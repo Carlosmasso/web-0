@@ -65,7 +65,7 @@ export function HeroImage({ config }) {
   return (
     <section
       className="db-section db-hero db-hero--image"
-      style={{ backgroundImage: `url(${hero.image})` }}
+      style={hero.image ? { backgroundImage: `url(${hero.image})` } : undefined}
     >
       <div className="db-hero__scrim" />
       <div className="db-container db-hero__over">

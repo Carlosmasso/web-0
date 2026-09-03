@@ -68,9 +68,10 @@ export function Sidebar({ config, onUpdate, onSection }) {
             <button
               key={p.id}
               type="button"
-              className={`swatch ${p.id === config.palette ? 'is-active' : ''}`}
-              onClick={() => onUpdate({ palette: p.id })}
               title={p.name}
+              style={{ padding: 0 }}
+              onClick={() => onUpdate({ palette: p.id })}
+              className={`swatch ${p.id === config.palette ? 'is-active' : ''}`}
             >
               <span style={{ background: p.light.bg }} />
               <span style={{ background: p.swatch }} />

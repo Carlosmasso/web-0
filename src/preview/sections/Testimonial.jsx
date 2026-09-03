@@ -4,7 +4,7 @@ import { Reveal } from '../Reveal'
 function Attribution({ q }) {
   return (
     <div className="db-quote__by">
-      <img src={q.avatar} alt="" loading="lazy" />
+      {q.avatar ? <img src={q.avatar} alt="" loading="lazy" /> : null}
       <span>
         <strong>{q.name}</strong>
         <span>{q.role}</span>

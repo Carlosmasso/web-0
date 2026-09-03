@@ -44,7 +44,7 @@ function Shell({ config, kind }) {
           {carousel.items.map((s) => (
             <article className="db-slide" key={s.title}>
               <div className="db-slide__media">
-                <img src={s.image} alt="" loading="lazy" />
+                {s.image ? <img src={s.image} alt="" loading="lazy" /> : null}
               </div>
               <div className="db-slide__body">
                 <h3>{s.title}</h3>

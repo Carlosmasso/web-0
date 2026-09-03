@@ -1,10 +1,12 @@
 import { useEffect, useRef } from 'react'
 
-// Bridges config into the isolated preview iframe. Waits for the frame to
-// announce itself, then pushes on every change.
-export function PreviewFrame({ config, device }) {
+// Bridges config + content into the isolated preview iframe. Waits for the
+// frame to announce itself, then pushes on every change.
+export function PreviewFrame({ config, content, device }) {
   const frameRef = useRef(null)
   const readyRef = useRef(false)
+  const dataRef = useRef({ config, content })
+  dataRef.current = { config, content }
 
   useEffect(() => {
     function onMessage(event) {
@@ -19,13 +21,14 @@ export function PreviewFrame({ config, device }) {
   }, [])
 
   function post() {
-    frameRef.current?.contentWindow?.postMessage({ type: 'config', config }, '*')
+    const { config, content } = dataRef.current
+    frameRef.current?.contentWindow?.postMessage({ type: 'config', config, content }, '*')
   }
 
   useEffect(() => {
     if (readyRef.current) post()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [config])
+  }, [config, content])
 
   return (
     <div className={`stage stage--${device}`}>

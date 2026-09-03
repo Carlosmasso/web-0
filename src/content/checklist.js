@@ -1,45 +1,40 @@
-import { CONTENT_SCHEMA } from './schema'
-import { SECTION_ORDER } from '../config/schema'
+import { buildForm } from './fields'
 
-// Given a design config, returns the ordered list of content the client must
-// provide for the variants they chose. Drives the "Contenido a pedir" panel
-// and its copy-to-clipboard text.
+// The content to request from the client, derived from the same field
+// definitions the form uses so the two can never drift.
+
 export function buildChecklist(config) {
-  const blocks = []
-
-  const push = (key) => {
-    const node = CONTENT_SCHEMA[key]
-    if (!node) return
-    const variant = config.sections?.[key]
-    const items = [
-      ...(node.always ? node.fields : node.base || []),
-      ...((node.byVariant && node.byVariant[variant]) || []),
-    ]
-    if (!items.length) return
-    blocks.push({
-      key,
-      label: node.label,
-      variant: variant || null,
-      items,
-    })
-  }
-
-  push('brand')
-  SECTION_ORDER.forEach(push)
-  push('footer')
-  return blocks
+  return buildForm(config).map((block) => ({
+    key: block.key,
+    label: block.label,
+    variant: block.variant || null,
+    fields: block.fields,
+  }))
 }
 
 export function checklistToText(config) {
   const lines = ['Contenido necesario para tu web', '']
   for (const block of buildChecklist(config)) {
     lines.push(block.variant ? `## ${block.label} (${block.variant})` : `## ${block.label}`)
-    for (const item of block.items) {
-      const meta = [item.type, item.hint].filter(Boolean).join(', ')
-      lines.push(`- ${item.label}${meta ? ` — ${meta}` : ''}`)
-      if (item.per) lines.push(`  · por elemento: ${item.per.join(' · ')}`)
+    for (const field of block.fields) {
+      lines.push(`- ${field.label}${metaOf(field)}`)
+      if (field.kind === 'repeater') {
+        const range = field.min === field.max ? `${field.min}` : `${field.min} a ${field.max}`
+        lines.push(`  · ${range} elemento(s), cada uno con: ${field.fields.map((sf) => sf.label.toLowerCase()).join(', ')}`)
+      }
     }
     lines.push('')
   }
   return lines.join('\n').trim()
+}
+
+function metaOf(field) {
+  const bits = []
+  if (field.kind === 'image') bits.push('imagen')
+  else if (field.kind === 'list') bits.push('lista')
+  else if (field.kind === 'textarea') bits.push('texto largo')
+  else if (field.kind === 'select') bits.push(`una de: ${field.options.join(', ')}`)
+  else if (field.kind === 'repeater') bits.push('lista de elementos')
+  if (field.hint) bits.push(field.hint)
+  return bits.length ? ` — ${bits.join(', ')}` : ''
 }

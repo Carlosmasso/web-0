@@ -13,11 +13,11 @@ export function Eyebrow({ children }) {
   return <p className="db-eyebrow">{children}</p>
 }
 
-// A framed visual. Uses a real photo (picsum seed) rather than a div mock.
-export function Frame({ src, alt, ratio = '4 / 3' }) {
+// A framed visual. Empty src renders the frame alone (content not yet set).
+export function Frame({ src, alt = '', ratio = '4 / 3' }) {
   return (
     <div className="db-frame" style={{ aspectRatio: ratio }}>
-      <img src={src} alt={alt} loading="lazy" />
+      {src ? <img src={src} alt={alt} loading="lazy" /> : null}
     </div>
   )
 }
