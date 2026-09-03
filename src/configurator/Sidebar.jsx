@@ -1,24 +1,26 @@
 import { useEffect, useMemo, useState } from 'react'
-import { PRESETS, PRESET_CATEGORIES, presetsByCategory } from '../registry/presets'
+import { PRESET_CATEGORIES, presetsByCategory } from '../registry/presets'
+import { AESTHETIC_OPTIONS } from '../registry/aesthetics'
 import { TYPE_PAIRINGS } from '../registry/fonts'
 import { VOCABULARY } from '../registry/vocabulary'
 import { SECTION_META, IDENTITY_AFFECTS } from '../registry/options'
 import { ensureFonts } from '../theme/fonts'
 import { auditPalette } from '../theme/color'
-import { allowedValues, lockedPaths, ownerOfValue, GUARDRAILS } from '../config/guardrails'
+import { GUARDRAILS, recommendedValue } from '../config/guardrails'
 import { getIn } from '../config/patch'
 import { SECTION_ORDER } from '../config/schema'
 
 // ============================================================
 // EL PANEL EN TRES CAPAS
 //
-//   1. MACRO           elige un mundo entero. Una decisión, no veinte.
-//   2. IDENTIDAD       lo que hace tuya esa base: color, tipo, esquinas.
-//                      Todo pasa por guardarraíles, no se puede romper.
-//   3. AVANZADO        acceso crudo, plegado y con aviso. Para quien sabe.
+//   1. PUNTO DE PARTIDA   elige un mundo entero (preset o estética base).
+//   2. TU IDENTIDAD       color, tipo, esquinas, densidad, movimiento.
+//   3. AJUSTE FINO        cada knob suelto, plegado por defecto.
 //
-// La parálisis por análisis se ataca en la capa 1: el usuario no ve 20
-// controles al entrar, ve 6 tarjetas y una pregunta que sabe contestar.
+// Regla de oro: en las capas 2 y 3, cada control hace EXACTAMENTE lo que dice.
+// Nunca bloquea, nunca teletransporta, nunca salta a la opción siguiente. El
+// guardarraíl solo marca lo "recomendado" para la estética activa; elegir es
+// del usuario. Cambiar de mundo entero se hace arriba, en la capa 1.
 // ============================================================
 
 function Layer({ n, title, subtitle, children, defaultOpen = true, tone }) {
@@ -50,11 +52,7 @@ function Group({ title, hint, children }) {
   )
 }
 
-/**
- * Encender el foco al pasar el puntero o al recibir el foco de teclado.
- * Compartido por TODOS los controles, vengan del vocabulario o escritos a mano:
- * si un control puede cambiar algo del sitio, tiene que poder señalarlo.
- */
+/** Enciende el foco del lienzo al pasar el puntero o al recibir foco de teclado. */
 function focusProps(affects, onFocus) {
   if (!affects) return {}
   return {
@@ -86,38 +84,24 @@ function Affects({ affects, onReveal }) {
 }
 
 /**
- * Control generado a partir del VOCABULARIO, no de nombres de CSS. Si la
- * estética activa bloquea o restringe el campo, se refleja aquí: las opciones
- * prohibidas se deshabilitan con su motivo, en vez de dejar que el usuario
- * elija algo que el motor va a revertir sin explicar.
+ * Control generado desde el VOCABULARIO (nunca desde nombres de CSS).
+ * Toda opción es una elección libre: aplica su valor y nada más. Si un valor
+ * es el "recomendado" para la estética activa, se marca — pero no se impone.
  */
-function VocabControl({
-  path,
-  value,
-  onChange,
-  aesthetic,
-  unlocked,
-  onFocus,
-  onReveal,
-  onSwitchAesthetic,
-}) {
+function VocabControl({ path, value, onChange, aesthetic, onFocus, onReveal }) {
   const entry = VOCABULARY[path]
   if (!entry) return null
 
-  const allowed = unlocked ? null : allowedValues(aesthetic, path)
-  const isLocked = !unlocked && lockedPaths(aesthetic).has(path)
-  const reason = GUARDRAILS[aesthetic]?.reason
-
+  const rec = recommendedValue(aesthetic, path)
   const focus = focusProps(entry.affects, onFocus)
   const affectsLine = <Affects affects={entry.affects} onReveal={onReveal} />
 
   if (entry.kind === 'toggle') {
     return (
-      <label className={`toggle ${isLocked ? 'is-locked' : ''}`} {...focus}>
+      <label className="toggle" {...focus}>
         <input
           type="checkbox"
           checked={Boolean(value)}
-          disabled={isLocked}
           onChange={(e) => onChange(e.target.checked)}
         />
         <span>
@@ -131,11 +115,8 @@ function VocabControl({
 
   if (entry.kind === 'range') {
     return (
-      <div className={`ctrl ${isLocked ? 'is-locked' : ''}`} {...focus}>
-        <span className="ctrl__label">
-          {entry.label}
-          {isLocked && <em className="lock" title={reason}>fijado</em>}
-        </span>
+      <div className="ctrl" {...focus}>
+        <span className="ctrl__label">{entry.label}</span>
         {affectsLine}
         <div className="slider">
           <input
@@ -144,7 +125,6 @@ function VocabControl({
             max={entry.max}
             step={entry.step}
             value={value ?? entry.min}
-            disabled={isLocked}
             onChange={(e) => onChange(Number(e.target.value))}
           />
           <output>{entry.format ? entry.format(Number(value)) : value}</output>
@@ -154,39 +134,27 @@ function VocabControl({
   }
 
   return (
-    <div className="ctrl" {...focus}>
-      <span className="ctrl__label">
-        {entry.label}
-        {isLocked && (
-          <em className="lock" title={reason}>
-            lo fija la estética
-          </em>
-        )}
-      </span>
+    <div className="grp" {...focus}>
+      <span className="grp__title">{entry.label}</span>
       {entry.question && <span className="ctrl__q">{entry.question}</span>}
       {affectsLine}
       <div className="optlist">
-        {entry.options.map((opt) => {
-          const blocked = allowed ? !allowed.includes(opt.id) : false
-          const owner = blocked ? ownerOfValue(path, opt.id) : null
-
-          // Una opción bloqueada NO es un botón muerto: es una puerta a la
-          // estética a la que pertenece. Si no hay a dónde llevar al usuario,
-          // entonces sí se deshabilita.
-          return (
-            <button
-              key={opt.id}
-              type="button"
-              disabled={blocked && !owner}
-              className={`opt ${opt.id === value ? 'is-active' : ''} ${blocked ? 'is-elsewhere' : ''}`}
-              onClick={() => (owner ? onSwitchAesthetic?.(owner.id) : onChange(opt.id))}
-            >
-              <span className="opt__label">{opt.label}</span>
-              {opt.tone && <span className="opt__note">{opt.tone}</span>}
-              {owner && <span className="opt__owner">Cambia a {owner.label}</span>}
-            </button>
-          )
-        })}
+        {entry.options.map((opt) => (
+          <button
+            key={opt.id}
+            type="button"
+            className={`opt ${opt.id === value ? 'is-active' : ''}`}
+            onClick={() => onChange(opt.id)}
+          >
+            <span className="opt__label">
+              {opt.label}
+              {opt.id === rec && opt.id !== value && (
+                <span className="opt__rec">recomendado</span>
+              )}
+            </span>
+            {opt.tone && <span className="opt__note">{opt.tone}</span>}
+          </button>
+        ))}
       </div>
     </div>
   )
@@ -204,13 +172,16 @@ export function Sidebar({
   onSwitchAesthetic,
 }) {
   useEffect(() => {
-    ensureFonts(TYPE_PAIRINGS.map((t) => t.values.headingFamily), document)
+    ensureFonts(
+      TYPE_PAIRINGS.map((t) => t.values.headingFamily),
+      document,
+    )
   }, [])
 
-  const unlocked = config.advanced?.unlocked
   const aesthetic = config.aesthetic
   const audit = useMemo(() => auditPalette(config.palette), [config.palette])
   const failing = audit.filter((a) => !a.pass)
+  const aestheticNote = GUARDRAILS[aesthetic]?.note
 
   const vocab = (path) => (
     <VocabControl
@@ -219,16 +190,14 @@ export function Sidebar({
       value={getIn(config, path)}
       onChange={(v) => onSet(path, v)}
       aesthetic={aesthetic}
-      unlocked={unlocked}
       onFocus={onFocus}
       onReveal={onReveal}
-      onSwitchAesthetic={onSwitchAesthetic}
     />
   )
 
   return (
     <div className="sidebar">
-      {/* ---------- CAPA 1: MACRO ---------- */}
+      {/* ---------- CAPA 1 ---------- */}
       <Layer n="1" title="Punto de partida" subtitle="Elige el mundo. Lo demás viene afinado.">
         {PRESET_CATEGORIES.map((cat) => (
           <Group key={cat.id} title={cat.label} hint={cat.note}>
@@ -254,15 +223,34 @@ export function Sidebar({
           </Group>
         ))}
 
+        <Group title="Estética base" hint="El acabado sobre tu color y tu tipo. Cambiarla reajusta bordes, sombras y efectos de una vez.">
+          <div className="chips">
+            {AESTHETIC_OPTIONS.map((a) => (
+              <button
+                key={a.id}
+                type="button"
+                className={`chip ${a.id === aesthetic ? 'is-active' : ''}`}
+                title={a.note}
+                onClick={() => onSwitchAesthetic?.(a.id)}
+              >
+                {a.label}
+              </button>
+            ))}
+          </div>
+        </Group>
+
         <button type="button" className="surprise" onClick={onSurprise}>
           <span aria-hidden="true">🎲</span> Sorpréndeme
           <em>Combina color, tipo y estructura sin romper nada</em>
         </button>
       </Layer>
 
-      {/* ---------- CAPA 2: IDENTIDAD SEGURA ---------- */}
+      {/* ---------- CAPA 2 ---------- */}
       <Layer n="2" title="Tu identidad" subtitle="Lo que hace tuya esa base.">
-        <Group title="Color de marca" hint="El resto de la paleta se calcula sola para que siempre se lea.">
+        <Group
+          title="Color de marca"
+          hint="El resto de la paleta se calcula sola para que siempre se lea."
+        >
           <Affects affects={IDENTITY_AFFECTS.brand} onReveal={onReveal} />
           <div className="brand" {...focusProps(IDENTITY_AFFECTS.brand, onFocus)}>
             <input
@@ -279,9 +267,14 @@ export function Sidebar({
             <button
               type="button"
               className="brand__mode"
-              onClick={() => onBrandColor(config.palette.primary, config.meta?.mode === 'dark' ? 'light' : 'dark')}
+              onClick={() =>
+                onBrandColor(
+                  config.palette.primary,
+                  config.meta?.mode === 'dark' ? 'light' : 'dark',
+                )
+              }
             >
-              {config.meta?.mode === 'dark' ? 'Fondo oscuro' : 'Fondo claro'}
+              {config.meta?.mode === 'dark' ? 'Fondo claro' : 'Fondo oscuro'}
             </button>
           </div>
           <p className={`a11y ${failing.length ? 'a11y--warn' : 'a11y--ok'}`}>
@@ -292,9 +285,7 @@ export function Sidebar({
         </Group>
 
         <Group title="Tipografía">
-          <div {...focusProps(IDENTITY_AFFECTS.typography, onFocus)}>
-            <Affects affects={IDENTITY_AFFECTS.typography} onReveal={onReveal} />
-          </div>
+          <Affects affects={IDENTITY_AFFECTS.typography} onReveal={onReveal} />
           <div className="optlist" {...focusProps(IDENTITY_AFFECTS.typography, onFocus)}>
             {TYPE_PAIRINGS.map((t) => (
               <button
@@ -315,30 +306,12 @@ export function Sidebar({
         {vocab('borders.radius')}
         {vocab('layout.density')}
         {vocab('motion')}
+
+        {aestheticNote && <p className="grp__hint" style={{ margin: '4px 0 0' }}>{aestheticNote}</p>}
       </Layer>
 
-      {/* ---------- CAPA 3: MODO AVANZADO ---------- */}
-      <Layer
-        n="3"
-        title="Ajuste fino"
-        subtitle="Para quien sabe lo que hace."
-        defaultOpen={false}
-        tone="pro"
-      >
-        <label className="unlock">
-          <input
-            type="checkbox"
-            checked={Boolean(unlocked)}
-            onChange={(e) => onSet('advanced.unlocked', e.target.checked)}
-          />
-          <span>
-            <span className="unlock__label">Saltarme las reglas de la estética</span>
-            <span className="unlock__note">
-              Los mínimos de contraste se siguen aplicando siempre.
-            </span>
-          </span>
-        </label>
-
+      {/* ---------- CAPA 3 ---------- */}
+      <Layer n="3" title="Ajuste fino" subtitle="Cada detalle por separado." defaultOpen={false} tone="pro">
         {vocab('shadows.style')}
         {vocab('shadows.intensity')}
         {vocab('borders.width')}

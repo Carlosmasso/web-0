@@ -38,10 +38,7 @@ export function Preview() {
   // Los guardarraíles corren SIEMPRE justo antes de inyectar, sea cual sea el
   // origen del dato: panel, hash compartido o base de datos. Nada llega al
   // lienzo sin pasar por aquí.
-  const config = useMemo(
-    () => normalizeConfigWithGuardrails(raw, { unlockAdvanced: raw?.advanced?.unlocked }).config,
-    [raw],
-  )
+  const config = useMemo(() => normalizeConfigWithGuardrails(raw).config, [raw])
 
   return (
     <>

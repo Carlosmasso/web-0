@@ -55,10 +55,7 @@ export function App() {
   // El panel edita la configuración CRUDA, pero muestra y envía la NORMALIZADA.
   // Así el usuario ve al instante lo que los guardarraíles han corregido, en vez
   // de que su elección se revierta en silencio al llegar al lienzo.
-  const { config, violations } = useMemo(
-    () => normalizeConfigWithGuardrails(raw, { unlockAdvanced: raw?.advanced?.unlocked }),
-    [raw],
-  )
+  const { config, violations } = useMemo(() => normalizeConfigWithGuardrails(raw), [raw])
 
   const encoded = useMemo(() => encodeConfig(config), [config])
 

@@ -73,41 +73,41 @@ el acabado sobre la paleta que el cliente ya eligió; las *plantillas*
 El problema no es la falta de opciones, es la parálisis. El panel está ordenado
 por **cuánto compromete cada decisión**, no por qué propiedad de CSS toca:
 
-| Capa | Qué decide | Cuántas opciones |
+| Capa | Qué decide | Cómo |
 | --- | --- | --- |
-| **1 · Punto de partida** | Un preset maestro completo, o el dado 🎲 | 6 tarjetas y un botón |
-| **2 · Tu identidad** | Color de marca, tipografía, esquinas, respiración, movimiento | 5 controles, todos con guardarraíl |
-| **3 · Ajuste fino** | Acceso crudo a sombras, bordes, efectos y secciones | Plegado por defecto |
+| **1 · Punto de partida** | El mundo entero | Presets comerciales/tendencia · 6 chips de estética base · el dado 🎲 |
+| **2 · Tu identidad** | Color de marca, tipografía, esquinas, densidad, movimiento | Controles libres con recomendación |
+| **3 · Ajuste fino** | Cada knob suelto (sombras, bordes, efectos, secciones) | Plegado por defecto |
 
 `src/registry/vocabulary.js` es la única capa donde vive el lenguaje de cara al
 usuario: nadie ve `box-shadow: inset` ni `border-radius: 32px`, ven
 **"Táctil / 3D"** y **"Redondeadas"**, cada una con una línea que describe lo que
-*comunica*, no lo que hace. Los controles se generan desde ahí, así que la jerga
-no puede colarse.
+*comunica*, no lo que hace.
 
 ### El motor de restricciones
 
+**Regla de oro:** en las capas 2 y 3, cada control hace *exactamente* lo que dice.
+Nunca bloquea una opción, nunca teletransporta a otra estética, nunca salta a la
+siguiente. Si eliges "Suaves" en Esquinas, sales con esquinas suaves — aunque no
+sea lo que "pega" con la estética activa. El guardarraíl **guía, no encierra**:
+marca el valor recomendado con una etiqueta discreta y ya.
+
+Cambiar de mundo entero se hace **arriba**, en la capa 1: los 6 chips de estética
+base aplican un juego coherente de bordes, sombras y efectos de una vez
+(`src/registry/aesthetics.js`).
+
 `normalizeConfigWithGuardrails(userConfig)` (`src/config/guardrails.js`) corre
-**siempre** justo antes de inyectar, venga el dato del panel, de un enlace
-compartido o de la base de datos. Cuatro tipos de regla:
+**siempre** justo antes de inyectar, y solo hace lo que el usuario no puede ver
+que hace falta:
 
-- **lock** — valores constitutivos de la estética. Neo-brutalismo con esquinas
-  redondeadas deja de ser neo-brutalismo: se fuerza a `none`. En el panel, esas
-  opciones no se deshabilitan sin más: `ownerOfValue()` busca a qué estética
-  pertenecen y la opción se convierte en una **puerta** ("Táctil / 3D · Cambia a
-  Claymorfismo"). El usuario expresa una intención y el sistema le lleva donde
-  esa intención existe, en vez de negársela.
-- **allow** — listas blancas. Glassmorfismo admite suave, amplio o cápsula, no recto.
-- **clamp** — rangos numéricos sanos para la intensidad de sombra o el desenfoque.
-- **suelo de accesibilidad** — texto ≥ 7:1, texto atenuado ≥ 4.5:1, acento ≥ 3:1.
-  Este no lo salta ni el modo Pro.
+- **clamp** — acota los sliders (intensidad de sombra, desenfoque) a rangos sanos.
+- **scheme** — cyberpunk fuerza fondo oscuro: el neón sobre blanco es ilegible.
+- **coherence** — "portada con aurora" enciende las luces si estaban apagadas.
+- **suelo de accesibilidad** — texto ≥ 7:1, atenuado ≥ 4.5:1, acento ≥ 3:1,
+  moviendo solo la luminosidad. Innegociable.
 
-Devuelve `{ config, violations, audit }`. Las `violations` se muestran en la barra
-("3 ajustes automáticos") y en el cajón de exportación, que es lo que convierte
-una caja negra frustrante en una herramienta en la que se confía.
-
-El interruptor **"Saltarme las reglas de la estética"** (capa 3) desactiva
-`lock` y `allow`. Nunca el suelo de accesibilidad.
+Devuelve `{ config, violations, audit }`. Las `violations` (siempre correcciones
+objetivas, nunca "no te dejo") se muestran en la barra y en el cajón de exportación.
 
 ### "¿Y esto dónde se ve?"
 

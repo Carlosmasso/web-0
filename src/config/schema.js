@@ -112,10 +112,6 @@ export const DEFAULT_CONFIG = {
     containerWidth: 1180,
   },
 
-  // ---------- capa PRO: desbloquea los locks estéticos ----------
-  // Nunca desactiva el suelo de accesibilidad, solo las reglas de armonía.
-  advanced: { unlocked: false },
-
   // ---------- provenance, solo para la interfaz ----------
   meta: {
     presetId: null,

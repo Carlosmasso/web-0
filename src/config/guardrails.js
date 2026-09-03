@@ -1,154 +1,128 @@
 // ============================================================
 // MÓDULO 1.2 — EL MOTOR DE RESTRICCIONES
 //
-// Filtro que corre SIEMPRE antes de inyectar la configuración en el lienzo.
-// Su trabajo es que el usuario no pueda producir un resultado roto, feo o
-// ilegible, sin quitarle la sensación de estar decidiendo.
+// Corre SIEMPRE justo antes de inyectar la configuración en el lienzo, venga
+// del panel, de un enlace o de la base de datos.
 //
-// Tres tipos de restricción por estética:
+// FILOSOFÍA (revisada): en las capas de cara al cliente, cada control hace
+// EXACTAMENTE lo que dice. Si eliges "Suaves" en Esquinas, sales con esquinas
+// suaves — nunca te teletransporta a otra estética ni te salta a la opción
+// siguiente. El guardarraíl guía, no encierra:
 //
-//   lock   el valor es constitutivo de la estética. Neo-brutalismo con
-//          esquinas redondeadas deja de ser neo-brutalismo, así que se fuerza.
-//   clamp  el valor es libre dentro de un rango sano.
-//   floor  mínimos de accesibilidad, no negociables por ninguna estética.
+//   recommend   marca el valor que mejor encaja con la estética. No bloquea.
+//   clamp       acota rangos numéricos (los sliders no pueden pasarse).
+//   scheme      cyberpunk necesita fondo oscuro (el neón sobre blanco no se ve).
+//   coherence   arregla contradicciones que el usuario no puede ver.
+//   a11y floor  contraste mínimo WCAG. Innegociable, para cualquier estética.
 //
-// Devuelve { config, violations } en vez de mutar en silencio: el panel puede
-// decir "he ajustado 3 cosas" y por qué, que es lo que convierte una caja
-// negra frustrante en una herramienta en la que se confía.
+// Cambiar de mundo entero se hace en la capa 1 (presets y estética base), que
+// aplica un juego de valores coherente de una vez. Los knobs sueltos de las
+// capas 2 y 3 solo mueven su propia propiedad.
 // ============================================================
 
 import { normalizeConfig } from './schema'
 import { setIn, getIn } from './patch'
 import { safePalette, contrastRatio, ensureContrast, onColor, isDark } from '../theme/color'
-import { describeValue } from '../registry/vocabulary'
 
 /**
- * Reglas por estética. Lo que NO aparece aquí queda libre para el usuario:
- * ese hueco es deliberado, es donde vive la sensación de autoría.
+ * Reglas por estética.
+ *   recommend  { path: valor }  — el valor que el panel marca como "recomendado".
+ *   clamp      { path: [min, max] }  — rango numérico sano.
+ *   requireScheme  'dark'  — fuerza fondo oscuro (accesibilidad del neón).
+ *   note       una línea que explica la recomendación.
  */
 export const GUARDRAILS = {
   'neo-brutalism': {
     label: 'Neo-brutalismo',
-    lock: {
+    recommend: {
       'borders.radius': 'none',
       'borders.width': 'thick',
       'borders.style': 'solid',
       'shadows.style': 'flat-hard',
-      'effects.blur': 0,
       'components.button.shape': 'sharp',
     },
     clamp: { 'shadows.intensity': [1, 1.8] },
-    reason: 'El brutalismo vive de la esquina recta y la sombra sólida.',
+    note: 'Encaja con esquinas rectas, trazo grueso y sombra sólida.',
   },
 
   glassmorphism: {
     label: 'Glassmorfismo',
-    lock: {
+    recommend: {
+      'borders.radius': 'round',
       'borders.width': 'thin',
-      'borders.style': 'solid',
       'shadows.style': 'soft-elevation',
+      'components.button.shape': 'pill',
     },
-    clamp: { 'effects.blur': [10, 30], 'shadows.intensity': [1, 2] },
-    allow: { 'borders.radius': ['soft', 'round', 'pill'] },
-    reason: 'Sin desenfoque y con bordes duros, el cristal deja de leerse como cristal.',
+    clamp: { 'effects.blur': [8, 30], 'shadows.intensity': [1, 2] },
+    minBlur: 10,
+    note: 'Necesita algo de desenfoque para leerse como cristal.',
   },
 
   claymorphism: {
     label: 'Claymorfismo',
-    lock: {
+    recommend: {
+      'borders.radius': 'round',
       'borders.width': 'thin',
-      'borders.style': 'solid',
       'shadows.style': 'inset-3d',
-      'effects.blur': 0,
+      'components.button.shape': 'pill',
     },
-    allow: { 'borders.radius': ['round', 'pill'] },
     clamp: { 'shadows.intensity': [0.9, 1.6] },
-    reason: 'La arcilla necesita esquinas muy redondeadas para leerse como volumen.',
+    note: 'La arcilla pide esquinas redondeadas y volumen interior.',
   },
 
   cyberpunk: {
     label: 'Cyberpunk',
-    lock: {
+    recommend: {
+      'borders.radius': 'none',
       'borders.width': 'thin',
       'shadows.style': 'glowing-neon',
-      'effects.blur': 0,
       'components.button.fill': 'outline',
     },
-    allow: { 'borders.radius': ['none', 'soft'] },
     clamp: { 'shadows.intensity': [1, 1.8] },
     requireScheme: 'dark',
-    reason: 'El neón solo resplandece sobre fondo oscuro.',
+    note: 'El neón solo resplandece sobre fondo oscuro.',
   },
 
   'minimalist-flat': {
     label: 'Minimalista',
-    lock: { 'shadows.style': 'none', 'effects.blur': 0, 'effects.aurora': false },
-    allow: { 'borders.radius': ['none', 'soft'], 'borders.width': ['thin'] },
-    reason: 'El minimalismo se sostiene en el espacio, no en el relieve.',
+    recommend: {
+      'borders.radius': 'soft',
+      'borders.width': 'thin',
+      'shadows.style': 'none',
+    },
+    note: 'El minimalismo se sostiene en el espacio, no en el relieve.',
   },
 
   'material-clean': {
     label: 'Material limpio',
-    lock: { 'borders.style': 'solid', 'effects.blur': 0 },
-    allow: { 'borders.radius': ['none', 'soft', 'round'], 'shadows.style': ['none', 'soft-elevation'] },
+    recommend: {
+      'borders.radius': 'soft',
+      'shadows.style': 'soft-elevation',
+    },
     clamp: { 'shadows.intensity': [0.4, 1.4] },
-    reason: 'La elevación suave es lo que hace legible la jerarquía.',
+    note: 'La elevación suave es lo que hace legible la jerarquía.',
   },
 }
 
-/** Umbrales de accesibilidad. Ninguna estética puede saltárselos. */
+/** Umbrales de accesibilidad. Ninguna estética se los salta. */
 const A11Y = {
-  textPrimary: 7, // AAA cuerpo
-  textMuted: 4.5, // AA cuerpo
-  accent: 3, // AA no textual
+  textPrimary: 7,
+  textMuted: 4.5,
+  accent: 3,
   onPrimary: 4.5,
 }
 
-function record(violations, path, from, to, reason) {
-  if (from === to) return
-  violations.push({
-    path,
-    from,
-    to,
-    fromLabel: describeValue(path, from),
-    toLabel: describeValue(path, to),
-    reason,
-  })
-}
-
 /**
- * @param {object} userConfig  configuración cruda (del panel, del hash, de la BD)
- * @param {{ unlockAdvanced?: boolean }} [opts]
- *        unlockAdvanced omite los `lock` estéticos — nunca los de accesibilidad.
+ * @param {object} userConfig  configuración cruda
  * @returns {{ config: object, violations: Array, audit: Array }}
  */
-export function normalizeConfigWithGuardrails(userConfig, opts = {}) {
-  const { unlockAdvanced = false } = opts
+export function normalizeConfigWithGuardrails(userConfig) {
   let config = normalizeConfig(userConfig)
   const violations = []
-
   const rules = GUARDRAILS[config.aesthetic]
 
   if (rules) {
-    // --- 1. locks: valores constitutivos de la estética ---
-    if (!unlockAdvanced) {
-      for (const [path, value] of Object.entries(rules.lock ?? {})) {
-        const current = getIn(config, path)
-        record(violations, path, current, value, rules.reason)
-        config = setIn(config, path, value)
-      }
-    }
-
-    // --- 2. allow: listas blancas (se cae al primer valor válido) ---
-    for (const [path, allowed] of Object.entries(rules.allow ?? {})) {
-      const current = getIn(config, path)
-      if (!allowed.includes(current)) {
-        record(violations, path, current, allowed[0], rules.reason)
-        config = setIn(config, path, allowed[0])
-      }
-    }
-
-    // --- 3. clamp: rangos numéricos sanos ---
+    // --- clamp: rangos numéricos ---
     for (const [path, [min, max]] of Object.entries(rules.clamp ?? {})) {
       const current = Number(getIn(config, path))
       const next = Math.min(max, Math.max(min, Number.isFinite(current) ? current : min))
@@ -159,13 +133,26 @@ export function normalizeConfigWithGuardrails(userConfig, opts = {}) {
           to: next,
           fromLabel: String(current),
           toLabel: String(next),
-          reason: rules.reason,
+          reason: rules.note,
         })
         config = setIn(config, path, next)
       }
     }
 
-    // --- 4. esquema forzado (cyberpunk necesita fondo oscuro) ---
+    // --- cristal sin desenfoque no es cristal ---
+    if (rules.minBlur && Number(getIn(config, 'effects.blur')) < rules.minBlur) {
+      violations.push({
+        path: 'effects.blur',
+        from: getIn(config, 'effects.blur'),
+        to: rules.minBlur,
+        fromLabel: 'sin desenfoque',
+        toLabel: `${rules.minBlur} px`,
+        reason: rules.note,
+      })
+      config = setIn(config, 'effects.blur', rules.minBlur)
+    }
+
+    // --- cyberpunk necesita fondo oscuro (accesibilidad del neón) ---
     if (rules.requireScheme === 'dark' && !isDark(config.palette.neutralBg)) {
       const safe = safePalette(config.palette.primary, { scheme: 'dark' })
       violations.push({
@@ -174,25 +161,20 @@ export function normalizeConfigWithGuardrails(userConfig, opts = {}) {
         to: safe.neutralBg,
         fromLabel: 'Fondo claro',
         toLabel: 'Fondo oscuro',
-        reason: rules.reason,
+        reason: rules.note,
+        a11y: true,
       })
       config = setIn(config, 'palette', { ...config.palette, ...safe })
       config = setIn(config, 'meta', { ...config.meta, mode: 'dark' })
     }
   }
 
-  // --- 5. coherencia entre nodos (independiente de la estética) ---
-  // Pedir "portada con aurora" y dejar las luces apagadas es una contradicción
-  // que el usuario no puede ver: se resuelve sola.
+  // --- coherencia entre nodos (contradicciones invisibles) ---
   if (config.components.hero.background === 'aurora' && !config.effects.aurora) {
     config = setIn(config, 'effects.aurora', true)
   }
-  // El cristal esmerilado sin desenfoque no es cristal.
-  if (config.aesthetic === 'glassmorphism' && config.effects.blur < 10) {
-    config = setIn(config, 'effects.blur', 18)
-  }
 
-  // --- 6. suelo de accesibilidad: SIEMPRE, incluso en modo avanzado ---
+  // --- suelo de accesibilidad: SIEMPRE ---
   config = enforceContrast(config, violations)
 
   return { config, violations, audit: auditConfig(config) }
@@ -225,7 +207,6 @@ function enforceContrast(config, violations = []) {
   fix('textMuted', p.neutralBg, A11Y.textMuted, 'el texto atenuado')
   fix('accent', p.neutralBg, A11Y.accent, 'el color de acento')
 
-  // El texto que va ENCIMA del primario se calcula, no se elige.
   if (contrastRatio(onColor(p.primary), p.primary) < A11Y.onPrimary) {
     p.primary = ensureContrast(p.primary, onColor(p.primary), A11Y.onPrimary)
   }
@@ -233,7 +214,7 @@ function enforceContrast(config, violations = []) {
   return setIn(config, 'palette', p)
 }
 
-/** Informe de accesibilidad de la configuración final, para mostrar en el panel. */
+/** Informe de accesibilidad de la configuración final. */
 export function auditConfig(config) {
   const p = config.palette
   const checks = [
@@ -249,35 +230,7 @@ export function auditConfig(config) {
   })
 }
 
-/** ¿Qué campos están bloqueados ahora mismo? Para atenuarlos en el panel. */
-export function lockedPaths(aesthetic) {
-  const rules = GUARDRAILS[aesthetic]
-  if (!rules) return new Set()
-  return new Set(Object.keys(rules.lock ?? {}))
-}
-
-/**
- * ¿A qué estética PERTENECE un valor que la actual no admite?
- *
- * Convierte un callejón sin salida en un camino: si el usuario pide
- * "Táctil / 3D" estando en material-clean, no se le niega, se le lleva al
- * claymorfismo, que es donde ese relieve existe de verdad.
- */
-export function ownerOfValue(path, value) {
-  for (const [id, rules] of Object.entries(GUARDRAILS)) {
-    if (rules.lock?.[path] === value) return { id, label: rules.label }
-  }
-  for (const [id, rules] of Object.entries(GUARDRAILS)) {
-    if (rules.allow?.[path]?.includes(value)) return { id, label: rules.label }
-  }
-  return null
-}
-
-/** Valores permitidos para un campo bajo la estética activa, o null si es libre. */
-export function allowedValues(aesthetic, path) {
-  const rules = GUARDRAILS[aesthetic]
-  if (!rules) return null
-  if (rules.lock && path in rules.lock) return [rules.lock[path]]
-  if (rules.allow && path in rules.allow) return rules.allow[path]
-  return null
+/** El valor recomendado para un campo bajo la estética activa, o null. */
+export function recommendedValue(aesthetic, path) {
+  return GUARDRAILS[aesthetic]?.recommend?.[path] ?? null
 }
