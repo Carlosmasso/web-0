@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { PALETTES } from '../registry/palettes'
 import { FONTS, loadGoogleFont } from '../registry/fonts'
+import { STYLES } from '../registry/styles'
 import {
   RADIUS_OPTIONS,
   DENSITY_OPTIONS,
@@ -62,6 +63,22 @@ export function Sidebar({ config, onUpdate, onSection }) {
 
   return (
     <div className="sidebar">
+      <Group title="Estilo">
+        <div className="optlist">
+          {STYLES.map((s) => (
+            <button
+              key={s.id}
+              type="button"
+              className={`opt ${s.id === config.surface ? 'is-active' : ''}`}
+              onClick={() => onUpdate(s.patch)}
+            >
+              <span className="opt__label">{s.label}</span>
+              <span className="opt__note">{s.note}</span>
+            </button>
+          ))}
+        </div>
+      </Group>
+
       <Group title="Paleta">
         <div className="swatches">
           {PALETTES.map((p) => (

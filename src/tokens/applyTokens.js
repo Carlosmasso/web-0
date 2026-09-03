@@ -37,6 +37,7 @@ export function applyTokens(el, cfg, doc = document) {
 
   el.dataset.mode = cfg.mode
   el.dataset.effects = cfg.effects
+  el.dataset.surface = cfg.surface ?? 'elevated'
 
   loadGoogleFont(font, doc)
 }

@@ -10,7 +10,17 @@
   --container: 1180px;
   --pad-x: 24px;
 
-  background: var(--bg);
+  /* Style layer — overridden per [data-surface] below. */
+  --border-w: 1px;
+  --card-bg: var(--surface);
+  --card-shadow: none;
+  --card-blur: none;
+  --page-bg: var(--bg);
+  --heading-transform: none;
+  --heading-tracking: -0.02em;
+  --heading-weight: 700;
+
+  background: var(--page-bg);
   color: var(--text);
   font-family: var(--font-body);
   font-size: 16px;
@@ -19,8 +29,78 @@
 
 .preview-root :is(h1, h2, h3, h4) {
   font-family: var(--font-heading);
-  letter-spacing: -0.02em;
+  letter-spacing: var(--heading-tracking);
   line-height: 1.06;
+  text-transform: var(--heading-transform);
+  font-weight: var(--heading-weight);
+}
+
+/* ============================================================
+   Style presets ([data-surface]). Each one only re-tunes the
+   style-layer tokens plus a few structural properties a token
+   can't express (blur, hard-offset shadow, page backdrop).
+   ============================================================ */
+
+/* Sombra suave (default) — cards carry the soft elevation shadow. */
+.preview-root[data-surface='elevated'] {
+  --card-shadow: var(--shadow);
+}
+
+/* Minimalista — hairline borders, no shadow, surfaces blend into the page. */
+.preview-root[data-surface='minimal'] {
+  --border-w: 1px;
+  --border: color-mix(in srgb, var(--border) 55%, transparent);
+  --card-bg: transparent;
+  --card-shadow: none;
+  --shadow: none;
+  --heading-weight: 600;
+}
+[data-surface='minimal'] .db-frame {
+  background: var(--surface-2);
+}
+
+/* Brutalismo — thick solid borders, hard offset shadow, no radius, caps. */
+.preview-root[data-surface='brutal'] {
+  --border-w: 2px;
+  --border: var(--text);
+  --card-bg: var(--surface);
+  --shadow: 6px 6px 0 0 var(--text);
+  --card-shadow: 6px 6px 0 0 var(--text);
+  --heading-transform: uppercase;
+  --heading-tracking: -0.01em;
+  --heading-weight: 800;
+}
+[data-surface='brutal'] .db-btn {
+  border: 2px solid var(--text);
+}
+[data-surface='brutal'] .db-btn--primary {
+  box-shadow: 4px 4px 0 0 var(--text);
+}
+[data-surface='brutal'] .db-nav {
+  border-bottom-width: 2px;
+  border-bottom-color: var(--text);
+}
+
+/* Glassmorfismo — translucent surfaces over a coloured backdrop. */
+.preview-root[data-surface='glass'] {
+  --border-w: 1px;
+  --border: color-mix(in srgb, var(--text) 14%, transparent);
+  --card-bg: color-mix(in srgb, var(--surface) 62%, transparent);
+  --card-blur: saturate(1.5) blur(14px);
+  --shadow: 0 10px 40px -12px color-mix(in srgb, var(--text) 40%, transparent);
+  --card-shadow: 0 10px 40px -12px color-mix(in srgb, var(--text) 35%, transparent);
+  --page-bg: radial-gradient(
+      120% 120% at 12% 0%,
+      color-mix(in srgb, var(--accent) 22%, var(--bg)) 0%,
+      var(--bg) 55%
+    ),
+    var(--bg);
+}
+[data-surface='glass'] .db-nav {
+  background: color-mix(in srgb, var(--bg) 60%, transparent);
+}
+[data-surface='glass'] .db-section--tint {
+  background: color-mix(in srgb, var(--surface-2) 45%, transparent);
 }
 
 .db-page {
@@ -102,7 +182,7 @@
 }
 
 .db-btn--ghost {
-  border: 1px solid var(--border);
+  border: var(--border-w) solid var(--border);
   color: var(--text);
 }
 
@@ -133,7 +213,7 @@
   z-index: 20;
   background: color-mix(in srgb, var(--bg) 82%, transparent);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border);
+  border-bottom: var(--border-w) solid var(--border);
 }
 
 .db-nav__inner {
@@ -285,7 +365,7 @@
 .db-frame {
   overflow: hidden;
   border-radius: var(--radius-card);
-  border: 1px solid var(--border);
+  border: var(--border-w) solid var(--border);
   background: var(--surface-2);
   box-shadow: var(--shadow);
 }
@@ -299,9 +379,11 @@
 /* ---------- cards & feature layouts ---------- */
 
 .db-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: var(--card-bg);
+  border: var(--border-w) solid var(--border);
   border-radius: var(--radius-card);
+  box-shadow: var(--card-shadow);
+  backdrop-filter: var(--card-blur);
   padding: calc(24px * var(--space-scale));
   transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1),
     border-color 160ms ease;
@@ -442,7 +524,7 @@
 .db-carousel__controls button {
   display: inline-flex;
   padding: 10px;
-  border: 1px solid var(--border);
+  border: var(--border-w) solid var(--border);
   border-radius: 999px;
   color: var(--text);
 }
@@ -489,9 +571,11 @@
 .db-slide {
   flex: 0 0 auto;
   scroll-snap-align: start;
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: var(--card-bg);
+  border: var(--border-w) solid var(--border);
   border-radius: var(--radius-card);
+  box-shadow: var(--card-shadow);
+  backdrop-filter: var(--card-blur);
   overflow: hidden;
 }
 
@@ -582,8 +666,9 @@
 
 .db-cta--boxed {
   background: color-mix(in srgb, var(--accent) 12%, var(--surface));
-  border: 1px solid color-mix(in srgb, var(--accent) 26%, var(--border));
+  border: var(--border-w) solid color-mix(in srgb, var(--accent) 26%, var(--border));
   border-radius: var(--radius-card);
+  box-shadow: var(--card-shadow);
   padding: clamp(32px, 4.5vw, 56px);
   text-align: center;
 }
@@ -644,7 +729,7 @@
 /* ---------- footer ---------- */
 
 .db-footer {
-  border-top: 1px solid var(--border);
+  border-top: var(--border-w) solid var(--border);
   padding-block: calc(var(--section-py) * 0.6) 32px;
 }
 
@@ -698,7 +783,7 @@
   gap: 16px;
   margin-top: 48px;
   padding-top: 20px;
-  border-top: 1px solid var(--border);
+  border-top: var(--border-w) solid var(--border);
   color: var(--muted);
   font-size: 0.82rem;
 }

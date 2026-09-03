@@ -6,6 +6,7 @@ export const DEFAULT_CONFIG = {
   palette: 'grafito',
   mode: 'light', // light | dark
   font: 'space-grotesk',
+  surface: 'elevated', // elevated | minimal | brutal | glass — the visual style
   radius: 'md', // none | sm | md | pill
   density: 'normal', // compact | normal | airy
   iconSet: 'phosphor', // phosphor | tabler
@@ -25,7 +26,7 @@ export const SECTION_ORDER = ['hero', 'features', 'carousel', 'testimonial', 'ct
 export function normalizeConfig(input) {
   const base = structuredClone(DEFAULT_CONFIG)
   if (!input || typeof input !== 'object') return base
-  for (const key of ['palette', 'mode', 'font', 'radius', 'density', 'iconSet', 'effects']) {
+  for (const key of ['palette', 'mode', 'font', 'surface', 'radius', 'density', 'iconSet', 'effects']) {
     if (typeof input[key] === 'string') base[key] = input[key]
   }
   if (input.sections && typeof input.sections === 'object') {

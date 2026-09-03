@@ -22,11 +22,19 @@ Todo gira alrededor de **una config serializable** (`src/config/schema.js`):
 ```jsonc
 {
   "palette": "grafito", "mode": "light", "font": "space-grotesk",
+  "surface": "elevated",          // estilo visual: elevated | minimal | brutal | glass
   "radius": "md", "density": "normal", "iconSet": "phosphor", "effects": "subtle",
   "sections": { "hero": "split", "features": "grid", "carousel": "peek",
                 "testimonial": "quote", "cta": "boxed" }
 }
 ```
+
+**Estilos** (`src/registry/styles.js`): "Sombra suave", "Minimalista", "Brutalismo" y
+"Glassmorfismo". Cada uno aplica de golpe un paquete de ajustes (`surface`, `radius`,
+`effects`, `font`) que el cliente puede seguir afinando con los controles de abajo. El
+valor `surface` activa un bloque `[data-surface="…"]` en `demo.css` que solo re-tunea
+tokens del *style layer* (`--border-w`, `--card-bg`, `--card-shadow`, `--card-blur`,
+`--page-bg`, `--heading-transform`…); ningún componente cambia.
 
 | Pieza | Rol |
 | --- | --- |
@@ -52,6 +60,7 @@ y para que los estilos de la demo no toquen los del panel.
 
 - Export que genere un proyecto autónomo listo para desplegar (hoy exporta `{ config, content }`).
 - Subida de imágenes (hoy los campos de imagen son por URL).
+- Más estilos (editorial, neumórfico) y afinar glass en modo claro (luce mejor en oscuro o con imagen de fondo).
 - Combos curados (no toda paleta pega con toda fuente y variante).
 - Toggle de secciones on/off y reordenado.
 - Más secciones (precios, logos, FAQ) y más variantes.
