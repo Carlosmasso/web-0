@@ -1,0 +1,455 @@
+/* ============================================================
+   Configurator shell. Its own fixed dark-neutral product theme,
+   independent of whatever the preview is rendering.
+   ============================================================ */
+
+:root {
+  --c-bg: #0f0f11;
+  --c-panel: #161618;
+  --c-panel-2: #1d1d20;
+  --c-line: #2a2a2e;
+  --c-line-strong: #3a3a40;
+  --c-text: #ededef;
+  --c-muted: #9a9aa2;
+  --c-accent: #6d8bff;
+  --c-accent-soft: rgba(109, 139, 255, 0.16);
+  --c-radius: 10px;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+body {
+  background: var(--c-bg);
+  color: var(--c-text);
+}
+
+.shell {
+  display: grid;
+  grid-template-columns: 344px 1fr;
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* ---------- panel ---------- */
+
+.shell__panel {
+  border-right: 1px solid var(--c-line);
+  background: var(--c-panel);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.shell__brand {
+  padding: 22px 22px 16px;
+  border-bottom: 1px solid var(--c-line);
+  position: sticky;
+  top: 0;
+  background: var(--c-panel);
+  z-index: 2;
+}
+
+.shell__logo {
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+}
+
+.shell__brand p {
+  color: var(--c-muted);
+  font-size: 0.82rem;
+  margin-top: 4px;
+}
+
+.sidebar {
+  padding: 8px 18px 40px;
+}
+
+.grp {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--c-line);
+}
+
+.grp:last-child {
+  border-bottom: none;
+}
+
+.grp__title {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  color: var(--c-muted);
+  margin-bottom: 12px;
+}
+
+/* ---------- swatches ---------- */
+
+.swatches {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.swatch {
+  position: relative;
+  display: flex;
+  border: 1px solid var(--c-line);
+  border-radius: var(--c-radius);
+  overflow: hidden;
+  height: 46px;
+  transition: border-color 120ms ease, transform 120ms ease;
+}
+
+.swatch span {
+  flex: 1;
+}
+
+.swatch em {
+  position: absolute;
+  inset: auto 0 0 0;
+  font-style: normal;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 2px 0;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.swatch:hover em {
+  opacity: 1;
+}
+
+.swatch:hover {
+  border-color: var(--c-line-strong);
+}
+
+.swatch.is-active {
+  border-color: var(--c-accent);
+  box-shadow: 0 0 0 1px var(--c-accent);
+}
+
+/* ---------- segmented ---------- */
+
+.seg {
+  display: flex;
+  gap: 4px;
+  background: var(--c-panel-2);
+  border: 1px solid var(--c-line);
+  border-radius: var(--c-radius);
+  padding: 4px;
+}
+
+.seg button {
+  flex: 1;
+  padding: 7px 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--c-muted);
+  border-radius: 7px;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.seg button:hover {
+  color: var(--c-text);
+}
+
+.seg button.is-active {
+  background: var(--c-accent-soft);
+  color: var(--c-text);
+}
+
+/* ---------- option list ---------- */
+
+.optlist {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.opt {
+  text-align: left;
+  padding: 10px 12px;
+  border: 1px solid var(--c-line);
+  border-radius: var(--c-radius);
+  background: var(--c-panel-2);
+  transition: border-color 120ms ease, background 120ms ease;
+}
+
+.opt:hover {
+  border-color: var(--c-line-strong);
+}
+
+.opt.is-active {
+  border-color: var(--c-accent);
+  background: var(--c-accent-soft);
+}
+
+.opt__label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 550;
+}
+
+.opt__note {
+  display: block;
+  font-size: 0.76rem;
+  color: var(--c-muted);
+  margin-top: 2px;
+}
+
+/* ---------- stage ---------- */
+
+.shell__stage-wrap {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.shell__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--c-line);
+  background: var(--c-panel);
+}
+
+.shell__devices {
+  display: flex;
+  gap: 4px;
+  background: var(--c-panel-2);
+  border: 1px solid var(--c-line);
+  border-radius: 8px;
+  padding: 4px;
+}
+
+.shell__devices button {
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  color: var(--c-muted);
+  border-radius: 6px;
+}
+
+.shell__devices button.is-active {
+  background: var(--c-accent-soft);
+  color: var(--c-text);
+}
+
+.shell__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.shell__actions button {
+  padding: 8px 13px;
+  font-size: 0.8rem;
+  font-weight: 550;
+  color: var(--c-text);
+  border: 1px solid var(--c-line-strong);
+  border-radius: 8px;
+  transition: border-color 120ms ease, background 120ms ease;
+}
+
+.shell__actions button:hover {
+  border-color: var(--c-accent);
+}
+
+.shell__actions button.is-active {
+  border-color: var(--c-accent);
+  background: var(--c-accent-soft);
+}
+
+.shell__stage-row {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+.shell__reset {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px !important;
+  color: var(--c-muted) !important;
+}
+
+.stage {
+  flex: 1;
+  min-height: 0;
+  padding: 24px;
+  background: var(--c-bg);
+  background-image: radial-gradient(var(--c-line) 1px, transparent 1px);
+  background-size: 22px 22px;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  overflow: auto;
+}
+
+.stage__device {
+  width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--c-line-strong);
+  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.6);
+  background: #fff;
+  transition: max-width 260ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.stage--desktop .stage__device {
+  max-width: 100%;
+}
+
+.stage--mobile .stage__device {
+  max-width: 402px;
+  border-radius: 26px;
+}
+
+.stage__device iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* ---------- checklist drawer ---------- */
+
+.checklist {
+  width: 0;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-left: 1px solid var(--c-line);
+  background: var(--c-panel);
+  display: flex;
+  flex-direction: column;
+  transition: width 240ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.checklist.is-open {
+  width: min(400px, 42vw);
+}
+
+.checklist__bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--c-line);
+  min-width: min(400px, 42vw);
+}
+
+.checklist__bar h2 {
+  font-size: 0.95rem;
+}
+
+.checklist__bar p {
+  font-size: 0.78rem;
+  color: var(--c-muted);
+  margin-top: 2px;
+}
+
+.checklist__bar-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.checklist__bar-actions button {
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  color: var(--c-text);
+  border: 1px solid var(--c-line-strong);
+  border-radius: 7px;
+}
+
+.checklist__bar-actions button:hover {
+  border-color: var(--c-accent);
+}
+
+.checklist__body {
+  overflow-y: auto;
+  padding: 8px 18px 32px;
+  min-width: min(400px, 42vw);
+}
+
+.checklist__block {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--c-line);
+}
+
+.checklist__block h3 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--c-muted);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.checklist__variant {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.72rem;
+  color: var(--c-accent);
+  background: var(--c-accent-soft);
+  padding: 1px 7px;
+  border-radius: 999px;
+}
+
+.checklist__block ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.checklist__block li {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.checklist__item-label {
+  font-size: 0.86rem;
+  font-weight: 550;
+}
+
+.checklist__item-meta {
+  font-size: 0.76rem;
+  color: var(--c-muted);
+}
+
+.checklist__per {
+  font-size: 0.76rem;
+  color: var(--c-muted);
+  padding-left: 10px;
+  border-left: 2px solid var(--c-line-strong);
+  margin-top: 3px;
+}
+
+@media (max-width: 940px) {
+  .shell {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+  .shell__panel {
+    max-height: 46vh;
+  }
+  .stage {
+    min-height: 60vh;
+  }
+  .checklist.is-open {
+    width: 100%;
+    position: absolute;
+    inset: 0;
+    z-index: 30;
+  }
+}
