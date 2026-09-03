@@ -467,8 +467,12 @@
 .db-slide { flex: 0 0 auto; scroll-snap-align: start; overflow: hidden; }
 .db-carousel--peek .db-slide { width: min(82vw, 620px); }
 .db-carousel--cards .db-slide {
+  /* N tarjetas + (N-1) huecos caben en el ANCHO INTERIOR del contenedor
+     (canal de página, no el sangrado del carrusel). Usar --carousel-inset
+     aquí es el bug: crece con el ancho de la ventana y estrangula las
+     tarjetas en previews anchos. */
   width: calc(
-    (min(100vw, var(--theme-container)) - var(--carousel-inset) * 2 -
+    (min(100vw, var(--theme-container)) - var(--pad-x) * 2 -
       var(--gap) * (var(--slides-per-view) - 1)) / var(--slides-per-view)
   );
 }
