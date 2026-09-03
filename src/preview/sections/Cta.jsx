@@ -1,44 +1,46 @@
 import { useContent } from '../../content/context'
-import { Button } from '../ui'
+import { Button, Field } from '../ui'
 import { Reveal } from '../Reveal'
 
-function Actions({ config, cta }) {
+/** Captura de correo: es donde el campo de formulario entra en el sitio real. */
+function Capture({ cta }) {
   return (
-    <div className="db-cta__actions">
-      <Button variant="invert" iconSet={config.iconSet} withArrow>
-        {cta.primary}
-      </Button>
-      <Button variant="invert-ghost">{cta.secondary}</Button>
+    <div className="db-cta__form">
+      <Field placeholder={cta.placeholder} hint={cta.hint} />
+      <Button withArrow>{cta.primary}</Button>
     </div>
   )
 }
 
-export function CtaBoxed({ config }) {
+export function CtaBoxed() {
   const { cta } = useContent()
+
   return (
     <section className="db-section">
       <div className="db-container">
-        <Reveal effects={config.effects} className="db-cta db-cta--boxed">
+        <Reveal className="db-cta db-cta--boxed">
           <h2>{cta.title}</h2>
           <p>{cta.body}</p>
-          <Actions config={config} cta={cta} />
+          <Capture cta={cta} />
+          <p className="db-cta__aside">{cta.secondary}</p>
         </Reveal>
       </div>
     </section>
   )
 }
 
-export function CtaBanner({ config }) {
+export function CtaBanner() {
   const { cta } = useContent()
+
   return (
     <section className="db-cta db-cta--banner">
       <div className="db-container db-cta__inner">
-        <Reveal effects={config.effects}>
+        <Reveal>
           <h2>{cta.title}</h2>
           <p>{cta.body}</p>
         </Reveal>
-        <Reveal effects={config.effects} delay={0.08}>
-          <Actions config={config} cta={cta} />
+        <Reveal delay={0.08}>
+          <Capture cta={cta} />
         </Reveal>
       </div>
     </section>

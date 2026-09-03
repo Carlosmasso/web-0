@@ -13,13 +13,14 @@ function Attribution({ q }) {
   )
 }
 
-export function TestimonialQuote({ config }) {
+export function TestimonialQuote() {
   const { testimonial } = useContent()
   const q = testimonial.quotes[0]
+
   return (
     <section className="db-section db-section--tint">
       <div className="db-container">
-        <Reveal effects={config.effects} className="db-quote-lead">
+        <Reveal className="db-quote-lead">
           <p className="db-quote-lead__text">{q.text}</p>
           <Attribution q={q} />
         </Reveal>
@@ -28,17 +29,18 @@ export function TestimonialQuote({ config }) {
   )
 }
 
-export function TestimonialGrid({ config }) {
+export function TestimonialGrid() {
   const { testimonial } = useContent()
+
   return (
     <section className="db-section db-section--tint">
       <div className="db-container">
-        <Reveal effects={config.effects} className="db-section__head">
+        <Reveal className="db-section__head">
           <h2>{testimonial.title}</h2>
         </Reveal>
         <div className="db-grid-3">
           {testimonial.quotes.slice(0, 3).map((q, i) => (
-            <Reveal key={q.name} effects={config.effects} delay={i * 0.06} className="db-card db-quote">
+            <Reveal key={q.name} delay={i * 0.06} className="db-card db-quote">
               <p>{q.text}</p>
               <Attribution q={q} />
             </Reveal>

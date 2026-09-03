@@ -1,12 +1,14 @@
 import { motion, useReducedMotion } from 'motion/react'
+import { useStructure } from './PreviewCanvas'
 
-// Scroll-in reveal. Purpose: storytelling. Content enters in reading order as
-// the user arrives at it. Collapses to a plain element under reduced motion
-// or when effects are off.
-export function Reveal({ children, delay = 0, effects = 'subtle', className, style }) {
+// Aparición al entrar en pantalla. Propósito: narrativa, el contenido llega en
+// orden de lectura. Se colapsa a un elemento normal cuando el movimiento está
+// desactivado o el sistema pide movimiento reducido.
+export function Reveal({ children, delay = 0, className, style }) {
+  const { motion: level } = useStructure()
   const reduce = useReducedMotion()
 
-  if (effects === 'none' || reduce) {
+  if (level === 'none' || reduce) {
     return (
       <div className={className} style={style}>
         {children}
@@ -14,8 +16,8 @@ export function Reveal({ children, delay = 0, effects = 'subtle', className, sty
     )
   }
 
-  const rise = effects === 'expressive' ? 26 : 12
-  const duration = effects === 'expressive' ? 0.7 : 0.5
+  const rise = level === 'expressive' ? 26 : 12
+  const duration = level === 'expressive' ? 0.7 : 0.5
 
   return (
     <motion.div

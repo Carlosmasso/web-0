@@ -1,31 +1,53 @@
 import { motion, useReducedMotion } from 'motion/react'
 import { useContent } from '../../content/context'
+import { useStructure } from '../PreviewCanvas'
 import { Button, Eyebrow, Frame } from '../ui'
 import { Reveal } from '../Reveal'
 
-function Actions({ config, hero }) {
+/** Capa de aurora: tres manchas desenfocadas a la deriva detrás del contenido. */
+function Aurora() {
+  return (
+    <div className="db-hero__aurora" aria-hidden="true">
+      <i />
+      <i />
+      <i />
+    </div>
+  )
+}
+
+function Actions({ hero }) {
   return (
     <div className="db-hero__actions">
-      <Button variant="primary" iconSet={config.iconSet} withArrow>
-        {hero.primary}
-      </Button>
+      <Button withArrow>{hero.primary}</Button>
       <Button variant="ghost">{hero.secondary}</Button>
     </div>
   )
 }
 
-export function HeroSplit({ config }) {
-  const { hero } = useContent()
-  const reduce = useReducedMotion()
-  const parallax = config.effects === 'expressive' && !reduce
+function Body({ hero }) {
   return (
-    <section className="db-section db-hero db-hero--split">
+    <>
+      <Eyebrow>{hero.eyebrow}</Eyebrow>
+      <h1>{hero.title}</h1>
+      <p className="db-lead">{hero.subtitle}</p>
+      <Actions hero={hero} />
+    </>
+  )
+}
+
+export function HeroSplit() {
+  const { hero } = useContent()
+  const { components, motion: level } = useStructure()
+  const bg = components.hero.background
+  const reduce = useReducedMotion()
+  const parallax = level === 'expressive' && !reduce
+
+  return (
+    <section className="db-section db-hero db-hero--split" data-bg={bg}>
+      {bg === 'aurora' && <Aurora />}
       <div className="db-container db-hero__grid">
-        <Reveal effects={config.effects} className="db-hero__body">
-          <Eyebrow>{hero.eyebrow}</Eyebrow>
-          <h1>{hero.title}</h1>
-          <p className="db-lead">{hero.subtitle}</p>
-          <Actions config={config} hero={hero} />
+        <Reveal className="db-hero__body">
+          <Body hero={hero} />
         </Reveal>
         <motion.div
           className="db-hero__visual"
@@ -34,46 +56,47 @@ export function HeroSplit({ config }) {
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.9, ease: [0.23, 1, 0.32, 1] }}
         >
-          <Frame src={hero.image} alt="" ratio="4 / 5" />
+          <Frame src={hero.image} ratio="4 / 5" />
         </motion.div>
       </div>
     </section>
   )
 }
 
-export function HeroCentered({ config }) {
+export function HeroCentered() {
   const { hero } = useContent()
+  const { components } = useStructure()
+  const bg = components.hero.background
+
   return (
-    <section className="db-section db-hero db-hero--centered">
+    <section className="db-section db-hero db-hero--centered" data-bg={bg}>
+      {bg === 'aurora' && <Aurora />}
       <div className="db-container db-hero__center">
-        <Reveal effects={config.effects}>
-          <Eyebrow>{hero.eyebrow}</Eyebrow>
-          <h1>{hero.title}</h1>
-          <p className="db-lead">{hero.subtitle}</p>
-          <Actions config={config} hero={hero} />
+        <Reveal>
+          <Body hero={hero} />
         </Reveal>
-        <Reveal effects={config.effects} delay={0.1} className="db-hero__center-visual">
-          <Frame src={hero.image} alt="" ratio="16 / 9" />
+        <Reveal delay={0.1} className="db-hero__center-visual">
+          <Frame src={hero.image} ratio="16 / 9" />
         </Reveal>
       </div>
     </section>
   )
 }
 
-export function HeroImage({ config }) {
+/** La foto a sangre ES el fondo, así que esta variante ignora hero.background. */
+export function HeroImage() {
   const { hero } = useContent()
+
   return (
     <section
       className="db-section db-hero db-hero--image"
+      data-bg="image"
       style={hero.image ? { backgroundImage: `url(${hero.image})` } : undefined}
     >
       <div className="db-hero__scrim" />
       <div className="db-container db-hero__over">
-        <Reveal effects={config.effects}>
-          <Eyebrow>{hero.eyebrow}</Eyebrow>
-          <h1>{hero.title}</h1>
-          <p className="db-lead">{hero.subtitle}</p>
-          <Actions config={config} hero={hero} />
+        <Reveal>
+          <Body hero={hero} />
         </Reveal>
       </div>
     </section>

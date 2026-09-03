@@ -1,8 +1,12 @@
 import { useContent } from '../content/context'
+import { useStructure } from './PreviewCanvas'
 import { Icon } from './Icon'
+import { Button } from './ui'
 
-export function Nav({ config }) {
+export function Nav() {
   const { brand } = useContent()
+  const { iconSet } = useStructure()
+
   return (
     <header className="db-nav">
       <div className="db-container db-nav__inner">
@@ -18,11 +22,9 @@ export function Nav({ config }) {
           <a className="db-nav__login" href="#">
             {brand.login}
           </a>
-          <button className="db-btn db-btn--primary db-btn--sm" type="button">
-            {brand.navCta}
-          </button>
+          <Button>{brand.navCta}</Button>
           <button className="db-nav__burger" type="button" aria-label="Menú">
-            <Icon set={config.iconSet} name="menu" size={22} />
+            <Icon set={iconSet} name="menu" size={22} />
           </button>
         </div>
       </div>
@@ -32,6 +34,7 @@ export function Nav({ config }) {
 
 export function Footer() {
   const { brand, footer } = useContent()
+
   return (
     <footer className="db-footer">
       <div className="db-container db-footer__inner">

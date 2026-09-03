@@ -99,8 +99,10 @@ export const DEFAULT_CONTENT = {
   cta: {
     title: 'Prepara la ruta de mañana esta noche',
     body: 'Catorce días de prueba con tus paradas reales. Sin tarjeta y sin permanencia.',
+    placeholder: 'nombre@tuflota.es',
+    hint: 'Te escribimos en menos de un día laborable.',
     primary: 'Crear cuenta',
-    secondary: 'Hablar con el equipo',
+    secondary: 'O escríbenos y lo vemos contigo por teléfono.',
   },
 
   footer: {

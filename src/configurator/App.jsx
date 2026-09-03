@@ -1,13 +1,17 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { DEFAULT_CONFIG, normalizeConfig } from '../config/schema'
+import { deepMerge, setIn } from '../config/patch'
 import { encodeConfig, decodeConfig } from '../config/encode'
 import { DEFAULT_CONTENT } from '../content/defaults'
+import { paletteValues } from '../registry/palettes'
+import { getTypePairing } from '../registry/fonts'
+import { getAesthetic } from '../registry/aesthetics'
 import { Sidebar } from './Sidebar'
 import { ContentForm } from './ContentForm'
 import { PreviewFrame } from './PreviewFrame'
 import { Icon } from '../preview/Icon'
 
-const CONFIG_KEY = 'web0.config'
+const CONFIG_KEY = 'web0.config.v1'
 const CONTENT_KEY = 'web0.content'
 
 function loadConfig() {
@@ -66,13 +70,43 @@ export function App() {
 
   useEffect(() => () => clearTimeout(copiedTimer.current), [])
 
-  const update = useCallback((patch) => {
-    setConfig((prev) => ({ ...prev, ...patch, sections: { ...prev.sections, ...patch.sections } }))
+  /* ---- edición del contrato ---- */
+
+  const set = useCallback((path, value) => {
+    setConfig((prev) => setIn(prev, path, value))
   }, [])
 
-  const setSection = useCallback((type, variant) => {
-    setConfig((prev) => ({ ...prev, sections: { ...prev.sections, [type]: variant } }))
+  const merge = useCallback((patch) => {
+    setConfig((prev) => deepMerge(prev, patch))
   }, [])
+
+  const applyPalette = useCallback(
+    (id, paletteMode) => {
+      merge({ palette: paletteValues(id, paletteMode), meta: { paletteId: id, mode: paletteMode } })
+    },
+    [merge],
+  )
+
+  const applyType = useCallback(
+    (id) => {
+      merge({ typography: getTypePairing(id).values, meta: { typeId: id } })
+    },
+    [merge],
+  )
+
+  const applyAesthetic = useCallback(
+    (id) => {
+      const { patch } = getAesthetic(id)
+      merge({ aesthetic: id, ...patch, meta: { aestheticId: id } })
+    },
+    [merge],
+  )
+
+  const applyPreset = useCallback((preset) => {
+    setConfig(normalizeConfig(preset.config))
+  }, [])
+
+  /* ---- exportación ---- */
 
   const flash = (key) => {
     setCopied(key)
@@ -114,7 +148,14 @@ export function App() {
         </div>
 
         {mode === 'design' ? (
-          <Sidebar config={config} onUpdate={update} onSection={setSection} />
+          <Sidebar
+            config={config}
+            onSet={set}
+            onApplyPalette={applyPalette}
+            onApplyType={applyType}
+            onApplyAesthetic={applyAesthetic}
+            onApplyPreset={applyPreset}
+          />
         ) : (
           <ContentForm
             config={config}

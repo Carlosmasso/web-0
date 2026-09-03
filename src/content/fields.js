@@ -127,8 +127,10 @@ export function buildForm(config) {
       fields: [
         f('cta.title', 'Titular', 'text'),
         f('cta.body', 'Texto', 'textarea', { hint: 'máx. 25 palabras' }),
+        f('cta.placeholder', 'Marcador del campo', 'text', { hint: 'ej. nombre@empresa.es' }),
+        f('cta.hint', 'Nota bajo el campo', 'text', { hint: 'qué pasa tras enviar' }),
         f('cta.primary', 'Botón principal', 'text'),
-        f('cta.secondary', 'Botón secundario', 'text'),
+        f('cta.secondary', 'Línea de apoyo', 'textarea'),
       ],
     }),
   }

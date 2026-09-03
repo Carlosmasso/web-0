@@ -1,64 +1,93 @@
-// Font pairings offered in the marketplace. `google` is the query string for
-// fonts.googleapis.com/css2. Dynamic loading is intentional here: previewing
-// type live is the feature.
+// Emparejamientos tipográficos del marketplace. Cada uno entrega el bloque
+// `typography` del contrato. Las familias se cargan bajo demanda desde
+// src/theme/fonts.js.
 
-export const FONTS = [
+export const TYPE_PAIRINGS = [
   {
     id: 'space-grotesk',
     name: 'Space Grotesk + Inter',
     note: 'Geométrica, tono producto',
-    heading: '"Space Grotesk", system-ui, sans-serif',
-    body: '"Inter", system-ui, sans-serif',
-    google: 'family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600',
+    values: {
+      headingFamily: '"Space Grotesk", system-ui, sans-serif',
+      bodyFamily: '"Inter", system-ui, sans-serif',
+      monoFamily: '"IBM Plex Mono", ui-monospace, monospace',
+      headingWeight: 700,
+      headingCase: 'none',
+      headingTracking: '-0.02em',
+      scaleRatio: 1.25,
+    },
   },
   {
-    id: 'bricolage',
-    name: 'Bricolage Grotesque + Inter',
-    note: 'Carácter, titulares con personalidad',
-    heading: '"Bricolage Grotesque", system-ui, sans-serif',
-    body: '"Inter", system-ui, sans-serif',
-    google: 'family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&family=Inter:wght@400;500;600',
+    id: 'archivo-black',
+    name: 'Archivo Black + Inter',
+    note: 'Titular macizo, para bloques duros',
+    values: {
+      headingFamily: '"Archivo Black", "Helvetica Neue", sans-serif',
+      bodyFamily: '"Inter", system-ui, sans-serif',
+      monoFamily: '"IBM Plex Mono", ui-monospace, monospace',
+      headingWeight: 400,
+      headingCase: 'uppercase',
+      headingTracking: '-0.01em',
+      scaleRatio: 1.333,
+    },
   },
   {
     id: 'newsreader',
     name: 'Newsreader + Inter',
     note: 'Editorial, serif de titular',
-    heading: '"Newsreader", Georgia, serif',
-    body: '"Inter", system-ui, sans-serif',
-    google: 'family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Inter:wght@400;500;600',
+    values: {
+      headingFamily: '"Newsreader", Georgia, serif',
+      bodyFamily: '"Inter", system-ui, sans-serif',
+      monoFamily: '"IBM Plex Mono", ui-monospace, monospace',
+      headingWeight: 500,
+      headingCase: 'none',
+      headingTracking: '-0.02em',
+      scaleRatio: 1.28,
+    },
   },
   {
     id: 'sora',
-    name: 'Sora + IBM Plex Sans',
+    name: 'Sora + Inter',
     note: 'Tecnológica, limpia',
-    heading: '"Sora", system-ui, sans-serif',
-    body: '"IBM Plex Sans", system-ui, sans-serif',
-    google: 'family=Sora:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600',
+    values: {
+      headingFamily: '"Sora", system-ui, sans-serif',
+      bodyFamily: '"Inter", system-ui, sans-serif',
+      monoFamily: '"IBM Plex Mono", ui-monospace, monospace',
+      headingWeight: 600,
+      headingCase: 'none',
+      headingTracking: '-0.03em',
+      scaleRatio: 1.25,
+    },
   },
   {
     id: 'outfit',
     name: 'Outfit + Work Sans',
     note: 'Amable, redondeada',
-    heading: '"Outfit", system-ui, sans-serif',
-    body: '"Work Sans", system-ui, sans-serif',
-    google: 'family=Outfit:wght@400;500;600;700&family=Work+Sans:wght@400;500;600',
+    values: {
+      headingFamily: '"Outfit", system-ui, sans-serif',
+      bodyFamily: '"Work Sans", system-ui, sans-serif',
+      monoFamily: '"IBM Plex Mono", ui-monospace, monospace',
+      headingWeight: 600,
+      headingCase: 'none',
+      headingTracking: '-0.025em',
+      scaleRatio: 1.24,
+    },
+  },
+  {
+    id: 'chakra-mono',
+    name: 'Chakra Petch + IBM Plex Mono',
+    note: 'Terminal, técnica, en versales',
+    values: {
+      headingFamily: '"Chakra Petch", "IBM Plex Mono", monospace',
+      bodyFamily: '"IBM Plex Mono", ui-monospace, monospace',
+      monoFamily: '"IBM Plex Mono", ui-monospace, monospace',
+      headingWeight: 600,
+      headingCase: 'uppercase',
+      headingTracking: '0.08em',
+      scaleRatio: 1.2,
+    },
   },
 ]
 
-export function getFont(id) {
-  return FONTS.find((f) => f.id === id) ?? FONTS[0]
-}
-
-const loaded = new Set()
-
-// Injects the stylesheet <link> once per family into the given document.
-export function loadGoogleFont(font, doc = document) {
-  const key = doc === document ? font.id : `frame:${font.id}`
-  if (loaded.has(key)) return
-  loaded.add(key)
-  const link = doc.createElement('link')
-  link.rel = 'stylesheet'
-  link.dataset.googleFont = font.id
-  link.href = `https://fonts.googleapis.com/css2?${font.google}&display=swap`
-  doc.head.appendChild(link)
-}
+export const getTypePairing = (id) =>
+  TYPE_PAIRINGS.find((t) => t.id === id) ?? TYPE_PAIRINGS[0]
