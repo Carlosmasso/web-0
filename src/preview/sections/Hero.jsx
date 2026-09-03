@@ -4,16 +4,8 @@ import { useStructure } from '../PreviewCanvas'
 import { Button, Eyebrow, Frame } from '../ui'
 import { Reveal } from '../Reveal'
 
-/** Capa de aurora: tres manchas desenfocadas a la deriva detrás del contenido. */
-function Aurora() {
-  return (
-    <div className="db-hero__aurora" aria-hidden="true">
-      <i />
-      <i />
-      <i />
-    </div>
-  )
-}
+// La aurora la pinta el lienzo (<PreviewCanvas>), no el hero: una sola
+// implementación, y así las luces siguen ahí al bajar por la página.
 
 function Actions({ hero }) {
   return (
@@ -43,8 +35,7 @@ export function HeroSplit() {
   const parallax = level === 'expressive' && !reduce
 
   return (
-    <section className="db-section db-hero db-hero--split" data-bg={bg}>
-      {bg === 'aurora' && <Aurora />}
+    <section className="db-section db-hero db-hero--split" data-section="hero" data-bg={bg}>
       <div className="db-container db-hero__grid">
         <Reveal className="db-hero__body">
           <Body hero={hero} />
@@ -69,8 +60,7 @@ export function HeroCentered() {
   const bg = components.hero.background
 
   return (
-    <section className="db-section db-hero db-hero--centered" data-bg={bg}>
-      {bg === 'aurora' && <Aurora />}
+    <section className="db-section db-hero db-hero--centered" data-section="hero" data-bg={bg}>
       <div className="db-container db-hero__center">
         <Reveal>
           <Body hero={hero} />
@@ -90,6 +80,7 @@ export function HeroImage() {
   return (
     <section
       className="db-section db-hero db-hero--image"
+      data-section="hero"
       data-bg="image"
       style={hero.image ? { backgroundImage: `url(${hero.image})` } : undefined}
     >

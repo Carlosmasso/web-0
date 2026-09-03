@@ -75,7 +75,7 @@ function Shell({ kind }) {
   const activeDot = atEnd ? count - 1 : pos.index
 
   return (
-    <section className="db-section">
+    <section className="db-section" data-section="carousel">
       <div className="db-container">
         <Reveal className="db-carousel__head">
           <h2>{carousel.title}</h2>

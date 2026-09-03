@@ -4,6 +4,48 @@
 
 export const TYPE_PAIRINGS = [
   {
+    id: 'inter-clean',
+    name: 'Inter Tight + Inter',
+    note: 'Neutra y profesional. La apuesta segura',
+    values: {
+      headingFamily: '"Inter Tight", system-ui, sans-serif',
+      bodyFamily: '"Inter", system-ui, sans-serif',
+      monoFamily: '"IBM Plex Mono", ui-monospace, monospace',
+      headingWeight: 600,
+      headingCase: 'none',
+      headingTracking: '-0.025em',
+      scaleRatio: 1.24,
+    },
+  },
+  {
+    id: 'playfair',
+    name: 'Playfair Display + Inter',
+    note: 'Serif de autoridad. Despachos y patrimonio',
+    values: {
+      headingFamily: '"Playfair Display", Georgia, serif',
+      bodyFamily: '"Inter", system-ui, sans-serif',
+      monoFamily: '"IBM Plex Mono", ui-monospace, monospace',
+      headingWeight: 600,
+      headingCase: 'none',
+      headingTracking: '-0.015em',
+      scaleRatio: 1.3,
+    },
+  },
+  {
+    id: 'bricolage-work',
+    name: 'Bricolage + Work Sans',
+    note: 'Cálida y con carácter. Oficio y cercanía',
+    values: {
+      headingFamily: '"Bricolage Grotesque", system-ui, sans-serif',
+      bodyFamily: '"Work Sans", system-ui, sans-serif',
+      monoFamily: '"IBM Plex Mono", ui-monospace, monospace',
+      headingWeight: 700,
+      headingCase: 'none',
+      headingTracking: '-0.03em',
+      scaleRatio: 1.27,
+    },
+  },
+  {
     id: 'space-grotesk',
     name: 'Space Grotesk + Inter',
     note: 'Geométrica, tono producto',

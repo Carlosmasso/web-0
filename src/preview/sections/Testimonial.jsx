@@ -18,7 +18,7 @@ export function TestimonialQuote() {
   const q = testimonial.quotes[0]
 
   return (
-    <section className="db-section db-section--tint">
+    <section className="db-section db-section--tint" data-section="testimonial">
       <div className="db-container">
         <Reveal className="db-quote-lead">
           <p className="db-quote-lead__text">{q.text}</p>
@@ -33,7 +33,7 @@ export function TestimonialGrid() {
   const { testimonial } = useContent()
 
   return (
-    <section className="db-section db-section--tint">
+    <section className="db-section db-section--tint" data-section="testimonial">
       <div className="db-container">
         <Reveal className="db-section__head">
           <h2>{testimonial.title}</h2>

@@ -1,12 +1,15 @@
-import { useEffect, useRef } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
 
-// Bridges config + content into the isolated preview iframe. Waits for the
-// frame to announce itself, then pushes on every change.
-export function PreviewFrame({ config, content, device }) {
+// Puente hacia el lienzo aislado. Envía { config, content } en cada cambio y
+// expone `focus()` para que el panel pueda señalar en el sitio qué toca cada
+// control.
+export const PreviewFrame = forwardRef(function PreviewFrame({ config, content, device }, ref) {
   const frameRef = useRef(null)
   const readyRef = useRef(false)
   const dataRef = useRef({ config, content })
   dataRef.current = { config, content }
+
+  const send = (message) => frameRef.current?.contentWindow?.postMessage(message, '*')
 
   useEffect(() => {
     function onMessage(event) {
@@ -22,13 +25,17 @@ export function PreviewFrame({ config, content, device }) {
 
   function post() {
     const { config, content } = dataRef.current
-    frameRef.current?.contentWindow?.postMessage({ type: 'config', config, content }, '*')
+    send({ type: 'config', config, content })
   }
 
   useEffect(() => {
     if (readyRef.current) post()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config, content])
+
+  useImperativeHandle(ref, () => ({
+    focus: (affects) => send({ type: 'focus', affects: affects ?? null }),
+  }))
 
   return (
     <div className={`stage stage--${device}`}>
@@ -37,4 +44,4 @@ export function PreviewFrame({ config, content, device }) {
       </div>
     </div>
   )
-}
+})

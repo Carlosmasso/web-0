@@ -1,36 +1,47 @@
-import { createContext, useContext, useLayoutEffect, useMemo, useRef } from 'react'
+import { createContext, useContext, useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import { resolveTheme, schemeOf } from '../theme/resolve'
 import { ensureFonts } from '../theme/fonts'
 
 // ============================================================
-// EL LIENZO
+// MÓDULO 3 — EL LIENZO
 //
 // Único componente que conoce la configuración cosmética completa. Escribe las
-// custom properties directamente sobre su nodo con setProperty y NO pasa nada
-// hacia abajo: los hijos leen var(--theme-*) desde CSS.
+// custom properties con setProperty sobre su nodo y NO pasa nada hacia abajo:
+// los hijos leen var(--theme-*) desde CSS. Cambiar un color no reconcilia ni
+// un nodo de React.
 //
-// Consecuencia: cambiar un color no reconcilia ni un solo nodo de React. El
-// trabajo es una llamada a setProperty por token más un recálculo de estilo
-// del navegador.
+// Además expone la configuración como SELECTORES DE ATRIBUTO en el DOM
+// (data-aesthetic, data-radius, data-shadow…). Eso permite que toda la
+// cascada mute de golpe a nivel nativo: pasar de un dentista a un
+// cyber-brutalismo es un recálculo de estilo, no un re-render del árbol.
 // ============================================================
 
 const StructureContext = createContext(null)
 
-/** El canal estructural: lo único que los componentes necesitan en JavaScript. */
 export function useStructure() {
   const ctx = useContext(StructureContext)
   if (!ctx) throw new Error('useStructure debe usarse dentro de <PreviewCanvas>')
   return ctx
 }
 
+/** Capa de aurora: manchas de luz desenfocadas a la deriva. */
+function AuroraLayer() {
+  return (
+    <div className="pv-aurora" aria-hidden="true">
+      <i />
+      <i />
+      <i />
+    </div>
+  )
+}
+
 export function PreviewCanvas({ config, doc = document, children }) {
   const rootRef = useRef(null)
 
-  // Solo se recalcula cuando cambia algo cosmético.
   const vars = useMemo(() => resolveTheme(config), [config])
 
-  // useLayoutEffect, no useEffect: escribimos antes del pintado, así que nunca
-  // se ve un fotograma con el tema anterior.
+  // useLayoutEffect: escribimos antes del pintado, así que nunca se ve un
+  // fotograma con el tema anterior.
   useLayoutEffect(() => {
     const el = rootRef.current
     if (!el) return
@@ -41,8 +52,18 @@ export function PreviewCanvas({ config, doc = document, children }) {
     ensureFonts([config.typography.headingFamily, config.typography.bodyFamily], doc)
   }, [config.typography.headingFamily, config.typography.bodyFamily, doc])
 
-  // Identidad estable mientras la estructura no cambie, para que un cambio de
-  // paleta no invalide a ningún consumidor del contexto.
+  // Las transiciones se activan DESPUÉS del primer pintado. Si no, la carga
+  // inicial se ve como un desvanecido de colores en lugar de una página ya
+  // puesta, que es exactamente el parpadeo que queremos evitar.
+  useEffect(() => {
+    const el = rootRef.current
+    if (!el) return
+    const id = requestAnimationFrame(() => {
+      el.dataset.ready = 'true'
+    })
+    return () => cancelAnimationFrame(id)
+  }, [])
+
   const structureKey = JSON.stringify({
     a: config.aesthetic,
     m: config.motion,
@@ -67,11 +88,19 @@ export function PreviewCanvas({ config, doc = document, children }) {
       <div
         ref={rootRef}
         className="pv-canvas"
+        /* Selectores de atributo: toda la cascada cuelga de aquí. */
         data-aesthetic={config.aesthetic}
+        data-radius={config.borders.radius}
+        data-border={config.borders.width}
+        data-shadow={config.shadows.style}
         data-density={config.layout.density}
         data-scheme={schemeOf(config)}
         data-noise={config.effects.noise ? 'on' : 'off'}
+        data-aurora={config.effects.aurora ? 'on' : 'off'}
+        data-glass={config.effects.blur > 0 ? 'on' : 'off'}
+        data-motion={config.motion}
       >
+        {config.effects.aurora && <AuroraLayer />}
         {children}
       </div>
     </StructureContext.Provider>

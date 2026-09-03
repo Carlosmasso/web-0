@@ -68,6 +68,94 @@ el acabado sobre la paleta que el cliente ya eligió; las *plantillas*
 | `src/preview/` | El sitio (componentes de producción). `PreviewCanvas.jsx` inyecta los tokens y provee el canal estructural; cada sección lee `useStructure()` y `useContent()`. |
 | `src/configurator/` | El shell con dos pestañas: **Diseño** (`Sidebar`, cara al cliente) y **Contenido** (`ContentForm`, cara a ti). `App` persiste config y contenido en `localStorage`, y la config también en `?c=`. |
 
+## Libertad guiada: el panel en tres capas
+
+El problema no es la falta de opciones, es la parálisis. El panel está ordenado
+por **cuánto compromete cada decisión**, no por qué propiedad de CSS toca:
+
+| Capa | Qué decide | Cuántas opciones |
+| --- | --- | --- |
+| **1 · Punto de partida** | Un preset maestro completo, o el dado 🎲 | 6 tarjetas y un botón |
+| **2 · Tu identidad** | Color de marca, tipografía, esquinas, respiración, movimiento | 5 controles, todos con guardarraíl |
+| **3 · Ajuste fino** | Acceso crudo a sombras, bordes, efectos y secciones | Plegado por defecto |
+
+`src/registry/vocabulary.js` es la única capa donde vive el lenguaje de cara al
+usuario: nadie ve `box-shadow: inset` ni `border-radius: 32px`, ven
+**"Táctil / 3D"** y **"Redondeadas"**, cada una con una línea que describe lo que
+*comunica*, no lo que hace. Los controles se generan desde ahí, así que la jerga
+no puede colarse.
+
+### El motor de restricciones
+
+`normalizeConfigWithGuardrails(userConfig)` (`src/config/guardrails.js`) corre
+**siempre** justo antes de inyectar, venga el dato del panel, de un enlace
+compartido o de la base de datos. Cuatro tipos de regla:
+
+- **lock** — valores constitutivos de la estética. Neo-brutalismo con esquinas
+  redondeadas deja de ser neo-brutalismo: se fuerza a `none`. En el panel, esas
+  opciones no se deshabilitan sin más: `ownerOfValue()` busca a qué estética
+  pertenecen y la opción se convierte en una **puerta** ("Táctil / 3D · Cambia a
+  Claymorfismo"). El usuario expresa una intención y el sistema le lleva donde
+  esa intención existe, en vez de negársela.
+- **allow** — listas blancas. Glassmorfismo admite suave, amplio o cápsula, no recto.
+- **clamp** — rangos numéricos sanos para la intensidad de sombra o el desenfoque.
+- **suelo de accesibilidad** — texto ≥ 7:1, texto atenuado ≥ 4.5:1, acento ≥ 3:1.
+  Este no lo salta ni el modo Pro.
+
+Devuelve `{ config, violations, audit }`. Las `violations` se muestran en la barra
+("3 ajustes automáticos") y en el cajón de exportación, que es lo que convierte
+una caja negra frustrante en una herramienta en la que se confía.
+
+El interruptor **"Saltarme las reglas de la estética"** (capa 3) desactiva
+`lock` y `allow`. Nunca el suelo de accesibilidad.
+
+### "¿Y esto dónde se ve?"
+
+Cada entrada del vocabulario declara un `affects: { selector, label }`, y hay
+**dos gestos para dos intenciones distintas**:
+
+- **Pasar el ratón ilumina, y nunca desplaza.** El panel envía
+  `postMessage({ type: 'focus', affects })` al iframe y `Spotlight` atenúa la
+  página y dibuja un contorno sobre todos los elementos que ese control cambia.
+  Encender lleva 140 ms de retardo, así que barrer el puntero por la lista no
+  enciende y apaga el resaltado decenas de veces; apagar es inmediato.
+- **Pulsar "Ver" desplaza.** `scrollTo` viaja como marca de tiempo, de modo que
+  pulsarlo dos veces vuelve a llevarte allí.
+
+Esa separación es deliberada: si el hover desplazara, mover el ratón por la
+columna de controles haría saltar el lienzo sin parar.
+
+Debajo de cada control queda además la línea *"Afecta a: tarjetas, imágenes y
+diapositivas"*, que resuelve la misma pregunta sin necesidad de interactuar.
+
+### Catálogo
+
+`src/registry/presets.js`, en dos categorías porque son dos compradores:
+
+- **Negocio** — Salud y bienestar (verde menta / azul clínico, relieve
+  imperceptible), Corporativo y legal (azul marino, acento champán, Playfair),
+  Hostelería y artesanía (tonos tierra, esquinas orgánicas, grano de papel).
+- **Tendencia** — Neo-brutalismo, Glassmorfismo, Claymorfismo.
+
+Estética != preset: tres presets comerciales muy distintos pueden apoyarse en la
+misma estética y no parecerse en nada.
+
+### Herramientas de producto
+
+- **🎲 Sorpréndeme** (`src/theme/randomize.js`) — azar *controlado*. Muestrea un
+  preset, un tono dentro de familias con carácter, y una tipografía con afinidad
+  probada para esa estética. La paleta no se sortea: se **deriva**. Después pasa
+  por los guardarraíles, así que no puede salir roto.
+- **Color seguro** (`src/theme/color.js`) — `safePalette(primary)` recibe solo el
+  color de marca y devuelve fondo, superficie, texto y acento con contraste
+  garantizado, moviendo únicamente la luminosidad para que el color siga siendo
+  reconocible. El neutro lleva una pizca del tono de marca: es lo que separa una
+  paleta *elegida* de una *heredada*.
+- **Exportador** (`src/theme/export.js`) — `tailwind.config.js` mapeado a clases
+  semánticas (`bg-surface`, `text-ink`, `rounded-brand`, `shadow-brand`),
+  `theme.css` con las custom properties en CSS puro, y `design-tokens.json` en
+  formato W3C para Figma o Style Dictionary. Portabilidad, no lock-in.
+
 ## El flujo de trabajo
 
 1. El cliente te pasa su contenido.

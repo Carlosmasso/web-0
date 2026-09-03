@@ -77,6 +77,7 @@ export const CAROUSEL_CONTROL_OPTIONS = [
 export const SECTION_META = {
   hero: {
     label: 'Cabecera',
+    affects: { selector: '[data-section="hero"]', label: 'La portada' },
     variants: [
       { id: 'split', label: 'Dividida', note: 'Texto + panel visual' },
       { id: 'centered', label: 'Centrada', note: 'Manifiesto tipográfico' },
@@ -85,6 +86,7 @@ export const SECTION_META = {
   },
   features: {
     label: 'Características',
+    affects: { selector: '[data-section="features"]', label: 'El bloque de características' },
     variants: [
       { id: 'grid', label: 'Rejilla', note: 'Tres columnas con icono' },
       { id: 'rows', label: 'Filas alternas', note: 'Texto e imagen en zigzag' },
@@ -93,6 +95,7 @@ export const SECTION_META = {
   },
   carousel: {
     label: 'Carrusel',
+    affects: { selector: '[data-section="carousel"]', label: 'El carrusel entero' },
     variants: [
       { id: 'peek', label: 'Con adelanto', note: 'Se asoma la siguiente tarjeta' },
       { id: 'cards', label: 'Tarjetas', note: 'Varias visibles, scroll-snap' },
@@ -101,6 +104,7 @@ export const SECTION_META = {
   },
   testimonial: {
     label: 'Testimonio',
+    affects: { selector: '[data-section="testimonial"]', label: 'La franja de testimonios' },
     variants: [
       { id: 'quote', label: 'Cita grande', note: 'Una voz destacada' },
       { id: 'grid', label: 'Rejilla', note: 'Tres citas cortas' },
@@ -108,9 +112,22 @@ export const SECTION_META = {
   },
   cta: {
     label: 'Llamada a la acción',
+    affects: { selector: '[data-section="cta"]', label: 'La llamada a la acción' },
     variants: [
       { id: 'boxed', label: 'En tarjeta', note: 'Bloque contenido y centrado' },
       { id: 'banner', label: 'Banda', note: 'Franja de ancho completo' },
     ],
+  },
+}
+
+/** Anclas de los controles de identidad, que no pasan por el vocabulario. */
+export const IDENTITY_AFFECTS = {
+  typography: {
+    selector: '.db-hero h1, .db-section__head h2, .db-carousel__head h2, .db-wordmark',
+    label: 'Todos los titulares',
+  },
+  brand: {
+    selector: '.db-btn--primary, .db-eyebrow, .db-feature__icon',
+    label: 'Botones, antetítulos e iconos',
   },
 }

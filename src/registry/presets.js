@@ -1,13 +1,159 @@
-// Plantillas completas: configuraciones enteras listas para aplicar de una vez.
-// A diferencia de las estéticas (que solo parchean el acabado), un preset fija
-// también paleta, tipografía, degradados y estructura de las secciones.
+// ============================================================
+// MÓDULO 2 — CATÁLOGO DE PRESETS MAESTROS
+//
+// Capa MACRO del configurador. El usuario elige un mundo entero, no ajustes
+// sueltos: paleta, tipografía, acabado, estructura de secciones y efectos
+// llegan ya afinados y coherentes entre sí.
+//
+// Dos categorías porque son dos compradores distintos:
+//   trend      agencias, startups, portfolios. Compran diferenciación.
+//   commercial negocio a pie de calle. Compra confianza y que "parezca serio".
+//
+// Cada preset declara la `aesthetic` que gobierna su comportamiento en CSS.
+// Estética != preset: tres presets comerciales muy distintos pueden apoyarse
+// en la misma estética y no parecerse en nada.
+// ============================================================
 
-/** @type {Record<string, Partial<typeof import('../config/schema').DEFAULT_CONFIG>>} */
+export const PRESET_CATEGORIES = [
+  { id: 'commercial', label: 'Negocio', note: 'Sectores con expectativas visuales muy marcadas' },
+  { id: 'trend', label: 'Tendencia', note: 'Para diferenciarse, no para tranquilizar' },
+]
+
 export const PRESETS = [
+  // ==========================================================
+  // A) ESTÁNDAR COMERCIAL
+  // ==========================================================
   {
-    id: 'neo-brutal-corp',
-    label: 'Neo-brutalismo corporativo',
-    note: 'Amarillo y negro, bordes rectos, sombra sólida.',
+    id: 'medical-wellness',
+    category: 'commercial',
+    label: 'Salud y bienestar',
+    audience: 'Dentistas, fisios, psicólogos, clínicas',
+    note: 'Verde menta y azul clínico, relieve casi imperceptible. Higiene y calma.',
+    swatch: ['#f7fbfa', '#0f9b8e', '#3b7fc4'],
+    config: {
+      aesthetic: 'material-clean',
+      motion: 'subtle',
+      iconSet: 'phosphor',
+      palette: {
+        primary: '#0f8d81', secondary: '#3b7fc4', accent: '#0b7a70',
+        neutralBg: '#f6fbfa', neutralSurface: '#ffffff',
+        textPrimary: '#0f211f', textMuted: '#4e6360',
+      },
+      typography: {
+        headingFamily: '"Inter Tight", system-ui, sans-serif',
+        bodyFamily: '"Inter", system-ui, sans-serif',
+        monoFamily: '"IBM Plex Mono", ui-monospace, monospace',
+        headingWeight: 600, headingCase: 'none',
+        headingTracking: '-0.025em', scaleRatio: 1.24,
+      },
+      borders: { radius: 'soft', width: 'thin', style: 'solid', color: 'auto' },
+      // Sombra deliberadamente por debajo del umbral consciente: se percibe
+      // orden, no se percibe la sombra.
+      shadows: { style: 'soft-elevation', color: 'auto', intensity: 0.5 },
+      gradients: { primaryGradient: null, backgroundGradient: null },
+      effects: { blur: 0, noise: false, aurora: false },
+      layout: { density: 'spacious', containerWidth: 1140 },
+      sections: { hero: 'split', features: 'grid', carousel: 'cards', testimonial: 'grid', cta: 'boxed' },
+      components: {
+        hero: { background: 'solid' },
+        card: { media: 'auto' },
+        button: { shape: 'inherit', fill: 'solid' },
+        input: { variant: 'outline' },
+        carousel: { controls: 'arrows', peek: false, slidesPerView: 3 },
+      },
+      meta: { presetId: 'medical-wellness', paletteId: null, mode: 'light', typeId: null, aestheticId: 'material-clean' },
+    },
+  },
+
+  {
+    id: 'corporate-legal',
+    category: 'commercial',
+    label: 'Corporativo y legal',
+    audience: 'Bufetes, consultoras, inmobiliarias',
+    note: 'Azul marino profundo con acento champán y serif de autoridad.',
+    swatch: ['#f8f7f4', '#12294a', '#a67c3d'],
+    config: {
+      aesthetic: 'minimalist-flat',
+      motion: 'subtle',
+      iconSet: 'tabler',
+      palette: {
+        primary: '#12294a', secondary: '#a67c3d', accent: '#8a682f',
+        neutralBg: '#f8f7f4', neutralSurface: '#ffffff',
+        textPrimary: '#101d2e', textMuted: '#535e6c',
+      },
+      typography: {
+        headingFamily: '"Playfair Display", Georgia, serif',
+        bodyFamily: '"Inter", system-ui, sans-serif',
+        monoFamily: '"IBM Plex Mono", ui-monospace, monospace',
+        headingWeight: 600, headingCase: 'none',
+        headingTracking: '-0.015em', scaleRatio: 1.3,
+      },
+      borders: { radius: 'none', width: 'thin', style: 'solid', color: 'auto' },
+      shadows: { style: 'none', color: 'auto', intensity: 1 },
+      gradients: { primaryGradient: null, backgroundGradient: null },
+      effects: { blur: 0, noise: false, aurora: false },
+      layout: { density: 'spacious', containerWidth: 1180 },
+      sections: { hero: 'split', features: 'rows', carousel: 'cards', testimonial: 'quote', cta: 'banner' },
+      components: {
+        hero: { background: 'solid' },
+        card: { media: 'auto' },
+        button: { shape: 'sharp', fill: 'solid' },
+        input: { variant: 'underline' },
+        carousel: { controls: 'arrows', peek: false, slidesPerView: 3 },
+      },
+      meta: { presetId: 'corporate-legal', paletteId: null, mode: 'light', typeId: null, aestheticId: 'minimalist-flat' },
+    },
+  },
+
+  {
+    id: 'local-food',
+    category: 'commercial',
+    label: 'Hostelería y artesanía',
+    audience: 'Cafeterías, panaderías, talleres',
+    note: 'Tonos tierra, esquinas muy orgánicas y grano de papel.',
+    swatch: ['#fdf8f1', '#b5551f', '#5f7a4a'],
+    config: {
+      aesthetic: 'claymorphism',
+      motion: 'expressive',
+      iconSet: 'phosphor',
+      palette: {
+        primary: '#a94c1b', secondary: '#5f7a4a', accent: '#9c4517',
+        neutralBg: '#fdf8f1', neutralSurface: '#fffdfa',
+        textPrimary: '#2a1c13', textMuted: '#6b5748',
+      },
+      typography: {
+        headingFamily: '"Bricolage Grotesque", system-ui, sans-serif',
+        bodyFamily: '"Work Sans", system-ui, sans-serif',
+        monoFamily: '"IBM Plex Mono", ui-monospace, monospace',
+        headingWeight: 700, headingCase: 'none',
+        headingTracking: '-0.03em', scaleRatio: 1.27,
+      },
+      borders: { radius: 'round', width: 'thin', style: 'solid', color: 'auto' },
+      shadows: { style: 'inset-3d', color: 'auto', intensity: 1.1 },
+      gradients: { primaryGradient: null, backgroundGradient: null },
+      effects: { blur: 0, noise: true, aurora: false },
+      layout: { density: 'normal', containerWidth: 1120 },
+      sections: { hero: 'image', features: 'grid', carousel: 'peek', testimonial: 'quote', cta: 'boxed' },
+      components: {
+        hero: { background: 'image' },
+        card: { media: 'auto' },
+        button: { shape: 'pill', fill: 'solid' },
+        input: { variant: 'filled' },
+        carousel: { controls: 'both', peek: true, slidesPerView: 3 },
+      },
+      meta: { presetId: 'local-food', paletteId: null, mode: 'light', typeId: null, aestheticId: 'claymorphism' },
+    },
+  },
+
+  // ==========================================================
+  // B) TENDENCIAS UI / EXPERIMENTALES
+  // ==========================================================
+  {
+    id: 'neo-brutal',
+    category: 'trend',
+    label: 'Neo-brutalismo',
+    audience: 'Agencias, herramientas de creador, marcas con carácter',
+    note: 'Sombras sólidas negras, trazo grueso y titulares en versales.',
     swatch: ['#ffe500', '#0a0a0a', '#2c2ce0'],
     config: {
       aesthetic: 'neo-brutalism',
@@ -19,11 +165,11 @@ export const PRESETS = [
         textPrimary: '#0a0a0a', textMuted: '#3d3d3d',
       },
       typography: {
-        headingFamily: '"Archivo Black", "Helvetica Neue", sans-serif',
+        headingFamily: '"Space Grotesk", system-ui, sans-serif',
         bodyFamily: '"Inter", system-ui, sans-serif',
         monoFamily: '"IBM Plex Mono", ui-monospace, monospace',
-        headingWeight: 400, headingCase: 'uppercase',
-        headingTracking: '-0.01em', scaleRatio: 1.333,
+        headingWeight: 700, headingCase: 'uppercase',
+        headingTracking: '-0.02em', scaleRatio: 1.333,
       },
       borders: { radius: 'none', width: 'thick', style: 'solid', color: '#0a0a0a' },
       shadows: { style: 'flat-hard', color: '#0a0a0a', intensity: 1.4 },
@@ -38,15 +184,17 @@ export const PRESETS = [
         input: { variant: 'outline' },
         carousel: { controls: 'arrows', peek: false, slidesPerView: 3 },
       },
-      meta: { paletteId: null, mode: 'light', typeId: 'archivo-black', aestheticId: 'neo-brutalism' },
+      meta: { presetId: 'neo-brutal', paletteId: null, mode: 'light', typeId: null, aestheticId: 'neo-brutalism' },
     },
   },
 
   {
     id: 'saas-glass',
-    label: 'SaaS premium glassmorphic',
-    note: 'Aurora de fondo, tarjetas translúcidas, esquinas amplias.',
-    swatch: ['#7c3aed', '#db2777', '#0ea5e9'],
+    category: 'trend',
+    label: 'Glassmorfismo',
+    audience: 'SaaS, productos de datos, landing de lanzamiento',
+    note: 'Aurora de fondo y superficies translúcidas con desenfoque severo.',
+    swatch: ['#0f0b2e', '#7c3aed', '#0ea5e9'],
     config: {
       aesthetic: 'glassmorphism',
       motion: 'expressive',
@@ -93,64 +241,59 @@ export const PRESETS = [
         input: { variant: 'filled' },
         carousel: { controls: 'both', peek: true, slidesPerView: 3 },
       },
-      meta: { paletteId: null, mode: 'dark', typeId: 'sora', aestheticId: 'glassmorphism' },
+      meta: { presetId: 'saas-glass', paletteId: null, mode: 'dark', typeId: null, aestheticId: 'glassmorphism' },
     },
   },
 
   {
-    id: 'cyberpunk-web3',
-    label: 'Dashboard cyberpunk / Web3',
-    note: 'Negro profundo, neón cian y rosa, monoespaciada.',
-    swatch: ['#05070d', '#22d3ee', '#f472b6'],
+    id: 'clay-playful',
+    category: 'trend',
+    label: 'Claymorfismo',
+    audience: 'Apps de consumo, educación, producto infantil',
+    note: 'Volumen inflado con doble sombra interna cruzada.',
+    swatch: ['#f0eeff', '#6d5cf6', '#ff8fab'],
     config: {
-      aesthetic: 'cyberpunk',
+      aesthetic: 'claymorphism',
       motion: 'expressive',
-      iconSet: 'tabler',
+      iconSet: 'phosphor',
       palette: {
-        primary: '#22d3ee', secondary: '#f472b6', accent: '#22d3ee',
-        neutralBg: '#05070d', neutralSurface: '#0b111c',
-        textPrimary: '#d7fbff', textMuted: '#6f8b98',
+        primary: '#5b4bd6', secondary: '#e4568c', accent: '#5346c9',
+        neutralBg: '#f1effe', neutralSurface: '#faf9ff',
+        textPrimary: '#1e1a3c', textMuted: '#5b5580',
       },
       typography: {
-        headingFamily: '"Chakra Petch", "IBM Plex Mono", monospace',
-        bodyFamily: '"IBM Plex Mono", ui-monospace, monospace',
+        headingFamily: '"Outfit", system-ui, sans-serif',
+        bodyFamily: '"Work Sans", system-ui, sans-serif',
         monoFamily: '"IBM Plex Mono", ui-monospace, monospace',
-        headingWeight: 600, headingCase: 'uppercase',
-        headingTracking: '0.08em', scaleRatio: 1.2,
+        headingWeight: 700, headingCase: 'none',
+        headingTracking: '-0.03em', scaleRatio: 1.26,
       },
-      borders: { radius: 'none', width: 'thin', style: 'solid', color: '#22d3ee' },
-      shadows: { style: 'glowing-neon', color: '#22d3ee', intensity: 1.3 },
+      borders: { radius: 'pill', width: 'thin', style: 'solid', color: 'auto' },
+      shadows: { style: 'inset-3d', color: 'auto', intensity: 1.3 },
       gradients: {
         primaryGradient: {
-          type: 'linear', angle: 96,
+          type: 'linear', angle: 135,
           stops: [
-            { color: '#22d3ee', at: 0 },
-            { color: '#f472b6', at: 100 },
+            { color: '#6d5cf6', at: 0 },
+            { color: '#e4568c', at: 100 },
           ],
         },
-        backgroundGradient: {
-          type: 'conic', angle: 210, position: '70% 8%',
-          stops: [
-            { color: '#05070d', at: 0 },
-            { color: '#0c1e28', at: 34 },
-            { color: '#1a0a1c', at: 68 },
-            { color: '#05070d', at: 100 },
-          ],
-        },
+        backgroundGradient: null,
       },
-      effects: { blur: 0, noise: true, aurora: false },
-      layout: { density: 'compact', containerWidth: 1320 },
-      sections: { hero: 'split', features: 'rows', carousel: 'cards', testimonial: 'grid', cta: 'banner' },
+      effects: { blur: 0, noise: false, aurora: false },
+      layout: { density: 'spacious', containerWidth: 1140 },
+      sections: { hero: 'centered', features: 'bento', carousel: 'cards', testimonial: 'grid', cta: 'boxed' },
       components: {
         hero: { background: 'gradient' },
         card: { media: 'auto' },
-        button: { shape: 'sharp', fill: 'outline' },
-        input: { variant: 'underline' },
-        carousel: { controls: 'dots', peek: false, slidesPerView: 4 },
+        button: { shape: 'pill', fill: 'gradient' },
+        input: { variant: 'filled' },
+        carousel: { controls: 'dots', peek: false, slidesPerView: 3 },
       },
-      meta: { paletteId: 'neon', mode: 'dark', typeId: 'chakra-mono', aestheticId: 'cyberpunk' },
+      meta: { presetId: 'clay-playful', paletteId: null, mode: 'light', typeId: null, aestheticId: 'claymorphism' },
     },
   },
 ]
 
 export const getPreset = (id) => PRESETS.find((p) => p.id === id) ?? null
+export const presetsByCategory = (category) => PRESETS.filter((p) => p.category === category)

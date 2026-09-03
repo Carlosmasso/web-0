@@ -38,16 +38,88 @@
   line-height: 1.6;
 }
 
-/* Grano opcional, por encima de todo pero sin capturar el puntero. */
+/* ------------------------------------------------------------
+   MÓDULO 3.1 — TRANSICIÓN ENTRE ESTÉTICAS
+   Al cambiar de preset, todo lo que se PINTA se interpola con una sola curva
+   y una sola duración, así que el salto se lee como una transformación
+   continua y no como un corte.
+
+   Deliberadamente NO se usa `transition: all`: en el nodo raíz eso incluiría
+   width, padding y font-size, y al cambiar densidad o escala tipográfica
+   dispararía reflows animados — justo el parpadeo que se quiere evitar.
+   Solo propiedades de composición y pintura, que no tocan el layout.
+
+   Se activa tras el primer pintado (data-ready) para que la carga inicial
+   aparezca ya puesta, no desvaneciéndose.
+   ------------------------------------------------------------ */
+
+.pv-canvas[data-ready] :is(
+    .db-card, .db-frame, .db-slide, .db-btn, .db-field__control,
+    .db-nav, .db-cta--boxed, .db-carousel__arrow, .db-carousel__dot,
+    .db-feature__icon, .db-section--tint, .db-footer, .db-hero
+  ) {
+  transition-property: background-color, background-image, border-color, border-radius,
+    border-width, box-shadow, color, backdrop-filter, opacity;
+  transition-duration: 0.4s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pv-canvas[data-ready] {
+  transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    background-image 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Los gestos de interacción son mucho más rápidos que el cambio de tema: si
+   heredaran los 400 ms, un botón se sentiría gomoso. Se reafirman aquí. */
+.pv-canvas[data-ready] .db-btn:active,
+.pv-canvas[data-ready] .db-carousel__arrow:active {
+  transition-duration: 0.1s;
+}
+
+/* ------------------------------------------------------------
+   MÓDULO 3.2 — CAPAS DE EFECTO
+   ------------------------------------------------------------ */
+
+/* Aurora a nivel de lienzo: luces que respiran detrás de toda la página. */
+.pv-aurora {
+  position: fixed;
+  inset: -25%;
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(80px);
+  opacity: 0.55;
+}
+.pv-aurora i {
+  position: absolute;
+  display: block;
+  width: 44%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  animation: pv-float 30s ease-in-out infinite alternate;
+}
+.pv-aurora i:nth-child(1) { background: var(--theme-primary); top: 2%; left: 8%; }
+.pv-aurora i:nth-child(2) { background: var(--theme-secondary); top: 30%; right: 4%; animation-delay: -11s; }
+.pv-aurora i:nth-child(3) { background: var(--theme-accent); bottom: 4%; left: 40%; animation-delay: -21s; }
+
+@keyframes pv-float {
+  from { transform: translate3d(-5%, -4%, 0) scale(1); }
+  to { transform: translate3d(7%, 6%, 0) scale(1.25); }
+}
+
+.pv-canvas > .db-page { position: relative; z-index: 1; }
+
+/* Grano: capa mate que quita el aspecto plástico de la pantalla.
+   feColorMatrix saturate=0 lo vuelve monocromo, si no el ruido tiñe. */
 .pv-canvas[data-noise='on']::after {
   content: '';
   position: fixed;
   inset: 0;
   z-index: 9999;
   pointer-events: none;
-  opacity: 0.32;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.42;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 .pv-canvas :is(h1, h2, h3, h4) {
@@ -258,31 +330,8 @@
     var(--theme-gradient);
 }
 
-/* aurora: tres manchas desenfocadas a la deriva */
-.db-hero__aurora {
-  position: absolute;
-  inset: -30%;
-  z-index: -1;
-  filter: blur(70px);
-  pointer-events: none;
-}
-.db-hero__aurora i {
-  position: absolute;
-  display: block;
-  width: 46%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  opacity: 0.7;
-  animation: db-drift 26s ease-in-out infinite alternate;
-}
-.db-hero__aurora i:nth-child(1) { background: var(--theme-primary); top: 4%; left: 4%; }
-.db-hero__aurora i:nth-child(2) { background: var(--theme-secondary); top: 10%; right: 2%; animation-delay: -9s; }
-.db-hero__aurora i:nth-child(3) { background: var(--theme-accent); bottom: -6%; left: 36%; animation-delay: -17s; }
-
-@keyframes db-drift {
-  from { transform: translate3d(-4%, -3%, 0) scale(1); }
-  to { transform: translate3d(6%, 5%, 0) scale(1.2); }
-}
+/* Con aurora, el hero se aparta y deja ver las luces del lienzo. */
+.db-hero[data-bg='aurora'] { background-color: transparent; }
 
 .db-hero__grid {
   display: grid;
@@ -729,6 +778,58 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .db-hero__aurora i { animation: none; }
+  .pv-aurora i { animation: none; }
   .db-btn, .db-card, .db-carousel__arrow, .db-field__control { transition-duration: 0.01ms; }
+}
+
+/* ============================================================
+   FOCO: el panel señala en el sitio qué está tocando el usuario.
+   Vive fuera de .pv-canvas para no heredar sus tokens ni sus
+   transiciones — es cromo de la herramienta, no del sitio.
+   ============================================================ */
+
+.pv-spot {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+.pv-spot__ring {
+  position: absolute;
+  border: 2px solid #6d8bff;
+  border-radius: 6px;
+  box-shadow: 0 0 0 3px rgba(109, 139, 255, 0.22), 0 0 0 9999px rgba(8, 10, 20, 0.28);
+  animation: pv-spot-in 180ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Solo el primer anillo abre el velo, si no se oscurecería en cascada. */
+.pv-spot__ring ~ .pv-spot__ring {
+  box-shadow: 0 0 0 3px rgba(109, 139, 255, 0.22);
+}
+
+.pv-spot__tag {
+  position: absolute;
+  top: -11px;
+  left: -2px;
+  transform: translateY(-100%);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  color: #fff;
+  background: #6d8bff;
+  padding: 4px 8px;
+  border-radius: 5px;
+}
+
+@keyframes pv-spot-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pv-spot__ring { animation: none; }
 }

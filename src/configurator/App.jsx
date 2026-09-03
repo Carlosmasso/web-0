@@ -1,17 +1,20 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { DEFAULT_CONFIG, normalizeConfig } from '../config/schema'
+import { DEFAULT_CONFIG } from '../config/schema'
+import { normalizeConfigWithGuardrails } from '../config/guardrails'
 import { deepMerge, setIn } from '../config/patch'
 import { encodeConfig, decodeConfig } from '../config/encode'
 import { DEFAULT_CONTENT } from '../content/defaults'
-import { paletteValues } from '../registry/palettes'
 import { getTypePairing } from '../registry/fonts'
 import { getAesthetic } from '../registry/aesthetics'
+import { safePalette } from '../theme/color'
+import { randomConfig } from '../theme/randomize'
 import { Sidebar } from './Sidebar'
 import { ContentForm } from './ContentForm'
+import { ExportPanel } from './ExportPanel'
 import { PreviewFrame } from './PreviewFrame'
 import { Icon } from '../preview/Icon'
 
-const CONFIG_KEY = 'web0.config.v1'
+const CONFIG_KEY = 'web0.config.v2'
 const CONTENT_KEY = 'web0.content'
 
 function loadConfig() {
@@ -22,7 +25,7 @@ function loadConfig() {
   }
   try {
     const saved = localStorage.getItem(CONFIG_KEY)
-    if (saved) return normalizeConfig(JSON.parse(saved))
+    if (saved) return JSON.parse(saved)
   } catch {
     /* ignore */
   }
@@ -40,25 +43,35 @@ function loadContent() {
 }
 
 export function App() {
-  const [config, setConfig] = useState(loadConfig)
+  const [raw, setRaw] = useState(loadConfig)
   const [content, setContent] = useState(loadContent)
-  const [mode, setMode] = useState('design') // design | content
+  const [mode, setMode] = useState('design')
   const [device, setDevice] = useState('desktop')
+  const [showExport, setShowExport] = useState(false)
   const [copied, setCopied] = useState(null)
   const copiedTimer = useRef(null)
+  const frameRef = useRef(null)
+
+  // El panel edita la configuración CRUDA, pero muestra y envía la NORMALIZADA.
+  // Así el usuario ve al instante lo que los guardarraíles han corregido, en vez
+  // de que su elección se revierta en silencio al llegar al lienzo.
+  const { config, violations } = useMemo(
+    () => normalizeConfigWithGuardrails(raw, { unlockAdvanced: raw?.advanced?.unlocked }),
+    [raw],
+  )
 
   const encoded = useMemo(() => encodeConfig(config), [config])
 
   useEffect(() => {
     try {
-      localStorage.setItem(CONFIG_KEY, JSON.stringify(config))
+      localStorage.setItem(CONFIG_KEY, JSON.stringify(raw))
     } catch {
       /* ignore */
     }
     const url = new URL(window.location.href)
     url.searchParams.set('c', encoded)
     window.history.replaceState(null, '', url)
-  }, [config, encoded])
+  }, [raw, encoded])
 
   useEffect(() => {
     try {
@@ -68,33 +81,36 @@ export function App() {
     }
   }, [content])
 
-  useEffect(() => () => clearTimeout(copiedTimer.current), [])
-
-  /* ---- edición del contrato ---- */
-
-  const set = useCallback((path, value) => {
-    setConfig((prev) => setIn(prev, path, value))
+  useEffect(() => () => {
+    clearTimeout(copiedTimer.current)
+    clearTimeout(focusTimer.current)
   }, [])
 
-  const merge = useCallback((patch) => {
-    setConfig((prev) => deepMerge(prev, patch))
-  }, [])
+  /* ---- edición ---- */
 
-  const applyPalette = useCallback(
-    (id, paletteMode) => {
-      merge({ palette: paletteValues(id, paletteMode), meta: { paletteId: id, mode: paletteMode } })
-    },
-    [merge],
-  )
+  const set = useCallback((path, value) => setRaw((prev) => setIn(prev, path, value)), [])
+  const merge = useCallback((patch) => setRaw((prev) => deepMerge(prev, patch)), [])
+
+  const applyPreset = useCallback((preset) => setRaw(structuredClone(preset.config)), [])
 
   const applyType = useCallback(
-    (id) => {
-      merge({ typography: getTypePairing(id).values, meta: { typeId: id } })
-    },
+    (id) => merge({ typography: getTypePairing(id).values, meta: { typeId: id } }),
     [merge],
   )
 
-  const applyAesthetic = useCallback(
+  /** MÓDULO 4.2 en acción: el usuario solo elige el color de marca. */
+  const setBrandColor = useCallback(
+    (hex, nextMode) => {
+      const scheme = nextMode ?? (raw?.meta?.mode === 'dark' ? 'dark' : 'light')
+      merge({ palette: safePalette(hex, { scheme }), meta: { mode: scheme } })
+    },
+    [merge, raw],
+  )
+
+  const surprise = useCallback(() => setRaw(randomConfig()), [])
+
+  /** Cambia solo el acabado, conservando paleta, tipografía y estructura. */
+  const switchAesthetic = useCallback(
     (id) => {
       const { patch } = getAesthetic(id)
       merge({ aesthetic: id, ...patch, meta: { aestheticId: id } })
@@ -102,8 +118,37 @@ export function App() {
     [merge],
   )
 
-  const applyPreset = useCallback((preset) => {
-    setConfig(normalizeConfig(preset.config))
+  /**
+   * Señala en el lienzo qué parte del sitio toca el control que se está mirando.
+   *
+   * Con retardo al encender: barrer el puntero por la lista de controles
+   * encendería y apagaría el foco decenas de veces. Apagar es inmediato, para
+   * que salir del panel no deje el resaltado colgando.
+   *
+   * Iluminar NUNCA desplaza el lienzo. Ir hasta allí es `revealInPreview`,
+   * que solo se dispara con un clic deliberado.
+   */
+  const focusTimer = useRef(null)
+  const revealLock = useRef(0)
+
+  const focusInPreview = useCallback((affects) => {
+    // Un "Ver" reciente manda: al pulsarlo, el puntero acaba encima de otros
+    // controles mientras el panel se recoloca, y esos hover robaban o apagaban
+    // el resaltado que el usuario acababa de pedir a propósito.
+    if (Date.now() < revealLock.current) return
+    clearTimeout(focusTimer.current)
+    if (!affects) {
+      frameRef.current?.focus(null)
+      return
+    }
+    focusTimer.current = setTimeout(() => frameRef.current?.focus(affects), 140)
+  }, [])
+
+  const revealInPreview = useCallback((affects) => {
+    clearTimeout(focusTimer.current)
+    // Cubre la duración del desplazamiento suave.
+    revealLock.current = Date.now() + 900
+    frameRef.current?.focus({ ...affects, scrollTo: Date.now() })
   }, [])
 
   /* ---- exportación ---- */
@@ -112,11 +157,6 @@ export function App() {
     setCopied(key)
     clearTimeout(copiedTimer.current)
     copiedTimer.current = setTimeout(() => setCopied(null), 1600)
-  }
-
-  const copySpec = async () => {
-    await navigator.clipboard.writeText(JSON.stringify({ config, content }, null, 2))
-    flash('json')
   }
 
   const copyLink = async () => {
@@ -151,10 +191,13 @@ export function App() {
           <Sidebar
             config={config}
             onSet={set}
-            onApplyPalette={applyPalette}
-            onApplyType={applyType}
-            onApplyAesthetic={applyAesthetic}
             onApplyPreset={applyPreset}
+            onApplyType={applyType}
+            onBrandColor={setBrandColor}
+            onSurprise={surprise}
+            onFocus={focusInPreview}
+            onReveal={revealInPreview}
+            onSwitchAesthetic={switchAesthetic}
           />
         ) : (
           <ContentForm
@@ -184,15 +227,27 @@ export function App() {
               Móvil
             </button>
           </div>
+
+          {violations.length > 0 && (
+            <p className="shell__violations" title={violations.map((v) => v.reason).join('\n')}>
+              {violations.length} ajuste{violations.length > 1 ? 's' : ''} automático
+              {violations.length > 1 ? 's' : ''}
+            </p>
+          )}
+
           <div className="shell__actions">
-            <button onClick={copySpec} type="button">
-              {copied === 'json' ? 'Copiado' : 'Copiar spec'}
+            <button
+              onClick={() => setShowExport((v) => !v)}
+              type="button"
+              className={showExport ? 'is-active' : ''}
+            >
+              Exportar código
             </button>
             <button onClick={copyLink} type="button">
               {copied === 'link' ? 'Copiado' : 'Copiar enlace'}
             </button>
             <button
-              onClick={() => setConfig(DEFAULT_CONFIG)}
+              onClick={() => setRaw(DEFAULT_CONFIG)}
               type="button"
               className="shell__reset"
               aria-label="Reiniciar diseño"
@@ -201,7 +256,16 @@ export function App() {
             </button>
           </div>
         </div>
-        <PreviewFrame config={config} content={content} device={device} />
+
+        <div className="shell__stage-row">
+          <PreviewFrame ref={frameRef} config={config} content={content} device={device} />
+          <ExportPanel
+            config={config}
+            violations={violations}
+            open={showExport}
+            onClose={() => setShowExport(false)}
+          />
+        </div>
       </main>
     </div>
   )
