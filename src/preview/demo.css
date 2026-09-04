@@ -303,6 +303,60 @@
 .db-nav__login { font-size: 0.9rem; color: var(--theme-text-muted); }
 .db-nav__burger { display: none; color: var(--theme-text); }
 
+/* ---------- menú móvil ---------- */
+/* .db-nav es sticky, así que ya es el contenedor de posicionamiento: el panel
+   cuelga justo debajo de la barra, superpuesto a la página, sin empujarla. */
+
+.db-nav__mobile {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  .db-nav__mobile {
+    display: block;
+    position: absolute;
+    inset: 100% 0 auto 0;
+    background: var(--theme-surface);
+    border-bottom: var(--theme-border-w) var(--theme-border-style) var(--theme-border-color);
+    opacity: 0;
+    transform: translateY(-6px);
+    pointer-events: none;
+    transition: opacity 180ms cubic-bezier(0.23, 1, 0.32, 1),
+      transform 180ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .db-nav[data-open='true'] .db-nav__mobile {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .db-nav__mobile-inner {
+    display: flex;
+    flex-direction: column;
+    padding: 0px;
+  }
+  .db-nav__mobile-inner a {
+    padding: 16px;
+    font-size: 0.98rem;
+    color: var(--theme-text);
+    border-bottom: 1px solid var(--theme-border-color);
+  }
+  .db-nav__mobile-login {
+    color: var(--theme-text-muted) !important;
+  }
+  .db-nav__mobile-inner a:last-child {
+    border-bottom: none;
+  }
+}
+
+@media (max-width: 860px) and (prefers-reduced-motion: reduce) {
+  .db-nav__mobile {
+    transform: none;
+    transition: opacity 150ms ease;
+  }
+}
+
 /* ---------- hero ---------- */
 
 .db-hero {
