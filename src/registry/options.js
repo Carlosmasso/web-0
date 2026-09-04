@@ -84,6 +84,14 @@ export const SECTION_META = {
       { id: 'image', label: 'Imagen de fondo', note: 'Foto a sangre con velo' },
     ],
   },
+  logos: {
+    label: 'Confían en nosotros',
+    affects: { selector: '[data-section="logos"]', label: 'La franja de marcas' },
+    variants: [
+      { id: 'plain', label: 'Solo logos', note: 'Una fila discreta bajo la portada' },
+      { id: 'headline', label: 'Con titular', note: 'Una frase de cifra o autoridad encima' },
+    ],
+  },
   features: {
     label: 'Características',
     affects: { selector: '[data-section="features"]', label: 'El bloque de características' },
@@ -102,12 +110,28 @@ export const SECTION_META = {
       { id: 'full', label: 'A sangre', note: 'Una diapositiva por vista' },
     ],
   },
+  pricing: {
+    label: 'Precios',
+    affects: { selector: '[data-section="pricing"]', label: 'La sección de precios' },
+    variants: [
+      { id: 'cards', label: 'Tarjetas', note: 'Planes uno junto a otro, el recomendado destacado' },
+      { id: 'rows', label: 'Lista', note: 'Planes apilados, más sobria y fácil de leer de un vistazo' },
+    ],
+  },
   testimonial: {
     label: 'Testimonio',
     affects: { selector: '[data-section="testimonial"]', label: 'La franja de testimonios' },
     variants: [
       { id: 'quote', label: 'Cita grande', note: 'Una voz destacada' },
       { id: 'grid', label: 'Rejilla', note: 'Tres citas cortas' },
+    ],
+  },
+  faq: {
+    label: 'Preguntas frecuentes',
+    affects: { selector: '[data-section="faq"]', label: 'Las preguntas frecuentes' },
+    variants: [
+      { id: 'accordion', label: 'Acordeón', note: 'Cada pregunta se expande al tocarla' },
+      { id: 'grid', label: 'Rejilla', note: 'Todas las respuestas visibles, en dos columnas' },
     ],
   },
   cta: {

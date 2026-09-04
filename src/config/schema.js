@@ -36,7 +36,16 @@ export const AESTHETICS = [
   'material-clean',
 ]
 
-export const SECTION_ORDER = ['hero', 'features', 'carousel', 'testimonial', 'cta']
+export const SECTION_ORDER = [
+  'hero',
+  'logos',
+  'features',
+  'carousel',
+  'pricing',
+  'testimonial',
+  'faq',
+  'cta',
+]
 
 export const DEFAULT_CONFIG = {
   version: 1,
@@ -48,9 +57,12 @@ export const DEFAULT_CONFIG = {
 
   sections: {
     hero: 'split', // split | centered | image
+    logos: 'plain', // plain | headline
     features: 'grid', // grid | rows | bento
     carousel: 'peek', // peek | cards | full
+    pricing: 'cards', // cards | rows
     testimonial: 'quote', // quote | grid
+    faq: 'accordion', // accordion | grid
     cta: 'boxed', // boxed | banner
   },
 

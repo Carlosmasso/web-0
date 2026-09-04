@@ -53,7 +53,10 @@ export const PRESETS = [
       gradients: { primaryGradient: null, backgroundGradient: null },
       effects: { blur: 0, noise: false, aurora: false },
       layout: { density: 'spacious', containerWidth: 1140 },
-      sections: { hero: 'split', features: 'grid', carousel: 'cards', testimonial: 'grid', cta: 'boxed' },
+      sections: {
+        hero: 'split', logos: 'plain', features: 'grid', carousel: 'cards',
+        pricing: 'cards', testimonial: 'grid', faq: 'accordion', cta: 'boxed',
+      },
       components: {
         hero: { background: 'solid' },
         card: { media: 'auto' },
@@ -93,7 +96,10 @@ export const PRESETS = [
       gradients: { primaryGradient: null, backgroundGradient: null },
       effects: { blur: 0, noise: false, aurora: false },
       layout: { density: 'spacious', containerWidth: 1180 },
-      sections: { hero: 'split', features: 'rows', carousel: 'cards', testimonial: 'quote', cta: 'banner' },
+      sections: {
+        hero: 'split', logos: 'headline', features: 'rows', carousel: 'cards',
+        pricing: 'rows', testimonial: 'quote', faq: 'grid', cta: 'banner',
+      },
       components: {
         hero: { background: 'solid' },
         card: { media: 'auto' },
@@ -133,7 +139,10 @@ export const PRESETS = [
       gradients: { primaryGradient: null, backgroundGradient: null },
       effects: { blur: 0, noise: true, aurora: false },
       layout: { density: 'normal', containerWidth: 1120 },
-      sections: { hero: 'image', features: 'grid', carousel: 'peek', testimonial: 'quote', cta: 'boxed' },
+      sections: {
+        hero: 'image', logos: 'plain', features: 'grid', carousel: 'peek',
+        pricing: 'cards', testimonial: 'quote', faq: 'accordion', cta: 'boxed',
+      },
       components: {
         hero: { background: 'image' },
         card: { media: 'auto' },
@@ -176,7 +185,10 @@ export const PRESETS = [
       gradients: { primaryGradient: null, backgroundGradient: null },
       effects: { blur: 0, noise: false, aurora: false },
       layout: { density: 'normal', containerWidth: 1200 },
-      sections: { hero: 'centered', features: 'grid', carousel: 'cards', testimonial: 'grid', cta: 'boxed' },
+      sections: {
+        hero: 'centered', logos: 'plain', features: 'grid', carousel: 'cards',
+        pricing: 'cards', testimonial: 'grid', faq: 'grid', cta: 'boxed',
+      },
       components: {
         hero: { background: 'solid' },
         card: { media: 'auto' },
@@ -233,7 +245,10 @@ export const PRESETS = [
       },
       effects: { blur: 18, noise: true, aurora: true },
       layout: { density: 'spacious', containerWidth: 1180 },
-      sections: { hero: 'centered', features: 'bento', carousel: 'peek', testimonial: 'quote', cta: 'boxed' },
+      sections: {
+        hero: 'centered', logos: 'headline', features: 'bento', carousel: 'peek',
+        pricing: 'cards', testimonial: 'quote', faq: 'accordion', cta: 'boxed',
+      },
       components: {
         hero: { background: 'aurora' },
         card: { media: 'auto' },
@@ -282,7 +297,10 @@ export const PRESETS = [
       },
       effects: { blur: 0, noise: false, aurora: false },
       layout: { density: 'spacious', containerWidth: 1140 },
-      sections: { hero: 'centered', features: 'bento', carousel: 'cards', testimonial: 'grid', cta: 'boxed' },
+      sections: {
+        hero: 'centered', logos: 'plain', features: 'bento', carousel: 'cards',
+        pricing: 'cards', testimonial: 'grid', faq: 'accordion', cta: 'boxed',
+      },
       components: {
         hero: { background: 'gradient' },
         card: { media: 'auto' },

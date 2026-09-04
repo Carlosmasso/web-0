@@ -49,6 +49,26 @@ export function buildForm(config) {
       ],
     }),
 
+    logos: () => ({
+      key: 'logos',
+      label: 'Confían en nosotros',
+      variant: v.logos,
+      fields: [
+        ...(v.logos === 'headline'
+          ? [f('logos.headline', 'Frase de autoridad', 'text', { hint: 'ej. una cifra o una afirmación corta' })]
+          : []),
+        f('logos.items', 'Empresas', 'repeater', {
+          min: 4,
+          max: 8,
+          labelKey: 'name',
+          fields: [
+            sub('name', 'Nombre', 'text'),
+            sub('logo', 'Logo', 'image', { hint: 'opcional; sin logo se muestra el nombre en texto' }),
+          ],
+        }),
+      ],
+    }),
+
     features: () => ({
       key: 'features',
       label: 'Características',
@@ -97,6 +117,30 @@ export function buildForm(config) {
       ],
     }),
 
+    pricing: () => ({
+      key: 'pricing',
+      label: 'Precios',
+      variant: v.pricing,
+      fields: [
+        f('pricing.title', 'Título de sección', 'text'),
+        f('pricing.subtitle', 'Bajada de sección', 'textarea', { hint: 'máx. 20 palabras' }),
+        f('pricing.plans', 'Planes', 'repeater', {
+          min: 2,
+          max: 4,
+          labelKey: 'name',
+          fields: [
+            sub('name', 'Nombre del plan', 'text'),
+            sub('tier', 'Destacar', 'select', { options: ['normal', 'destacado'] }),
+            sub('tagline', 'Para quién es', 'text', { hint: 'una línea' }),
+            sub('price', 'Precio', 'text', { hint: 'ej. 29€ o "Hablemos"' }),
+            sub('period', 'Periodo', 'text', { hint: 'ej. /mes — vacío si no aplica' }),
+            sub('features', 'Incluye', 'list', { hint: '4 a 6, una por línea' }),
+            sub('cta', 'Botón', 'text'),
+          ],
+        }),
+      ],
+    }),
+
     testimonial: () => {
       const grid = v.testimonial === 'grid'
       return {
@@ -119,6 +163,24 @@ export function buildForm(config) {
         ],
       }
     },
+
+    faq: () => ({
+      key: 'faq',
+      label: 'Preguntas frecuentes',
+      variant: v.faq,
+      fields: [
+        f('faq.title', 'Título de sección', 'text'),
+        f('faq.items', 'Preguntas', 'repeater', {
+          min: 4,
+          max: 8,
+          labelKey: 'q',
+          fields: [
+            sub('q', 'Pregunta', 'text'),
+            sub('a', 'Respuesta', 'textarea', { hint: 'máx. 40 palabras' }),
+          ],
+        }),
+      ],
+    }),
 
     cta: () => ({
       key: 'cta',

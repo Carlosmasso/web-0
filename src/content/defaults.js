@@ -20,6 +20,17 @@ export const DEFAULT_CONTENT = {
     image: 'https://picsum.photos/seed/cartograma-reparto-furgoneta/1200/1400',
   },
 
+  logos: {
+    headline: 'Ya planifican con Cartograma más de 200 flotas',
+    items: [
+      { name: 'Frescor Levante', logo: '' },
+      { name: 'Muebles Corcel', logo: '' },
+      { name: 'Panificadora Suárez', logo: '' },
+      { name: 'Grupo Ferro', logo: '' },
+      { name: 'Óptica Bellver', logo: '' },
+    ],
+  },
+
   features: {
     title: 'Todo el reparto del día en un sitio',
     subtitle:
@@ -72,6 +83,51 @@ export const DEFAULT_CONTENT = {
     ],
   },
 
+  pricing: {
+    title: 'Un precio por furgoneta, no por sorpresa',
+    subtitle: 'Sin permanencia. Cambia de plan el día que cambie tu flota.',
+    plans: [
+      {
+        name: 'Arranque',
+        tier: 'normal',
+        tagline: 'Para 1 o 2 furgonetas',
+        price: '29€',
+        period: '/mes',
+        features: ['Planificador diario', 'Hasta 2 conductores', 'Avisos por SMS', 'Soporte por correo'],
+        cta: 'Empezar',
+      },
+      {
+        name: 'Flota',
+        tier: 'destacado',
+        tagline: 'Para 3 a 12 furgonetas',
+        price: '79€',
+        period: '/mes',
+        features: [
+          'Todo lo de Arranque',
+          'Conductores ilimitados',
+          'Seguimiento en vivo',
+          'Informe semanal',
+          'Soporte por teléfono',
+        ],
+        cta: 'Probar 14 días gratis',
+      },
+      {
+        name: 'A medida',
+        tier: 'normal',
+        tagline: 'Para más de 12 furgonetas',
+        price: 'Hablemos',
+        period: '',
+        features: [
+          'Todo lo de Flota',
+          'Integración con tu sistema',
+          'Gestor de cuenta',
+          'Acuerdo de nivel de servicio',
+        ],
+        cta: 'Hablar con ventas',
+      },
+    ],
+  },
+
   testimonial: {
     title: 'Flotas que ya salen antes cada mañana',
     quotes: [
@@ -92,6 +148,32 @@ export const DEFAULT_CONTENT = {
         name: 'Rocío Cardenal',
         role: 'Mobiliario a medida, Sevilla',
         avatar: 'https://picsum.photos/seed/rocio-cardenal/120/120',
+      },
+    ],
+  },
+
+  faq: {
+    title: 'Preguntas frecuentes',
+    items: [
+      {
+        q: '¿Necesito instalar algo en las furgonetas?',
+        a: 'No. Los conductores usan la app desde su móvil; el resto se planifica desde el navegador.',
+      },
+      {
+        q: '¿Puedo probarlo con mis rutas reales?',
+        a: 'Sí, los 14 días de prueba incluyen tus paradas de verdad, no un ejemplo genérico.',
+      },
+      {
+        q: '¿Qué pasa si cambio el número de furgonetas?',
+        a: 'Cambias de plan el mismo día, sin esperar a que acabe el mes ni hablar con nadie.',
+      },
+      {
+        q: '¿Los clientes ven dónde está su pedido?',
+        a: 'Sí, reciben un enlace de seguimiento en vivo junto con el aviso de la franja de entrega.',
+      },
+      {
+        q: '¿Hay permanencia?',
+        a: 'No. Puedes cancelar cuando quieras desde el propio panel.',
       },
     ],
   },

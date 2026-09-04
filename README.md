@@ -178,5 +178,5 @@ y para que los estilos de la demo no toquen los del panel.
 - Validación del contrato con Zod al leer de base de datos y al recibir del panel.
 - Combos curados (no toda paleta pega con toda tipografía y estética).
 - Toggle de secciones on/off y reordenado.
-- Más secciones (precios, logos, FAQ) y más variantes.
+- Más secciones (equipo, estadísticas) y más variantes de las 8 actuales.
 - Cuentas, propuestas guardadas, revisiones.
