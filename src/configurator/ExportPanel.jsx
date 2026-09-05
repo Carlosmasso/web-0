@@ -1,14 +1,17 @@
 import { useMemo, useState } from 'react'
 import { exportBundle, downloadArtifact } from '../theme/export'
+import { buildProjectFiles } from '../export/scaffold'
+import { downloadProjectZip } from '../export/zip'
 import { auditConfig } from '../config/guardrails'
 
-// Cajón de exportación: la promesa de portabilidad hecha visible. Es el
-// argumento que convierte "juguete bonito" en "herramienta que compro".
-export function ExportPanel({ config, violations = [], open, onClose }) {
+// Cajón técnico: para DESPUÉS de que el cliente te haya escrito con
+// "Quiero esta web". No es la vitrina — es donde tú entregas.
+export function ExportPanel({ config, content, violations = [], open, onClose }) {
   const artifacts = useMemo(() => exportBundle(config), [config])
   const audit = useMemo(() => auditConfig(config), [config])
   const [tab, setTab] = useState(0)
   const [copied, setCopied] = useState(false)
+  const [zipping, setZipping] = useState(false)
 
   const current = artifacts[tab]
 
@@ -18,15 +21,35 @@ export function ExportPanel({ config, violations = [], open, onClose }) {
     setTimeout(() => setCopied(false), 1600)
   }
 
+  const downloadProject = async () => {
+    setZipping(true)
+    try {
+      const { files, projectName } = buildProjectFiles(config, content)
+      await downloadProjectZip(files, projectName)
+    } finally {
+      setZipping(false)
+    }
+  }
+
   return (
     <div className={`xport ${open ? 'is-open' : ''}`} aria-hidden={!open}>
       <div className="xport__bar">
         <div>
-          <h2>Llévate el diseño</h2>
-          <p>Tokens listos para pegar en tu proyecto. Sin dependencias de Estudio.</p>
+          <h2>Entregar</h2>
+          <p>Para cuando el encargo ya es tuyo: el proyecto real, o solo los tokens.</p>
         </div>
         <button type="button" onClick={onClose} aria-label="Cerrar">
           Cerrar
+        </button>
+      </div>
+
+      <div className="xport__project">
+        <div>
+          <strong>Proyecto completo</strong>
+          <span>React + Vite, con este contenido ya puesto. Recuerda cambiarlo por el del cliente antes.</span>
+        </div>
+        <button type="button" className="xport__project-btn" onClick={downloadProject} disabled={zipping}>
+          {zipping ? 'Empaquetando…' : 'Descargar .zip'}
         </button>
       </div>
 

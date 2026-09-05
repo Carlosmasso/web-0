@@ -11,6 +11,7 @@ import { randomConfig } from '../theme/randomize'
 import { Sidebar } from './Sidebar'
 import { ContentForm } from './ContentForm'
 import { ExportPanel } from './ExportPanel'
+import { ContactModal } from './ContactModal'
 import { PreviewFrame } from './PreviewFrame'
 import { Icon } from '../preview/Icon'
 
@@ -48,6 +49,7 @@ export function App() {
   const [mode, setMode] = useState('design')
   const [device, setDevice] = useState('desktop')
   const [showExport, setShowExport] = useState(false)
+  const [showContact, setShowContact] = useState(false)
   const [copied, setCopied] = useState(null)
   const copiedTimer = useRef(null)
   const frameRef = useRef(null)
@@ -156,10 +158,13 @@ export function App() {
     copiedTimer.current = setTimeout(() => setCopied(null), 1600)
   }
 
+  const previewLink = `${window.location.origin}/preview.html#${encoded}`
+
   const copyLink = async () => {
-    await navigator.clipboard.writeText(`${window.location.origin}/preview.html#${encoded}`)
+    await navigator.clipboard.writeText(previewLink)
     flash('link')
   }
+
 
   return (
     <div className="shell">
@@ -233,15 +238,18 @@ export function App() {
           )}
 
           <div className="shell__actions">
+            <button onClick={copyLink} type="button" className="shell__ghost">
+              {copied === 'link' ? 'Copiado' : 'Copiar enlace'}
+            </button>
             <button
               onClick={() => setShowExport((v) => !v)}
               type="button"
-              className={showExport ? 'is-active' : ''}
+              className={`shell__ghost ${showExport ? 'is-active' : ''}`}
             >
-              Exportar código
+              Código
             </button>
-            <button onClick={copyLink} type="button">
-              {copied === 'link' ? 'Copiado' : 'Copiar enlace'}
+            <button onClick={() => setShowContact(true)} type="button" className="shell__cta">
+              Quiero esta web
             </button>
             <button
               onClick={() => setRaw(DEFAULT_CONFIG)}
@@ -258,12 +266,21 @@ export function App() {
           <PreviewFrame ref={frameRef} config={config} content={content} device={device} />
           <ExportPanel
             config={config}
+            content={content}
             violations={violations}
             open={showExport}
             onClose={() => setShowExport(false)}
           />
         </div>
       </main>
+
+      <ContactModal
+        open={showContact}
+        onClose={() => setShowContact(false)}
+        config={config}
+        content={content}
+        previewLink={previewLink}
+      />
     </div>
   )
 }

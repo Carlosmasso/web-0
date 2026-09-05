@@ -21,6 +21,7 @@
   --c-muted: #989ca7; /* secundario */
   --c-faint: #6f737e; /* terciario: pistas de pistas */
   --c-accent: #829dff;
+  --c-accent-strong: #4c66e6; /* para botones rellenos: blanco encima cumple AA */
   --c-accent-soft: rgba(130, 157, 255, 0.15);
   --c-accent-line: rgba(130, 157, 255, 0.42);
   --c-pending: #d5a54e;
@@ -962,6 +963,18 @@ body {
   color: var(--c-muted) !important;
 }
 
+/* La acción de cara al cliente: la única que debe destacar. Copiar enlace y
+   Código son utilidades; esta es la que de verdad mueve el encargo. */
+.shell__cta {
+  border-color: transparent !important;
+  background: var(--c-accent-strong);
+  color: #fff !important;
+  font-weight: 650 !important;
+}
+.shell__cta:hover {
+  filter: brightness(1.08);
+}
+
 .shell__stage-row {
   flex: 1;
   min-height: 0;
@@ -1050,6 +1063,47 @@ body {
   color: var(--c-text);
   border: 1px solid var(--c-line);
   border-radius: 7px;
+}
+
+.xport__project {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 16px 18px 0;
+  padding: 14px 16px;
+  background: var(--c-accent-soft);
+  border: 1px solid var(--c-accent-line);
+  border-radius: var(--c-radius-lg);
+}
+.xport__project strong {
+  display: block;
+  font-size: 0.86rem;
+}
+.xport__project span {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--c-muted);
+  margin-top: 3px;
+  line-height: 1.45;
+  max-width: 46ch;
+}
+.xport__project-btn {
+  flex: none;
+  padding: 9px 14px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--c-accent-strong);
+  border-radius: 8px;
+  transition: filter 140ms ease;
+}
+.xport__project-btn:hover {
+  filter: brightness(1.08);
+}
+.xport__project-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
 }
 
 .xport__tabs {
@@ -1184,4 +1238,138 @@ body {
     inset: 0;
     z-index: 30;
   }
+}
+
+/* ============================================================
+   MODAL DE CONTACTO
+   Lo único que ve el cliente al pulsar "Quiero esta web": sus propios
+   datos, con la misma identidad visual del panel. Sin jerga de diseño.
+   ============================================================ */
+
+.modal-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(8, 9, 12, 0.6);
+  backdrop-filter: blur(3px);
+  animation: modal-veil-in 160ms ease;
+}
+
+.modal {
+  width: 100%;
+  max-width: 420px;
+  max-height: 88vh;
+  overflow-y: auto;
+  background: var(--c-card);
+  border: 1px solid var(--c-line);
+  border-radius: var(--c-radius-lg);
+  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.55);
+  padding: 22px;
+  animation: modal-in 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.modal__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.modal__head h2 {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.modal__head p {
+  font-size: 0.8rem;
+  color: var(--c-muted);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+.modal__close {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-muted);
+  border-radius: 7px;
+}
+.modal__close:hover {
+  color: var(--c-text);
+  background: var(--c-field);
+}
+
+.modal__submit {
+  width: 100%;
+  padding: 12px;
+  margin-top: 4px;
+  font-size: 0.9rem;
+  font-weight: 650;
+  color: #fff;
+  background: var(--c-accent-strong);
+  border-radius: 10px;
+  transition: filter 140ms ease, opacity 140ms ease;
+}
+.modal__submit:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+.modal__submit:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.modal__error {
+  font-size: 0.8rem;
+  color: var(--c-pending);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+.modal__error a {
+  color: var(--c-accent);
+  text-decoration: underline;
+}
+
+.modal__done {
+  text-align: center;
+  padding: 10px 4px 4px;
+}
+.modal__done-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 14px;
+  font-size: 1.3rem;
+  color: #fff;
+  background: var(--c-ok);
+  border-radius: 999px;
+}
+.modal__done h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+.modal__done p {
+  font-size: 0.85rem;
+  color: var(--c-muted);
+  line-height: 1.55;
+  margin: 6px 0 18px;
+}
+
+@keyframes modal-veil-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-veil, .modal { animation: none; }
 }

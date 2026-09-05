@@ -158,11 +158,38 @@ misma estética y no parecerse en nada.
 
 ## El flujo de trabajo
 
-1. El cliente te pasa su contenido.
-2. El cliente elige el UX/UI en la pestaña **Diseño**. La config viaja en `?c=` y en el enlace de preview.
-3. En la pestaña **Contenido**, **Copiar contenido** te da la lista exacta a pedir al cliente según las variantes elegidas (para mandársela por correo).
-4. Rellenas los campos del cliente. El formulario se genera a partir de `fields.js` y solo pide lo que la variante elegida realmente muestra; los huecos vacíos salen marcados como *pendiente*. Todo se refleja en el preview al instante.
-5. **Copiar spec** exporta `{ config, content }` con el contenido real. `npm run build` y publicas.
+**El cliente decide, no se lleva nada construido.** El configurador es una
+herramienta de venta: quien lo tiene abierto elige UX/UI en la pestaña
+**Diseño**, y cuando le gusta lo que ve pulsa **"Quiero esta web"** — el único
+botón destacado de la barra. Se abre un modal (`ContactModal.jsx`) que pide
+solo sus datos (nombre, email, teléfono, nota). Al enviar, `submitLead()`
+(`src/export/contact.js`) manda por **fetch a FormSubmit** —sin que se abra
+nada en su pantalla— tu correo con: sus datos, la config y el contenido en
+texto, y **el proyecto ya empaquetado como `.zip` adjunto**. El cliente ve
+solo un "recibido, te contactamos". Nada de jerga de diseño a la vista, nada
+descargable para él.
+
+> **Puesta en marcha, una sola vez:** el primer envío a `CONTACT_EMAIL`
+> (constante en `contact.js`) hace que FormSubmit te mande un correo con un
+> enlace *"Activate Form"*. Púlsalo y a partir de ahí llegan todos los envíos.
+> Antes de activar, el modal muestra el estado de error con un `mailto:` de
+> reserva.
+
+Cuando el encargo ya es tuyo, la entrega:
+
+1. El cliente te pasa su contenido real (por el canal que sea).
+2. En la pestaña **Contenido**, **Copiar contenido** te da la lista exacta a
+   pedir según las variantes que eligió, y el formulario solo pide lo que esa
+   variante realmente muestra — los huecos vacíos salen marcados *pendiente*.
+   Todo se refleja en el preview al instante.
+3. Ese `.zip` (el que te llegó adjunto, o el que descargas a mano desde el
+   cajón **Código**) es un proyecto React + Vite real —
+   `src/export/scaffold.js` copia los mismos ficheros fuente que corren en el
+   preview (vía `?raw` de Vite), así que nunca se desincroniza de lo que
+   viste. `npm install && npm run build` y despliegas `dist/` donde quieras.
+   Las otras pestañas del cajón (`tailwind.config.js` / `theme.css` /
+   `design-tokens.json`) siguen ahí para cuando solo necesitas los tokens
+   sobre un proyecto que ya existe.
 
 El preview vive en un **iframe** aparte (dos entradas en `vite.config.js`) para
 que el responsive del sitio responda al ancho del lienzo, no al del navegador,
@@ -170,7 +197,6 @@ y para que los estilos de la demo no toquen los del panel.
 
 ## Qué falta
 
-- Export que genere un proyecto autónomo listo para desplegar (hoy exporta `{ config, content }`).
 - Subida de imágenes (hoy los campos de imagen son por URL).
 - Selectores de color libres en el panel (el contrato ya guarda valores; falta la UI).
 - Editor de degradados (paradas y ángulo) en vez de solo lo que traen las plantillas.
