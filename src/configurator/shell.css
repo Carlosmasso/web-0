@@ -1327,8 +1327,17 @@ body {
 .xport.is-open {
   width: min(460px, 46vw);
 }
-.xport > * {
-  min-width: min(460px, 46vw);
+/* Ancho propio, independiente del de .xport: así cuando el cajón anima de 0 a
+   abierto, el contenido no se refluye — solo se desliza a la vista. Antes esto
+   era min-width en cada hijo, y los hijos con margen lateral (proyecto, código)
+   se salían del cajón y quedaban cortados a la derecha. */
+.xport__inner {
+  width: min(460px, 46vw);
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
 }
 
 .xport__bar {
@@ -1529,6 +1538,9 @@ body {
     position: absolute;
     inset: 0;
     z-index: 30;
+  }
+  .xport.is-open .xport__inner {
+    width: 100%;
   }
 }
 

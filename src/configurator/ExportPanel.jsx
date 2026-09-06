@@ -33,81 +33,91 @@ export function ExportPanel({ config, content, violations = [], open, onClose })
 
   return (
     <div className={`xport ${open ? 'is-open' : ''}`} aria-hidden={!open}>
-      <div className="xport__bar">
-        <div>
-          <h2>Entregar</h2>
-          <p>Para cuando el encargo ya es tuyo: el proyecto real, o solo los tokens.</p>
-        </div>
-        <button type="button" onClick={onClose} aria-label="Cerrar">
-          Cerrar
-        </button>
-      </div>
-
-      <div className="xport__project">
-        <div>
-          <strong>Proyecto completo</strong>
-          <span>React + Vite, con este contenido ya puesto. Recuerda cambiarlo por el del cliente antes.</span>
-        </div>
-        <button type="button" className="xport__project-btn" onClick={downloadProject} disabled={zipping}>
-          {zipping ? 'Empaquetando…' : 'Descargar .zip'}
-        </button>
-      </div>
-
-      <div className="xport__tabs" role="tablist">
-        {artifacts.map((a, i) => (
-          <button
-            key={a.filename}
-            type="button"
-            role="tab"
-            aria-selected={i === tab}
-            className={i === tab ? 'is-active' : ''}
-            onClick={() => setTab(i)}
-          >
-            {a.filename}
+      {/* Ancho fijo: el cajón (.xport) anima su width de 0 a abierto y recorta;
+          el interior se mantiene a su ancho para que el reveal sea un deslizar
+          limpio, no un reflujo. */}
+      <div className="xport__inner">
+        <div className="xport__bar">
+          <div>
+            <h2>Entregar</h2>
+            <p>Para cuando el encargo ya es tuyo: el proyecto real, o solo los tokens.</p>
+          </div>
+          <button type="button" onClick={onClose} aria-label="Cerrar">
+            Cerrar
           </button>
-        ))}
-      </div>
+        </div>
 
-      <div className="xport__actions">
-        <button type="button" onClick={copy}>
-          {copied ? 'Copiado' : 'Copiar'}
-        </button>
-        <button type="button" onClick={() => downloadArtifact(current)}>
-          Descargar
-        </button>
-      </div>
+        <div className="xport__project">
+          <div>
+            <strong>Proyecto completo</strong>
+            <span>React + Vite, con este contenido ya puesto. Recuerda cambiarlo por el del cliente antes.</span>
+          </div>
+          <button
+            type="button"
+            className="xport__project-btn"
+            onClick={downloadProject}
+            disabled={zipping}
+          >
+            {zipping ? 'Empaquetando…' : 'Descargar .zip'}
+          </button>
+        </div>
 
-      <pre className="xport__code">
-        <code>{current.content}</code>
-      </pre>
-
-      <div className="xport__audit">
-        <h3>Accesibilidad</h3>
-        <ul>
-          {audit.map((a) => (
-            <li key={a.label} className={a.pass ? 'is-pass' : 'is-fail'}>
-              <span>{a.label}</span>
-              <b>
-                {a.ratio}:1 <em>/ {a.target}</em>
-              </b>
-            </li>
+        <div className="xport__tabs" role="tablist">
+          {artifacts.map((a, i) => (
+            <button
+              key={a.filename}
+              type="button"
+              role="tab"
+              aria-selected={i === tab}
+              className={i === tab ? 'is-active' : ''}
+              onClick={() => setTab(i)}
+            >
+              {a.filename}
+            </button>
           ))}
-        </ul>
-        {violations.length > 0 && (
-          <>
-            <h3>Ajustes automáticos</h3>
-            <ul className="xport__violations">
-              {violations.map((v, i) => (
-                <li key={`${v.path}-${i}`}>
-                  <span>
-                    <code>{v.path}</code> {v.fromLabel} → <b>{v.toLabel}</b>
-                  </span>
-                  <em>{v.reason}</em>
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
+        </div>
+
+        <div className="xport__actions">
+          <button type="button" onClick={copy}>
+            {copied ? 'Copiado' : 'Copiar'}
+          </button>
+          <button type="button" onClick={() => downloadArtifact(current)}>
+            Descargar
+          </button>
+        </div>
+
+        <pre className="xport__code">
+          <code>{current.content}</code>
+        </pre>
+
+        <div className="xport__audit">
+          <h3>Accesibilidad</h3>
+          <ul>
+            {audit.map((a) => (
+              <li key={a.label} className={a.pass ? 'is-pass' : 'is-fail'}>
+                <span>{a.label}</span>
+                <b>
+                  {a.ratio}:1 <em>/ {a.target}</em>
+                </b>
+              </li>
+            ))}
+          </ul>
+          {violations.length > 0 && (
+            <>
+              <h3>Ajustes automáticos</h3>
+              <ul className="xport__violations">
+                {violations.map((v, i) => (
+                  <li key={`${v.path}-${i}`}>
+                    <span>
+                      <code>{v.path}</code> {v.fromLabel} → <b>{v.toLabel}</b>
+                    </span>
+                    <em>{v.reason}</em>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
       </div>
     </div>
   )
