@@ -179,7 +179,7 @@ Todo lo de la venta, nada de la entrega:
 | --- | --- |
 | Elegir diseño: preset, estética, color de marca, tipografía, esquinas, densidad, iconos, efectos, variante por sección | Pestaña **Diseño** (`Sidebar`) |
 | Mostrar / ocultar y reordenar secciones (la cabecera va fija) | Capa 3 del panel — "Secciones". La lista de secciones visibles vive en el contrato (`sectionOrder`); el formulario de Contenido solo pide las visibles. |
-| Escribir sus textos (opcional) | Pestaña **Contenido**, con el aviso suavizado: *"…si lo prefieres, los pongo yo."* |
+| Escribir sus textos y subir sus imágenes (opcional) | Pestaña **Contenido**. Las imágenes se comprimen en el navegador y viajan dentro del `.zip`; también admite pegar una URL. |
 | **Deshacer / Rehacer** cualquier cambio de diseño | Botón **Deshacer** en la barra, siempre visible (`⌘Z` / `⇧⌘Z` como extra). "Rehacer" solo aparece si hay algo que rehacer. |
 | Ver en escritorio / móvil | Conmutador de la barra |
 | Guardar una versión para volver luego | **Copiar enlace** — el `?c=` lleva toda la config en la URL |
@@ -211,7 +211,8 @@ entre proyectos) y el `?c=` de la URL se ignora: manda el proyecto activo.
    solo sus datos (nombre, email, teléfono, nota). Nada de jerga a la vista.
 2. Al enviar, `submitLead()` (`src/export/contact.js`) manda **por fetch a
    FormSubmit**, sin abrir nada en su pantalla, un correo a `CONTACT_EMAIL` con:
-   sus datos, la config y el contenido en texto, y **el proyecto ya empaquetado
+   sus datos, la config y el contenido en texto (las imágenes subidas se
+   resumen aquí; van completas en el `.zip`), y **el proyecto ya empaquetado
    como `.zip` adjunto**. El cliente solo ve *"recibido, te contactamos"*.
 3. El cliente te pasa su contenido real. Con **Copiar lista para el cliente**
    tienes la lista exacta a pedir; el formulario de **Contenido** solo muestra
@@ -241,7 +242,9 @@ y para que los estilos de la demo no toquen los del panel.
 
 ## Qué falta
 
-- Subida de imágenes (hoy los campos de imagen son por URL).
+- Imágenes: hoy se suben desde el disco (se comprimen a data URI en el
+  navegador, `src/content/image.js`). Falta un almacén real — con muchas
+  imágenes grandes se puede llenar el `localStorage` (~5 MB).
 - Selectores de color libres en el panel (el contrato ya guarda valores; falta la UI).
 - Editor de degradados (paradas y ángulo) en vez de solo lo que traen las plantillas.
 - Almacén con selectores (Zustand) en lugar de contexto, cuando el panel crezca.

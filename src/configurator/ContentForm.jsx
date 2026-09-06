@@ -1,7 +1,8 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { isStudio } from '../config/mode'
 import { buildForm, getPath, setPath, blankItem } from '../content/fields'
 import { checklistToText } from '../content/checklist'
+import { fileToDataUrl } from '../content/image'
 
 const isEmpty = (v) => v == null || v === '' || (Array.isArray(v) && v.length === 0)
 
@@ -101,19 +102,67 @@ function Control({ field, value, onChange }) {
     )
   }
   if (field.kind === 'image') {
-    return (
-      <span className="field__image">
-        <input
-          type="url"
-          placeholder="https://..."
-          value={value ?? ''}
-          onChange={(e) => onChange(e.target.value)}
-        />
-        {value ? <img src={value} alt="" /> : <span className="field__image-empty">sin imagen</span>}
-      </span>
-    )
+    return <ImageControl value={value} onChange={onChange} />
   }
   return <input type="text" value={value ?? ''} onChange={(e) => onChange(e.target.value)} />
+}
+
+function ImageControl({ value, onChange }) {
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState(null)
+  const inputRef = useRef(null)
+  const isUpload = typeof value === 'string' && value.startsWith('data:')
+
+  const pick = async (e) => {
+    const file = e.target.files?.[0]
+    e.target.value = '' // permite volver a elegir el mismo archivo
+    if (!file) return
+    setError(null)
+    setBusy(true)
+    try {
+      onChange(await fileToDataUrl(file))
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <span className="field__image">
+      <span className="field__image-actions">
+        <button
+          type="button"
+          className="field__upload"
+          onClick={() => inputRef.current?.click()}
+          disabled={busy}
+        >
+          {busy ? 'Procesando…' : isUpload ? 'Cambiar imagen' : 'Subir imagen'}
+        </button>
+        {value && (
+          <button
+            type="button"
+            className="field__image-clear"
+            onClick={() => {
+              onChange('')
+              setError(null)
+            }}
+          >
+            Quitar
+          </button>
+        )}
+        <input ref={inputRef} type="file" accept="image/*" hidden onChange={pick} />
+      </span>
+      <input
+        type="url"
+        placeholder="o pega una URL: https://…"
+        value={isUpload ? '' : (value ?? '')}
+        onChange={(e) => onChange(e.target.value)}
+      />
+      {error && <span className="field__image-error">{error}</span>}
+      {value ? <img src={value} alt="" /> : <span className="field__image-empty">sin imagen</span>}
+    </span>
+  )
 }
 
 function Repeater({ field, content, set }) {

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { DEFAULT_CONFIG } from '../config/schema'
 import { normalizeConfigWithGuardrails } from '../config/guardrails'
-import { decodeConfig } from '../config/encode'
+import { decodeConfig, decodeContent } from '../config/encode'
 import { DEFAULT_CONTENT } from '../content/defaults'
 import { PreviewCanvas } from './PreviewCanvas'
 import { DemoPage } from './DemoPage'
@@ -12,10 +12,13 @@ import { Spotlight } from './Spotlight'
 // compartido renderice por su cuenta.
 export function Preview() {
   const [raw, setRaw] = useState(() => {
-    const hash = window.location.hash.slice(1)
-    return (hash && decodeConfig(hash)) || DEFAULT_CONFIG
+    const h = window.location.hash.slice(1).split('~')[0]
+    return (h && decodeConfig(h)) || DEFAULT_CONFIG
   })
-  const [content, setContent] = useState(DEFAULT_CONTENT)
+  const [content, setContent] = useState(() => {
+    const h = window.location.hash.slice(1).split('~')[1]
+    return (h && decodeContent(h)) || DEFAULT_CONTENT
+  })
   const [focus, setFocus] = useState(null)
 
   useEffect(() => {

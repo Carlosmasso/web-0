@@ -290,8 +290,10 @@
    sutil y una etiqueta. Se lee como "aún no puesto", no como un fallo. */
 .db-frame:empty,
 .db-slide__media:empty {
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
   background-image: repeating-linear-gradient(
     45deg,
     transparent 0 11px,
@@ -301,7 +303,13 @@
 .db-frame:empty::after,
 .db-slide__media:empty::after {
   content: 'Imagen pendiente';
+  /* min-width:0 deja que el texto se ajuste dentro de marcos estrechos en vez
+     de desbordar y quedar cortado por overflow:hidden. */
+  min-width: 0;
+  max-width: 100%;
   font-family: var(--theme-font-body);
-  font-size: 0.85rem;
+  font-size: 0.78rem;
+  line-height: 1.3;
+  text-align: center;
   color: var(--theme-text-muted);
 }

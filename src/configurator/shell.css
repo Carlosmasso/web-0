@@ -1024,6 +1024,45 @@ body {
   border: 1px dashed var(--c-line);
   border-radius: 9px;
 }
+.field__image-actions {
+  display: flex;
+  gap: 6px;
+}
+.field__upload {
+  flex: 1;
+  padding: 9px 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--c-text);
+  background: var(--c-field);
+  border: 1px solid var(--c-line);
+  border-radius: 9px;
+  transition: border-color 140ms ease, background 140ms ease;
+}
+.field__upload:not(:disabled):hover {
+  border-color: var(--c-accent);
+  background: var(--c-field-hover);
+}
+.field__upload:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+.field__image-clear {
+  padding: 9px 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--c-muted);
+  border: 1px solid var(--c-line);
+  border-radius: 9px;
+}
+.field__image-clear:hover {
+  border-color: var(--c-pending);
+  color: var(--c-pending);
+}
+.field__image-error {
+  font-size: 0.76rem;
+  color: var(--c-pending);
+}
 
 .rep {
   margin-bottom: 18px;

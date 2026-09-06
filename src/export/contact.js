@@ -19,6 +19,16 @@ export const CONTACT_EMAIL = 'cmassoweb@gmail.com'
 const ENDPOINT = `https://formsubmit.co/ajax/${encodeURIComponent(CONTACT_EMAIL)}`
 
 /**
+ * Replacer de JSON.stringify: en el volcado de texto legible, solo acorta las
+ * imágenes subidas GRANDES (> ~45 KB). Las pequeñas (logos, avatares) se dejan
+ * enteras. Todas van completas en el .zip pase lo que pase.
+ */
+const stripDataUris = (_key, val) =>
+  typeof val === 'string' && val.startsWith('data:image/') && val.length > 60000
+    ? `[imagen subida — ${Math.round(val.length / 1024)} KB, va en el .zip]`
+    : val
+
+/**
  * @param {{ config: object, content: object, previewLink: string,
  *           lead: { name: string, email: string, phone?: string, note?: string } }} args
  * @returns {Promise<void>}  resuelve si FormSubmit acepta el envío; lanza si no.
@@ -42,7 +52,9 @@ export async function submitLead({ config, content, previewLink, lead }) {
   // Todo lo que necesitas para entregar, en el mismo correo
   form.append('vista_previa', previewLink)
   form.append('configuracion', JSON.stringify(config, null, 2))
-  form.append('contenido', JSON.stringify(content, null, 2))
+  // En el texto legible, las imágenes subidas son data URIs enormes: se
+  // sustituyen por una nota. Las imágenes de verdad van dentro del .zip.
+  form.append('contenido', JSON.stringify(content, stripDataUris, 2))
   form.append('attachment', blob, filename)
 
   const res = await fetch(ENDPOINT, {

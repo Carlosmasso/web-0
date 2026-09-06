@@ -15,7 +15,7 @@ import {
 } from './projects'
 import { ProjectMenu } from './ProjectMenu'
 import { deepMerge, setIn } from '../config/patch'
-import { encodeConfig, decodeConfig } from '../config/encode'
+import { encodeConfig, decodeConfig, encodeContent } from '../config/encode'
 import { DEFAULT_CONTENT } from '../content/defaults'
 import { getTypePairing } from '../registry/fonts'
 import { getAesthetic } from '../registry/aesthetics'
@@ -267,7 +267,12 @@ export function App() {
     copiedTimer.current = setTimeout(() => setCopied(null), 1600)
   }
 
-  const previewLink = `${window.location.origin}/preview.html#${encoded}`
+  // El enlace lleva diseño + contenido (textos, secciones, imágenes por URL).
+  // Las imágenes subidas se quedan fuera: un data URI no cabe en una URL.
+  const previewLink = useMemo(
+    () => `${window.location.origin}/preview.html#${encoded}~${encodeContent(content)}`,
+    [encoded, content],
+  )
 
   const copyLink = async () => {
     await navigator.clipboard.writeText(previewLink)
