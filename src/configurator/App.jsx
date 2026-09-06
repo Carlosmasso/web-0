@@ -25,7 +25,6 @@ import { safePalette } from '../theme/color'
 import { randomConfig } from '../theme/randomize'
 import { Sidebar } from './Sidebar'
 import { ContentForm } from './ContentForm'
-import { ExportPanel } from './ExportPanel'
 import { ContactModal } from './ContactModal'
 import { PreviewFrame } from './PreviewFrame'
 import { Icon } from '../preview/Icon'
@@ -78,7 +77,7 @@ export function App() {
   )
   const [mode, setMode] = useState('design')
   const [device, setDevice] = useState('desktop')
-  const [showExport, setShowExport] = useState(false)
+  const [zipping, setZipping] = useState(false)
   const [showContact, setShowContact] = useState(false)
   const [showTour, setShowTour] = useState(false)
   const [copied, setCopied] = useState(null)
@@ -307,6 +306,21 @@ export function App() {
     flash('link')
   }
 
+  // Solo estudio. El código del export (JSZip incluido) se carga bajo demanda.
+  const downloadZip = async () => {
+    setZipping(true)
+    try {
+      const [{ buildProjectFiles }, { downloadProjectZip }] = await Promise.all([
+        import('../export/scaffold'),
+        import('../export/zip'),
+      ])
+      const { files, projectName } = buildProjectFiles(config, content)
+      await downloadProjectZip(files, projectName)
+    } finally {
+      setZipping(false)
+    }
+  }
+
 
   return (
     <div className="shell">
@@ -455,11 +469,12 @@ export function App() {
             </button>
             {isStudio && (
               <button
-                onClick={() => setShowExport((v) => !v)}
+                onClick={downloadZip}
                 type="button"
-                className={`shell__ghost ${showExport ? 'is-active' : ''}`}
+                className="shell__ghost"
+                disabled={zipping}
               >
-                Código
+                {zipping ? 'Empaquetando…' : 'Descargar .zip'}
               </button>
             )}
             <button onClick={() => setShowContact(true)} type="button" className="shell__cta">
@@ -470,15 +485,6 @@ export function App() {
 
         <div className="shell__stage-row">
           <PreviewFrame ref={frameRef} config={config} content={content} device={device} />
-          {isStudio && (
-            <ExportPanel
-              config={config}
-              content={content}
-              violations={violations}
-              open={showExport}
-              onClose={() => setShowExport(false)}
-            />
-          )}
         </div>
       </main>
 

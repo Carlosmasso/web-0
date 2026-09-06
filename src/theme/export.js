@@ -1,8 +1,9 @@
 // ============================================================
-// MÓDULO 4.3 — EXPORTADOR DE CÓDIGO
+// EXPORTADOR DE SOLO TOKENS
 //
-// Portabilidad = argumento de venta. El cliente paga porque se lleva algo
-// que funciona fuera de la herramienta, no un lock-in.
+// SIN UI ahora mismo (se quitó el cajón "Código"). Se mantiene porque es una
+// capacidad real —pegar el diseño en un proyecto que ya existe— y volver a
+// engancharlo es un botón. Para el proyecto completo está el ".zip".
 //
 // Tres salidas desde el mismo contrato:
 //   tailwind.config.js   proyectos con Tailwind

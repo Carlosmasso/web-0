@@ -122,7 +122,7 @@ que hace falta:
   moviendo solo la luminosidad. Innegociable.
 
 Devuelve `{ config, violations, audit }`. Las `violations` (siempre correcciones
-objetivas, nunca "no te dejo") se muestran en la barra y en el cajón de exportación.
+objetivas, nunca "no te dejo") se muestran en un chip de la barra, solo en estudio.
 
 ### "¿Y esto dónde se ve?"
 
@@ -175,10 +175,10 @@ misma estética y no parecerse en nada.
   garantizado, moviendo únicamente la luminosidad para que el color siga siendo
   reconocible. El neutro lleva una pizca del tono de marca: es lo que separa una
   paleta *elegida* de una *heredada*.
-- **Exportador** (`src/theme/export.js`) — `tailwind.config.js` mapeado a clases
-  semánticas (`bg-surface`, `text-ink`, `rounded-brand`, `shadow-brand`),
-  `theme.css` con las custom properties en CSS puro, y `design-tokens.json` en
-  formato W3C para Figma o Style Dictionary. Portabilidad, no lock-in.
+- **Exportador de tokens** (`src/theme/export.js`) — `tailwind.config.js`,
+  `theme.css` (custom properties en CSS puro) y `design-tokens.json` (W3C).
+  **Sin UI ahora**: la entrega es el `.zip` completo. El módulo se mantiene por
+  si hace falta re-enganchar el "solo tokens".
 
 ## El flujo de trabajo
 
@@ -209,9 +209,9 @@ bajo las pestañas lo relanza, y `?tour` lo fuerza aunque ya se haya visto.
 | Probar el formulario del sitio | El CTA responde con su mensaje de confirmación (envío de maqueta) |
 | **Pedir presupuesto** | **"Pedir presupuesto"** — el único botón destacado |
 
-Lo que **no** ve: el botón **Código** y su cajón de exportación, el chip de
-"ajustes automáticos", el selector de proyectos, ni los botones internos de
-Contenido ("Copiar lista para el cliente", "Restablecer").
+Lo que **no** ve: el botón **Descargar .zip**, el chip de "ajustes automáticos",
+el selector de proyectos, ni los botones internos de Contenido ("Copiar lista
+para el cliente", "Restablecer").
 
 ### Qué puedes hacer tú (estudio / admin)
 
@@ -220,10 +220,10 @@ Todo lo del cliente, más:
 | Acción | Dónde |
 | --- | --- |
 | **Varios proyectos**, uno por cliente, sin que se pisen | Selector en la cabecera del panel: **Nuevo / Duplicar / Renombrar / Borrar**. Cada proyecto guarda su config y su contenido en `localStorage` bajo su propia clave (`src/configurator/projects.js`). En el primer arranque, tu trabajo actual migra a "Proyecto 1". |
-| Ver qué han corregido los guardarraíles | Chip *"N ajustes automáticos"* en la barra + detalle en el cajón |
+| Ver qué han corregido los guardarraíles | Chip *"N ajustes automáticos"* en la barra |
 | **Copiar lista para el cliente** — el texto exacto a pedirle según las variantes que eligió | Pestaña **Contenido** |
 | **Restablecer** el contenido al relleno de ejemplo | Pestaña **Contenido** |
-| Descargar el proyecto o los tokens a mano | Botón **Código** → cajón de exportación |
+| Descargar el proyecto `.zip` | Botón **Descargar .zip** en la barra, o el enlace `?studio` de la hoja de leads (botón en el propio preview) |
 
 En estudio, cambiar de proyecto **vacía el historial de deshacer** (no se cruza
 entre proyectos) y el `?c=` de la URL se ignora: manda el proyecto activo.
@@ -235,24 +235,21 @@ entre proyectos) y el `?c=` de la URL se ignora: manda el proyecto activo.
    con enlace a `/privacidad.html`. Nada de jerga a la vista.
 2. Al enviar, `submitLead()` (`src/export/contact.js`) hace un `POST` a la
    función serverless **`/api/lead`** (Vercel), sin abrir nada en su pantalla,
-   con: sus datos, el enlace de vista previa, la config y el contenido en texto,
-   y el proyecto `.zip` en base64 si pesa menos de ~3,4 MB. La función (a) añade
-   una fila a tu **Google Sheet**, (b) te **avisa por correo** con el `.zip`
-   adjunto, (c) manda al cliente un **"recibido"**. Vale con que la hoja o tu
-   correo funcionen. Montaje en `SETUP.md`. El cliente solo ve *"¡Recibido!"*.
+   con: sus datos, el enlace de vista previa, el enlace `?studio` para descargar
+   el proyecto, y el contenido en texto. La función (a) añade una fila a tu
+   **Google Sheet** con todo el detalle, (b) te **avisa por correo** — texto
+   plano corto, **sin adjuntos** (los `.zip` disparan el spam). Vale con que la
+   hoja o el correo funcionen. Montaje en `SETUP.md`. El cliente ve *"¡Recibido!"*.
 3. El cliente te pasa su contenido real. Con **Copiar lista para el cliente**
    tienes la lista exacta a pedir; el formulario de **Contenido** solo muestra
-   lo que esa variante usa y marca *pendiente* los huecos. Todo se refleja en
-   el preview al instante.
-4. Ese `.zip` (el adjunto, o el que bajas del cajón **Código**) es un proyecto
-   **React + Vite real**: `src/export/scaffold.js` copia los mismos ficheros
-   fuente que corren en el preview (vía `?raw` de Vite; el CSS, ya resuelto en
-   un solo archivo, vía `?inline`), así que nunca se desincroniza. Las imágenes
-   que subió el cliente salen del JSON a `public/img/` como archivos
-   reemplazables. `npm install && npm run build` y despliegas `dist/` donde
-   quieras. Las otras pestañas del cajón (`tailwind.config.js` / `theme.css` /
-   `design-tokens.json`) quedan para cuando solo necesitas los tokens sobre un
-   proyecto que ya existe.
+   lo que esa variante usa y marca *pendiente* los huecos.
+4. Abres el enlace **"Descargar proyecto (tú)"** de la hoja (`/preview.html?studio#…`):
+   renderiza el diseño y muestra un botón que descarga el `.zip` — un proyecto
+   **React + Vite real**. `src/export/scaffold.js` copia los mismos ficheros
+   fuente que corren en el preview (vía `?raw`; el CSS ya resuelto vía `?inline`),
+   así que nunca se desincroniza. Las imágenes que subió el cliente salen del
+   JSON a `public/img/` (pero no viajan en el enlace: se las pides al cliente).
+   `npm install && npm run build` y despliegas `dist/`.
 
 > **Puesta en marcha:** ver **`SETUP.md`** — Google Sheet + Apps Script, cuenta
 > de Resend y variables de entorno en Vercel. En `npm run dev` la función no
