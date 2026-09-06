@@ -5,14 +5,21 @@
 // sueltos: paleta, tipografía, acabado, estructura de secciones y efectos
 // llegan ya afinados y coherentes entre sí.
 //
-// Se muestran en una sola rejilla. `category` ('commercial' | 'trend') ya no
-// agrupa en la interfaz: solo ordena (de lo seguro a lo expresivo) y sirve de
-// filtro para el dado (`randomConfig({ category })`).
+// Dos grupos porque son dos formas de elegir que no comparan bien:
+//   commercial  eliges por tu sector ("soy dentista" -> Salud y bienestar).
+//   trend       eliges por un estilo ("quiero ese look" -> Neo-brutalismo).
+// Los de estilo van encima de los chips de "Estética base": son esos acabados
+// ya vestidos con una paleta y una tipografía de partida.
 //
 // Cada preset declara la `aesthetic` que gobierna su comportamiento en CSS.
 // Estética != preset: tres presets comerciales muy distintos pueden apoyarse
 // en la misma estética y no parecerse en nada.
 // ============================================================
+
+export const PRESET_GROUPS = [
+  { id: 'commercial', label: 'Por sector', note: 'Ya afinado para lo que se espera en tu ramo' },
+  { id: 'trend', label: 'Por estilo', note: 'Para diferenciarte, no para tranquilizar' },
+]
 
 export const PRESETS = [
   // ==========================================================
@@ -528,3 +535,4 @@ export const PRESETS = [
 ]
 
 export const getPreset = (id) => PRESETS.find((p) => p.id === id) ?? null
+export const presetsByGroup = (id) => PRESETS.filter((p) => p.category === id)

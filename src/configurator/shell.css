@@ -795,11 +795,13 @@ body {
 /* ---------- estética base: chips ---------- */
 
 .chips {
-  display: flex;
-  flex-wrap: wrap;
   gap: 6px;
+  display: grid;
+  flex-wrap: wrap;
+  grid-template-columns: 1fr 1fr;
 }
 .chip {
+  width: 100%;
   padding: 8px 12px;
   font-size: 0.8rem;
   font-weight: 550;

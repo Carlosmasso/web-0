@@ -137,16 +137,21 @@ diapositivas"*, que resuelve la misma pregunta sin necesidad de interactuar.
 
 ### Catálogo
 
-`src/registry/presets.js`, los 11 en una sola rejilla, ordenados de lo seguro a
-lo expresivo: Salud y bienestar, Corporativo y legal, Inmobiliaria y
-arquitectura (carbón sobre hueso, serif de autoridad), Restauración de mantel
-(negro y dorado, foto a sangre), Hostelería y artesanía, Infancia y educación
-(coral y verde agua), Editorial (serif enorme, retícula asimétrica), SaaS oscuro
-(azul eléctrico + malla), Claymorfismo, Glassmorfismo, Neo-brutalismo.
+`src/registry/presets.js`, en dos grupos porque son dos formas de elegir que no
+comparan bien:
 
-El campo `category` (`commercial` / `trend`) ya no agrupa en la interfaz: solo
-ordena y filtra el dado. Algunos presets ocultan secciones que no aplican (una
-inmobiliaria no tiene planes de precio) vía `sectionOrder`.
+- **Por sector** — Salud y bienestar, Corporativo y legal, Hostelería y
+  artesanía, Inmobiliaria y arquitectura (carbón sobre hueso, serif de
+  autoridad), Infancia y educación (coral y verde agua), Restauración de mantel
+  (negro y dorado, foto a sangre). Eliges por quién eres.
+- **Por estilo** — Neo-brutalismo, Glassmorfismo, Claymorfismo, SaaS oscuro
+  (azul eléctrico + malla), Editorial (serif enorme, retícula asimétrica).
+  Eliges por cómo se ve. Van justo encima de los chips de "Estética base": son
+  esos acabados ya vestidos con una paleta y una tipografía.
+
+El campo `category` (`commercial` / `trend`) da el grupo y filtra el dado.
+Algunos presets ocultan secciones que no aplican (una inmobiliaria no tiene
+planes de precio) vía `sectionOrder`.
 
 Estética != preset: tres presets comerciales muy distintos pueden apoyarse en la
 misma estética y no parecerse en nada.
