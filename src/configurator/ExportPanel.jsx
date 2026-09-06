@@ -4,8 +4,8 @@ import { buildProjectFiles } from '../export/scaffold'
 import { downloadProjectZip } from '../export/zip'
 import { auditConfig } from '../config/guardrails'
 
-// Cajón técnico: para DESPUÉS de que el cliente te haya escrito con
-// "Quiero esta web". No es la vitrina — es donde tú entregas.
+// Cajón técnico: para DESPUÉS de que el cliente te haya pedido presupuesto.
+// No es la vitrina — es donde tú entregas.
 export function ExportPanel({ config, content, violations = [], open, onClose }) {
   const artifacts = useMemo(() => exportBundle(config), [config])
   const audit = useMemo(() => auditConfig(config), [config])

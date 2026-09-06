@@ -199,7 +199,7 @@ bajo las pestañas lo relanza, y `?tour` lo fuerza aunque ya se haya visto.
 | Ver en escritorio / móvil | Conmutador de la barra |
 | Guardar una versión para volver luego | **Copiar enlace** — el `?c=` lleva toda la config en la URL |
 | Probar el formulario del sitio | El CTA responde con su mensaje de confirmación (envío de maqueta) |
-| **Pedir la web** | **"Quiero esta web"** — el único botón destacado |
+| **Pedir presupuesto** | **"Pedir presupuesto"** — el único botón destacado |
 
 Lo que **no** ve: el botón **Código** y su cajón de exportación, el chip de
 "ajustes automáticos", el selector de proyectos, ni los botones internos de
@@ -222,13 +222,16 @@ entre proyectos) y el `?c=` de la URL se ignora: manda el proyecto activo.
 
 ### El cliente pide, tú entregas
 
-1. El cliente pulsa **"Quiero esta web"**. Un modal (`ContactModal.jsx`) le pide
-   solo sus datos (nombre, email, teléfono, nota). Nada de jerga a la vista.
-2. Al enviar, `submitLead()` (`src/export/contact.js`) manda **por fetch a
-   FormSubmit**, sin abrir nada en su pantalla, un correo a `CONTACT_EMAIL` con:
-   sus datos, la config y el contenido en texto (las imágenes subidas se
-   resumen aquí; van completas en el `.zip`), y **el proyecto ya empaquetado
-   como `.zip` adjunto**. El cliente solo ve *"recibido, te contactamos"*.
+1. El cliente pulsa **"Pedir presupuesto"**. Un modal (`ContactModal.jsx`) le pide
+   sus datos (nombre, email, teléfono, nota) y **la casilla de consentimiento**
+   con enlace a `/privacidad.html`. Nada de jerga a la vista.
+2. Al enviar, `submitLead()` (`src/export/contact.js`) hace un `POST` a la
+   función serverless **`/api/lead`** (Vercel), sin abrir nada en su pantalla,
+   con: sus datos, el enlace de vista previa, la config y el contenido en texto,
+   y el proyecto `.zip` en base64 si pesa menos de ~3,4 MB. La función (a) añade
+   una fila a tu **Google Sheet**, (b) te **avisa por correo** con el `.zip`
+   adjunto, (c) manda al cliente un **"recibido"**. Vale con que la hoja o tu
+   correo funcionen. Montaje en `SETUP.md`. El cliente solo ve *"¡Recibido!"*.
 3. El cliente te pasa su contenido real. Con **Copiar lista para el cliente**
    tienes la lista exacta a pedir; el formulario de **Contenido** solo muestra
    lo que esa variante usa y marca *pendiente* los huecos. Todo se refleja en
@@ -243,11 +246,10 @@ entre proyectos) y el `?c=` de la URL se ignora: manda el proyecto activo.
    `design-tokens.json`) quedan para cuando solo necesitas los tokens sobre un
    proyecto que ya existe.
 
-> **Puesta en marcha, una sola vez:** el primer envío a `CONTACT_EMAIL`
-> (constante en `contact.js`) hace que FormSubmit te mande un correo con un
-> enlace *"Activate Form"*. Púlsalo y a partir de ahí llegan todos los envíos.
-> Antes de activar, el modal muestra un estado de error con un `mailto:` de
-> reserva.
+> **Puesta en marcha:** ver **`SETUP.md`** — Google Sheet + Apps Script, cuenta
+> de Resend y variables de entorno en Vercel. En `npm run dev` la función no
+> corre (usa `vercel dev` o una preview de Vercel). Si el envío falla, el modal
+> muestra un `mailto:` de reserva.
 
 **El cliente nunca se lleva la web construida.** El configurador es una
 herramienta de venta; el build lo entregas tú (*"si damos la posibilidad de

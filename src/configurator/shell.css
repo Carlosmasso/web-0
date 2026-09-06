@@ -130,6 +130,41 @@ body {
   text-decoration: underline;
 }
 
+.shell__legal {
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  padding: 16px;
+  border-top: 1px solid var(--c-hair);
+  font-size: 0.72rem;
+  justify-content: space-around;
+}
+.shell__legal a {
+  color: var(--c-faint);
+}
+.shell__legal a:hover {
+  color: var(--c-muted);
+}
+
+.panel-error {
+  padding: 24px 18px;
+  font-size: 0.85rem;
+  color: var(--c-muted);
+}
+.panel-error button {
+  margin-top: 10px;
+  padding: 7px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--c-text);
+  border: 1px solid var(--c-line);
+  border-radius: 8px;
+}
+.panel-error button:hover {
+  border-color: var(--c-accent);
+}
+
 /* ---------- selector de proyectos (solo estudio) ---------- */
 
 .pmenu {
@@ -1557,7 +1592,7 @@ body {
 
 /* ============================================================
    MODAL DE CONTACTO
-   Lo único que ve el cliente al pulsar "Quiero esta web": sus propios
+   Lo único que ve el cliente al pulsar "Pedir presupuesto": sus propios
    datos, con la misma identidad visual del panel. Sin jerga de diseño.
    ============================================================ */
 
@@ -1617,6 +1652,26 @@ body {
 .modal__close:hover {
   color: var(--c-text);
   background: var(--c-field);
+}
+
+.modal__consent {
+  display: flex;
+  gap: 9px;
+  margin: 4px 0 14px;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--c-muted);
+}
+.modal__consent input {
+  flex: none;
+  margin-top: 2px;
+  width: 15px;
+  height: 15px;
+  accent-color: var(--c-accent-strong);
+}
+.modal__consent a {
+  color: var(--c-accent);
+  text-decoration: underline;
 }
 
 .modal__submit {

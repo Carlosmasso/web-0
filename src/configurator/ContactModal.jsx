@@ -3,10 +3,12 @@ import { submitLead, CONTACT_EMAIL } from '../export/contact'
 
 const EMPTY = { name: '', email: '', phone: '', note: '' }
 
-// Lo único que ve el cliente al pulsar "Quiero esta web": sus propios datos.
-// Al enviar, todo viaja por fetch a FormSubmit — nada se abre en su pantalla.
+// Lo único que ve el cliente al pulsar "Pedir presupuesto": sus datos + el
+// consentimiento. Al enviar, todo va por fetch a /api/lead — nada se abre en
+// su pantalla. No hay pago ni venta aquí, solo una petición de presupuesto.
 export function ContactModal({ open, onClose, config, content, previewLink }) {
   const [lead, setLead] = useState(EMPTY)
+  const [consent, setConsent] = useState(false)
   const [status, setStatus] = useState('idle') // idle | sending | sent | error
   const firstFieldRef = useRef(null)
 
@@ -20,6 +22,7 @@ export function ContactModal({ open, onClose, config, content, previewLink }) {
   useEffect(() => {
     if (!open) return undefined
     setLead(EMPTY)
+    setConsent(false)
     setStatus('idle')
     const raf = requestAnimationFrame(() => firstFieldRef.current?.focus())
     const onKey = (e) => {
@@ -34,7 +37,7 @@ export function ContactModal({ open, onClose, config, content, previewLink }) {
 
   if (!open) return null
 
-  const canSubmit = lead.name.trim() && lead.email.trim() && status !== 'sending'
+  const canSubmit = lead.name.trim() && lead.email.trim() && consent && status !== 'sending'
   const set = (key) => (e) => setLead((prev) => ({ ...prev, [key]: e.target.value }))
 
   const submit = async (e) => {
@@ -72,7 +75,7 @@ export function ContactModal({ open, onClose, config, content, previewLink }) {
               ✓
             </span>
             <h2 id="contact-title">¡Recibido!</h2>
-            <p>Te escribo en menos de 24&nbsp;h para cerrar los detalles.</p>
+            <p>Te paso el presupuesto en menos de un día laborable. Sin compromiso.</p>
             <button type="button" className="modal__submit" onClick={onClose}>
               Cerrar
             </button>
@@ -81,8 +84,8 @@ export function ContactModal({ open, onClose, config, content, previewLink }) {
           <>
             <div className="modal__head">
               <div>
-                <h2 id="contact-title">Quiero esta web</h2>
-                <p>Déjame tus datos y te escribo para cerrar los detalles.</p>
+                <h2 id="contact-title">Presupuesto sin compromiso</h2>
+                <p>Déjame tus datos y te paso un presupuesto de esta web. No hay ningún pago ni obligación ahora.</p>
               </div>
               <button
                 type="button"
@@ -136,6 +139,22 @@ export function ContactModal({ open, onClose, config, content, previewLink }) {
                   onChange={set('note')}
                   placeholder="Plazos, dudas, lo que sea…"
                 />
+              </label>
+
+              <label className="modal__consent">
+                <input
+                  type="checkbox"
+                  checked={consent}
+                  onChange={(e) => setConsent(e.target.checked)}
+                  required
+                />
+                <span>
+                  He leído y acepto la{' '}
+                  <a href="/privacidad.html" target="_blank" rel="noopener noreferrer">
+                    política de privacidad
+                  </a>
+                  . Usaré tus datos solo para enviarte el presupuesto y responderte.
+                </span>
               </label>
 
               {status === 'error' && (

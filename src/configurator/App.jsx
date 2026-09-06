@@ -15,6 +15,7 @@ import {
 } from './projects'
 import { ProjectMenu } from './ProjectMenu'
 import { Tour, TOUR_STEPS, isTourDone, markTourDone } from './Tour'
+import { ErrorBoundary } from '../ErrorBoundary'
 import { deepMerge, setIn } from '../config/patch'
 import { encodeConfig, decodeConfig, encodeContent } from '../config/encode'
 import { DEFAULT_CONTENT } from '../content/defaults'
@@ -344,28 +345,45 @@ export function App() {
           </button>
         </div>
 
-        {mode === 'design' ? (
-          <Sidebar
-            config={config}
-            onSet={set}
-            onApplyPreset={applyPreset}
-            onApplyType={applyType}
-            onBrandColor={setBrandColor}
-            onSurprise={surprise}
-            onFocus={focusInPreview}
-            onReveal={revealInPreview}
-            onSwitchAesthetic={switchAesthetic}
-            onToggleSection={toggleSection}
-            onMoveSection={moveSection}
-          />
-        ) : (
-          <ContentForm
-            config={config}
-            content={content}
-            onChange={setContent}
-            onReset={() => setContent(DEFAULT_CONTENT)}
-          />
-        )}
+        <ErrorBoundary
+          fallback={(retry) => (
+            <div className="panel-error">
+              <p>Este panel ha fallado.</p>
+              <button type="button" onClick={retry}>
+                Reintentar
+              </button>
+            </div>
+          )}
+        >
+          {mode === 'design' ? (
+            <Sidebar
+              config={config}
+              onSet={set}
+              onApplyPreset={applyPreset}
+              onApplyType={applyType}
+              onBrandColor={setBrandColor}
+              onSurprise={surprise}
+              onFocus={focusInPreview}
+              onReveal={revealInPreview}
+              onSwitchAesthetic={switchAesthetic}
+              onToggleSection={toggleSection}
+              onMoveSection={moveSection}
+            />
+          ) : (
+            <ContentForm
+              config={config}
+              content={content}
+              onChange={setContent}
+              onReset={() => setContent(DEFAULT_CONTENT)}
+            />
+          )}
+        </ErrorBoundary>
+
+        <footer className="shell__legal">
+          <a href="/aviso-legal.html" target="_blank" rel="noopener noreferrer">Aviso legal</a>
+          <a href="/privacidad.html" target="_blank" rel="noopener noreferrer">Privacidad</a>
+          <a href="/cookies.html" target="_blank" rel="noopener noreferrer">Cookies</a>
+        </footer>
       </aside>
 
       <main className="shell__stage-wrap">
@@ -438,7 +456,7 @@ export function App() {
               </button>
             )}
             <button onClick={() => setShowContact(true)} type="button" className="shell__cta">
-              Quiero esta web
+              Pedir presupuesto
             </button>
           </div>
         </div>

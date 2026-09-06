@@ -2,76 +2,68 @@
 // EL CLIENTE TE CONTACTA — ENVÍO SILENCIOSO
 //
 // El cliente rellena el modal y pulsa "Enviar". Nada se abre en su pantalla:
-// una petición fetch a FormSubmit lleva sus datos + la config + el contenido
-// + el proyecto ya empaquetado (.zip adjunto) a tu correo. Ve solo un
-// "gracias, te contactamos".
+// una petición a /api/lead (función serverless en Vercel) registra la solicitud
+// en tu Google Sheet, te avisa por correo con el proyecto .zip adjunto y manda
+// al cliente un "recibido". Ver api/lead.js y SETUP.md.
 //
-// PRIMERA VEZ: FormSubmit te manda un correo de confirmación con un enlace.
-// Ábrelo una vez y a partir de ahí llegan todos los envíos.
+// En `npm run dev` la función no existe: usa `vercel dev` o prueba en una
+// preview de Vercel.
 // ============================================================
 
 import { buildProjectFiles } from './scaffold'
 import { buildZipBlob } from './zip'
 
-// A dónde llegan los avisos. Cámbialo aquí si algún día usas otra dirección.
+// Solo para el enlace `mailto:` de respaldo que muestra el modal si algo falla.
 export const CONTACT_EMAIL = 'cmassoweb@gmail.com'
 
-const ENDPOINT = `https://formsubmit.co/ajax/${encodeURIComponent(CONTACT_EMAIL)}`
+// Por debajo de este tamaño de blob, el .zip viaja en el POST a /api/lead (en
+// base64 crece ~33 %; el límite de cuerpo de Vercel ronda los 4,5 MB). Por
+// encima, se omite: el enlace de vista previa ya lleva diseño y textos.
+const MAX_ZIP_INLINE = 3_400_000
 
-/**
- * Replacer de JSON.stringify: en el volcado de texto legible, solo acorta las
- * imágenes subidas GRANDES (> ~45 KB). Las pequeñas (logos, avatares) se dejan
- * enteras. Todas van completas en el .zip pase lo que pase.
- */
-const stripDataUris = (_key, val) =>
-  typeof val === 'string' && val.startsWith('data:image/') && val.length > 60000
-    ? `[imagen subida — ${Math.round(val.length / 1024)} KB, en el .zip: public/img/]`
-    : val
+/** En el volcado legible, acorta solo las imágenes subidas grandes. */
+const stripDataUris = (_k, v) =>
+  typeof v === 'string' && v.startsWith('data:image/') && v.length > 60000
+    ? `[imagen subida — ${Math.round(v.length / 1024)} KB, en el .zip: public/img/]`
+    : v
+
+const blobToBase64 = (blob) =>
+  new Promise((resolve, reject) => {
+    const r = new FileReader()
+    r.onload = () => resolve(String(r.result).split(',')[1] || '')
+    r.onerror = () => reject(new Error('read'))
+    r.readAsDataURL(blob)
+  })
 
 /**
  * @param {{ config: object, content: object, previewLink: string,
  *           lead: { name: string, email: string, phone?: string, note?: string } }} args
- * @returns {Promise<void>}  resuelve si FormSubmit acepta el envío; lanza si no.
+ * @returns {Promise<void>} resuelve si la solicitud quedó registrada; lanza si no.
  */
 export async function submitLead({ config, content, previewLink, lead }) {
-  const brand = content?.brand?.name || 'mi negocio'
+  const brand = content?.brand?.name || ''
   const { files, projectName } = buildProjectFiles(config, content)
   const { blob, filename } = await buildZipBlob(files, projectName)
+  const zipBase64 = blob.size <= MAX_ZIP_INLINE ? await blobToBase64(blob) : ''
 
-  const form = new FormData()
-  form.append('name', lead.name)
-  form.append('email', lead.email)
-  if (lead.phone) form.append('phone', lead.phone)
-  if (lead.note) form.append('message', lead.note)
-
-  // Campos de control de FormSubmit
-  form.append('_subject', `Quiero esta web para ${brand} — ${lead.name}`)
-  form.append('_captcha', 'false')
-  form.append('_template', 'table')
-
-  // Todo lo que necesitas para entregar, en el mismo correo
-  form.append('vista_previa', previewLink)
-  form.append('configuracion', JSON.stringify(config, null, 2))
-  // En el texto legible, las imágenes subidas son data URIs enormes: se
-  // sustituyen por una nota. Las imágenes de verdad van dentro del .zip.
-  form.append('contenido', JSON.stringify(content, stripDataUris, 2))
-  form.append('attachment', blob, filename)
-
-  const res = await fetch(ENDPOINT, {
+  const res = await fetch('/api/lead', {
     method: 'POST',
-    headers: { Accept: 'application/json' },
-    body: form,
-  })
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: lead.name,
+      email: lead.email,
+      phone: lead.phone || '',
+      note: lead.note || '',
+      brand,
+      previewLink,
+      consent: true,
+      configText: JSON.stringify(config, null, 2),
+      contentText: JSON.stringify(content, stripDataUris, 2),
+      zipBase64,
+      zipName: filename,
+    }),
+  }).catch(() => null)
 
-  const data = await res.json().catch(() => ({}))
-  if (!res.ok || data.success === 'false' || data.success === false) {
-    if (/activ/i.test(data.message || '')) {
-      // eslint-disable-next-line no-console
-      console.warn(
-        `[Estudio] FormSubmit aún no está activo para ${CONTACT_EMAIL}. ` +
-          `Revisa ese correo y pulsa el enlace "Activate Form" una vez.`,
-      )
-    }
-    throw new Error(data.message || `FormSubmit respondió ${res.status}`)
-  }
+  const data = res && res.ok ? await res.json().catch(() => ({})) : {}
+  if (!data.ok) throw new Error('No se pudo registrar la solicitud.')
 }
