@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useLayoutEffect, useState } from 'react'
 
 // ============================================================
-// TOUR GUIADO  —  SOLO MODO CLIENTE
+// TOUR GUIADO
 //
-// La primera vez que un cliente entra, un recorrido de seis pasos le explica
-// para qué es la herramienta y cómo usarla en su caso. Se marca como visto en
-// localStorage; el botón "¿Cómo funciona?" lo vuelve a lanzar.
+// La primera vez que se entra, un recorrido guiado explica para qué es la
+// herramienta y cómo usarla. Se marca como visto en localStorage; el botón
+// "¿Cómo funciona?" lo vuelve a lanzar.
+//
+// Un paso puede llevar `expand: true`: si su objetivo es la cabecera de una
+// capa plegada, la abre antes de resaltarla para que se vea qué contiene.
 // ============================================================
 
 const TOUR_KEY = 'web0.tour.v1'
@@ -34,13 +37,19 @@ export const TOUR_STEPS = [
   },
   {
     target: '[data-tour="start"]',
-    title: 'Empieza por un punto de partida',
-    body: 'Elige por tu sector (dentista, bufete, cafetería…) o por un estilo. Todo lo demás llega ya afinado y encajado.',
+    title: 'No empiezas de cero',
+    body: 'Elige una base por tu sector (dentista, bufete, cafetería…) o por el estilo que te guste. Viene con colores, tipografía y secciones que ya encajan entre sí, y puedes cambiarla cuando quieras.',
   },
   {
     target: '[data-tour="identity"]',
-    title: 'Ajústalo a lo tuyo',
-    body: 'Tu color de marca, la tipografía, las esquinas, el aire. Cada control hace exactamente lo que dice, sin sorpresas.',
+    title: 'Ponle tu marca',
+    body: 'Tu color, tu tipografía, la forma de las esquinas y cuánto respira el diseño. Elijas el color que elijas, el resto de la paleta se ajusta solo para que todo se lea bien.',
+  },
+  {
+    target: '[data-tour="fine"]',
+    expand: true,
+    title: 'Afina los detalles, si quieres',
+    body: 'Aquí eliges qué secciones aparecen y en qué orden, y ajustas cosas como las sombras o los botones. Va plegado a propósito: la base ya viene bien, esto es solo para rematar.',
   },
   {
     target: '.stage',
@@ -83,20 +92,37 @@ export function Tour({ steps, open, onClose }) {
     if (open) setI(0)
   }, [open])
 
-  // Mide el objetivo del paso, tras un scroll suave por si está fuera de vista.
+  // Mide el objetivo del paso. El scroll es instantáneo y centra el objetivo:
+  // la transición CSS de `.tour__spot` hace el desplazamiento visible entre
+  // pasos, y así la medida no compite con una animación de scroll a medias
+  // (era lo que descuadraba el recuadro en los pasos con panel desplazado).
   useLayoutEffect(() => {
     if (!open) return undefined
-    const measure = () => {
-      const el = step.target ? document.querySelector(step.target) : null
-      setRect(el ? el.getBoundingClientRect() : null)
-    }
     const el = step.target ? document.querySelector(step.target) : null
-    el?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
-    measure()
-    const t = setTimeout(measure, 280)
+    if (!el) {
+      setRect(null)
+      return undefined
+    }
+
+    // Si el paso apunta a una capa plegada, ábrela para que se vea qué lleva.
+    if (step.expand && el.closest('.layer')?.classList.contains('is-open') === false) {
+      el.click()
+    }
+
+    el.scrollIntoView({ block: 'center', behavior: 'auto' })
+
+    const measure = () => setRect(el.getBoundingClientRect())
+    let raf1 = 0
+    let raf2 = 0
+    // Dos frames: uno para que el scroll cuaje, otro para el layout resultante.
+    raf1 = requestAnimationFrame(() => {
+      measure()
+      raf2 = requestAnimationFrame(measure)
+    })
     window.addEventListener('resize', measure)
     return () => {
-      clearTimeout(t)
+      cancelAnimationFrame(raf1)
+      cancelAnimationFrame(raf2)
       window.removeEventListener('resize', measure)
     }
   }, [open, i, step])
@@ -132,8 +158,8 @@ export function Tour({ steps, open, onClose }) {
             left: rect.left - 8,
             top: Math.max(4, rect.top - 8),
             width: rect.width + 16,
-            // Recorta el resalte a lo que se ve: una capa alta (la de presets)
-            // no debe pintar un halo de 900 px.
+            // Salvaguarda: nunca más alto que el viewport, por si un paso apunta
+            // a un elemento grande.
             height: Math.min(rect.height + 16, window.innerHeight - Math.max(4, rect.top - 8) - 8),
           }}
         />

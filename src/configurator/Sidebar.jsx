@@ -27,11 +27,13 @@ import { SECTION_ORDER } from '../config/schema'
 function Layer({ n, title, subtitle, children, defaultOpen = true, tone, tourId }) {
   const [open, setOpen] = useState(defaultOpen)
   return (
-    <section
-      className={`layer ${open ? 'is-open' : ''} ${tone ? `layer--${tone}` : ''}`}
-      data-tour={tourId}
-    >
-      <button type="button" className="layer__head" onClick={() => setOpen((v) => !v)}>
+    <section className={`layer ${open ? 'is-open' : ''} ${tone ? `layer--${tone}` : ''}`}>
+      <button
+        type="button"
+        className="layer__head"
+        data-tour={tourId}
+        onClick={() => setOpen((v) => !v)}
+      >
         <span className="layer__n">{n}</span>
         <span className="layer__titles">
           <span className="layer__title">{title}</span>
@@ -327,7 +329,14 @@ export function Sidebar({
       </Layer>
 
       {/* ---------- CAPA 3 ---------- */}
-      <Layer n="3" title="Ajuste fino" subtitle="Cada detalle por separado." defaultOpen={false} tone="pro">
+      <Layer
+        n="3"
+        title="Ajuste fino"
+        subtitle="Cada detalle por separado."
+        defaultOpen={false}
+        tone="pro"
+        tourId="fine"
+      >
         {vocab('shadows.style')}
         {vocab('effects.noise')}
         {vocab('effects.aurora')}
