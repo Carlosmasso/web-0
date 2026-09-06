@@ -185,7 +185,10 @@ trabajas desde otro ordenador.
 
 ### Qué puede hacer el cliente
 
-Todo lo de la venta, nada de la entrega:
+Todo lo de la venta, nada de la entrega. La primera vez que se abre la
+herramienta, un **tour guiado** de seis pasos (`Tour.jsx`, se marca visto en
+`localStorage`) explica para qué es y cómo usarla; el botón "¿Cómo funciona?"
+bajo las pestañas lo relanza, y `?tour` lo fuerza aunque ya se haya visto.
 
 | Acción | Dónde |
 | --- | --- |

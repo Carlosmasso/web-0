@@ -14,6 +14,7 @@ import {
   setActiveId,
 } from './projects'
 import { ProjectMenu } from './ProjectMenu'
+import { Tour, TOUR_STEPS, isTourDone, markTourDone } from './Tour'
 import { deepMerge, setIn } from '../config/patch'
 import { encodeConfig, decodeConfig, encodeContent } from '../config/encode'
 import { DEFAULT_CONTENT } from '../content/defaults'
@@ -78,6 +79,7 @@ export function App() {
   const [device, setDevice] = useState('desktop')
   const [showExport, setShowExport] = useState(false)
   const [showContact, setShowContact] = useState(false)
+  const [showTour, setShowTour] = useState(false)
   const [copied, setCopied] = useState(null)
   const copiedTimer = useRef(null)
   const frameRef = useRef(null)
@@ -108,6 +110,24 @@ export function App() {
   useEffect(() => () => {
     clearTimeout(copiedTimer.current)
     clearTimeout(focusTimer.current)
+  }, [])
+
+  // Tour de bienvenida: la primera vez que se abre (en cualquier modo), tras un
+  // respiro para que el preview haya cargado. Una vez visto, no vuelve solo;
+  // el botón "¿Cómo funciona?" o `?tour` lo relanzan.
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).has('tour')) {
+      setShowTour(true)
+      return undefined
+    }
+    if (isTourDone()) return undefined
+    const t = setTimeout(() => setShowTour(true), 700)
+    return () => clearTimeout(t)
+  }, [])
+
+  const closeTour = useCallback(() => {
+    setShowTour(false)
+    markTourDone()
   }, [])
 
   // Deshacer / rehacer con teclado. Solo sobre el diseño: si el foco está en un
@@ -312,6 +332,16 @@ export function App() {
               Contenido
             </button>
           </div>
+          <button
+            type="button"
+            className="design shell__help"
+            onClick={() => {
+              setMode('design')
+              setShowTour(true)
+            }}
+          >
+            ¿Cómo funciona?
+          </button>
         </div>
 
         {mode === 'design' ? (
@@ -434,6 +464,8 @@ export function App() {
         content={content}
         previewLink={previewLink}
       />
+
+      <Tour steps={TOUR_STEPS} open={showTour} onClose={closeTour} />
     </div>
   )
 }

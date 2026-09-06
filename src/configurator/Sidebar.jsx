@@ -24,10 +24,13 @@ import { SECTION_ORDER } from '../config/schema'
 // ============================================================
 
 
-function Layer({ n, title, subtitle, children, defaultOpen = true, tone }) {
+function Layer({ n, title, subtitle, children, defaultOpen = true, tone, tourId }) {
   const [open, setOpen] = useState(defaultOpen)
   return (
-    <section className={`layer ${open ? 'is-open' : ''} ${tone ? `layer--${tone}` : ''}`}>
+    <section
+      className={`layer ${open ? 'is-open' : ''} ${tone ? `layer--${tone}` : ''}`}
+      data-tour={tourId}
+    >
       <button type="button" className="layer__head" onClick={() => setOpen((v) => !v)}>
         <span className="layer__n">{n}</span>
         <span className="layer__titles">
@@ -201,7 +204,12 @@ export function Sidebar({
   return (
     <div className="sidebar">
       {/* ---------- CAPA 1 ---------- */}
-      <Layer n="1" title="Punto de partida" subtitle="Elige el mundo. Lo demás viene afinado.">
+      <Layer
+        n="1"
+        title="Punto de partida"
+        subtitle="Elige el mundo. Lo demás viene afinado."
+        tourId="start"
+      >
         {PRESET_GROUPS.map((g) => (
           <Group key={g.id} title={g.label} hint={g.note}>
             <div className="preset-grid">
@@ -249,7 +257,12 @@ export function Sidebar({
       </Layer>
 
       {/* ---------- CAPA 2 ---------- */}
-      <Layer n="2" title="Tu identidad" subtitle="Lo que hace tuya esa base.">
+      <Layer
+        n="2"
+        title="Tu identidad"
+        subtitle="Lo que hace tuya esa base."
+        tourId="identity"
+      >
         <Group
           title="Color de marca"
           hint="El resto de la paleta se calcula sola para que siempre se lea."

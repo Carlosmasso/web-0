@@ -120,6 +120,15 @@ body {
   font-size: 1.05rem;
   letter-spacing: -0.01em;
 }
+.shell__help {
+  margin-top: 10px;
+  font-size: 0.76rem;
+  font-weight: 550;
+  color: var(--c-accent);
+}
+.shell__help:hover {
+  text-decoration: underline;
+}
 
 /* ---------- selector de proyectos (solo estudio) ---------- */
 
@@ -1678,4 +1687,97 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .modal-veil, .modal { animation: none; }
+}
+
+/* ============================================================
+   TOUR DE BIENVENIDA  (solo modo cliente)
+   ============================================================ */
+
+.tour {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+}
+.tour__veil {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 9, 13, 0.62);
+}
+.tour__spot {
+  position: absolute;
+  border: 2px solid var(--c-accent);
+  border-radius: 12px;
+  box-shadow: 0 0 0 9999px rgba(8, 9, 13, 0.62);
+  pointer-events: none;
+  transition: left 260ms cubic-bezier(0.23, 1, 0.32, 1),
+    top 260ms cubic-bezier(0.23, 1, 0.32, 1),
+    width 260ms cubic-bezier(0.23, 1, 0.32, 1),
+    height 260ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.tour__card {
+  position: absolute;
+  width: min(320px, calc(100vw - 24px));
+  background: var(--c-card);
+  border: 1px solid var(--c-line);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 24px 60px -16px rgba(0, 0, 0, 0.6);
+  animation: tour-in 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+@keyframes tour-in {
+  from { opacity: 0; transform: translateY(6px); }
+}
+.tour__count {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--c-faint);
+}
+.tour__card h3 {
+  font-size: 1rem;
+  margin: 6px 0 8px;
+}
+.tour__card > p {
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--c-muted);
+}
+.tour__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 16px;
+}
+.tour__nav-right {
+  display: flex;
+  gap: 6px;
+}
+.tour__skip,
+.tour__back {
+  padding: 7px 12px;
+  font-size: 0.78rem;
+  font-weight: 550;
+  color: var(--c-muted);
+  border-radius: 8px;
+}
+.tour__skip:hover,
+.tour__back:hover {
+  color: var(--c-text);
+}
+.tour__next {
+  padding: 7px 16px;
+  font-size: 0.8rem;
+  font-weight: 650;
+  color: #fff;
+  background: var(--c-accent-strong);
+  border-radius: 8px;
+}
+.tour__next:hover {
+  filter: brightness(1.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tour__spot { transition: none; }
+  .tour__card { animation: none; }
 }
