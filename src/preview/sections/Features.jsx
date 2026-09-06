@@ -31,7 +31,11 @@ export function FeatureGrid() {
         <Heading features={features} />
         <div className="db-grid-3">
           {features.items.map((f, i) => (
-            <Reveal key={f.title} delay={i * 0.06} className="db-card db-feature">
+            <Reveal
+              key={f.title}
+              delay={i * 0.06}
+              className={`db-card db-feature ${i === 0 ? 'db-feature--lead' : ''}`}
+            >
               <FeatureIcon name={f.icon} />
               <h3>{f.title}</h3>
               <p>{f.body}</p>
@@ -54,7 +58,11 @@ export function FeatureRows() {
         <Heading features={features} />
         <div className="db-rows">
           {features.items.map((f, i) => (
-            <Reveal key={f.title} className={`db-row ${i % 2 ? 'db-row--flip' : ''}`}>
+            <Reveal
+              key={f.title}
+              delay={i * 0.05}
+              className={`db-row ${i % 2 ? 'db-row--flip' : ''}`}
+            >
               <div className="db-row__body">
                 <FeatureIcon name={f.icon} />
                 <h3>{f.title}</h3>

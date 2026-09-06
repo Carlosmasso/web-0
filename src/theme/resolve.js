@@ -94,7 +94,7 @@ export function resolveTheme(c) {
     '--theme-accent': p.accent,
     '--theme-bg': p.neutralBg,
     '--theme-surface': p.neutralSurface,
-    '--theme-surface-2': `color-mix(in srgb, ${p.textPrimary} 5%, ${p.neutralBg})`,
+    '--theme-surface-2': `color-mix(in srgb, ${p.textPrimary} 8%, ${p.neutralBg})`,
     '--theme-text': p.textPrimary,
     '--theme-text-muted': p.textMuted,
     '--theme-on-primary': contrastFor(p.primary),

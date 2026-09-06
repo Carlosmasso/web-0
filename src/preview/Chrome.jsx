@@ -97,8 +97,18 @@ export function Footer() {
         </div>
       </div>
       <div className="db-container db-footer__legal">
-        <span>2026 {brand.name}</span>
-        <span>{footer.legal}</span>
+        <span>© 2026 {brand.name}</span>
+        <span className="db-footer__legal-links">
+          {(footer.legal || '')
+            .split('·')
+            .map((item) => item.trim())
+            .filter(Boolean)
+            .map((item) => (
+              <a href="#" key={item}>
+                {item}
+              </a>
+            ))}
+        </span>
       </div>
     </footer>
   )

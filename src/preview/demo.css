@@ -7,14 +7,28 @@
    ============================================================ */
 
 .pv-canvas {
-  /* Escala tipográfica derivada de la razón modular del contrato. */
+  /* Escala tipográfica derivada de la razón modular del contrato.
+     step-0 es el cuerpo (16px). El paso negativo queda para etiquetas y
+     metadatos; step-4 y step-5 dan presencia a los titulares. */
+  --step--1: calc(var(--step-0) / var(--theme-scale));
   --step-0: 1rem;
   --step-1: calc(var(--step-0) * var(--theme-scale));
   --step-2: calc(var(--step-1) * var(--theme-scale));
   --step-3: calc(var(--step-2) * var(--theme-scale));
+  --step-4: calc(var(--step-3) * var(--theme-scale));
+  --step-5: calc(var(--step-4) * var(--theme-scale));
 
-  --section-py: calc(68px * var(--theme-space));
-  --gap: calc(26px * var(--theme-space));
+  /* Escala de espaciado: un único origen, escalado por la densidad del
+     contrato. Los componentes tiran de aquí en vez de números sueltos. */
+  --space-1: calc(6px * var(--theme-space));
+  --space-2: calc(10px * var(--theme-space));
+  --space-3: calc(16px * var(--theme-space));
+  --space-4: calc(24px * var(--theme-space));
+  --space-5: calc(36px * var(--theme-space));
+  --space-6: calc(56px * var(--theme-space));
+
+  --section-py: calc(clamp(52px, 7vw, 92px) * var(--theme-space));
+  --gap: calc(28px * var(--theme-space));
   --pad-x: 24px;
 
   /* Capa de estilo: valores por defecto que las estéticas reajustan. */
@@ -34,8 +48,8 @@
   background-size: 100% max(100vh, 820px);
   color: var(--theme-text);
   font-family: var(--theme-font-body);
-  font-size: 16px;
-  line-height: 1.6;
+  font-size: var(--step-0);
+  line-height: 1.65;
 }
 
 /* ------------------------------------------------------------
@@ -127,7 +141,7 @@
   font-weight: var(--theme-heading-weight);
   text-transform: var(--theme-heading-case);
   letter-spacing: var(--theme-heading-track);
-  line-height: 1.06;
+  line-height: 1.12;
   text-wrap: balance;
   color: var(--heading-color);
 }
@@ -146,7 +160,7 @@
 
 .db-section__head {
   max-width: 46ch;
-  margin-bottom: calc(var(--gap) * 1.15);
+  margin-bottom: calc(var(--gap) * 1.4);
 }
 .db-section__head--center {
   max-width: 52ch;
@@ -159,19 +173,24 @@
 
 .db-section__head h2,
 .db-carousel__head h2,
-.db-cta h2 { font-size: clamp(1.7rem, 1.1rem + 2vw, var(--step-3)); }
+.db-cta h2 { font-size: clamp(1.9rem, 1.2rem + 2.2vw, var(--step-4)); }
 
 .db-lead {
   color: var(--theme-text-muted);
   font-size: var(--step-1);
+  line-height: 1.55;
   max-width: 60ch;
 }
 
 .db-eyebrow {
-  font-family: var(--theme-font-mono);
-  font-size: 0.72rem;
+  /* Cuerpo, no mono: la etiqueta mono-mayúscula es en sí un tic de plantilla,
+     y además --theme-font-mono nunca llega a cargarse. Sigue leyéndose como
+     eyebrow por la caja alta y el tracking. */
+  font-family: var(--theme-font-body);
+  font-size: 0.74rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   color: var(--theme-accent);
   margin-bottom: 14px;
 }
@@ -228,7 +247,9 @@
   background: transparent;
   background-image: none;
   color: var(--theme-text);
-  border-color: var(--theme-border-color);
+  /* El borde 'auto' ronda el 16% de opacidad: como CTA secundario apenas se
+     leía. Un borde propio, más marcado, sin llegar al peso del primario. */
+  border-color: color-mix(in srgb, var(--theme-text) 34%, transparent);
 }
 
 .db-btn:focus-visible { outline: 2px solid var(--theme-accent); outline-offset: 3px; }
@@ -244,11 +265,10 @@
 .db-field { display: flex; flex-direction: column; gap: 6px; flex: 1 1 240px; }
 
 .db-field__label {
-  font-family: var(--theme-font-mono);
-  font-size: 0.74rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--theme-text-muted);
+  font-family: var(--theme-font-body);
+  font-size: 0.85rem;
+  font-weight: 550;
+  color: var(--theme-text);
 }
 
 .db-field__hint {
@@ -268,7 +288,11 @@
   transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
 }
 .db-field__control::placeholder { color: var(--theme-text-muted); opacity: 0.85; }
-.db-field__control:focus { outline: none; border-color: var(--theme-accent); }
+.db-field__control:focus {
+  outline: none;
+  border-color: var(--theme-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--theme-accent) 22%, transparent);
+}
 
 .db-field[data-variant='filled'] .db-field__control {
   background: color-mix(in srgb, var(--theme-text) 7%, var(--theme-surface));
@@ -304,6 +328,18 @@
 
 .db-nav__links { display: flex; gap: 26px; font-size: 0.92rem; color: var(--theme-text-muted); }
 .db-nav__links a:hover { color: var(--theme-text); }
+
+/* Foco de teclado visible en todo lo navegable que no es un botón: los enlaces
+   heredaban solo el contorno del navegador, dispar con el de .db-btn. */
+.db-nav__links a:focus-visible,
+.db-nav__mobile-inner a:focus-visible,
+.db-footer__cols a:focus-visible,
+.db-footer__legal-links a:focus-visible,
+.db-faq__q:focus-visible {
+  outline: 2px solid var(--theme-accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
 .db-nav__actions { display: flex; align-items: center; gap: 14px; margin-left: auto; }
 .db-nav__actions .db-btn { padding: 9px 15px; font-size: 0.875rem; }
 .db-nav__login { font-size: 0.9rem; color: var(--theme-text-muted); }
@@ -369,12 +405,18 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  padding-block: calc(var(--section-py) * 1.15);
+  /* Techo modesto arriba (si no, el contenido flota media pantalla abajo) y
+     más aire debajo, hacia la siguiente sección. */
+  padding-top: calc(var(--section-py) * 0.75);
+  padding-bottom: calc(var(--section-py) * 1.2);
 }
 
-.db-hero h1 { font-size: clamp(2.4rem, 1.4rem + 4vw, calc(var(--step-3) * 1.7)); }
-.db-hero .db-lead { margin-top: 20px; }
-.db-hero__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.db-hero h1 {
+  font-size: clamp(2.6rem, 1.5rem + 4.2vw, calc(var(--step-4) * 1.6));
+  line-height: 1.05;
+}
+.db-hero .db-lead { margin-top: var(--space-4); }
+.db-hero__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: var(--space-5); }
 
 /* El degradado primario está calibrado para botones y acentos: a plena
    saturación detrás de un titular se come el contraste. Se vela contra el
@@ -438,6 +480,26 @@
 .db-frame { overflow: hidden; background: var(--theme-surface-2); }
 .db-frame img { width: 100%; height: 100%; object-fit: cover; }
 
+/* Marco sin imagen: en vez de un rectángulo gris que parece roto, una trama
+   sutil y una etiqueta. Se lee como "aún no puesto", no como un fallo. */
+.db-frame:empty,
+.db-slide__media:empty {
+  display: grid;
+  place-items: center;
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent 0 11px,
+    color-mix(in srgb, var(--theme-text) 4%, transparent) 11px 22px
+  );
+}
+.db-frame:empty::after,
+.db-slide__media:empty::after {
+  content: 'Imagen pendiente';
+  font-family: var(--theme-font-body);
+  font-size: 0.85rem;
+  color: var(--theme-text-muted);
+}
+
 /* ---------- tarjetas y layouts de características ---------- */
 
 .db-card {
@@ -448,6 +510,14 @@
 
 .db-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap); }
 
+/* El primer bloque de la rejilla de características lleva un tinte de acento:
+   da un punto de entrada a la vista y rompe la fila de tres tarjetas idénticas.
+   Es el mismo tratamiento que .db-bento__accent, así funciona en las 6 estéticas. */
+.db-feature--lead {
+  background: color-mix(in srgb, var(--theme-accent) 9%, var(--surface-bg));
+  border-color: color-mix(in srgb, var(--theme-accent) 24%, var(--theme-border-color));
+}
+
 .db-feature__icon {
   display: inline-flex;
   padding: 10px;
@@ -457,7 +527,7 @@
   margin-bottom: 16px;
 }
 .db-feature h3 { font-size: var(--step-1); margin-bottom: 8px; }
-.db-feature p { color: var(--theme-text-muted); font-size: 0.95rem; }
+.db-feature p { color: var(--theme-text); font-size: var(--step-0); line-height: 1.6; }
 
 .db-rows { display: flex; flex-direction: column; gap: calc(var(--gap) * 1.25); }
 .db-row {
@@ -468,7 +538,7 @@
 }
 .db-row--flip .db-row__body { order: 2; }
 .db-row__body h3 { font-size: var(--step-2); margin-bottom: 10px; }
-.db-row__body p { color: var(--theme-text-muted); max-width: 42ch; }
+.db-row__body p { color: var(--theme-text); max-width: 42ch; line-height: 1.6; }
 
 .db-bento { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
 .db-bento__wide {
@@ -479,9 +549,9 @@
   align-items: stretch;
 }
 .db-bento__wide h3 { font-size: var(--step-2); margin-bottom: 10px; }
-.db-bento__wide p { color: var(--theme-text-muted); max-width: 40ch; }
+.db-bento__wide p { color: var(--theme-text); max-width: 40ch; line-height: 1.6; }
 .db-bento__tile h3 { font-size: var(--step-1); margin-bottom: 8px; }
-.db-bento__tile p { color: var(--theme-text-muted); font-size: 0.95rem; }
+.db-bento__tile p { color: var(--theme-text); font-size: var(--step-0); line-height: 1.6; }
 .db-bento__accent {
   background: color-mix(in srgb, var(--theme-accent) 12%, var(--surface-bg));
   border-color: color-mix(in srgb, var(--theme-accent) 30%, var(--theme-border-color));
@@ -542,7 +612,7 @@
 .db-slide__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .db-slide__body { padding: var(--theme-card-pad); }
 .db-slide__body h3 { font-size: var(--step-1); margin-bottom: 6px; }
-.db-slide__body p { color: var(--theme-text-muted); font-size: 0.92rem; }
+.db-slide__body p { color: var(--theme-text); font-size: var(--step-0); line-height: 1.55; }
 
 .db-carousel__arrows { display: flex; gap: 8px; flex-shrink: 0; }
 .db-carousel__arrow {
@@ -584,13 +654,13 @@
   font-family: var(--theme-font-heading);
   font-weight: var(--theme-heading-weight);
   letter-spacing: var(--theme-heading-track);
-  font-size: clamp(1.5rem, 1rem + 1.8vw, var(--step-3));
+  font-size: clamp(1.6rem, 1.1rem + 1.8vw, var(--step-4));
   line-height: 1.18;
   border-left: 3px solid var(--theme-accent);
   padding-left: 22px;
   margin-bottom: 22px;
 }
-.db-quote p { color: var(--theme-text-muted); margin-bottom: 18px; }
+.db-quote p { color: var(--theme-text); margin-bottom: 18px; line-height: 1.6; }
 .db-quote__by { display: flex; align-items: center; gap: 12px; font-size: 0.88rem; padding-left: 22px; }
 .db-quote .db-quote__by { padding-left: 0; }
 .db-quote__by img { width: 38px; height: 38px; border-radius: 999px; object-fit: cover; }
@@ -603,10 +673,8 @@
 .db-logos__head { text-align: center; margin-bottom: 28px; }
 .db-logos__head p {
   color: var(--theme-text-muted);
-  font-size: 0.78rem;
-  font-weight: 550;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  font-size: var(--step-0);
+  font-weight: 500;
 }
 .db-logos__row {
   display: flex;
@@ -630,6 +698,20 @@
   transition: filter 160ms ease;
 }
 .db-logos__item:hover img { filter: none; }
+.db-logos__lockup { gap: 10px; }
+.db-logos__mono {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex: none;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--theme-accent) 15%, transparent);
+  color: var(--theme-accent);
+  font-family: var(--theme-font-heading);
+  font-weight: var(--theme-heading-weight);
+  font-size: 0.8rem;
+}
 .db-logos__item em {
   font-style: normal;
   font-family: var(--theme-font-heading);
@@ -689,7 +771,7 @@
   display: flex;
   align-items: flex-start;
   gap: 9px;
-  font-size: 0.88rem;
+  font-size: 0.92rem;
   color: var(--theme-text);
 }
 .db-plan__features li svg { flex: none; margin-top: 2px; color: var(--theme-accent); }
@@ -751,11 +833,11 @@
 }
 .db-faq__item[data-open='true'] .db-faq__a-wrap { grid-template-rows: 1fr; }
 .db-faq__a-clip { overflow: hidden; }
-.db-faq__a { color: var(--theme-text-muted); margin: 0; padding: 0 28px 20px 2px; }
+.db-faq__a { color: var(--theme-text); margin: 0; padding: 0 28px 20px 2px; line-height: 1.6; }
 
 .db-faq__grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap) calc(var(--gap) * 1.6); }
 .db-faq__pair h3 { font-size: var(--step-1); margin-bottom: 8px; }
-.db-faq__pair p { color: var(--theme-text-muted); }
+.db-faq__pair p { color: var(--theme-text); line-height: 1.6; }
 
 @media (hover: hover) and (pointer: fine) {
   .db-faq__q:hover { color: var(--theme-accent); }
@@ -774,7 +856,7 @@
   text-align: center;
 }
 .db-cta--boxed h2 { margin-bottom: 12px; }
-.db-cta--boxed p { color: var(--theme-text-muted); max-width: 46ch; margin: 0 auto 28px; }
+.db-cta--boxed p { color: var(--theme-text); max-width: 46ch; margin: 0 auto 28px; }
 .db-cta--boxed .db-cta__form { justify-content: center; max-width: 520px; margin-inline: auto; }
 .db-cta__aside { font-size: 0.85rem; margin-top: 18px !important; }
 
@@ -820,11 +902,11 @@
 .db-footer__brand p { color: var(--theme-text-muted); margin-top: 12px; max-width: 34ch; font-size: 0.92rem; }
 .db-footer__cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
 .db-footer__cols h4 {
-  font-family: var(--theme-font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--theme-text-muted);
+  font-family: var(--theme-font-heading);
+  font-weight: var(--theme-heading-weight);
+  font-size: 0.85rem;
+  letter-spacing: 0.01em;
+  color: var(--theme-text);
   margin-bottom: 14px;
 }
 .db-footer__cols ul { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 9px; }
@@ -840,6 +922,9 @@
   color: var(--theme-text-muted);
   flex-wrap: wrap;
 }
+.db-footer__legal-links { display: flex; flex-wrap: wrap; gap: 20px; }
+.db-footer__legal-links a { color: inherit; }
+.db-footer__legal-links a:hover { color: var(--theme-text); }
 
 /* ============================================================
    ESTÉTICAS
@@ -867,7 +952,7 @@
   --theme-border-color: color-mix(in srgb, var(--theme-text) 11%, transparent);
 }
 [data-aesthetic='minimalist-flat'] .db-frame,
-[data-aesthetic='minimalist-flat'] .db-slide__media { background: var(--theme-surface-2); }
+[data-aesthetic='minimalist-flat'] .db-slide__media { background-color: var(--theme-surface-2); }
 [data-aesthetic='minimalist-flat'] .db-field__control:focus {
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--theme-accent) 28%, transparent);
 }
@@ -972,6 +1057,9 @@
     0 0 16px -2px color-mix(in srgb, var(--theme-secondary) 80%, transparent);
 }
 [data-aesthetic='cyberpunk'] .db-carousel__dot[aria-selected='true'] { background: var(--theme-secondary); }
+/* Botones rectos -> flechas rectas. Sin esto quedaban de píldora sobre una
+   interfaz que va toda a cantos vivos. */
+[data-aesthetic='cyberpunk'] .db-carousel__arrow { border-radius: 0; }
 
 @media (hover: hover) and (pointer: fine) {
   [data-aesthetic='material-clean'] .db-card:hover {
