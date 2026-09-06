@@ -14,4 +14,11 @@ export default defineConfig({
       },
     },
   },
+  test: {
+    environment: 'node',
+    include: ['src/**/*.test.js'],
+    // Procesa el CSS de verdad: el test del scaffold necesita ver el contenido
+    // que `?raw` / `?inline` meten en el .zip.
+    css: true,
+  },
 })

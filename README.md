@@ -10,10 +10,17 @@ la web construida. El cliente nunca se descarga el proyecto.
 ```bash
 npm install
 npm run dev      # http://localhost:5173
+npm test         # vitest: núcleo puro + el .zip del export
 ```
 
 - `/` — el configurador (panel + lienzo).
 - `/preview.html#<config>` — la vista previa sola, para compartir por enlace.
+
+Los tests (`src/**/*.test.js`) cubren lo que más duele si se rompe sin avisar:
+`encode`/`decode` de enlaces, `normalizeConfig` y guardarraíles (los 11 presets
+cumplen WCAG), `resolveTheme`, el registro de proyectos, y `buildProjectFiles`
+(que el `.zip` lleve los archivos, las imágenes subidas salgan a `public/img/` y
+el CSS llegue resuelto).
 
 ## El motor de estilos: dos canales
 
