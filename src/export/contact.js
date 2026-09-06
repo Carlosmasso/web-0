@@ -25,7 +25,7 @@ const ENDPOINT = `https://formsubmit.co/ajax/${encodeURIComponent(CONTACT_EMAIL)
  */
 const stripDataUris = (_key, val) =>
   typeof val === 'string' && val.startsWith('data:image/') && val.length > 60000
-    ? `[imagen subida — ${Math.round(val.length / 1024)} KB, va en el .zip]`
+    ? `[imagen subida — ${Math.round(val.length / 1024)} KB, en el .zip: public/img/]`
     : val
 
 /**

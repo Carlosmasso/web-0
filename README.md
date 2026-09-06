@@ -221,10 +221,12 @@ entre proyectos) y el `?c=` de la URL se ignora: manda el proyecto activo.
 4. Ese `.zip` (el adjunto, o el que bajas del cajón **Código**) es un proyecto
    **React + Vite real**: `src/export/scaffold.js` copia los mismos ficheros
    fuente que corren en el preview (vía `?raw` de Vite; el CSS, ya resuelto en
-   un solo archivo, vía `?inline`), así que nunca se desincroniza. `npm install
-   && npm run build` y despliegas `dist/` donde quieras. Las otras pestañas del
-   cajón (`tailwind.config.js` / `theme.css` / `design-tokens.json`) quedan
-   para cuando solo necesitas los tokens sobre un proyecto que ya existe.
+   un solo archivo, vía `?inline`), así que nunca se desincroniza. Las imágenes
+   que subió el cliente salen del JSON a `public/img/` como archivos
+   reemplazables. `npm install && npm run build` y despliegas `dist/` donde
+   quieras. Las otras pestañas del cajón (`tailwind.config.js` / `theme.css` /
+   `design-tokens.json`) quedan para cuando solo necesitas los tokens sobre un
+   proyecto que ya existe.
 
 > **Puesta en marcha, una sola vez:** el primer envío a `CONTACT_EMAIL`
 > (constante en `contact.js`) hace que FormSubmit te mande un correo con un

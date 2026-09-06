@@ -66,6 +66,60 @@ const RUNTIME_FILES = {
   'src/theme/fonts.js': fonts,
 }
 
+const IMG_EXT = {
+  'image/webp': 'webp',
+  'image/jpeg': 'jpg',
+  'image/png': 'png',
+  'image/gif': 'gif',
+  'image/avif': 'avif',
+  'image/svg+xml': 'svg',
+}
+
+/**
+ * Saca las imágenes SUBIDAS (data URIs) del contenido a archivos en
+ * `public/img/` y deja la ruta en su lugar (`/img/hero-image.webp`). Vite sirve
+ * `public/` en la raíz y lo copia a `dist/`, así que quedan como imágenes
+ * normales, reemplazables. Las imágenes puestas por URL no se tocan.
+ *
+ * @returns {{ content: object, assets: Record<string, {base64: string}> }}
+ */
+function extractImages(content) {
+  const assets = {}
+  const used = new Set()
+
+  const nameFor = (path, ext) => {
+    const base =
+      path
+        .replace(/\.(items|quotes|plans|groups)\./g, '.')
+        .replace(/[^a-z0-9]+/gi, '-')
+        .replace(/^-+|-+$/g, '')
+        .toLowerCase() || 'imagen'
+    let name = `${base}.${ext}`
+    for (let i = 2; used.has(name); i++) name = `${base}-${i}.${ext}`
+    used.add(name)
+    return name
+  }
+
+  const walk = (node, path) => {
+    if (typeof node === 'string') {
+      const m = /^data:(image\/[a-z.+-]+);base64,(.+)$/is.exec(node)
+      if (!m) return node
+      const file = nameFor(path, IMG_EXT[m[1].toLowerCase()] || 'bin')
+      assets[`public/img/${file}`] = { base64: m[2] }
+      return `/img/${file}`
+    }
+    if (Array.isArray(node)) return node.map((v, i) => walk(v, `${path}.${i}`))
+    if (node && typeof node === 'object') {
+      const out = {}
+      for (const [k, v] of Object.entries(node)) out[k] = walk(v, path ? `${path}.${k}` : k)
+      return out
+    }
+    return node
+  }
+
+  return { content: walk(content, ''), assets }
+}
+
 const slugify = (s) =>
   String(s)
     .normalize('NFD')
@@ -185,7 +239,9 @@ npm run build      # genera dist/, listo para subir a cualquier hosting estátic
 ## Qué tocar
 
 - **Colores, tipografía, bordes, sombras** → \`src/site.config.js\`, objeto \`SITE_CONFIG\`.
-- **Textos e imágenes** → \`src/site.config.js\`, objeto \`SITE_CONTENT\`.
+- **Textos** → \`src/site.config.js\`, objeto \`SITE_CONTENT\`.
+- **Imágenes** → \`public/img/\` (reemplaza el archivo por el tuyo), o cambia la
+  ruta en \`SITE_CONTENT\` por una URL.
 - **Estructura de cada sección** (qué variante, o el propio maquetado) → los
   componentes en \`src/preview/sections/\`.
 - **Qué secciones aparecen y en qué orden** → \`src/preview/DemoPage.jsx\`
@@ -208,13 +264,17 @@ export function buildProjectFiles(config, content) {
   const description = content?.hero?.subtitle || `${brandName}, construido con Estudio.`
   const fontsHref = googleFontsHref(config)
 
+  // Las imágenes subidas salen del JSON a archivos en public/img/.
+  const { content: cleanContent, assets } = extractImages(content)
+
   const files = {
     ...RUNTIME_FILES,
+    ...assets,
     'package.json': packageJson(projectName),
     'vite.config.js': viteConfig(),
     'index.html': indexHtml({ brandName, description, fontsHref }),
     'src/main.jsx': mainJsx(),
-    'src/site.config.js': siteConfigJs(config, content),
+    'src/site.config.js': siteConfigJs(config, cleanContent),
     'README.md': readme(brandName),
     '.gitignore': gitignore(),
   }

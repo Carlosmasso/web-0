@@ -1,11 +1,19 @@
 import JSZip from 'jszip'
 
-/** Empaqueta el mapa {ruta: contenido} en un Blob .zip (sin descargar). */
+/**
+ * Empaqueta el mapa {ruta: contenido} en un Blob .zip (sin descargar).
+ * Un valor de texto se escribe tal cual; `{ base64 }` se escribe como binario
+ * (así van las imágenes subidas, ya fuera del JSON).
+ */
 export async function buildZipBlob(files, projectName) {
   const zip = new JSZip()
   const root = zip.folder(projectName)
   for (const [path, content] of Object.entries(files)) {
-    root.file(path, content)
+    if (content && typeof content === 'object' && typeof content.base64 === 'string') {
+      root.file(path, content.base64, { base64: true })
+    } else {
+      root.file(path, content)
+    }
   }
   const blob = await zip.generateAsync({ type: 'blob' })
   return { blob, filename: `${projectName}.zip` }
