@@ -80,8 +80,8 @@ export const VOCABULARY = {
     affects: { selector: '.db-hero', label: 'La portada' },
     options: [
       { id: 'solid', label: 'Color liso', tone: 'Limpio y directo' },
-      { id: 'gradient', label: 'Degradado', tone: 'Atmósfera de color' },
-      { id: 'aurora', label: 'Aurora', tone: 'Manchas de luz en movimiento lento' },
+      { id: 'gradient', label: 'Degradado', tone: 'Un lavado suave con los colores de tu paleta' },
+      { id: 'bare', label: 'Transparente', tone: 'Deja ver el fondo de la página: color, malla o luces' },
     ],
   },
 
@@ -158,6 +158,13 @@ export const VOCABULARY = {
     affects: { selector: '.db-hero', label: 'Las luces detrás de toda la página' },
     kind: 'toggle',
     tone: 'Manchas de color desenfocadas que se mueven muy despacio',
+  },
+
+  'effects.mesh': {
+    label: 'Fondo con color',
+    affects: { selector: '.db-page', label: 'Un lavado de color detrás de toda la página' },
+    kind: 'toggle',
+    tone: 'Manchas de color muy tenues en las esquinas, tomadas de tu paleta. Da profundidad sin distraer',
   },
 
   'effects.blur': {

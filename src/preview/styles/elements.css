@@ -224,22 +224,14 @@
 .db-hero .db-lead { margin-top: var(--space-4); }
 .db-hero__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: var(--space-5); }
 
-/* El degradado primario está calibrado para botones y acentos: a plena
-   saturación detrás de un titular se come el contraste. Se vela contra el
-   fondo de página para que quede como atmósfera, no como superficie. */
+/* Lavado diagonal derivado de la paleta (--theme-hero-grad). Siempre visible,
+   ya calibrado para no comerse el titular. */
 .db-hero[data-bg='gradient'] {
-  background-color: var(--theme-bg);
-  background-image:
-    linear-gradient(
-      to bottom,
-      color-mix(in srgb, var(--theme-bg) 74%, transparent),
-      color-mix(in srgb, var(--theme-bg) 90%, transparent)
-    ),
-    var(--theme-gradient);
+  background: var(--theme-hero-grad);
 }
 
-/* Con aurora, el hero se aparta y deja ver las luces del lienzo. */
-.db-hero[data-bg='aurora'] { background-color: transparent; }
+/* Transparente: la portada deja ver el fondo de la página (color, malla, luces). */
+.db-hero[data-bg='bare'] { background-color: transparent; }
 
 .db-hero__grid {
   display: grid;

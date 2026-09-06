@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { PRESET_CATEGORIES, presetsByCategory } from '../registry/presets'
+import { PRESETS } from '../registry/presets'
 import { AESTHETIC_OPTIONS } from '../registry/aesthetics'
 import { TYPE_PAIRINGS } from '../registry/fonts'
 import { VOCABULARY } from '../registry/vocabulary'
@@ -22,6 +22,13 @@ import { SECTION_ORDER } from '../config/schema'
 // guardarraíl solo marca lo "recomendado" para la estética activa; elegir es
 // del usuario. Cambiar de mundo entero se hace arriba, en la capa 1.
 // ============================================================
+
+// Los presets van en una sola rejilla, ordenados de lo seguro a lo expresivo.
+// `category` (que sigue en el contrato para el dado) da ese orden; sort estable
+// conserva el orden dentro de cada grupo.
+const orderedPresets = [...PRESETS].sort((a, b) =>
+  a.category === b.category ? 0 : a.category === 'commercial' ? -1 : 1,
+)
 
 function Layer({ n, title, subtitle, children, defaultOpen = true, tone }) {
   const [open, setOpen] = useState(defaultOpen)
@@ -201,29 +208,30 @@ export function Sidebar({
     <div className="sidebar">
       {/* ---------- CAPA 1 ---------- */}
       <Layer n="1" title="Punto de partida" subtitle="Elige el mundo. Lo demás viene afinado.">
-        {PRESET_CATEGORIES.map((cat) => (
-          <Group key={cat.id} title={cat.label} hint={cat.note}>
-            <div className="preset-grid">
-              {presetsByCategory(cat.id).map((p) => (
-                <button
-                  key={p.id}
-                  type="button"
-                  className={`preset ${p.id === config.meta?.presetId ? 'is-active' : ''}`}
-                  onClick={() => onApplyPreset(p)}
-                >
-                  <span className="preset__swatch">
-                    {p.swatch.map((c, i) => (
-                      <i key={i} style={{ background: c }} />
-                    ))}
-                  </span>
-                  <span className="preset__label">{p.label}</span>
-                  <span className="preset__audience">{p.audience}</span>
-                  <span className="preset__note">{p.note}</span>
-                </button>
-              ))}
-            </div>
-          </Group>
-        ))}
+        <Group
+          title="Puntos de partida"
+          hint="Un mundo entero ya afinado: color, tipo, acabado y estructura. Lo demás lo retocas debajo."
+        >
+          <div className="preset-grid">
+            {orderedPresets.map((p) => (
+              <button
+                key={p.id}
+                type="button"
+                className={`preset ${p.id === config.meta?.presetId ? 'is-active' : ''}`}
+                onClick={() => onApplyPreset(p)}
+              >
+                <span className="preset__swatch">
+                  {p.swatch.map((c, i) => (
+                    <i key={i} style={{ background: c }} />
+                  ))}
+                </span>
+                <span className="preset__label">{p.label}</span>
+                <span className="preset__audience">{p.audience}</span>
+                <span className="preset__note">{p.note}</span>
+              </button>
+            ))}
+          </div>
+        </Group>
 
         <Group title="Estética base" hint="El acabado sobre tu color y tu tipo. Cambiarla reajusta bordes, sombras y efectos de una vez.">
           <div className="chips">
@@ -315,10 +323,6 @@ export function Sidebar({
       {/* ---------- CAPA 3 ---------- */}
       <Layer n="3" title="Ajuste fino" subtitle="Cada detalle por separado." defaultOpen={false} tone="pro">
         {vocab('shadows.style')}
-        {vocab('shadows.intensity')}
-        {vocab('borders.width')}
-        {vocab('borders.style')}
-        {vocab('effects.blur')}
         {vocab('effects.noise')}
         {vocab('effects.aurora')}
         {vocab('components.hero.background')}

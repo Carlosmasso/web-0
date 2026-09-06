@@ -31,6 +31,8 @@ function AuroraLayer() {
       <i />
       <i />
       <i />
+      <i />
+      <i />
     </div>
   )
 }
@@ -99,6 +101,7 @@ export function PreviewCanvas({ config, doc = document, children }) {
         data-scheme={schemeOf(config)}
         data-noise={config.effects.noise ? 'on' : 'off'}
         data-aurora={config.effects.aurora ? 'on' : 'off'}
+        data-mesh={config.effects.mesh ? 'on' : 'off'}
         data-glass={config.effects.blur > 0 ? 'on' : 'off'}
         data-motion={config.motion}
       >

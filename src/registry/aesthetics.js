@@ -61,7 +61,7 @@ export const AESTHETIC_OPTIONS = [
       shadows: { style: 'soft-elevation', color: 'auto', intensity: 1.5 },
       effects: { blur: 18, noise: true, aurora: true },
       components: {
-        hero: { background: 'aurora' },
+        hero: { background: 'bare' },
         button: { shape: 'pill', fill: 'gradient' },
         input: { variant: 'filled' },
       },

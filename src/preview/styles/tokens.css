@@ -101,24 +101,65 @@
   inset: -25%;
   z-index: 0;
   pointer-events: none;
-  filter: blur(80px);
-  opacity: 0.55;
+  filter: blur(88px);
+  opacity: 0.46;
 }
 .pv-aurora i {
   position: absolute;
   display: block;
-  width: 44%;
   aspect-ratio: 1;
   border-radius: 50%;
-  animation: pv-float 30s ease-in-out infinite alternate;
+  animation: pv-float 32s ease-in-out infinite alternate;
 }
-.pv-aurora i:nth-child(1) { background: var(--theme-primary); top: 2%; left: 8%; }
-.pv-aurora i:nth-child(2) { background: var(--theme-secondary); top: 30%; right: 4%; animation-delay: -11s; }
-.pv-aurora i:nth-child(3) { background: var(--theme-accent); bottom: 4%; left: 40%; animation-delay: -21s; }
+.pv-aurora i:nth-child(1) { background: var(--theme-primary);   width: 46%; top: -4%; left: 3%; }
+.pv-aurora i:nth-child(2) { background: var(--theme-secondary); width: 40%; top: 22%; right: 1%; animation-delay: -8s; }
+.pv-aurora i:nth-child(3) { background: var(--theme-accent);    width: 50%; bottom: -2%; left: 32%; animation-delay: -17s; }
+.pv-aurora i:nth-child(4) { background: var(--theme-primary);   width: 30%; bottom: 16%; right: 20%; animation-delay: -24s; }
+.pv-aurora i:nth-child(5) { background: var(--theme-secondary); width: 26%; top: 8%; left: 44%; animation-delay: -13s; }
 
 @keyframes pv-float {
   from { transform: translate3d(-5%, -4%, 0) scale(1); }
-  to { transform: translate3d(7%, 6%, 0) scale(1.25); }
+  to { transform: translate3d(7%, 6%, 0) scale(1.22); }
+}
+
+/* ------------------------------------------------------------
+   MALLA DE FONDO  ·  data-mesh
+   Manchas radiales derivadas de la paleta (--theme-mesh), fijas en las
+   esquinas. Siempre presente pero a opacidad 0, así el toggle atenúa en vez
+   de aparecer de golpe. El movimiento es un transform (compuesto, barato) más
+   un hue-rotate mínimo vía @property; ambos se paran con movimiento reducido.
+   ------------------------------------------------------------ */
+
+@property --pv-mesh-hue {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.pv-canvas::before {
+  content: '';
+  position: fixed;
+  inset: -15%;
+  z-index: 0;
+  pointer-events: none;
+  background: var(--theme-mesh);
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.pv-canvas[data-mesh='on']::before { opacity: 0.9; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .pv-canvas[data-mesh='on']::before {
+    filter: hue-rotate(var(--pv-mesh-hue));
+    animation: pv-mesh-drift 36s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes pv-mesh-drift {
+  from { transform: translate3d(-2%, -1.5%, 0) scale(1.03); --pv-mesh-hue: -5deg; }
+  to { transform: translate3d(3%, 2%, 0) scale(1.12); --pv-mesh-hue: 6deg; }
 }
 
 .pv-canvas > .db-page { position: relative; z-index: 1; }

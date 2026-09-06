@@ -5,19 +5,14 @@
 // sueltos: paleta, tipografía, acabado, estructura de secciones y efectos
 // llegan ya afinados y coherentes entre sí.
 //
-// Dos categorías porque son dos compradores distintos:
-//   trend      agencias, startups, portfolios. Compran diferenciación.
-//   commercial negocio a pie de calle. Compra confianza y que "parezca serio".
+// Se muestran en una sola rejilla. `category` ('commercial' | 'trend') ya no
+// agrupa en la interfaz: solo ordena (de lo seguro a lo expresivo) y sirve de
+// filtro para el dado (`randomConfig({ category })`).
 //
 // Cada preset declara la `aesthetic` que gobierna su comportamiento en CSS.
 // Estética != preset: tres presets comerciales muy distintos pueden apoyarse
 // en la misma estética y no parecerse en nada.
 // ============================================================
-
-export const PRESET_CATEGORIES = [
-  { id: 'commercial', label: 'Negocio', note: 'Sectores con expectativas visuales muy marcadas' },
-  { id: 'trend', label: 'Tendencia', note: 'Para diferenciarse, no para tranquilizar' },
-]
 
 export const PRESETS = [
   // ==========================================================
@@ -51,7 +46,7 @@ export const PRESETS = [
       // orden, no se percibe la sombra.
       shadows: { style: 'soft-elevation', color: 'auto', intensity: 0.5 },
       gradients: { primaryGradient: null, backgroundGradient: null },
-      effects: { blur: 0, noise: false, aurora: false },
+      effects: { blur: 0, noise: false, aurora: false, mesh: false },
       layout: { density: 'spacious', containerWidth: 1140 },
       sections: {
         hero: 'split', logos: 'plain', features: 'grid', carousel: 'cards',
@@ -94,7 +89,7 @@ export const PRESETS = [
       borders: { radius: 'none', width: 'thin', style: 'solid', color: 'auto' },
       shadows: { style: 'none', color: 'auto', intensity: 1 },
       gradients: { primaryGradient: null, backgroundGradient: null },
-      effects: { blur: 0, noise: false, aurora: false },
+      effects: { blur: 0, noise: false, aurora: false, mesh: false },
       layout: { density: 'spacious', containerWidth: 1180 },
       sections: {
         hero: 'split', logos: 'headline', features: 'rows', carousel: 'cards',
@@ -137,7 +132,7 @@ export const PRESETS = [
       borders: { radius: 'round', width: 'thin', style: 'solid', color: 'auto' },
       shadows: { style: 'inset-3d', color: 'auto', intensity: 1.1 },
       gradients: { primaryGradient: null, backgroundGradient: null },
-      effects: { blur: 0, noise: true, aurora: false },
+      effects: { blur: 0, noise: true, aurora: false, mesh: false },
       layout: { density: 'normal', containerWidth: 1120 },
       sections: {
         hero: 'image', logos: 'plain', features: 'grid', carousel: 'peek',
@@ -151,6 +146,139 @@ export const PRESETS = [
         carousel: { controls: 'both', peek: true, slidesPerView: 3 },
       },
       meta: { presetId: 'local-food', paletteId: null, mode: 'light', typeId: null, aestheticId: 'claymorphism' },
+    },
+  },
+
+  {
+    id: 'real-estate',
+    category: 'commercial',
+    label: 'Inmobiliaria y arquitectura',
+    audience: 'Promotoras de gama alta, estudios de arquitectura, interiorismo',
+    note: 'Carbón sobre hueso, serif de titular con autoridad y mucho aire. Discreción y precio alto.',
+    swatch: ['#f4f2ee', '#1f1d1b', '#8a7355'],
+    config: {
+      aesthetic: 'minimalist-flat',
+      motion: 'subtle',
+      iconSet: 'tabler',
+      palette: {
+        primary: '#1f1d1b', secondary: '#8a7355', accent: '#6f5b43',
+        neutralBg: '#f4f2ee', neutralSurface: '#ffffff',
+        textPrimary: '#181614', textMuted: '#5c574f',
+      },
+      typography: {
+        headingFamily: '"Newsreader", Georgia, serif',
+        bodyFamily: '"Inter", system-ui, sans-serif',
+        monoFamily: '"IBM Plex Mono", ui-monospace, monospace',
+        headingWeight: 500, headingCase: 'none',
+        headingTracking: '-0.02em', scaleRatio: 1.3,
+      },
+      borders: { radius: 'none', width: 'thin', style: 'solid', color: 'auto' },
+      shadows: { style: 'none', color: 'auto', intensity: 1 },
+      gradients: { primaryGradient: null, backgroundGradient: null },
+      effects: { blur: 0, noise: false, aurora: false, mesh: false },
+      layout: { density: 'spacious', containerWidth: 1200 },
+      // Una inmobiliaria no vende planes: la sección de precios se oculta.
+      sectionOrder: ['hero', 'logos', 'features', 'carousel', 'testimonial', 'faq', 'cta'],
+      sections: {
+        hero: 'image', logos: 'headline', features: 'rows', carousel: 'full',
+        pricing: 'rows', testimonial: 'quote', faq: 'grid', cta: 'banner',
+      },
+      components: {
+        hero: { background: 'image' },
+        card: { media: 'auto' },
+        button: { shape: 'sharp', fill: 'solid' },
+        input: { variant: 'underline' },
+        carousel: { controls: 'arrows', peek: false, slidesPerView: 3 },
+      },
+      meta: { presetId: 'real-estate', paletteId: null, mode: 'light', typeId: null, aestheticId: 'minimalist-flat' },
+    },
+  },
+
+  {
+    id: 'kids-care',
+    category: 'commercial',
+    label: 'Infancia y educación',
+    audience: 'Pediatras, guarderías, logopedas, actividades para niños',
+    note: 'Coral y verde agua, esquinas muy redondeadas y volumen de arcilla sobre una malla de color tenue.',
+    swatch: ['#fef6f2', '#c8481f', '#2f9c8b'],
+    config: {
+      aesthetic: 'claymorphism',
+      motion: 'expressive',
+      iconSet: 'phosphor',
+      palette: {
+        primary: '#c8481f', secondary: '#2f9c8b', accent: '#a83c15',
+        neutralBg: '#fef6f2', neutralSurface: '#fffdfb',
+        textPrimary: '#2c1c17', textMuted: '#6d5a52',
+      },
+      typography: {
+        headingFamily: '"Outfit", system-ui, sans-serif',
+        bodyFamily: '"Work Sans", system-ui, sans-serif',
+        monoFamily: '"IBM Plex Mono", ui-monospace, monospace',
+        headingWeight: 600, headingCase: 'none',
+        headingTracking: '-0.025em', scaleRatio: 1.26,
+      },
+      borders: { radius: 'round', width: 'thin', style: 'solid', color: 'auto' },
+      shadows: { style: 'inset-3d', color: 'auto', intensity: 1.1 },
+      gradients: { primaryGradient: null, backgroundGradient: null },
+      effects: { blur: 0, noise: false, aurora: false, mesh: true },
+      layout: { density: 'spacious', containerWidth: 1120 },
+      sections: {
+        hero: 'centered', logos: 'plain', features: 'bento', carousel: 'cards',
+        pricing: 'cards', testimonial: 'grid', faq: 'accordion', cta: 'boxed',
+      },
+      components: {
+        hero: { background: 'solid' },
+        card: { media: 'auto' },
+        button: { shape: 'pill', fill: 'solid' },
+        input: { variant: 'filled' },
+        carousel: { controls: 'dots', peek: false, slidesPerView: 3 },
+      },
+      meta: { presetId: 'kids-care', paletteId: null, mode: 'light', typeId: null, aestheticId: 'claymorphism' },
+    },
+  },
+
+  {
+    id: 'fine-dining',
+    category: 'commercial',
+    label: 'Restauración de mantel',
+    audience: 'Restaurantes de carta, hoteles boutique, catering premium',
+    note: 'Negro cálido y dorado tenue, foto a sangre y serif clásico con grano de papel. Sobrio y caro.',
+    swatch: ['#12100e', '#e8e2d6', '#b08d57'],
+    config: {
+      aesthetic: 'minimalist-flat',
+      motion: 'subtle',
+      iconSet: 'tabler',
+      palette: {
+        primary: '#e8e2d6', secondary: '#b08d57', accent: '#c9a86a',
+        neutralBg: '#12100e', neutralSurface: '#1c1916',
+        textPrimary: '#f2ede4', textMuted: '#a89f90',
+      },
+      typography: {
+        headingFamily: '"Playfair Display", Georgia, serif',
+        bodyFamily: '"Inter", system-ui, sans-serif',
+        monoFamily: '"IBM Plex Mono", ui-monospace, monospace',
+        headingWeight: 500, headingCase: 'none',
+        headingTracking: '-0.01em', scaleRatio: 1.32,
+      },
+      borders: { radius: 'none', width: 'thin', style: 'solid', color: 'auto' },
+      shadows: { style: 'none', color: 'auto', intensity: 1 },
+      gradients: { primaryGradient: null, backgroundGradient: null },
+      effects: { blur: 0, noise: true, aurora: false, mesh: false },
+      layout: { density: 'spacious', containerWidth: 1160 },
+      // Un restaurante no tiene planes ni muro de logos.
+      sectionOrder: ['hero', 'features', 'carousel', 'testimonial', 'faq', 'cta'],
+      sections: {
+        hero: 'image', logos: 'plain', features: 'rows', carousel: 'full',
+        pricing: 'rows', testimonial: 'quote', faq: 'grid', cta: 'banner',
+      },
+      components: {
+        hero: { background: 'image' },
+        card: { media: 'auto' },
+        button: { shape: 'sharp', fill: 'outline' },
+        input: { variant: 'underline' },
+        carousel: { controls: 'arrows', peek: false, slidesPerView: 3 },
+      },
+      meta: { presetId: 'fine-dining', paletteId: null, mode: 'dark', typeId: null, aestheticId: 'minimalist-flat' },
     },
   },
 
@@ -183,7 +311,7 @@ export const PRESETS = [
       borders: { radius: 'none', width: 'thick', style: 'solid', color: '#0a0a0a' },
       shadows: { style: 'flat-hard', color: '#0a0a0a', intensity: 1.4 },
       gradients: { primaryGradient: null, backgroundGradient: null },
-      effects: { blur: 0, noise: false, aurora: false },
+      effects: { blur: 0, noise: false, aurora: false, mesh: false },
       layout: { density: 'normal', containerWidth: 1200 },
       sections: {
         hero: 'centered', logos: 'plain', features: 'grid', carousel: 'cards',
@@ -243,14 +371,14 @@ export const PRESETS = [
           ],
         },
       },
-      effects: { blur: 18, noise: true, aurora: true },
+      effects: { blur: 18, noise: true, aurora: true, mesh: false },
       layout: { density: 'spacious', containerWidth: 1180 },
       sections: {
         hero: 'centered', logos: 'headline', features: 'bento', carousel: 'peek',
         pricing: 'cards', testimonial: 'quote', faq: 'accordion', cta: 'boxed',
       },
       components: {
-        hero: { background: 'aurora' },
+        hero: { background: 'bare' },
         card: { media: 'auto' },
         button: { shape: 'pill', fill: 'gradient' },
         input: { variant: 'filled' },
@@ -295,7 +423,7 @@ export const PRESETS = [
         },
         backgroundGradient: null,
       },
-      effects: { blur: 0, noise: false, aurora: false },
+      effects: { blur: 0, noise: false, aurora: false, mesh: false },
       layout: { density: 'spacious', containerWidth: 1140 },
       sections: {
         hero: 'centered', logos: 'plain', features: 'bento', carousel: 'cards',
@@ -311,7 +439,92 @@ export const PRESETS = [
       meta: { presetId: 'clay-playful', paletteId: null, mode: 'light', typeId: null, aestheticId: 'claymorphism' },
     },
   },
+
+  {
+    id: 'dark-saas',
+    category: 'trend',
+    label: 'SaaS oscuro',
+    audience: 'Productos de software, herramientas de desarrollo, infraestructura',
+    note: 'Casi negro con un azul eléctrico y una malla de color de fondo. Tono producto, sin el cristal.',
+    swatch: ['#0b0d12', '#e8ebf2', '#5b8bff'],
+    config: {
+      aesthetic: 'material-clean',
+      motion: 'expressive',
+      iconSet: 'phosphor',
+      palette: {
+        primary: '#4f7ef2', secondary: '#22d3ee', accent: '#7aa2ff',
+        neutralBg: '#0b0d12', neutralSurface: '#14171f',
+        textPrimary: '#eef1f6', textMuted: '#9aa1b0',
+      },
+      typography: {
+        headingFamily: '"Space Grotesk", system-ui, sans-serif',
+        bodyFamily: '"Inter", system-ui, sans-serif',
+        monoFamily: '"IBM Plex Mono", ui-monospace, monospace',
+        headingWeight: 600, headingCase: 'none',
+        headingTracking: '-0.03em', scaleRatio: 1.25,
+      },
+      borders: { radius: 'soft', width: 'thin', style: 'solid', color: 'auto' },
+      shadows: { style: 'soft-elevation', color: '#03040a', intensity: 1 },
+      gradients: { primaryGradient: null, backgroundGradient: null },
+      effects: { blur: 0, noise: false, aurora: false, mesh: true },
+      layout: { density: 'normal', containerWidth: 1200 },
+      sections: {
+        hero: 'split', logos: 'headline', features: 'bento', carousel: 'peek',
+        pricing: 'cards', testimonial: 'grid', faq: 'accordion', cta: 'boxed',
+      },
+      components: {
+        hero: { background: 'solid' },
+        card: { media: 'auto' },
+        button: { shape: 'inherit', fill: 'solid' },
+        input: { variant: 'outline' },
+        carousel: { controls: 'both', peek: true, slidesPerView: 3 },
+      },
+      meta: { presetId: 'dark-saas', paletteId: null, mode: 'dark', typeId: null, aestheticId: 'material-clean' },
+    },
+  },
+
+  {
+    id: 'editorial',
+    category: 'trend',
+    label: 'Editorial',
+    audience: 'Medios, revistas, estudios de diseño, portfolios de autor',
+    note: 'Serif de titular enorme, retícula asimétrica, monocromo y un solo acento. Todo aire.',
+    swatch: ['#faf9f7', '#141414', '#c2410c'],
+    config: {
+      aesthetic: 'minimalist-flat',
+      motion: 'expressive',
+      iconSet: 'tabler',
+      palette: {
+        primary: '#141414', secondary: '#c2410c', accent: '#b23c0b',
+        neutralBg: '#faf9f7', neutralSurface: '#ffffff',
+        textPrimary: '#141414', textMuted: '#57534e',
+      },
+      typography: {
+        headingFamily: '"Newsreader", Georgia, serif',
+        bodyFamily: '"Inter", system-ui, sans-serif',
+        monoFamily: '"IBM Plex Mono", ui-monospace, monospace',
+        headingWeight: 500, headingCase: 'none',
+        headingTracking: '-0.02em', scaleRatio: 1.34,
+      },
+      borders: { radius: 'none', width: 'thin', style: 'solid', color: 'auto' },
+      shadows: { style: 'none', color: 'auto', intensity: 1 },
+      gradients: { primaryGradient: null, backgroundGradient: null },
+      effects: { blur: 0, noise: false, aurora: false, mesh: false },
+      layout: { density: 'spacious', containerWidth: 1140 },
+      sections: {
+        hero: 'centered', logos: 'plain', features: 'rows', carousel: 'full',
+        pricing: 'cards', testimonial: 'quote', faq: 'grid', cta: 'boxed',
+      },
+      components: {
+        hero: { background: 'solid' },
+        card: { media: 'auto' },
+        button: { shape: 'sharp', fill: 'outline' },
+        input: { variant: 'underline' },
+        carousel: { controls: 'arrows', peek: false, slidesPerView: 3 },
+      },
+      meta: { presetId: 'editorial', paletteId: null, mode: 'light', typeId: null, aestheticId: 'minimalist-flat' },
+    },
+  },
 ]
 
 export const getPreset = (id) => PRESETS.find((p) => p.id === id) ?? null
-export const presetsByCategory = (category) => PRESETS.filter((p) => p.category === category)

@@ -36,7 +36,7 @@ decisión pertenece a uno de dos canales y viaja por una vía distinta:
   "gradients": { "primaryGradient": { "type": "linear", "angle": 118, "stops": [...] },
                  "backgroundGradient": { "type": "radial", "position": "…", "stops": [...] } },
   "sectionOrder": ["hero", "features", "pricing", "faq", "cta"],  // visibles, en orden
-  "components": { "hero": { "background": "aurora" },
+  "components": { "hero": { "background": "gradient" },
                   "button": { "shape": "pill", "fill": "gradient" }, … }
 }
 ```
@@ -57,7 +57,10 @@ panel marque la opción activa; el motor lo ignora.
   (`aesthetics.css`) no son cosmética: definen qué significa `:active`. En
   neo-brutalismo el botón cae sobre su sombra dura; en cyberpunk un destello
   barre la superficie; en claymorfismo se hunde con sombra interior; en material
-  se eleva y aterriza.
+  se eleva y aterriza. Los fondos (`tokens.css`) son capas fijas y sin
+  dependencias: aurora (manchas desenfocadas a la deriva) y malla de color
+  (`--theme-mesh`, tres radiales derivados de la paleta con un `transform` y un
+  `hue-rotate` mínimo vía `@property`, que se paran con movimiento reducido).
 
 **Dos niveles de elección**: las 6 *estéticas* (`registry/aesthetics.js`) parchean solo
 el acabado sobre la paleta que el cliente ya eligió; las *plantillas*
@@ -81,7 +84,7 @@ por **cuánto compromete cada decisión**, no por qué propiedad de CSS toca:
 | --- | --- | --- |
 | **1 · Punto de partida** | El mundo entero | Presets comerciales/tendencia · 6 chips de estética base · el dado 🎲 |
 | **2 · Tu identidad** | Color de marca, tipografía, esquinas, densidad, movimiento | Controles libres con recomendación |
-| **3 · Ajuste fino** | Cada knob suelto (sombras, bordes, efectos, secciones) | Plegado por defecto |
+| **3 · Ajuste fino** | Personalidad de relieve, grano y luces de fondo, portada, botones y campos, iconos, y qué secciones aparecen | Plegado por defecto |
 
 `src/registry/vocabulary.js` es la única capa donde vive el lenguaje de cara al
 usuario: nadie ve `box-shadow: inset` ni `border-radius: 32px`, ven
@@ -106,7 +109,7 @@ que hace falta:
 
 - **clamp** — acota los sliders (intensidad de sombra, desenfoque) a rangos sanos.
 - **scheme** — cyberpunk fuerza fondo oscuro: el neón sobre blanco es ilegible.
-- **coherence** — "portada con aurora" enciende las luces si estaban apagadas.
+- **coherence** — el glassmorfismo sin desenfoque no es cristal: se sube al mínimo.
 - **suelo de accesibilidad** — texto ≥ 7:1, atenuado ≥ 4.5:1, acento ≥ 3:1,
   moviendo solo la luminosidad. Innegociable.
 
@@ -134,12 +137,16 @@ diapositivas"*, que resuelve la misma pregunta sin necesidad de interactuar.
 
 ### Catálogo
 
-`src/registry/presets.js`, en dos categorías porque son dos compradores:
+`src/registry/presets.js`, los 11 en una sola rejilla, ordenados de lo seguro a
+lo expresivo: Salud y bienestar, Corporativo y legal, Inmobiliaria y
+arquitectura (carbón sobre hueso, serif de autoridad), Restauración de mantel
+(negro y dorado, foto a sangre), Hostelería y artesanía, Infancia y educación
+(coral y verde agua), Editorial (serif enorme, retícula asimétrica), SaaS oscuro
+(azul eléctrico + malla), Claymorfismo, Glassmorfismo, Neo-brutalismo.
 
-- **Negocio** — Salud y bienestar (verde menta / azul clínico, relieve
-  imperceptible), Corporativo y legal (azul marino, acento champán, Playfair),
-  Hostelería y artesanía (tonos tierra, esquinas orgánicas, grano de papel).
-- **Tendencia** — Neo-brutalismo, Glassmorfismo, Claymorfismo.
+El campo `category` (`commercial` / `trend`) ya no agrupa en la interfaz: solo
+ordena y filtra el dado. Algunos presets ocultan secciones que no aplican (una
+inmobiliaria no tiene planes de precio) vía `sectionOrder`.
 
 Estética != preset: tres presets comerciales muy distintos pueden apoyarse en la
 misma estética y no parecerse en nada.

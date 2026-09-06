@@ -46,7 +46,7 @@ export const MOTION_OPTIONS = [
 export const HERO_BG_OPTIONS = [
   { id: 'solid', label: 'Color plano' },
   { id: 'gradient', label: 'Degradado' },
-  { id: 'aurora', label: 'Aurora' },
+  { id: 'bare', label: 'Transparente' },
 ]
 
 export const BUTTON_SHAPE_OPTIONS = [

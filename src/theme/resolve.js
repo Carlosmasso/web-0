@@ -115,6 +115,23 @@ export function resolveTheme(c) {
     '--theme-gradient': gradientToCss(c.gradients.primaryGradient),
     '--theme-gradient-bg': gradientToCss(c.gradients.backgroundGradient),
 
+    /* Degradado de portada: SIEMPRE existe (a diferencia de primaryGradient,
+       que suele ser null). Un lavado diagonal suave de la paleta, ya calibrado
+       para no comerse el contraste del titular. */
+    '--theme-hero-grad':
+      `linear-gradient(165deg, ` +
+      `color-mix(in srgb, ${p.primary} 16%, ${p.neutralBg}) 0%, ` +
+      `${p.neutralBg} 46%, ` +
+      `color-mix(in srgb, ${p.secondary} 13%, ${p.neutralBg}) 100%)`,
+
+    /* Malla de fondo: tres manchas radiales derivadas de la paleta, fijas en
+       las esquinas. Sobre fondo claro son un lavado tenue; sobre oscuro, un
+       resplandor. La usa `.pv-canvas[data-mesh='on']::before`. */
+    '--theme-mesh':
+      `radial-gradient(42% 38% at 12% 8%, color-mix(in srgb, ${p.primary} 20%, transparent), transparent 62%), ` +
+      `radial-gradient(38% 34% at 88% 6%, color-mix(in srgb, ${p.secondary} 16%, transparent), transparent 58%), ` +
+      `radial-gradient(48% 44% at 72% 92%, color-mix(in srgb, ${p.accent} 14%, transparent), transparent 66%)`,
+
     /* efectos */
     '--theme-blur': c.effects.blur > 0 ? `blur(${c.effects.blur}px) saturate(1.4)` : 'none',
 

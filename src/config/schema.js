@@ -72,7 +72,7 @@ export const DEFAULT_CONFIG = {
   sectionOrder: [...SECTION_ORDER],
 
   components: {
-    hero: { background: 'solid' }, // solid | gradient | aurora | image
+    hero: { background: 'solid' }, // solid | gradient | bare | image
     card: { media: 'auto' }, // auto | none  (auto = la variante decide)
     button: { shape: 'inherit', fill: 'solid' }, // inherit|pill|sharp · solid|outline|gradient
     input: { variant: 'outline' }, // outline | filled | underline
@@ -122,6 +122,7 @@ export const DEFAULT_CONFIG = {
     blur: 0, // px de backdrop-filter; 0 lo desactiva
     noise: false,
     aurora: false,
+    mesh: false, // degradado de malla derivado de la paleta, detrás de la página
   },
 
   layout: {
@@ -171,6 +172,9 @@ export function normalizeConfig(input) {
     base.gradients.backgroundGradient = normalizeGradient(gradients.backgroundGradient)
   }
   base.sectionOrder = normalizeSectionOrder(base.sectionOrder)
+  // 'aurora' como fondo de portada se retiró: ahora las luces de fondo son un
+  // efecto de página aparte. Un valor antiguo pasa a 'bare' (transparente).
+  if (base.components.hero.background === 'aurora') base.components.hero.background = 'bare'
   return base
 }
 

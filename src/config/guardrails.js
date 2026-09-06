@@ -169,11 +169,6 @@ export function normalizeConfigWithGuardrails(userConfig) {
     }
   }
 
-  // --- coherencia entre nodos (contradicciones invisibles) ---
-  if (config.components.hero.background === 'aurora' && !config.effects.aurora) {
-    config = setIn(config, 'effects.aurora', true)
-  }
-
   // --- suelo de accesibilidad: SIEMPRE ---
   config = enforceContrast(config, violations)
 
