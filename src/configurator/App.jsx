@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { DEFAULT_CONFIG } from '../config/schema'
+import { isStudio } from '../config/mode'
 import { normalizeConfigWithGuardrails } from '../config/guardrails'
 import { deepMerge, setIn } from '../config/patch'
 import { encodeConfig, decodeConfig } from '../config/encode'
@@ -230,7 +231,7 @@ export function App() {
             </button>
           </div>
 
-          {violations.length > 0 && (
+          {isStudio && violations.length > 0 && (
             <p className="shell__violations" title={violations.map((v) => v.reason).join('\n')}>
               {violations.length} ajuste{violations.length > 1 ? 's' : ''} automático
               {violations.length > 1 ? 's' : ''}
@@ -241,13 +242,15 @@ export function App() {
             <button onClick={copyLink} type="button" className="shell__ghost">
               {copied === 'link' ? 'Copiado' : 'Copiar enlace'}
             </button>
-            <button
-              onClick={() => setShowExport((v) => !v)}
-              type="button"
-              className={`shell__ghost ${showExport ? 'is-active' : ''}`}
-            >
-              Código
-            </button>
+            {isStudio && (
+              <button
+                onClick={() => setShowExport((v) => !v)}
+                type="button"
+                className={`shell__ghost ${showExport ? 'is-active' : ''}`}
+              >
+                Código
+              </button>
+            )}
             <button onClick={() => setShowContact(true)} type="button" className="shell__cta">
               Quiero esta web
             </button>
@@ -264,13 +267,15 @@ export function App() {
 
         <div className="shell__stage-row">
           <PreviewFrame ref={frameRef} config={config} content={content} device={device} />
-          <ExportPanel
-            config={config}
-            content={content}
-            violations={violations}
-            open={showExport}
-            onClose={() => setShowExport(false)}
-          />
+          {isStudio && (
+            <ExportPanel
+              config={config}
+              content={content}
+              violations={violations}
+              open={showExport}
+              onClose={() => setShowExport(false)}
+            />
+          )}
         </div>
       </main>
 

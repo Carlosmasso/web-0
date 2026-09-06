@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { isStudio } from '../config/mode'
 import { buildForm, getPath, setPath, blankItem } from '../content/fields'
 import { checklistToText } from '../content/checklist'
 
@@ -18,15 +19,21 @@ export function ContentForm({ config, content, onChange, onReset }) {
   return (
     <div className="cform">
       <div className="cform__intro">
-        <p>Contenido del cliente. Se refleja en el preview al instante.</p>
-        <div className="cform__intro-actions">
-          <button type="button" onClick={copyList}>
-            {copied ? 'Copiado' : 'Copiar lista para el cliente'}
-          </button>
-          <button type="button" onClick={onReset}>
-            Restablecer
-          </button>
-        </div>
+        {isStudio ? (
+          <>
+            <p>Contenido del cliente. Se refleja en el preview al instante.</p>
+            <div className="cform__intro-actions">
+              <button type="button" onClick={copyList}>
+                {copied ? 'Copiado' : 'Copiar lista para el cliente'}
+              </button>
+              <button type="button" onClick={onReset}>
+                Restablecer
+              </button>
+            </div>
+          </>
+        ) : (
+          <p>Los textos de tu web. Es opcional — si lo prefieres, los pongo yo.</p>
+        )}
       </div>
 
       {blocks.map((block) => (

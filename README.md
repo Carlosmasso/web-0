@@ -158,10 +158,28 @@ misma estética y no parecerse en nada.
 
 ## El flujo de trabajo
 
-**El cliente decide, no se lleva nada construido.** El configurador es una
-herramienta de venta: quien lo tiene abierto elige UX/UI en la pestaña
-**Diseño**, y cuando le gusta lo que ve pulsa **"Quiero esta web"** — el único
-botón destacado de la barra. Se abre un modal (`ContactModal.jsx`) que pide
+### Modo estudio vs modo cliente
+
+Una sola instancia sirve a dos personas. `src/config/mode.js` las separa solo:
+
+- **Modo estudio** — `import.meta.env.DEV`, `localhost`/`127.0.0.1`, o `?studio`
+  en la URL. Es como tú levantas la herramienta. Ves todo: pestaña
+  **Contenido** con su botón "Copiar lista para el cliente" y "Restablecer",
+  botón **Código** (cajón de exportación), chip de "ajustes automáticos".
+- **Modo cliente** — la versión desplegada en Vercel, abierta con un `?c=`
+  link. Se ocultan **Código**, el chip de ajustes y los botones internos de
+  Contenido. La pestaña Contenido **sí se ve** (el cliente puede escribir sus
+  textos si quiere; el envío ya los lleva), solo con el texto suavizado:
+  *"Los textos de tu web. Es opcional — si lo prefieres, los pongo yo."*
+
+Nada de esto es un interruptor que el cliente pueda adivinar en la URL.
+
+### Cliente decide, no se lleva nada construido
+
+El configurador es una herramienta de venta: quien lo tiene abierto elige
+UX/UI en la pestaña **Diseño** (y opcionalmente sus textos en **Contenido**),
+y cuando le gusta lo que ve pulsa **"Quiero esta web"** — el único botón
+destacado de la barra. Se abre un modal (`ContactModal.jsx`) que pide
 solo sus datos (nombre, email, teléfono, nota). Al enviar, `submitLead()`
 (`src/export/contact.js`) manda por **fetch a FormSubmit** —sin que se abra
 nada en su pantalla— tu correo con: sus datos, la config y el contenido en
