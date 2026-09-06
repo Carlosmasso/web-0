@@ -295,6 +295,13 @@ export function App() {
     [encoded, content],
   )
 
+  // Para ti: abre el configurador con ese diseño ya cargado (para regenerar el
+  // .zip). Solo lleva la config; el contenido va en la hoja de leads.
+  const editLink = useMemo(
+    () => `${window.location.origin}/app.html?c=${encoded}`,
+    [encoded],
+  )
+
   const copyLink = async () => {
     await navigator.clipboard.writeText(previewLink)
     flash('link')
@@ -478,9 +485,9 @@ export function App() {
       <ContactModal
         open={showContact}
         onClose={() => setShowContact(false)}
-        config={config}
         content={content}
         previewLink={previewLink}
+        editLink={editLink}
       />
 
       <Tour steps={TOUR_STEPS} open={showTour} onClose={closeTour} />

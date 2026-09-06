@@ -33,8 +33,10 @@ function doPost(e) {
         'Email',
         'Teléfono',
         'Negocio',
-        'Enlace del diseño',
         'Nota',
+        'Enlace del diseño',
+        'Abrir en configurador',
+        'Contenido',
         'Consentimiento',
         'Estado',
       ])
@@ -46,8 +48,10 @@ function doPost(e) {
       d.email || '',
       d.telefono || '',
       d.negocio || '',
-      d.enlace || '',
       d.nota || '',
+      d.enlace || '',
+      d.editar || '',
+      d.contenido || '',
       d.consentimiento || '',
       'nuevo',
     ])

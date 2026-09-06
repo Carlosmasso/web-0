@@ -51,12 +51,17 @@ páginas vistas y de dónde llega la gente.
 
 1. Abre la web desplegada, diseña algo, pulsa **Pedir presupuesto**, marca el
    consentimiento y envía.
-2. Debe aparecer una **fila en la Sheet** (canal fiable), llegarte el **correo**
-   con el `.zip` adjunto, y al email de prueba una **confirmación**.
-   - Con `onboarding@resend.dev` los correos pueden ir a spam: revisa esa
-     carpeta y marca "no es spam". La Sheet no falla.
-3. Si el modal muestra error: falta alguna variable de entorno o no has
-   redesplegado. La consola del navegador da pistas.
+2. Debe aparecer una **fila en la Sheet** (canal fiable: fecha, contacto,
+   enlace del diseño, enlace para regenerar, contenido) y llegarte un **correo**
+   de aviso, corto y en texto plano.
+   - El `.zip` **no** va por correo (los adjuntos disparan el spam). Se regenera
+     desde el configurador con el enlace de la columna "Abrir en configurador"
+     → botón **Código** → Descargar .zip.
+   - Con `onboarding@resend.dev` el correo puede ir a spam: revísalo y marca
+     "no es spam". La confirmación al cliente solo se envía si su email coincide
+     con el de tu cuenta de Resend; si no, falla en silencio y no pasa nada.
+3. Si el modal muestra error: falta una variable o no has redesplegado. Mira
+   Vercel → deployment → **Functions** → logs de `/api/lead`.
 
 En local (`npm run dev`) la función `/api/lead` no corre. Usa `npx vercel dev`
 o prueba en el deploy.
