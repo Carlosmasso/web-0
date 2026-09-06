@@ -1,7 +1,19 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import { DEFAULT_CONFIG } from '../config/schema'
 import { isStudio } from '../config/mode'
 import { normalizeConfigWithGuardrails } from '../config/guardrails'
+import { useHistory } from './useHistory'
+import {
+  ensureSeeded,
+  readProject,
+  writeProject,
+  createProject,
+  renameProject,
+  deleteProject,
+  listProjects,
+  setActiveId,
+} from './projects'
+import { ProjectMenu } from './ProjectMenu'
 import { deepMerge, setIn } from '../config/patch'
 import { encodeConfig, decodeConfig } from '../config/encode'
 import { DEFAULT_CONTENT } from '../content/defaults'
@@ -45,8 +57,23 @@ function loadContent() {
 }
 
 export function App() {
-  const [raw, setRaw] = useState(loadConfig)
-  const [content, setContent] = useState(loadContent)
+  // En estudio, la config y el contenido salen del proyecto activo. En cliente,
+  // de las claves planas de siempre (+ ?c= en la URL). El cliente no ve proyectos.
+  const [projectId, setProjectId] = useState(() => (isStudio ? ensureSeeded() : null))
+  const [, bumpRegistry] = useReducer((n) => n + 1, 0)
+
+  const {
+    state: raw,
+    set: setRaw,
+    reset: resetHistory,
+    undo,
+    redo,
+    canUndo,
+    canRedo,
+  } = useHistory(() => (isStudio ? readProject(projectId).config : loadConfig()))
+  const [content, setContent] = useState(() =>
+    isStudio ? readProject(projectId).content : loadContent(),
+  )
   const [mode, setMode] = useState('design')
   const [device, setDevice] = useState('desktop')
   const [showExport, setShowExport] = useState(false)
@@ -63,28 +90,40 @@ export function App() {
   const encoded = useMemo(() => encodeConfig(config), [config])
 
   useEffect(() => {
-    try {
-      localStorage.setItem(CONFIG_KEY, JSON.stringify(raw))
-    } catch {
-      /* ignore */
+    if (isStudio && projectId) {
+      writeProject(projectId, { config: raw, content })
+    } else {
+      try {
+        localStorage.setItem(CONFIG_KEY, JSON.stringify(raw))
+        localStorage.setItem(CONTENT_KEY, JSON.stringify(content))
+      } catch {
+        /* ignore */
+      }
     }
     const url = new URL(window.location.href)
     url.searchParams.set('c', encoded)
     window.history.replaceState(null, '', url)
-  }, [raw, encoded])
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(CONTENT_KEY, JSON.stringify(content))
-    } catch {
-      /* ignore */
-    }
-  }, [content])
+  }, [raw, content, encoded, projectId])
 
   useEffect(() => () => {
     clearTimeout(copiedTimer.current)
     clearTimeout(focusTimer.current)
   }, [])
+
+  // Deshacer / rehacer con teclado. Solo sobre el diseño: si el foco está en un
+  // campo de texto, se cede el atajo al deshacer nativo del propio campo.
+  useEffect(() => {
+    const onKey = (e) => {
+      if (!(e.metaKey || e.ctrlKey) || e.key.toLowerCase() !== 'z') return
+      const t = e.target
+      if (t && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return
+      e.preventDefault()
+      if (e.shiftKey) redo()
+      else undo()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [undo, redo])
 
   /* ---- edición ---- */
 
@@ -117,6 +156,50 @@ export function App() {
     },
     [merge],
   )
+
+  /* ---- proyectos (solo estudio) ---- */
+
+  const switchProject = useCallback(
+    (id) => {
+      const p = readProject(id)
+      setActiveId(id)
+      setProjectId(id)
+      resetHistory(p.config)
+      setContent(p.content)
+    },
+    [resetHistory],
+  )
+
+  const newProject = useCallback(() => {
+    const id = createProject(`Proyecto ${listProjects().length + 1}`, {
+      config: structuredClone(DEFAULT_CONFIG),
+      content: structuredClone(DEFAULT_CONTENT),
+    })
+    switchProject(id)
+  }, [switchProject])
+
+  const duplicateProject = useCallback(() => {
+    const current = listProjects().find((p) => p.id === projectId)
+    const id = createProject(`${current?.name ?? 'Proyecto'} (copia)`, { config: raw, content })
+    switchProject(id)
+  }, [projectId, raw, content, switchProject])
+
+  // Renombrar solo toca localStorage; el bump fuerza el re-render para que el
+  // menú muestre el nombre nuevo.
+  const renameCurrent = useCallback(
+    (name) => {
+      renameProject(projectId, name)
+      bumpRegistry()
+    },
+    [projectId],
+  )
+
+  const deleteCurrent = useCallback(() => {
+    const rest = listProjects().filter((p) => p.id !== projectId)
+    if (!rest.length) return
+    deleteProject(projectId)
+    switchProject(rest[0].id)
+  }, [projectId, switchProject])
 
   /**
    * Señala en el lienzo qué parte del sitio toca el control que se está mirando.
@@ -171,7 +254,18 @@ export function App() {
     <div className="shell">
       <aside className="shell__panel">
         <div className="shell__brand">
-          <span className="shell__logo">Estudio</span>
+          {isStudio ? (
+            <ProjectMenu
+              projectId={projectId}
+              onSwitch={switchProject}
+              onNew={newProject}
+              onDuplicate={duplicateProject}
+              onRename={renameCurrent}
+              onDelete={deleteCurrent}
+            />
+          ) : (
+            <span className="shell__logo">Estudio</span>
+          )}
           <div className="shell__tabs">
             <button
               type="button"
@@ -239,6 +333,36 @@ export function App() {
           )}
 
           <div className="shell__actions">
+            <button
+              type="button"
+              onClick={undo}
+              disabled={!canUndo}
+              className="shell__undo"
+              title="Deshacer (⌘Z)"
+            >
+              <Icon set="tabler" name="undo" size={15} />
+              Deshacer
+            </button>
+            {canRedo && (
+              <button
+                type="button"
+                onClick={redo}
+                className="shell__redo"
+                aria-label="Rehacer"
+                title="Rehacer (⇧⌘Z)"
+              >
+                <Icon set="tabler" name="redo" size={15} />
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => setRaw(DEFAULT_CONFIG)}
+              className="shell__reset"
+              title="Vuelve al diseño por defecto (se puede deshacer)"
+            >
+              <Icon set="tabler" name="refresh" size={15} />
+              Reiniciar
+            </button>
             <button onClick={copyLink} type="button" className="shell__ghost">
               {copied === 'link' ? 'Copiado' : 'Copiar enlace'}
             </button>
@@ -253,14 +377,6 @@ export function App() {
             )}
             <button onClick={() => setShowContact(true)} type="button" className="shell__cta">
               Quiero esta web
-            </button>
-            <button
-              onClick={() => setRaw(DEFAULT_CONFIG)}
-              type="button"
-              className="shell__reset"
-              aria-label="Reiniciar diseño"
-            >
-              <Icon set="tabler" name="close" size={16} />
             </button>
           </div>
         </div>

@@ -1,9 +1,9 @@
 # Estudio — configurador de webs a medida
 
-Prototipo de un marketplace donde un cliente arma su web eligiendo paleta,
-tipografía, esquinas, densidad, iconos, efectos y una variante por sección.
-La vista previa se renderiza en vivo y el resultado se exporta como una
-configuración (JSON) que sirve de brief para el build final.
+Marketplace donde un cliente arma su web eligiendo paleta, tipografía, esquinas,
+densidad, iconos, efectos y una variante por sección. La vista previa se
+renderiza en vivo; cuando le gusta lo que ve, te contacta y **tú** le entregas
+la web construida. El cliente nunca se descarga el proyecto.
 
 ## Arranque
 
@@ -50,10 +50,13 @@ panel marque la opción activa; el motor lo ignora.
 - **`src/preview/PreviewCanvas.jsx`** — escribe las propiedades con `setProperty` en un
   `useLayoutEffect`. Los hijos **no reciben la config**: leen `var(--theme-*)` desde CSS.
   Por eso cambiar un color no reconcilia ni un nodo.
-- **`demo.css`** — los bloques `[data-aesthetic="…"]` no son cosmética: definen qué
-  significa `:active`. En neo-brutalismo el botón cae sobre su sombra dura; en cyberpunk
-  un destello barre la superficie; en claymorfismo se hunde con sombra interior; en
-  material se eleva y aterriza.
+- **`src/preview/styles/`** — el CSS del sitio, partido por responsabilidad
+  (`tokens` · `elements` · `sections` · `aesthetics` · `states`); `demo.css` es
+  solo el índice de `@import`. Los bloques `[data-aesthetic="…"]`
+  (`aesthetics.css`) no son cosmética: definen qué significa `:active`. En
+  neo-brutalismo el botón cae sobre su sombra dura; en cyberpunk un destello
+  barre la superficie; en claymorfismo se hunde con sombra interior; en material
+  se eleva y aterriza.
 
 **Dos niveles de elección**: las 6 *estéticas* (`registry/aesthetics.js`) parchean solo
 el acabado sobre la paleta que el cliente ya eligió; las *plantillas*
@@ -66,7 +69,7 @@ el acabado sobre la paleta que el cliente ya eligió; las *plantillas*
 | `src/registry/` | Catálogo del marketplace: paletas, emparejamientos tipográficos, las 6 estéticas, las plantillas completas y el mapa sección→componente. |
 | `src/content/` | Capa de contenido, separada del diseño. `defaults.js` es el relleno; `fields.js` define qué campos pide cada sección según su variante (fuente única); `checklist.js` deriva de ahí la lista a pedir al cliente. |
 | `src/preview/` | El sitio (componentes de producción). `PreviewCanvas.jsx` inyecta los tokens y provee el canal estructural; cada sección lee `useStructure()` y `useContent()`. |
-| `src/configurator/` | El shell con dos pestañas: **Diseño** (`Sidebar`, cara al cliente) y **Contenido** (`ContentForm`, cara a ti). `App` persiste config y contenido en `localStorage`, y la config también en `?c=`. |
+| `src/configurator/` | El shell: pestañas **Diseño** (`Sidebar`) y **Contenido** (`ContentForm`), historial de deshacer (`useHistory.js`) y, solo en estudio, el selector de proyectos (`projects.js` + `ProjectMenu.jsx`). Persiste en `localStorage`: por proyecto en estudio, en clave única + `?c=` en cliente. |
 
 ## Libertad guiada: el panel en tres capas
 
@@ -158,56 +161,77 @@ misma estética y no parecerse en nada.
 
 ## El flujo de trabajo
 
-### Modo estudio vs modo cliente
+### Dos personas, una instancia
 
-Una sola instancia sirve a dos personas. `src/config/mode.js` las separa solo:
+`src/config/mode.js` decide el modo con `isStudio`. La detección es automática;
+el cliente no puede forzarla desde la URL. `?studio` existe solo para cuando
+trabajas desde otro ordenador.
 
-- **Modo estudio** — `import.meta.env.DEV`, `localhost`/`127.0.0.1`, o `?studio`
-  en la URL. Es como tú levantas la herramienta. Ves todo: pestaña
-  **Contenido** con su botón "Copiar lista para el cliente" y "Restablecer",
-  botón **Código** (cajón de exportación), chip de "ajustes automáticos".
-- **Modo cliente** — la versión desplegada en Vercel, abierta con un `?c=`
-  link. Se ocultan **Código**, el chip de ajustes y los botones internos de
-  Contenido. La pestaña Contenido **sí se ve** (el cliente puede escribir sus
-  textos si quiere; el envío ya los lleva), solo con el texto suavizado:
-  *"Los textos de tu web. Es opcional — si lo prefieres, los pongo yo."*
+- **Estudio** — `import.meta.env.DEV`, `localhost` / `127.0.0.1`, o `?studio`.
+- **Cliente** — la versión desplegada en Vercel.
 
-Nada de esto es un interruptor que el cliente pueda adivinar en la URL.
+### Qué puede hacer el cliente
 
-### Cliente decide, no se lleva nada construido
+Todo lo de la venta, nada de la entrega:
 
-El configurador es una herramienta de venta: quien lo tiene abierto elige
-UX/UI en la pestaña **Diseño** (y opcionalmente sus textos en **Contenido**),
-y cuando le gusta lo que ve pulsa **"Quiero esta web"** — el único botón
-destacado de la barra. Se abre un modal (`ContactModal.jsx`) que pide
-solo sus datos (nombre, email, teléfono, nota). Al enviar, `submitLead()`
-(`src/export/contact.js`) manda por **fetch a FormSubmit** —sin que se abra
-nada en su pantalla— tu correo con: sus datos, la config y el contenido en
-texto, y **el proyecto ya empaquetado como `.zip` adjunto**. El cliente ve
-solo un "recibido, te contactamos". Nada de jerga de diseño a la vista, nada
-descargable para él.
+| Acción | Dónde |
+| --- | --- |
+| Elegir diseño: preset, estética, color de marca, tipografía, esquinas, densidad, iconos, efectos, variante por sección | Pestaña **Diseño** (`Sidebar`) |
+| Escribir sus textos (opcional) | Pestaña **Contenido**, con el aviso suavizado: *"…si lo prefieres, los pongo yo."* |
+| **Deshacer / Rehacer** cualquier cambio de diseño | Botón **Deshacer** en la barra, siempre visible (`⌘Z` / `⇧⌘Z` como extra). "Rehacer" solo aparece si hay algo que rehacer. |
+| Ver en escritorio / móvil | Conmutador de la barra |
+| Guardar una versión para volver luego | **Copiar enlace** — el `?c=` lleva toda la config en la URL |
+| Probar el formulario del sitio | El CTA responde con su mensaje de confirmación (envío de maqueta) |
+| **Pedir la web** | **"Quiero esta web"** — el único botón destacado |
+
+Lo que **no** ve: el botón **Código** y su cajón de exportación, el chip de
+"ajustes automáticos", el selector de proyectos, ni los botones internos de
+Contenido ("Copiar lista para el cliente", "Restablecer").
+
+### Qué puedes hacer tú (estudio / admin)
+
+Todo lo del cliente, más:
+
+| Acción | Dónde |
+| --- | --- |
+| **Varios proyectos**, uno por cliente, sin que se pisen | Selector en la cabecera del panel: **Nuevo / Duplicar / Renombrar / Borrar**. Cada proyecto guarda su config y su contenido en `localStorage` bajo su propia clave (`src/configurator/projects.js`). En el primer arranque, tu trabajo actual migra a "Proyecto 1". |
+| Ver qué han corregido los guardarraíles | Chip *"N ajustes automáticos"* en la barra + detalle en el cajón |
+| **Copiar lista para el cliente** — el texto exacto a pedirle según las variantes que eligió | Pestaña **Contenido** |
+| **Restablecer** el contenido al relleno de ejemplo | Pestaña **Contenido** |
+| Descargar el proyecto o los tokens a mano | Botón **Código** → cajón de exportación |
+
+En estudio, cambiar de proyecto **vacía el historial de deshacer** (no se cruza
+entre proyectos) y el `?c=` de la URL se ignora: manda el proyecto activo.
+
+### El cliente pide, tú entregas
+
+1. El cliente pulsa **"Quiero esta web"**. Un modal (`ContactModal.jsx`) le pide
+   solo sus datos (nombre, email, teléfono, nota). Nada de jerga a la vista.
+2. Al enviar, `submitLead()` (`src/export/contact.js`) manda **por fetch a
+   FormSubmit**, sin abrir nada en su pantalla, un correo a `CONTACT_EMAIL` con:
+   sus datos, la config y el contenido en texto, y **el proyecto ya empaquetado
+   como `.zip` adjunto**. El cliente solo ve *"recibido, te contactamos"*.
+3. El cliente te pasa su contenido real. Con **Copiar lista para el cliente**
+   tienes la lista exacta a pedir; el formulario de **Contenido** solo muestra
+   lo que esa variante usa y marca *pendiente* los huecos. Todo se refleja en
+   el preview al instante.
+4. Ese `.zip` (el adjunto, o el que bajas del cajón **Código**) es un proyecto
+   **React + Vite real**: `src/export/scaffold.js` copia los mismos ficheros
+   fuente que corren en el preview (vía `?raw` de Vite; el CSS, ya resuelto en
+   un solo archivo, vía `?inline`), así que nunca se desincroniza. `npm install
+   && npm run build` y despliegas `dist/` donde quieras. Las otras pestañas del
+   cajón (`tailwind.config.js` / `theme.css` / `design-tokens.json`) quedan
+   para cuando solo necesitas los tokens sobre un proyecto que ya existe.
 
 > **Puesta en marcha, una sola vez:** el primer envío a `CONTACT_EMAIL`
 > (constante en `contact.js`) hace que FormSubmit te mande un correo con un
 > enlace *"Activate Form"*. Púlsalo y a partir de ahí llegan todos los envíos.
-> Antes de activar, el modal muestra el estado de error con un `mailto:` de
+> Antes de activar, el modal muestra un estado de error con un `mailto:` de
 > reserva.
 
-Cuando el encargo ya es tuyo, la entrega:
-
-1. El cliente te pasa su contenido real (por el canal que sea).
-2. En la pestaña **Contenido**, **Copiar contenido** te da la lista exacta a
-   pedir según las variantes que eligió, y el formulario solo pide lo que esa
-   variante realmente muestra — los huecos vacíos salen marcados *pendiente*.
-   Todo se refleja en el preview al instante.
-3. Ese `.zip` (el que te llegó adjunto, o el que descargas a mano desde el
-   cajón **Código**) es un proyecto React + Vite real —
-   `src/export/scaffold.js` copia los mismos ficheros fuente que corren en el
-   preview (vía `?raw` de Vite), así que nunca se desincroniza de lo que
-   viste. `npm install && npm run build` y despliegas `dist/` donde quieras.
-   Las otras pestañas del cajón (`tailwind.config.js` / `theme.css` /
-   `design-tokens.json`) siguen ahí para cuando solo necesitas los tokens
-   sobre un proyecto que ya existe.
+**El cliente nunca se lleva la web construida.** El configurador es una
+herramienta de venta; el build lo entregas tú (*"si damos la posibilidad de
+descarga, ¿qué gano yo?"*).
 
 El preview vive en un **iframe** aparte (dos entradas en `vite.config.js`) para
 que el responsive del sitio responda al ancho del lienzo, no al del navegador,
@@ -223,4 +247,6 @@ y para que los estilos de la demo no toquen los del panel.
 - Combos curados (no toda paleta pega con toda tipografía y estética).
 - Toggle de secciones on/off y reordenado.
 - Más secciones (equipo, estadísticas) y más variantes de las 8 actuales.
-- Cuentas, propuestas guardadas, revisiones.
+- Los proyectos de estudio viven en `localStorage`: faltan cuentas y revisiones
+  con historial en servidor.
+- Importar un `?c=` de cliente como proyecto nuevo en estudio (hoy se ignora).

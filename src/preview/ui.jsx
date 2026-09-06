@@ -6,13 +6,13 @@ import { Icon } from './Icon'
  * El componente es idéntico en las seis estéticas. Lo que cambia es qué
  * significa :active, y eso vive en CSS bajo [data-aesthetic].
  */
-export function Button({ children, variant = 'primary', withArrow = false }) {
+export function Button({ children, variant = 'primary', withArrow = false, type = 'button' }) {
   const { components, iconSet } = useStructure()
   const { shape, fill } = components.button
 
   return (
     <button
-      type="button"
+      type={type}
       className={`db-btn db-btn--${variant}`}
       data-shape={shape}
       data-fill={fill}

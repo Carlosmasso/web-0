@@ -29,15 +29,17 @@ export function FeatureGrid() {
     <section className="db-section" data-section="features">
       <div className="db-container">
         <Heading features={features} />
-        <div className="db-grid-3">
+        <div className="db-feature-grid">
           {features.items.map((f, i) => (
             <Reveal
               key={f.title}
               delay={i * 0.06}
               className={`db-card db-feature ${i === 0 ? 'db-feature--lead' : ''}`}
             >
-              <FeatureIcon name={f.icon} />
-              <h3>{f.title}</h3>
+              <div className="db-feature__head">
+                <FeatureIcon name={f.icon} />
+                <h3>{f.title}</h3>
+              </div>
               <p>{f.body}</p>
             </Reveal>
           ))}

@@ -7,6 +7,9 @@ import {
   List,
   X,
   CaretDown,
+  ArrowUUpLeft,
+  ArrowUUpRight,
+  ArrowClockwise,
 } from '@phosphor-icons/react'
 import {
   IconArrowRight,
@@ -17,6 +20,9 @@ import {
   IconMenu2,
   IconX,
   IconChevronDown,
+  IconArrowBackUp,
+  IconArrowForwardUp,
+  IconRefresh,
 } from '@tabler/icons-react'
 
 // One glyph name maps to a component in each family. Keeps a single icon
@@ -31,6 +37,9 @@ const SETS = {
     menu: List,
     close: X,
     chevron: CaretDown,
+    undo: ArrowUUpLeft,
+    redo: ArrowUUpRight,
+    refresh: ArrowClockwise,
   },
   tabler: {
     route: IconRoute,
@@ -41,6 +50,9 @@ const SETS = {
     menu: IconMenu2,
     close: IconX,
     chevron: IconChevronDown,
+    undo: IconArrowBackUp,
+    redo: IconArrowForwardUp,
+    refresh: IconRefresh,
   },
 }
 

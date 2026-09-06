@@ -1,0 +1,197 @@
+/* ============================================================
+   EL SITIO
+   Todo valor sale de las custom properties que resolveTheme() escribe sobre
+   .pv-canvas. Ni un color fijo. El comportamiento por estética vive en los
+   bloques [data-aesthetic] del final: ningún componente pregunta en
+   JavaScript qué estética está activa.
+   ============================================================ */
+
+.pv-canvas {
+  /* Escala tipográfica derivada de la razón modular del contrato.
+     step-0 es el cuerpo (16px). El paso negativo queda para etiquetas y
+     metadatos; step-4 y step-5 dan presencia a los titulares. */
+  --step--1: calc(var(--step-0) / var(--theme-scale));
+  --step-0: 1rem;
+  --step-1: calc(var(--step-0) * var(--theme-scale));
+  --step-2: calc(var(--step-1) * var(--theme-scale));
+  --step-3: calc(var(--step-2) * var(--theme-scale));
+  --step-4: calc(var(--step-3) * var(--theme-scale));
+  --step-5: calc(var(--step-4) * var(--theme-scale));
+
+  /* Escala de espaciado: un único origen, escalado por la densidad del
+     contrato. Los componentes tiran de aquí en vez de números sueltos. */
+  --space-1: calc(6px * var(--theme-space));
+  --space-2: calc(10px * var(--theme-space));
+  --space-3: calc(16px * var(--theme-space));
+  --space-4: calc(24px * var(--theme-space));
+  --space-5: calc(36px * var(--theme-space));
+  --space-6: calc(56px * var(--theme-space));
+
+  --section-py: calc(clamp(52px, 7vw, 92px) * var(--theme-space));
+  --gap: calc(28px * var(--theme-space));
+  --pad-x: 24px;
+
+  /* Capa de estilo: valores por defecto que las estéticas reajustan. */
+  --surface-bg: var(--theme-surface);
+  --surface-blur: none;
+  --card-shadow: none;
+  --heading-color: inherit;
+
+  position: relative;
+  isolation: isolate;
+  background-color: var(--theme-bg);
+  background-image: var(--theme-gradient-bg);
+  /* Anclado a la franja superior en vez de attachment:fixed, que repinta en
+     cada fotograma de scroll y tartamudea en Safari de iOS. Debajo queda el
+     color plano. */
+  background-repeat: no-repeat;
+  background-size: 100% max(100vh, 820px);
+  color: var(--theme-text);
+  font-family: var(--theme-font-body);
+  font-size: var(--step-0);
+  line-height: 1.65;
+}
+
+/* ------------------------------------------------------------
+   MÓDULO 3.1 — TRANSICIÓN ENTRE ESTÉTICAS
+   Al cambiar de preset, todo lo que se PINTA se interpola con una sola curva
+   y una sola duración, así que el salto se lee como una transformación
+   continua y no como un corte.
+
+   Deliberadamente NO se usa `transition: all`: en el nodo raíz eso incluiría
+   width, padding y font-size, y al cambiar densidad o escala tipográfica
+   dispararía reflows animados — justo el parpadeo que se quiere evitar.
+   Solo propiedades de composición y pintura, que no tocan el layout.
+
+   Se activa tras el primer pintado (data-ready) para que la carga inicial
+   aparezca ya puesta, no desvaneciéndose.
+   ------------------------------------------------------------ */
+
+.pv-canvas[data-ready] :is(
+    .db-card, .db-frame, .db-slide, .db-btn, .db-field__control,
+    .db-nav, .db-cta--boxed, .db-carousel__arrow, .db-carousel__dot,
+    .db-feature__icon, .db-section--tint, .db-footer, .db-hero
+  ) {
+  transition-property: background-color, background-image, border-color, border-radius,
+    border-width, box-shadow, color, backdrop-filter, opacity;
+  transition-duration: 0.4s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pv-canvas[data-ready] {
+  transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    background-image 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Los gestos de interacción son mucho más rápidos que el cambio de tema: si
+   heredaran los 400 ms, un botón se sentiría gomoso. Se reafirman aquí. */
+.pv-canvas[data-ready] .db-btn:active,
+.pv-canvas[data-ready] .db-carousel__arrow:active {
+  transition-duration: 0.1s;
+}
+
+/* ------------------------------------------------------------
+   MÓDULO 3.2 — CAPAS DE EFECTO
+   ------------------------------------------------------------ */
+
+/* Aurora a nivel de lienzo: luces que respiran detrás de toda la página. */
+.pv-aurora {
+  position: fixed;
+  inset: -25%;
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(80px);
+  opacity: 0.55;
+}
+.pv-aurora i {
+  position: absolute;
+  display: block;
+  width: 44%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  animation: pv-float 30s ease-in-out infinite alternate;
+}
+.pv-aurora i:nth-child(1) { background: var(--theme-primary); top: 2%; left: 8%; }
+.pv-aurora i:nth-child(2) { background: var(--theme-secondary); top: 30%; right: 4%; animation-delay: -11s; }
+.pv-aurora i:nth-child(3) { background: var(--theme-accent); bottom: 4%; left: 40%; animation-delay: -21s; }
+
+@keyframes pv-float {
+  from { transform: translate3d(-5%, -4%, 0) scale(1); }
+  to { transform: translate3d(7%, 6%, 0) scale(1.25); }
+}
+
+.pv-canvas > .db-page { position: relative; z-index: 1; }
+
+/* Grano: capa mate que quita el aspecto plástico de la pantalla.
+   feColorMatrix saturate=0 lo vuelve monocromo, si no el ruido tiñe. */
+.pv-canvas[data-noise='on']::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.42;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.pv-canvas :is(h1, h2, h3, h4) {
+  font-family: var(--theme-font-heading);
+  font-weight: var(--theme-heading-weight);
+  text-transform: var(--theme-heading-case);
+  letter-spacing: var(--theme-heading-track);
+  line-height: 1.12;
+  text-wrap: balance;
+  color: var(--heading-color);
+}
+
+.db-page { overflow-x: clip; }
+
+.db-container {
+  width: 100%;
+  max-width: var(--theme-container);
+  margin-inline: auto;
+  padding-inline: var(--pad-x);
+}
+
+.db-section { padding-block: var(--section-py); }
+.db-section--tint { background: var(--theme-surface-2); }
+
+.db-section__head {
+  max-width: 46ch;
+  margin-bottom: calc(var(--gap) * 1.4);
+}
+.db-section__head--center {
+  max-width: 52ch;
+  margin-inline: auto;
+  text-align: center;
+}
+.db-section__head--center .db-lead { margin-inline: auto; }
+.db-section__head .db-lead,
+.db-carousel__head .db-lead { margin-top: 12px; }
+
+.db-section__head h2,
+.db-carousel__head h2,
+.db-cta h2 { font-size: clamp(1.9rem, 1.2rem + 2.2vw, var(--step-4)); }
+
+.db-lead {
+  color: var(--theme-text-muted);
+  font-size: var(--step-1);
+  line-height: 1.55;
+  max-width: 60ch;
+}
+
+.db-eyebrow {
+  /* Cuerpo, no mono: la etiqueta mono-mayúscula es en sí un tic de plantilla,
+     y además --theme-font-mono nunca llega a cargarse. Sigue leyéndose como
+     eyebrow por la caja alta y el tracking. */
+  font-family: var(--theme-font-body);
+  font-size: 0.74rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--theme-accent);
+  margin-bottom: 14px;
+}
+

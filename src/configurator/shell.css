@@ -121,6 +121,137 @@ body {
   letter-spacing: -0.01em;
 }
 
+/* ---------- selector de proyectos (solo estudio) ---------- */
+
+.pmenu {
+  position: relative;
+}
+.pmenu__trigger {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  text-align: left;
+}
+.pmenu__eyebrow {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+}
+.pmenu__name {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  color: var(--c-text);
+}
+.pmenu__name svg {
+  color: var(--c-muted);
+}
+.pmenu__trigger:hover .pmenu__name {
+  color: var(--c-accent);
+}
+
+.pmenu__panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background: var(--c-card);
+  border: 1px solid var(--c-line);
+  border-radius: 11px;
+  padding: 6px;
+  box-shadow: 0 14px 40px -12px rgba(0, 0, 0, 0.55);
+}
+.pmenu__list {
+  list-style: none;
+  margin: 0 0 6px;
+  padding: 0;
+  max-height: 220px;
+  overflow-y: auto;
+}
+.pmenu__list button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 0.86rem;
+  color: var(--c-text);
+  border-radius: 7px;
+  transition: background 130ms ease;
+}
+.pmenu__list button:hover {
+  background: var(--c-field);
+}
+.pmenu__list button.is-active {
+  color: var(--c-accent);
+}
+.pmenu__list button.is-active svg {
+  color: var(--c-accent);
+}
+
+.pmenu__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  border-top: 1px solid var(--c-hair);
+  padding-top: 6px;
+}
+.pmenu__actions button {
+  padding: 7px 8px;
+  font-size: 0.8rem;
+  font-weight: 550;
+  color: var(--c-text);
+  border-radius: 7px;
+  transition: background 130ms ease, color 130ms ease;
+}
+.pmenu__actions button:hover {
+  background: var(--c-field);
+}
+.pmenu__actions .pmenu__del {
+  color: var(--c-pending);
+}
+.pmenu__actions .pmenu__del:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.pmenu__rename {
+  display: flex;
+  gap: 4px;
+  border-top: 1px solid var(--c-hair);
+  padding-top: 6px;
+}
+.pmenu__rename input {
+  flex: 1;
+  min-width: 0;
+  padding: 7px 9px;
+  font-size: 0.84rem;
+  color: var(--c-text);
+  background: var(--c-void);
+  border: 1px solid var(--c-line);
+  border-radius: 7px;
+}
+.pmenu__rename input:focus {
+  outline: none;
+  border-color: var(--c-accent);
+}
+.pmenu__rename button {
+  padding: 7px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--c-accent-strong);
+  border-radius: 7px;
+}
+
 .shell__brand p {
   color: var(--c-muted);
   font-size: 0.82rem;
@@ -959,8 +1090,29 @@ body {
 .shell__reset {
   display: inline-flex;
   align-items: center;
+  gap: 6px;
+  color: var(--c-muted);
+}
+
+/* Deshacer: botón con texto, siempre visible. Rehacer: compacto, solo cuando
+   hay algo que rehacer. Para un cliente, un icono de flecha curva no basta. */
+.shell__undo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.shell__redo {
+  display: inline-flex;
+  align-items: center;
   padding: 8px !important;
-  color: var(--c-muted) !important;
+  color: var(--c-muted);
+}
+.shell__actions button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.shell__actions button:disabled:hover {
+  border-color: var(--c-line);
 }
 
 /* La acción de cara al cliente: la única que debe destacar. Copiar enlace y

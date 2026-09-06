@@ -185,6 +185,7 @@ export const DEFAULT_CONTENT = {
     hint: 'Te escribimos en menos de un día laborable.',
     primary: 'Crear cuenta',
     secondary: 'O escríbenos y lo vemos contigo por teléfono.',
+    success: 'Hecho. Te escribimos en menos de un día laborable.',
   },
 
   footer: {

@@ -17,7 +17,10 @@ import chrome from '../preview/Chrome.jsx?raw'
 import reveal from '../preview/Reveal.jsx?raw'
 import icon from '../preview/Icon.jsx?raw'
 import ui from '../preview/ui.jsx?raw'
-import demoCss from '../preview/demo.css?raw'
+// `?inline` en vez de `?raw`: demo.css es solo un índice de @import, y así el
+// export recibe el CSS ya resuelto en un único archivo, sin tener que listar
+// cada parcial aquí.
+import demoCss from '../preview/demo.css?inline'
 import resetCss from '../styles/reset.css?raw'
 import schema from '../config/schema.js?raw'
 import sectionsRegistry from '../registry/sections.js?raw'

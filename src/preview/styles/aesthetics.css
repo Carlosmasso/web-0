@@ -1,0 +1,153 @@
+/* ============================================================
+   ESTÉTICAS  —  ver también registry/aesthetics.js
+   Cada bloque [data-aesthetic] reajusta la capa de estilo y define qué
+   significa :active. Aquí la estética deja de ser cosmética y pasa a ser
+   conducta.
+   ============================================================ */
+
+/* --- Material limpio: la elevación responde al puntero --- */
+[data-aesthetic='material-clean'] { --card-shadow: var(--theme-shadow); }
+[data-aesthetic='material-clean'] .db-btn--primary {
+  box-shadow: 0 2px 5px -1px color-mix(in srgb, var(--theme-shadow-color) 26%, transparent);
+}
+[data-aesthetic='material-clean'] .db-btn--primary:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--theme-shadow-color) 22%, transparent);
+}
+[data-aesthetic='material-clean'] .db-field[data-variant='underline'] .db-field__control:focus {
+  box-shadow: inset 0 -2px 0 0 var(--theme-accent);
+}
+
+/* --- Minimalista plano: sin sombras, la tarjeta se funde con la página --- */
+[data-aesthetic='minimalist-flat'] {
+  --card-shadow: none;
+  --surface-bg: transparent;
+  --theme-border-color: color-mix(in srgb, var(--theme-text) 11%, transparent);
+}
+[data-aesthetic='minimalist-flat'] .db-frame,
+[data-aesthetic='minimalist-flat'] .db-slide__media { background-color: var(--theme-surface-2); }
+[data-aesthetic='minimalist-flat'] .db-field__control:focus {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--theme-accent) 28%, transparent);
+}
+
+/* --- Neo-brutalismo: la sombra dura es una capa física. Al pulsar, el
+       elemento cae sobre ella y la sombra desaparece. --- */
+[data-aesthetic='neo-brutalism'] {
+  --card-shadow: var(--theme-shadow);
+  --theme-border-color: var(--theme-text);
+}
+[data-aesthetic='neo-brutalism'] .db-btn {
+  border-color: var(--theme-text);
+  box-shadow: 4px 4px 0 0 var(--theme-shadow-color);
+}
+[data-aesthetic='neo-brutalism'] .db-btn:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 0 var(--theme-shadow-color);
+}
+[data-aesthetic='neo-brutalism'] .db-carousel__arrow { border-radius: 0; }
+[data-aesthetic='neo-brutalism'] .db-carousel__arrow:not(:disabled):active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 0 var(--theme-shadow-color);
+}
+[data-aesthetic='neo-brutalism'] .db-carousel__arrow--prev:not(:disabled):active {
+  transform: rotate(180deg) translate(4px, 4px);
+}
+[data-aesthetic='neo-brutalism'] .db-field__control:focus {
+  box-shadow: 4px 4px 0 0 var(--theme-text);
+}
+[data-aesthetic='neo-brutalism'] .db-carousel__dot { border-radius: 0; }
+
+/* --- Glassmorfismo: superficie translúcida, se aclara con el puntero --- */
+[data-aesthetic='glassmorphism'] {
+  --card-shadow: var(--theme-shadow);
+  --surface-bg: color-mix(in srgb, var(--theme-surface) 48%, transparent);
+  --surface-blur: var(--theme-blur);
+}
+[data-aesthetic='glassmorphism'] .db-nav,
+[data-aesthetic='glassmorphism'] .db-section--tint {
+  background: color-mix(in srgb, var(--theme-surface) 30%, transparent);
+}
+[data-aesthetic='glassmorphism'] .db-btn {
+  backdrop-filter: var(--theme-blur);
+  -webkit-backdrop-filter: var(--theme-blur);
+  border-color: color-mix(in srgb, var(--theme-text) 18%, transparent);
+}
+[data-aesthetic='glassmorphism'] .db-btn:active { transform: scale(0.98); }
+[data-aesthetic='glassmorphism'] .db-field__control:focus {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--theme-accent) 38%, transparent);
+}
+
+/* --- Claymorfismo: volumen de arcilla. Se hunde al pulsar y la sombra
+       pasa de exterior a interior. --- */
+[data-aesthetic='claymorphism'] {
+  --card-shadow: var(--theme-shadow);
+  --theme-border-color: transparent;
+  --surface-bg: color-mix(in srgb, var(--theme-surface) 92%, var(--theme-primary));
+}
+[data-aesthetic='claymorphism'] .db-btn {
+  box-shadow: inset 0 2px 3px color-mix(in srgb, white 45%, transparent),
+    0 8px 16px -6px color-mix(in srgb, var(--theme-shadow-color) 40%, transparent);
+}
+[data-aesthetic='claymorphism'] .db-btn:active {
+  transform: scale(0.97);
+  box-shadow: inset 0 4px 10px color-mix(in srgb, var(--theme-shadow-color) 32%, transparent);
+}
+[data-aesthetic='claymorphism'] .db-field__control:focus {
+  box-shadow: inset 0 3px 8px color-mix(in srgb, var(--theme-shadow-color) 22%, transparent);
+}
+
+/* --- Cyberpunk: el resplandor crece y un destello barre la superficie --- */
+[data-aesthetic='cyberpunk'] {
+  --card-shadow: var(--theme-shadow);
+  --surface-bg: color-mix(in srgb, var(--theme-accent) 5%, transparent);
+  --heading-color: var(--theme-accent);
+}
+[data-aesthetic='cyberpunk'] .db-btn--primary {
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--theme-accent) 10%, transparent);
+  background-image: none;
+  color: var(--theme-accent);
+  border-color: var(--theme-accent);
+  box-shadow: 0 0 12px -2px color-mix(in srgb, var(--theme-accent) 70%, transparent);
+}
+[data-aesthetic='cyberpunk'] .db-btn--primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-105%) skewX(-18deg);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--theme-accent) 42%, transparent),
+    transparent
+  );
+  transition: transform 620ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+[data-aesthetic='cyberpunk'] .db-field__control:focus {
+  border-color: var(--theme-secondary);
+  box-shadow: 0 0 0 1px var(--theme-secondary),
+    0 0 16px -2px color-mix(in srgb, var(--theme-secondary) 80%, transparent);
+}
+[data-aesthetic='cyberpunk'] .db-carousel__dot[aria-selected='true'] { background: var(--theme-secondary); }
+/* Botones rectos -> flechas rectas. Sin esto quedaban de píldora sobre una
+   interfaz que va toda a cantos vivos. */
+[data-aesthetic='cyberpunk'] .db-carousel__arrow { border-radius: 0; }
+
+@media (hover: hover) and (pointer: fine) {
+  [data-aesthetic='material-clean'] .db-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 38px -14px color-mix(in srgb, var(--theme-shadow-color) 34%, transparent);
+  }
+  [data-aesthetic='glassmorphism'] .db-card:hover,
+  [data-aesthetic='claymorphism'] .db-card:hover { transform: translateY(-3px); }
+  [data-aesthetic='cyberpunk'] .db-card:hover {
+    border-color: var(--theme-accent);
+    box-shadow: 0 0 0 1px var(--theme-accent),
+      0 0 28px -6px color-mix(in srgb, var(--theme-accent) 70%, transparent);
+  }
+  [data-aesthetic='cyberpunk'] .db-btn--primary:hover { filter: brightness(1.3); }
+  [data-aesthetic='cyberpunk'] .db-btn--primary:hover::after { transform: translateX(105%) skewX(-18deg); }
+  [data-aesthetic='cyberpunk'] .db-carousel__arrow:not(:disabled):hover { filter: brightness(1.35); }
+  [data-aesthetic='minimalist-flat'] .db-card:hover { border-color: var(--theme-accent); }
+}

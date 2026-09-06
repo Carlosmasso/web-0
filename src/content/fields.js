@@ -193,6 +193,7 @@ export function buildForm(config) {
         f('cta.hint', 'Nota bajo el campo', 'text', { hint: 'qué pasa tras enviar' }),
         f('cta.primary', 'Botón principal', 'text'),
         f('cta.secondary', 'Línea de apoyo', 'textarea'),
+        f('cta.success', 'Mensaje de confirmación', 'text', { hint: 'lo que se ve tras enviar' }),
       ],
     }),
   }
