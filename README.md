@@ -13,8 +13,9 @@ npm run dev      # http://localhost:5173
 npm test         # vitest: núcleo puro + el .zip del export
 ```
 
-- `/` — el configurador (panel + lienzo).
-- `/preview.html#<config>` — la vista previa sola, para compartir por enlace.
+- `/` — la landing (HTML estático, `index.html` + `public/landing.css`).
+- `/app.html` — el configurador (panel + lienzo). El `?c=` de los enlaces cuelga de aquí.
+- `/preview.html#<config>` — la vista previa sola, embebida en un iframe y compartible.
 
 Los tests (`src/**/*.test.js`) cubren lo que más duele si se rompe sin avisar:
 `encode`/`decode` de enlaces, `normalizeConfig` y guardarraíles (los 11 presets

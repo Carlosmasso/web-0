@@ -2,14 +2,17 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'node:path'
 
-// Two entry points: the configurator shell (index.html) and the
-// isolated preview canvas (preview.html) that the shell embeds in an iframe.
+// Tres entradas:
+//   index.html    — la landing (HTML estático, sin React).
+//   app.html      — el configurador (panel + lienzo).
+//   preview.html  — el lienzo aislado que el configurador embebe en un iframe.
 export default defineConfig({
   plugins: [react()],
   build: {
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'index.html'),
+        landing: resolve(__dirname, 'index.html'),
+        app: resolve(__dirname, 'app.html'),
         preview: resolve(__dirname, 'preview.html'),
       },
     },

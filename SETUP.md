@@ -41,33 +41,44 @@ Proyecto en Vercel → **Settings → Environment Variables** (para *Production*
 
 Redeploy después de añadirlas.
 
-## 4. Comprobar
+## 4. Analítica
+
+En Vercel → pestaña **Analytics** → **Enable**. El script ya está en `index.html`
+y `app.html` (`/_vercel/insights/script.js`), sin cookies ni banner. Verás
+páginas vistas y de dónde llega la gente.
+
+## 5. Comprobar (hazlo ANTES de compartir el enlace)
 
 1. Abre la web desplegada, diseña algo, pulsa **Pedir presupuesto**, marca el
    consentimiento y envía.
-2. Debe aparecer una fila en la Sheet, llegarte el correo con el `.zip`, y al
-   cliente (el email que pusiste) un "recibido".
-3. Si algo falla, el modal muestra un `mailto:` de reserva y en la consola del
-   navegador hay pistas.
+2. Debe aparecer una **fila en la Sheet** (canal fiable), llegarte el **correo**
+   con el `.zip` adjunto, y al email de prueba una **confirmación**.
+   - Con `onboarding@resend.dev` los correos pueden ir a spam: revisa esa
+     carpeta y marca "no es spam". La Sheet no falla.
+3. Si el modal muestra error: falta alguna variable de entorno o no has
+   redesplegado. La consola del navegador da pistas.
 
 En local (`npm run dev`) la función `/api/lead` no corre. Usa `npx vercel dev`
-o prueba en una *preview deployment*.
+o prueba en el deploy.
+
+## 6. Móvil
+
+Abre la web en el teléfono: la landing debe verse bien; el configurador es más
+justo en móvil. Si no cuela, decidir si se hace usable o se muestra un aviso
+"mejor desde ordenador".
 
 ---
 
-## Legal — a completar antes de cobrar
+## Legal — hecho para fase 0
 
-Rellena los `[[ CARLOS: … ]]` en:
+`aviso-legal.html`, `privacidad.html` y `cookies.html` ya llevan tus datos como
+persona física. Cuando te des de alta como autónomo: añadir NIF y domicilio, y
+revisar el aviso legal con un gestor.
 
-- [`public/aviso-legal.html`](public/aviso-legal.html) — nombre, NIF, dirección, localidad.
-- [`public/privacidad.html`](public/privacidad.html) — lo mismo + proveedor de correo + plazo de conservación.
-- [`public/cookies.html`](public/cookies.html) — fecha; revisar si añades analítica.
+## Pendiente (cuando haya tracción)
 
-No es asesoramiento legal; si puedes, que lo revise un gestor.
-
-## Pendiente antes de lanzar (ver revisión)
-
-- Nombre de producto + dominio + favicon + meta OG.
-- Landing con precio visible.
-- Analítica (Plausible/Umami).
-- Tests del núcleo (`npm i -D vitest`).
+- Dominio propio (`.es` ~10 €/año) apuntando a Vercel → hace el test real para
+  leads y permite verificar el dominio en Resend (mejor entregabilidad).
+- Nombre definitivo del producto (ahora "Estudio" de placeholder).
+- `og.png` (1200×630) para la tarjeta al compartir el enlace.
+- Pasada de móvil en el configurador.

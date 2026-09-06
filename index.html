@@ -2,12 +2,129 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="data:," />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Estudio · Configurador de webs a medida</title>
+    <link rel="icon" href="/favicon.svg" />
+
+    <title>Estudio · Diseña tu web y yo la construyo</title>
+    <meta
+      name="description"
+      content="Elige cómo se ve tu web en un configurador visual, la ves en vivo, y cuando te guste me la pides. Yo la construyo con tu contenido y te la entrego lista para publicar."
+    />
+
+    <!-- Tarjeta al compartir el enlace. [[ CARLOS: cambia la URL y añade /og.png (1200x630) ]] -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Estudio · Diseña tu web y yo la construyo" />
+    <meta
+      property="og:description"
+      content="Elige el diseño en un configurador visual, míralo en vivo y pídeme un presupuesto sin compromiso."
+    />
+    <meta property="og:image" content="/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="stylesheet" href="/landing.css" />
+
+    <!-- Vercel Web Analytics (activar en Vercel → pestaña Analytics). Sin cookies. -->
+    <script defer src="/_vercel/insights/script.js"></script>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <header class="nav">
+      <span class="wordmark">Estudio</span>
+      <nav>
+        <a href="#como-funciona">Cómo funciona</a>
+        <a class="btn btn--ghost" href="/app.html">Abrir el configurador</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <h1>Diseña tu web tú mismo. Yo la construyo.</h1>
+        <p class="lead">
+          Eliges la paleta, la tipografía, las secciones y el estilo en un configurador
+          visual. Lo ves en vivo, tal cual quedará. Cuando te guste, me lo pides y yo la monto
+          con tu contenido y te la entrego lista para publicar.
+        </p>
+        <div class="hero__cta">
+          <a class="btn btn--primary" href="/app.html">Diseñar mi web</a>
+          <span class="hero__note">Gratis y sin registro. El presupuesto lo hablamos por correo, sin compromiso.</span>
+        </div>
+      </section>
+
+      <section id="como-funciona" class="steps">
+        <h2>Cómo funciona</h2>
+        <ol>
+          <li>
+            <span class="steps__n">1</span>
+            <h3>Diseñas</h3>
+            <p>
+              Entras al configurador, eliges un punto de partida según tu sector o un estilo,
+              y lo ajustas: tu color de marca, la tipografía, qué secciones aparecen. Todo se
+              ve al instante.
+            </p>
+          </li>
+          <li>
+            <span class="steps__n">2</span>
+            <h3>Me lo pides</h3>
+            <p>
+              Cuando el diseño te convence, dejas tus datos. Me llega lo que has diseñado y
+              te escribo con una propuesta y un presupuesto sin compromiso.
+            </p>
+          </li>
+          <li>
+            <span class="steps__n">3</span>
+            <h3>Te la entrego</h3>
+            <p>
+              La construyo con tu contenido real (o el que me pases), la publico donde
+              quieras y queda tuya. Una web a medida, no una plantilla más.
+            </p>
+          </li>
+        </ol>
+      </section>
+
+      <section class="audience">
+        <h2>Para quién es</h2>
+        <p>
+          Negocios que necesitan una web que dé confianza sin meterse en un proyecto
+          complicado: clínicas y consultas, despachos, cafeterías y obradores, tiendas,
+          inmobiliarias, autónomos y profesionales.
+        </p>
+      </section>
+
+      <section class="what">
+        <h2>Qué es, y qué no</h2>
+        <div class="what__grid">
+          <div>
+            <h3>Sí</h3>
+            <ul>
+              <li>Eliges de verdad cómo se ve, con vista previa en vivo.</li>
+              <li>El resultado es un sitio a medida, tuyo.</li>
+              <li>Yo me encargo del montaje, el contenido y la publicación.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>No</h3>
+            <ul>
+              <li>No es un creador de webs de arrastrar y soltar que acabas manteniendo tú.</li>
+              <li>No hay pagos ni contratos por aquí: solo pides presupuesto.</li>
+              <li>No te llevas un editor ni un panel: te llevas la web terminada.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="cta-final">
+        <h2>Empieza por el diseño</h2>
+        <p>Se tarda un rato y no te compromete a nada.</p>
+        <a class="btn btn--primary" href="/app.html">Diseñar mi web</a>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <span>Estudio · Carlos Massó · Madrid</span>
+      <nav>
+        <a href="/aviso-legal.html">Aviso legal</a>
+        <a href="/privacidad.html">Privacidad</a>
+        <a href="/cookies.html">Cookies</a>
+      </nav>
+    </footer>
   </body>
 </html>

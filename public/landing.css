@@ -1,0 +1,256 @@
+:root {
+  --ink: #16171b;
+  --ink-soft: #55575e;
+  --ink-faint: #8b8d95;
+  --bg: #ffffff;
+  --bg-alt: #f6f6f4;
+  --line: #e6e6e2;
+  --accent: #3b53d6;
+  --accent-ink: #ffffff;
+  --max: 720px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #ecedf1;
+    --ink-soft: #a2a4ac;
+    --ink-faint: #71737c;
+    --bg: #131418;
+    --bg-alt: #17181c;
+    --line: #2b2d34;
+    --accent: #8ba0ff;
+    --accent-ink: #10121a;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.65 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+/* ---------- nav ---------- */
+
+.nav {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 22px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.nav nav {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.nav nav > a:first-child {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+.nav nav > a:first-child:hover {
+  color: var(--ink);
+}
+
+.wordmark {
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+}
+
+/* ---------- botones ---------- */
+
+.btn {
+  display: inline-block;
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: transform 120ms ease, filter 140ms ease, border-color 140ms ease;
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn--primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.btn--primary:hover {
+  filter: brightness(1.07);
+}
+.btn--ghost {
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 9px 16px;
+  font-size: 0.9rem;
+}
+.btn--ghost:hover {
+  border-color: var(--accent);
+}
+
+/* ---------- secciones ---------- */
+
+main {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+section {
+  padding: 64px 0;
+  border-top: 1px solid var(--line);
+}
+section:first-child {
+  border-top: 0;
+}
+
+h1 {
+  font-size: clamp(2rem, 1.3rem + 3.4vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+h2 {
+  font-size: 1.4rem;
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
+}
+h3 {
+  font-size: 1.05rem;
+  margin-bottom: 6px;
+}
+
+.lead {
+  margin-top: 20px;
+  font-size: 1.12rem;
+  color: var(--ink-soft);
+  max-width: 60ch;
+}
+
+.hero {
+  padding-top: 40px;
+}
+.hero__cta {
+  margin-top: 32px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 18px;
+}
+.hero__note {
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+  max-width: 34ch;
+}
+
+/* pasos */
+
+.steps ol {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 28px;
+}
+.steps li {
+  padding-left: 46px;
+  position: relative;
+}
+.steps__n {
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.steps p {
+  color: var(--ink-soft);
+}
+
+.audience p {
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+}
+
+.what__grid {
+  display: grid;
+  gap: 28px 40px;
+  grid-template-columns: 1fr 1fr;
+}
+.what__grid ul {
+  padding-left: 18px;
+  color: var(--ink-soft);
+  display: grid;
+  gap: 8px;
+}
+.what__grid h3 {
+  color: var(--ink-faint);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.cta-final {
+  text-align: center;
+}
+.cta-final p {
+  color: var(--ink-soft);
+  margin: 6px 0 24px;
+}
+
+/* ---------- pie ---------- */
+
+.foot {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 40px 20px 64px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+}
+.foot nav {
+  display: flex;
+  gap: 16px;
+}
+.foot a {
+  color: var(--ink-faint);
+}
+.foot a:hover {
+  color: var(--ink-soft);
+}
+
+@media (max-width: 560px) {
+  .what__grid {
+    grid-template-columns: 1fr;
+  }
+  section {
+    padding: 48px 0;
+  }
+}
