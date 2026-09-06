@@ -1,4 +1,4 @@
-# Estudio — configurador de webs a medida
+# Maqueta — configurador de webs a medida
 
 Marketplace donde un cliente arma su web eligiendo paleta, tipografía, esquinas,
 densidad, iconos, efectos y una variante por sección. La vista previa se

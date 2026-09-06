@@ -51,7 +51,7 @@ export function exportTailwindConfig(config) {
     'on-primary': vars['--theme-on-primary'],
   }
 
-  return `/** Generado por Estudio — no editar a mano.
+  return `/** Generado por Maqueta — no editar a mano.
  *  Preset: ${config.meta?.presetId ?? 'personalizado'} · Estética: ${config.aesthetic}
  */
 /** @type {import('tailwindcss').Config} */
@@ -101,7 +101,7 @@ export function exportCssVariables(config) {
 
   const { h, s, l } = hexToHsl(config.palette.primary)
 
-  return `/* Generado por Estudio — preset: ${config.meta?.presetId ?? 'personalizado'} */
+  return `/* Generado por Maqueta — preset: ${config.meta?.presetId ?? 'personalizado'} */
 
 :root {
 ${lines}
@@ -115,7 +115,7 @@ ${lines}
 
 [data-aesthetic='${config.aesthetic}'] {
   /* El comportamiento por estética (gestos al pulsar, foco, superficies)
-     se importa aparte desde el runtime de Estudio. */
+     se importa aparte desde el runtime de Maqueta. */
 }
 `
 }
@@ -127,7 +127,7 @@ export function exportDesignTokens(config) {
 
   return JSON.stringify(
     {
-      $description: `Estudio · ${config.meta?.presetId ?? 'personalizado'}`,
+      $description: `Maqueta · ${config.meta?.presetId ?? 'personalizado'}`,
       color: {
         primary: color(p.primary),
         secondary: color(p.secondary),

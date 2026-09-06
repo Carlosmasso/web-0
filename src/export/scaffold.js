@@ -8,7 +8,7 @@
 //
 // Solo entra el árbol de RUNTIME (lo que pinta el sitio). El configurador
 // —guardarraíles, registries de presets, formulario de contenido— se queda
-// fuera: ese es el trabajo de Estudio, no del sitio entregado.
+// fuera: ese es el trabajo de Maqueta, no del sitio entregado.
 // ============================================================
 
 import previewCanvas from '../preview/PreviewCanvas.jsx?raw'
@@ -211,7 +211,7 @@ createRoot(document.getElementById('root')).render(
 }
 
 function siteConfigJs(config, content) {
-  return `// Generado por Estudio a partir de tu configuración. Es JSON plano: puedes
+  return `// Generado por Maqueta a partir de tu configuración. Es JSON plano: puedes
 // seguir afinando colores, tipografía o textos aquí a mano, sin volver al
 // configurador.
 
@@ -224,7 +224,7 @@ export const SITE_CONTENT = ${JSON.stringify(content, null, 2)}
 function readme(brandName) {
   return `# ${brandName}
 
-Generado con Estudio. Es un proyecto de React + Vite normal, sin dependencia
+Generado con Maqueta. Es un proyecto de React + Vite normal, sin dependencia
 del configurador: los componentes de \`src/preview/\` son los mismos que
 viste en la vista previa.
 
@@ -261,7 +261,7 @@ function gitignore() {
 export function buildProjectFiles(config, content) {
   const brandName = content?.brand?.name || 'Mi sitio'
   const projectName = slugify(brandName)
-  const description = content?.hero?.subtitle || `${brandName}, construido con Estudio.`
+  const description = content?.hero?.subtitle || `${brandName}, construido con Maqueta.`
   const fontsHref = googleFontsHref(config)
 
   // Las imágenes subidas salen del JSON a archivos en public/img/.

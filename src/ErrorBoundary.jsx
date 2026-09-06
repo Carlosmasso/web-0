@@ -12,7 +12,7 @@ export class ErrorBoundary extends Component {
 
   componentDidCatch(error, info) {
     // eslint-disable-next-line no-console
-    console.error('[Estudio] error capturado por ErrorBoundary:', error, info?.componentStack)
+    console.error('[Maqueta] error capturado por ErrorBoundary:', error, info?.componentStack)
   }
 
   retry = () => this.setState({ error: null })

@@ -42,7 +42,7 @@ export function ProjectMenu({ projectId, onSwitch, onNew, onDuplicate, onRename,
   return (
     <div className="pmenu" ref={ref}>
       <button type="button" className="pmenu__trigger" onClick={() => setOpen((v) => !v)}>
-        <span className="pmenu__eyebrow">Estudio · proyecto</span>
+        <span className="pmenu__eyebrow">Maqueta · proyecto</span>
         <span className="pmenu__name">
           {active?.name ?? 'Proyecto'}
           <Icon set="tabler" name="chevron" size={13} />
