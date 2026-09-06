@@ -295,11 +295,11 @@ export function App() {
     [encoded, content],
   )
 
-  // Para ti: abre el configurador con ese diseño ya cargado (para regenerar el
-  // .zip). Solo lleva la config; el contenido va en la hoja de leads.
+  // Para ti: abre el preview de ese diseño en modo estudio, con el botón de
+  // "Descargar proyecto (.zip)". Lleva config + contenido (imágenes subidas no).
   const editLink = useMemo(
-    () => `${window.location.origin}/app.html?c=${encoded}`,
-    [encoded],
+    () => `${window.location.origin}/preview.html?studio#${encoded}~${encodeContent(content)}`,
+    [encoded, content],
   )
 
   const copyLink = async () => {

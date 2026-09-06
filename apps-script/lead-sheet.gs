@@ -35,7 +35,7 @@ function doPost(e) {
         'Negocio',
         'Nota',
         'Enlace del diseño',
-        'Abrir en configurador',
+        'Descargar proyecto (tú)',
         'Contenido',
         'Consentimiento',
         'Estado',
