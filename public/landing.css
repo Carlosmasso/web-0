@@ -275,4 +275,7 @@ h3 {
   .hero {
     padding-top: 28px;
   }
+  .foot {
+    justify-content: center;
+  }
 }
