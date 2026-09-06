@@ -6,14 +6,15 @@ import { useStructure } from './PreviewCanvas'
 import { Nav, Footer } from './Chrome'
 
 export function DemoPage({ content = DEFAULT_CONTENT }) {
-  const { sections } = useStructure()
+  const { sections, sectionOrder } = useStructure()
+  const order = sectionOrder?.length ? sectionOrder : SECTION_ORDER
 
   return (
     <ContentContext.Provider value={content}>
       <div className="db-page">
         <Nav />
         <main>
-          {SECTION_ORDER.map((type) => {
+          {order.map((type) => {
             const Cmp = resolveSection(type, sections[type])
             return Cmp ? <Cmp key={type} /> : null
           })}

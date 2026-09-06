@@ -35,6 +35,7 @@ decisión pertenece a uno de dos canales y viaja por una vía distinta:
   "shadows":  { "style": "soft-elevation", "color": "auto", "intensity": 1.5 },
   "gradients": { "primaryGradient": { "type": "linear", "angle": 118, "stops": [...] },
                  "backgroundGradient": { "type": "radial", "position": "…", "stops": [...] } },
+  "sectionOrder": ["hero", "features", "pricing", "faq", "cta"],  // visibles, en orden
   "components": { "hero": { "background": "aurora" },
                   "button": { "shape": "pill", "fill": "gradient" }, … }
 }
@@ -177,6 +178,7 @@ Todo lo de la venta, nada de la entrega:
 | Acción | Dónde |
 | --- | --- |
 | Elegir diseño: preset, estética, color de marca, tipografía, esquinas, densidad, iconos, efectos, variante por sección | Pestaña **Diseño** (`Sidebar`) |
+| Mostrar / ocultar y reordenar secciones (la cabecera va fija) | Capa 3 del panel — "Secciones". La lista de secciones visibles vive en el contrato (`sectionOrder`); el formulario de Contenido solo pide las visibles. |
 | Escribir sus textos (opcional) | Pestaña **Contenido**, con el aviso suavizado: *"…si lo prefieres, los pongo yo."* |
 | **Deshacer / Rehacer** cualquier cambio de diseño | Botón **Deshacer** en la barra, siempre visible (`⌘Z` / `⇧⌘Z` como extra). "Rehacer" solo aparece si hay algo que rehacer. |
 | Ver en escritorio / móvil | Conmutador de la barra |
@@ -245,7 +247,7 @@ y para que los estilos de la demo no toquen los del panel.
 - Almacén con selectores (Zustand) en lugar de contexto, cuando el panel crezca.
 - Validación del contrato con Zod al leer de base de datos y al recibir del panel.
 - Combos curados (no toda paleta pega con toda tipografía y estética).
-- Toggle de secciones on/off y reordenado.
+- Reordenar secciones arrastrando (hoy es con flechas ↑↓).
 - Más secciones (equipo, estadísticas) y más variantes de las 8 actuales.
 - Los proyectos de estudio viven en `localStorage`: faltan cuentas y revisiones
   con historial en servidor.

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
-import { DEFAULT_CONFIG } from '../config/schema'
+import { DEFAULT_CONFIG, SECTION_ORDER } from '../config/schema'
 import { isStudio } from '../config/mode'
 import { normalizeConfigWithGuardrails } from '../config/guardrails'
 import { useHistory } from './useHistory'
@@ -157,6 +157,31 @@ export function App() {
     [merge],
   )
 
+  /* ---- secciones: visibilidad y orden ---- */
+
+  const toggleSection = useCallback((type) => {
+    if (type === 'hero') return
+    setRaw((prev) => {
+      const order = prev.sectionOrder?.length ? prev.sectionOrder : SECTION_ORDER
+      const next = order.includes(type)
+        ? order.filter((t) => t !== type)
+        : [...order, type]
+      return setIn(prev, 'sectionOrder', next)
+    })
+  }, [])
+
+  const moveSection = useCallback((type, dir) => {
+    setRaw((prev) => {
+      const order = [...(prev.sectionOrder?.length ? prev.sectionOrder : SECTION_ORDER)]
+      const i = order.indexOf(type)
+      const j = i + dir
+      // el hero (índice 0) no se cruza
+      if (i < 1 || j < 1 || j >= order.length) return prev
+      ;[order[i], order[j]] = [order[j], order[i]]
+      return setIn(prev, 'sectionOrder', order)
+    })
+  }, [])
+
   /* ---- proyectos (solo estudio) ---- */
 
   const switchProject = useCallback(
@@ -295,6 +320,8 @@ export function App() {
             onFocus={focusInPreview}
             onReveal={revealInPreview}
             onSwitchAesthetic={switchAesthetic}
+            onToggleSection={toggleSection}
+            onMoveSection={moveSection}
           />
         ) : (
           <ContentForm

@@ -69,6 +69,7 @@ export function PreviewCanvas({ config, doc = document, children }) {
     m: config.motion,
     i: config.iconSet,
     s: config.sections,
+    o: config.sectionOrder,
     c: config.components,
   })
   const structure = useMemo(
@@ -77,6 +78,7 @@ export function PreviewCanvas({ config, doc = document, children }) {
       motion: config.motion,
       iconSet: config.iconSet,
       sections: config.sections,
+      sectionOrder: config.sectionOrder,
       components: config.components,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps

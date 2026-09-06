@@ -613,6 +613,107 @@ body {
   background: var(--c-accent-soft);
 }
 
+/* ---------- secciones: visibilidad y orden ---------- */
+
+.sec {
+  margin-bottom: 18px;
+}
+.sec:last-of-type {
+  margin-bottom: 0;
+}
+.sec__bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.sec__label {
+  font-size: 0.84rem;
+  font-weight: 600;
+  margin-right: auto;
+}
+.sec__move {
+  display: inline-flex;
+  gap: 2px;
+}
+.sec__move button {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  font-size: 0.78rem;
+  color: var(--c-muted);
+  border: 1px solid var(--c-hair);
+  border-radius: 6px;
+}
+.sec__move button:not(:disabled):hover {
+  border-color: var(--c-accent);
+  color: var(--c-text);
+}
+.sec__move button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+.sec__pin {
+  font-size: 0.64rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--c-faint);
+  border: 1px solid var(--c-hair);
+  border-radius: 6px;
+  padding: 3px 7px;
+}
+.sec__toggle {
+  padding: 3px 10px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--c-muted);
+  border: 1px solid var(--c-line);
+  border-radius: 999px;
+}
+.sec__toggle:hover {
+  border-color: var(--c-pending);
+  color: var(--c-pending);
+}
+
+.sec-hidden {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--c-line);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.sec-hidden__title {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--c-faint);
+  margin-bottom: 2px;
+}
+.sec-hidden__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  font-size: 0.82rem;
+  color: var(--c-muted);
+  border: 1px dashed var(--c-line);
+  border-radius: 9px;
+}
+.sec-hidden__item:hover {
+  border-style: solid;
+  border-color: var(--c-accent);
+  color: var(--c-text);
+}
+.sec-hidden__add {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--c-accent);
+}
+
 /* ---------- segmentado (claro / oscuro, esquinas…) ---------- */
 
 .seg {

@@ -198,7 +198,10 @@ export function buildForm(config) {
     }),
   }
 
-  SECTION_ORDER.forEach((key) => blocks.push(section[key]()))
+  // Solo las secciones visibles y en el mismo orden que la página. Una oculta
+  // no se le pide al cliente.
+  const order = config.sectionOrder?.length ? config.sectionOrder : SECTION_ORDER
+  order.forEach((key) => section[key] && blocks.push(section[key]()))
 
   blocks.push({
     key: 'footer',

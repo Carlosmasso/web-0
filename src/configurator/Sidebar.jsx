@@ -170,6 +170,8 @@ export function Sidebar({
   onFocus,
   onReveal,
   onSwitchAesthetic,
+  onToggleSection,
+  onMoveSection,
 }) {
   useEffect(() => {
     ensureFonts(
@@ -326,26 +328,80 @@ export function Sidebar({
         {vocab('components.carousel.controls')}
         {vocab('iconSet')}
 
-        <Group title="Secciones">
-          {SECTION_ORDER.map((type) => (
-            <div className="ctrl" key={type} {...focusProps(SECTION_META[type].affects, onFocus)}>
-              <span className="ctrl__label">{SECTION_META[type].label}</span>
-              <Affects affects={SECTION_META[type].affects} onReveal={onReveal} />
-              <div className="optlist">
-                {SECTION_META[type].variants.map((v) => (
-                  <button
-                    key={v.id}
-                    type="button"
-                    className={`opt ${config.sections[type] === v.id ? 'is-active' : ''}`}
-                    onClick={() => onSet(`sections.${type}`, v.id)}
-                  >
-                    <span className="opt__label">{v.label}</span>
-                    <span className="opt__note">{v.note}</span>
-                  </button>
-                ))}
+        <Group title="Secciones" hint="Muestra u oculta cada bloque y cámbialo de orden. La cabecera siempre va primero.">
+          {config.sectionOrder.map((type, idx) => {
+            const meta = SECTION_META[type]
+            const isHero = type === 'hero'
+            return (
+              <div className="sec" key={type} {...focusProps(meta.affects, onFocus)}>
+                <div className="sec__bar">
+                  {isHero ? (
+                    <span className="sec__pin">fija</span>
+                  ) : (
+                    <span className="sec__move">
+                      <button
+                        type="button"
+                        aria-label={`Subir ${meta.label}`}
+                        disabled={idx <= 1}
+                        onClick={() => onMoveSection(type, -1)}
+                      >
+                        ↑
+                      </button>
+                      <button
+                        type="button"
+                        aria-label={`Bajar ${meta.label}`}
+                        disabled={idx >= config.sectionOrder.length - 1}
+                        onClick={() => onMoveSection(type, 1)}
+                      >
+                        ↓
+                      </button>
+                    </span>
+                  )}
+                  <span className="sec__label">{meta.label}</span>
+                  {!isHero && (
+                    <button
+                      type="button"
+                      className="sec__toggle"
+                      onClick={() => onToggleSection(type)}
+                    >
+                      Quitar
+                    </button>
+                  )}
+                </div>
+                <Affects affects={meta.affects} onReveal={onReveal} />
+                <div className="optlist">
+                  {meta.variants.map((v) => (
+                    <button
+                      key={v.id}
+                      type="button"
+                      className={`opt ${config.sections[type] === v.id ? 'is-active' : ''}`}
+                      onClick={() => onSet(`sections.${type}`, v.id)}
+                    >
+                      <span className="opt__label">{v.label}</span>
+                      <span className="opt__note">{v.note}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
+            )
+          })}
+
+          {SECTION_ORDER.some((t) => !config.sectionOrder.includes(t)) && (
+            <div className="sec-hidden">
+              <span className="sec-hidden__title">Ocultas</span>
+              {SECTION_ORDER.filter((t) => !config.sectionOrder.includes(t)).map((type) => (
+                <button
+                  key={type}
+                  type="button"
+                  className="sec-hidden__item"
+                  onClick={() => onToggleSection(type)}
+                >
+                  <span>{SECTION_META[type].label}</span>
+                  <span className="sec-hidden__add">Añadir</span>
+                </button>
+              ))}
             </div>
-          ))}
+          )}
         </Group>
       </Layer>
     </div>

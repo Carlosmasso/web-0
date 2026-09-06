@@ -66,6 +66,11 @@ export const DEFAULT_CONFIG = {
     cta: 'boxed', // boxed | banner
   },
 
+  // Secciones visibles y en qué orden se pintan. Una sección fuera de esta lista
+  // está oculta pero conserva su variante en `sections` por si se reactiva. El
+  // hero siempre está y siempre va primero.
+  sectionOrder: [...SECTION_ORDER],
+
   components: {
     hero: { background: 'solid' }, // solid | gradient | aurora | image
     card: { media: 'auto' }, // auto | none  (auto = la variante decide)
@@ -165,7 +170,22 @@ export function normalizeConfig(input) {
     base.gradients.primaryGradient = normalizeGradient(gradients.primaryGradient)
     base.gradients.backgroundGradient = normalizeGradient(gradients.backgroundGradient)
   }
+  base.sectionOrder = normalizeSectionOrder(base.sectionOrder)
   return base
+}
+
+/** Solo tipos conocidos, sin duplicados, con el hero siempre presente y primero. */
+function normalizeSectionOrder(input) {
+  const seen = new Set()
+  const clean = []
+  for (const type of Array.isArray(input) ? input : []) {
+    if (SECTION_ORDER.includes(type) && !seen.has(type)) {
+      seen.add(type)
+      clean.push(type)
+    }
+  }
+  if (!clean.length) return [...SECTION_ORDER]
+  return ['hero', ...clean.filter((t) => t !== 'hero')]
 }
 
 function normalizeGradient(g) {
