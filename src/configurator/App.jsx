@@ -80,6 +80,13 @@ export function App() {
   const [zipping, setZipping] = useState(false)
   const [showContact, setShowContact] = useState(false)
   const [showTour, setShowTour] = useState(false)
+  const [mnote, setMnote] = useState(() => {
+    try {
+      return sessionStorage.getItem('web0.mnote') !== '1'
+    } catch {
+      return true
+    }
+  })
   const [copied, setCopied] = useState(null)
   const copiedTimer = useRef(null)
   const frameRef = useRef(null)
@@ -306,6 +313,15 @@ export function App() {
     flash('link')
   }
 
+  const dismissMnote = () => {
+    setMnote(false)
+    try {
+      sessionStorage.setItem('web0.mnote', '1')
+    } catch {
+      /* ignore */
+    }
+  }
+
   // Solo estudio. El código del export (JSZip incluido) se carga bajo demanda.
   const downloadZip = async () => {
     setZipping(true)
@@ -325,6 +341,22 @@ export function App() {
   return (
     <div className="shell">
       <aside className="shell__panel">
+        {mnote && (
+          <div className="shell__mnote">
+            <span>El configurador va mejor desde un ordenador.</span>
+            <button type="button" onClick={copyLink}>
+              {copied === 'link' ? 'Enlace copiado' : 'Copiar enlace para seguir'}
+            </button>
+            <button
+              type="button"
+              className="shell__mnote-x"
+              onClick={dismissMnote}
+              aria-label="Cerrar aviso"
+            >
+              ✕
+            </button>
+          </div>
+        )}
         <div className="shell__brand">
           {isStudio ? (
             <ProjectMenu
@@ -471,7 +503,7 @@ export function App() {
               <button
                 onClick={downloadZip}
                 type="button"
-                className="shell__ghost"
+                className="shell__ghost shell__dl"
                 disabled={zipping}
               >
                 {zipping ? 'Empaquetando…' : 'Descargar .zip'}

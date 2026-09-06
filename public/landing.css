@@ -253,4 +253,26 @@ h3 {
   section {
     padding: 48px 0;
   }
+  .nav {
+    padding: 18px 16px;
+  }
+  /* El ancla "Cómo funciona" cabe con el scroll; en móvil solo el botón. */
+  .nav nav > a:first-child {
+    display: none;
+  }
+  .btn {
+    padding: 11px 18px;
+  }
+  .btn--ghost {
+    padding: 9px 14px;
+  }
+  main {
+    padding: 0 16px;
+  }
+  .lead {
+    font-size: 1.05rem;
+  }
+  .hero {
+    padding-top: 28px;
+  }
 }
