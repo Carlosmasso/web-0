@@ -204,9 +204,11 @@ bundle vía `envPrefix` en `vite.config.js`: es ofuscación, no un candado). Si
 ### Qué puede hacer el cliente
 
 Todo lo de la venta, nada de la entrega. La primera vez que se abre la
-herramienta, un **tour guiado** de seis pasos (`Tour.jsx`, se marca visto en
-`localStorage`) explica para qué es y cómo usarla; el botón "¿Cómo funciona?"
-bajo las pestañas lo relanza, y `?tour` lo fuerza aunque ya se haya visto.
+herramienta, un **tour guiado** (`Tour.jsx`, se marca visto en `localStorage`)
+explica para qué es y cómo usarla; un paso puede abrir una capa plegada
+(`expand`) o disparar el "Ver" en el lienzo para enseñarlo en vivo (`reveal`). El
+botón "¿Cómo funciona?" bajo las pestañas lo relanza, y `?tour` lo fuerza aunque
+ya se haya visto.
 
 | Acción | Dónde |
 | --- | --- |

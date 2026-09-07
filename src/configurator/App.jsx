@@ -544,7 +544,7 @@ export function App() {
         editLink={editLink}
       />
 
-      <Tour steps={TOUR_STEPS} open={showTour} onClose={closeTour} />
+      <Tour steps={TOUR_STEPS} open={showTour} onClose={closeTour} onReveal={revealInPreview} />
     </div>
   )
 }

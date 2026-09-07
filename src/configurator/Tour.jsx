@@ -7,8 +7,11 @@ import { useCallback, useEffect, useLayoutEffect, useState } from 'react'
 // herramienta y cómo usarla. Se marca como visto en localStorage; el botón
 // "¿Cómo funciona?" lo vuelve a lanzar.
 //
-// Un paso puede llevar `expand: true`: si su objetivo es la cabecera de una
-// capa plegada, la abre antes de resaltarla para que se vea qué contiene.
+// Un paso puede llevar:
+//   - `expand: true` — si apunta a la cabecera de una capa plegada, la abre
+//     antes de resaltarla.
+//   - `reveal: { selector, label }` — dispara el mismo "Ver" del panel en el
+//     lienzo, para enseñar en vivo cómo el panel señala partes del sitio.
 // ============================================================
 
 const TOUR_KEY = 'web0.tour.v1'
@@ -53,13 +56,14 @@ export const TOUR_STEPS = [
   },
   {
     target: '.stage',
-    title: 'Se ve al instante',
-    body: 'Todo lo que tocas aparece aquí al momento, tal cual quedará tu web publicada. Prueba cosas sin miedo: nada se rompe y puedes deshacer.',
+    reveal: { selector: '.db-footer', label: 'El pie de página' },
+    title: 'Se ve al instante, y te señala qué cambia',
+    body: 'Todo lo que tocas aparece aquí al momento. Y cada ajuste del panel dice a qué parte de la web afecta: pásale el ratón y se ilumina aquí, o pulsa "Ver" y baja hasta ella (como ahora, al pie). Prueba sin miedo: nada se rompe y arriba tienes "Deshacer".',
   },
   {
     target: '.shell__tabs',
     title: 'Tus textos y fotos, si quieres',
-    body: 'En "Contenido" puedes escribir tus textos y subir tus imágenes. Es opcional: si lo prefieres, los pongo yo al construirla.',
+    body: 'En "Contenido" escribes tus textos y subes imágenes. Ahí va también tu WhatsApp, si quieres un botón flotante para que te escriban. Todo opcional: si lo prefieres, lo pongo yo al construirla.',
   },
   {
     target: '.shell__cta',
@@ -82,7 +86,7 @@ function placeCard(rect) {
   return { left: clamp(rect.left, 12, vw - CARD_W - 12), top: clamp(rect.bottom + gap, 12, vh - 260) }
 }
 
-export function Tour({ steps, open, onClose }) {
+export function Tour({ steps, open, onClose, onReveal }) {
   const [i, setI] = useState(0)
   const [rect, setRect] = useState(null)
   const step = steps[i]
@@ -91,6 +95,17 @@ export function Tour({ steps, open, onClose }) {
   useEffect(() => {
     if (open) setI(0)
   }, [open])
+
+  // Pasos con `reveal`: disparan el "Ver" en el lienzo, con un respiro para que
+  // la tarjeta y el recuadro ya estén puestos. Al salir del paso se limpia.
+  useEffect(() => {
+    if (!open || !onReveal || !step.reveal) return undefined
+    const t = setTimeout(() => onReveal(step.reveal), 380)
+    return () => {
+      clearTimeout(t)
+      onReveal(null)
+    }
+  }, [open, i, step, onReveal])
 
   // Mide el objetivo del paso. El scroll es instantáneo y centra el objetivo:
   // la transición CSS de `.tour__spot` hace el desplazamiento visible entre
