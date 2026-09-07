@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import { DEFAULT_CONFIG, SECTION_ORDER } from '../config/schema'
-import { isStudio } from '../config/mode'
+import { isStudio, STUDIO_QUERY } from '../config/mode'
 import { normalizeConfigWithGuardrails } from '../config/guardrails'
 import { useHistory } from './useHistory'
 import {
@@ -304,7 +304,8 @@ export function App() {
   // Para ti: abre el preview de ese diseño en modo estudio, con el botón de
   // "Descargar proyecto (.zip)". Lleva config + contenido (imágenes subidas no).
   const editLink = useMemo(
-    () => `${window.location.origin}/preview.html?studio#${encoded}~${encodeContent(content)}`,
+    () =>
+      `${window.location.origin}/preview.html${STUDIO_QUERY}#${encoded}~${encodeContent(content)}`,
     [encoded, content],
   )
 

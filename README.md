@@ -188,11 +188,12 @@ misma estética y no parecerse en nada.
 
 ### Dos personas, una instancia
 
-`src/config/mode.js` decide el modo con `isStudio`. La detección es automática;
-el cliente no puede forzarla desde la URL. `?studio` existe solo para cuando
-trabajas desde otro ordenador.
+`src/config/mode.js` decide el modo con `isStudio`. En local es automático; en el
+deploy hace falta `?studio=<REACT_STUDIO_KEY>` (la clave viaja en el bundle: es
+ofuscación para que un cliente no lo active sin querer, no un candado). Sin
+`REACT_STUDIO_KEY` configurada, `?studio` a secas sigue valiendo.
 
-- **Estudio** — `import.meta.env.DEV`, `localhost` / `127.0.0.1`, o `?studio`.
+- **Estudio** — `import.meta.env.DEV`, `localhost` / `127.0.0.1`, o `?studio=<clave>`.
 - **Cliente** — la versión desplegada en Vercel.
 
 ### Qué puede hacer el cliente
@@ -239,15 +240,17 @@ entre proyectos) y el `?c=` de la URL se ignora: manda el proyecto activo.
    con enlace a `/privacidad.html`. Nada de jerga a la vista.
 2. Al enviar, `submitLead()` (`src/export/contact.js`) hace un `POST` a la
    función serverless **`/api/lead`** (Vercel), sin abrir nada en su pantalla,
-   con: sus datos, el enlace de vista previa, el enlace `?studio` para descargar
-   el proyecto, y el contenido en texto. La función (a) añade una fila a tu
-   **Google Sheet** con todo el detalle, (b) te **avisa por correo** — texto
-   plano corto, **sin adjuntos** (los `.zip` disparan el spam). Vale con que la
-   hoja o el correo funcionen. Montaje en `SETUP.md`. El cliente ve *"¡Recibido!"*.
+   con: sus datos, los enlaces de vista previa y de descarga, un resumen de qué
+   secciones traen imágenes subidas, y el contenido en texto. Antes de nada,
+   `/api/lead` **filtra spam** (campo trampa + tiempo mínimo en el formulario +
+   topes de tamaño). Luego (a) añade una fila a tu **Google Sheet** con todo el
+   detalle, (b) te **avisa por correo** — texto plano corto, **sin adjuntos**.
+   Vale con que la hoja o el correo funcionen. Montaje en `SETUP.md`. El cliente
+   ve *"¡Recibido!"* (y un aviso de guardar sus fotos si subió alguna).
 3. El cliente te pasa su contenido real. Con **Copiar lista para el cliente**
    tienes la lista exacta a pedir; el formulario de **Contenido** solo muestra
    lo que esa variante usa y marca *pendiente* los huecos.
-4. Abres el enlace **"Descargar proyecto (tú)"** de la hoja (`/preview.html?studio#…`):
+4. Abres el enlace **"Descargar proyecto (tú)"** de la hoja (`/preview.html?studio=<clave>#…`):
    renderiza el diseño y muestra un botón que descarga el `.zip` — un proyecto
    **React + Vite real**. `src/export/scaffold.js` copia los mismos ficheros
    fuente que corren en el preview (vía `?raw`; el CSS ya resuelto vía `?inline`),
@@ -283,3 +286,10 @@ y para que los estilos de la demo no toquen los del panel.
 - Los proyectos de estudio viven en `localStorage`: faltan cuentas y revisiones
   con historial en servidor.
 - Importar un `?c=` de cliente como proyecto nuevo en estudio (hoy se ignora).
+- Las imágenes que sube el cliente no viajan en el lead (no caben en la URL): la
+  hoja solo dice qué secciones traían fotos y se las pides al responder. Lo suyo
+  sería subirlas a un bucket (Vercel Blob) al enviar.
+- `?studio` con clave es ofuscación, no auth: la descarga del `.zip` debería ir
+  tras una función con token de verdad.
+- Sin rate-limit real en `/api/lead` (honeypot + trampa de tiempo paran bots
+  tontos; para más haría falta un store tipo Upstash).

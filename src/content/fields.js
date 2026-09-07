@@ -38,11 +38,11 @@ export function buildForm(config) {
       label: 'Cabecera',
       variant: v.hero,
       fields: [
-        f('hero.eyebrow', 'Antetítulo', 'text', { hint: 'opcional, 2 a 4 palabras' }),
-        f('hero.title', 'Titular', 'text', { hint: 'máx. 2 líneas' }),
-        f('hero.subtitle', 'Entradilla', 'textarea', { hint: 'máx. 20 palabras' }),
-        f('hero.primary', 'Botón principal', 'text'),
-        f('hero.secondary', 'Botón secundario', 'text'),
+        f('hero.eyebrow', 'Antetítulo', 'text', { hint: 'opcional, 2 a 4 palabras', max: 40 }),
+        f('hero.title', 'Titular', 'text', { hint: 'máx. 2 líneas', max: 90 }),
+        f('hero.subtitle', 'Entradilla', 'textarea', { hint: 'máx. 20 palabras', max: 180 }),
+        f('hero.primary', 'Botón principal', 'text', { max: 28 }),
+        f('hero.secondary', 'Botón secundario', 'text', { max: 28 }),
         f('hero.image', (HERO_IMAGE[v.hero] || HERO_IMAGE.split)[0], 'image', {
           hint: (HERO_IMAGE[v.hero] || HERO_IMAGE.split)[1],
         }),
@@ -74,16 +74,16 @@ export function buildForm(config) {
       label: 'Características',
       variant: v.features,
       fields: [
-        f('features.title', 'Título de sección', 'text'),
-        f('features.subtitle', 'Bajada de sección', 'textarea', { hint: 'máx. 25 palabras' }),
+        f('features.title', 'Título de sección', 'text', { max: 70 }),
+        f('features.subtitle', 'Bajada de sección', 'textarea', { hint: 'máx. 25 palabras', max: 220 }),
         f('features.items', '3 características', 'repeater', {
           min: 3,
           max: 3,
           labelKey: 'title',
           fields: [
             sub('icon', 'Icono', 'select', { options: ICON_KEYS }),
-            sub('title', 'Título', 'text'),
-            sub('body', 'Texto', 'textarea', { hint: 'máx. 20 palabras' }),
+            sub('title', 'Título', 'text', { max: 60 }),
+            sub('body', 'Texto', 'textarea', { hint: 'máx. 20 palabras', max: 180 }),
             ...(v.features !== 'grid'
               ? [
                   sub('image', 'Imagen', 'image', {
@@ -122,8 +122,8 @@ export function buildForm(config) {
       label: 'Precios',
       variant: v.pricing,
       fields: [
-        f('pricing.title', 'Título de sección', 'text'),
-        f('pricing.subtitle', 'Bajada de sección', 'textarea', { hint: 'máx. 20 palabras' }),
+        f('pricing.title', 'Título de sección', 'text', { max: 70 }),
+        f('pricing.subtitle', 'Bajada de sección', 'textarea', { hint: 'máx. 20 palabras', max: 180 }),
         f('pricing.plans', 'Planes', 'repeater', {
           min: 2,
           max: 4,
@@ -148,15 +148,15 @@ export function buildForm(config) {
         label: 'Testimonio',
         variant: v.testimonial,
         fields: [
-          ...(grid ? [f('testimonial.title', 'Título de sección', 'text')] : []),
+          ...(grid ? [f('testimonial.title', 'Título de sección', 'text', { max: 70 })] : []),
           f('testimonial.quotes', grid ? '3 citas' : '1 cita destacada', 'repeater', {
             min: grid ? 3 : 1,
             max: grid ? 3 : 1,
             labelKey: 'name',
             fields: [
-              sub('text', 'Cita', 'textarea', { hint: 'máx. 3 líneas' }),
-              sub('name', 'Nombre', 'text'),
-              sub('role', 'Cargo y empresa', 'text'),
+              sub('text', 'Cita', 'textarea', { hint: 'máx. 3 líneas', max: 240 }),
+              sub('name', 'Nombre', 'text', { max: 60 }),
+              sub('role', 'Cargo y empresa', 'text', { max: 80 }),
               sub('avatar', 'Foto', 'image'),
             ],
           }),
@@ -175,8 +175,8 @@ export function buildForm(config) {
           max: 8,
           labelKey: 'q',
           fields: [
-            sub('q', 'Pregunta', 'text'),
-            sub('a', 'Respuesta', 'textarea', { hint: 'máx. 40 palabras' }),
+            sub('q', 'Pregunta', 'text', { max: 120 }),
+            sub('a', 'Respuesta', 'textarea', { hint: 'máx. 40 palabras', max: 320 }),
           ],
         }),
       ],
@@ -187,13 +187,13 @@ export function buildForm(config) {
       label: 'Llamada a la acción',
       variant: v.cta,
       fields: [
-        f('cta.title', 'Titular', 'text'),
-        f('cta.body', 'Texto', 'textarea', { hint: 'máx. 25 palabras' }),
-        f('cta.placeholder', 'Marcador del campo', 'text', { hint: 'ej. nombre@empresa.es' }),
-        f('cta.hint', 'Nota bajo el campo', 'text', { hint: 'qué pasa tras enviar' }),
-        f('cta.primary', 'Botón principal', 'text'),
-        f('cta.secondary', 'Línea de apoyo', 'textarea'),
-        f('cta.success', 'Mensaje de confirmación', 'text', { hint: 'lo que se ve tras enviar' }),
+        f('cta.title', 'Titular', 'text', { max: 80 }),
+        f('cta.body', 'Texto', 'textarea', { hint: 'máx. 25 palabras', max: 220 }),
+        f('cta.placeholder', 'Marcador del campo', 'text', { hint: 'ej. nombre@empresa.es', max: 60 }),
+        f('cta.hint', 'Nota bajo el campo', 'text', { hint: 'qué pasa tras enviar', max: 120 }),
+        f('cta.primary', 'Botón principal', 'text', { max: 28 }),
+        f('cta.secondary', 'Línea de apoyo', 'textarea', { max: 160 }),
+        f('cta.success', 'Mensaje de confirmación', 'text', { hint: 'lo que se ve tras enviar', max: 90 }),
       ],
     }),
   }

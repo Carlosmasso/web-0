@@ -7,11 +7,38 @@
 //   2. Te avisa por correo — texto plano y corto, SIN adjuntos ni volcados JSON.
 //   3. (Opcional) confirma al cliente. Puede fallar sin pasar nada.
 //
+// Antes de nada filtra el spam: campo trampa (honeypot) + tiempo mínimo en el
+// formulario + topes de tamaño. Un bot recibe un 200 "ok" pero no se procesa.
+//
 // La respuesta incluye `out` con el detalle de cada vía, para diagnosticar.
 // Variables de entorno: ver .env.example.
 // ============================================================
 
 const send = (res, code, body) => res.status(code).json(body)
+const str = (v) => (typeof v === 'string' ? v : '')
+
+// Tiempo mínimo verosímil rellenando el formulario. Por debajo, es un bot.
+export const MIN_FORM_MS = 2500
+
+/** ¿Huele a bot? Honeypot relleno o envío instantáneo. Función pura, testeable. */
+export function looksLikeBot(p = {}) {
+  if (str(p.company).trim()) return 'honeypot'
+  const ms = Number(p.elapsedMs)
+  if (Number.isFinite(ms) && ms > 0 && ms < MIN_FORM_MS) return 'too_fast'
+  return null
+}
+
+/** ¿Payload fuera de rango? Corta antes de tocar Sheet o correo. */
+export function tooLarge(p = {}) {
+  return (
+    str(p.name).length > 200 ||
+    str(p.email).length > 200 ||
+    str(p.phone).length > 40 ||
+    str(p.brand).length > 200 ||
+    str(p.note).length > 4000 ||
+    str(p.contentText).length > 200000
+  )
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return send(res, 405, { error: 'method_not_allowed' })
@@ -33,7 +60,14 @@ export default async function handler(req, res) {
     editLink = '',
     consent,
     contentText = '',
+    images = '',
   } = p
+
+  // Bots: 200 "ok" para no darles pistas, pero sin procesar nada.
+  const bot = looksLikeBot(p)
+  if (bot) return send(res, 200, { ok: true, skipped: bot })
+
+  if (tooLarge(p)) return send(res, 413, { error: 'payload_too_large' })
 
   if (!name || !email || !consent) return send(res, 400, { error: 'missing_fields' })
 
@@ -57,6 +91,7 @@ export default async function handler(req, res) {
           telefono: phone,
           negocio: brand,
           nota: note,
+          imagenes: images,
           enlace: previewLink,
           editar: editLink,
           contenido: contentText,
@@ -87,7 +122,7 @@ export default async function handler(req, res) {
           to,
           reply_to: email,
           subject: `Petición de presupuesto — ${brand || 'web'} · ${name}`,
-          text: adminText({ name, email, phone, note, brand, previewLink, now }),
+          text: adminText({ name, email, phone, note, brand, previewLink, images, now }),
         }),
       })
       const body = await r.text()
@@ -116,7 +151,7 @@ export default async function handler(req, res) {
   return send(res, ok ? 200 : 502, { ok, out })
 }
 
-function adminText({ name, email, phone, note, brand, previewLink, now }) {
+function adminText({ name, email, phone, note, brand, previewLink, images, now }) {
   return [
     `Nueva petición de presupuesto (${now.toLocaleString('es-ES')})`,
     '',
@@ -125,6 +160,7 @@ function adminText({ name, email, phone, note, brand, previewLink, now }) {
     `Teléfono: ${phone || '-'}`,
     `Negocio:  ${brand || '-'}`,
     `Nota:     ${note || '-'}`,
+    `Imágenes: ${images ? `${images} — pídeselas al cliente al responder` : 'ninguna'}`,
     '',
     `Diseño: ${previewLink}`,
     '',

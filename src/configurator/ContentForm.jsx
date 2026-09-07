@@ -61,8 +61,16 @@ export function ContentForm({ config, content, onChange, onReset }) {
   )
 }
 
+// Tope de caracteres: el del campo, o uno por defecto según el tipo. Evita que
+// un texto kilométrico rompa el maquetado del preview (y del sitio entregado).
+const capFor = (field) =>
+  field.max ?? (field.kind === 'textarea' ? 500 : field.kind === 'list' ? 2000 : 120)
+
 function Field({ field, value, onChange }) {
   const empty = isEmpty(value)
+  const cap = capFor(field)
+  const len = typeof value === 'string' ? value.length : 0
+  const near = len >= cap * 0.85
   return (
     <label className={`field ${empty ? 'field--empty' : ''}`}>
       <span className="field__label">
@@ -70,16 +78,29 @@ function Field({ field, value, onChange }) {
           {field.label}
           {empty && <span className="field__pending">pendiente</span>}
         </span>
-        {field.hint && <em>{field.hint}</em>}
+        {near ? (
+          <em className={len >= cap ? 'field__count field__count--max' : 'field__count'}>
+            {len}/{cap}
+          </em>
+        ) : (
+          field.hint && <em>{field.hint}</em>
+        )}
       </span>
-      <Control field={field} value={value} onChange={onChange} />
+      <Control field={field} value={value} onChange={onChange} cap={cap} />
     </label>
   )
 }
 
-function Control({ field, value, onChange }) {
+function Control({ field, value, onChange, cap }) {
   if (field.kind === 'textarea') {
-    return <textarea rows={2} value={value ?? ''} onChange={(e) => onChange(e.target.value)} />
+    return (
+      <textarea
+        rows={2}
+        maxLength={cap}
+        value={value ?? ''}
+        onChange={(e) => onChange(e.target.value)}
+      />
+    )
   }
   if (field.kind === 'select') {
     return (
@@ -96,6 +117,7 @@ function Control({ field, value, onChange }) {
     return (
       <textarea
         rows={3}
+        maxLength={cap}
         value={(value ?? []).join('\n')}
         onChange={(e) => onChange(e.target.value.split('\n').map((s) => s.trim()).filter(Boolean))}
       />
@@ -104,7 +126,14 @@ function Control({ field, value, onChange }) {
   if (field.kind === 'image') {
     return <ImageControl value={value} onChange={onChange} />
   }
-  return <input type="text" value={value ?? ''} onChange={(e) => onChange(e.target.value)} />
+  return (
+    <input
+      type="text"
+      maxLength={cap}
+      value={value ?? ''}
+      onChange={(e) => onChange(e.target.value)}
+    />
+  )
 }
 
 function ImageControl({ value, onChange }) {

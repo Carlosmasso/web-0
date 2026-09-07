@@ -8,6 +8,10 @@ import { resolve } from 'node:path'
 //   preview.html  — el lienzo aislado que el configurador embebe en un iframe.
 export default defineConfig({
   plugins: [react()],
+  // Vite solo expone `VITE_*` a `import.meta.env` del cliente. Añadimos `REACT_`
+  // para `REACT_STUDIO_KEY` (la clave del modo estudio). Ojo: sigue siendo
+  // público — acaba en el bundle igual que una `VITE_*`.
+  envPrefix: ['VITE_', 'REACT_'],
   build: {
     rollupOptions: {
       input: {

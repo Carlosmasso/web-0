@@ -38,8 +38,13 @@ Proyecto en Vercel → **Settings → Environment Variables** (para *Production*
 | `RESEND_API_KEY` | la clave del paso 2.2 |
 | `LEAD_FROM_EMAIL` | `onboarding@resend.dev` o `"Maqueta <hola@tudominio.com>"` |
 | `LEAD_TO_EMAIL` | tu correo, donde quieres los avisos |
+| `REACT_STUDIO_KEY` | texto largo aleatorio; hará falta `?studio=<esa-clave>` para el modo estudio |
 
-Redeploy después de añadirlas.
+Redeploy después de añadirlas. `REACT_STUDIO_KEY` es de *build*: si la cambias, hay que
+volver a desplegar para que entre en el bundle.
+
+Si ya tenías una Sheet de antes: se añadió la columna **"Imágenes (pídelas)"**. O borras
+las filas para que regenere la cabecera, o añades tú la columna en la posición 7 (tras "Nota").
 
 ## 4. Analítica
 
@@ -51,20 +56,34 @@ páginas vistas y de dónde llega la gente.
 
 1. Abre la web desplegada, diseña algo, pulsa **Pedir presupuesto**, marca el
    consentimiento y envía.
-2. Debe aparecer una **fila en la Sheet** (canal fiable: fecha, contacto,
-   enlace del diseño, enlace para regenerar, contenido) y llegarte un **correo**
-   de aviso, corto y en texto plano.
-   - El `.zip` **no** va por correo (los adjuntos disparan el spam). Se regenera
-     desde el configurador con el enlace de la columna "Abrir en configurador"
-     → botón **Código** → Descargar .zip.
+2. Debe aparecer una **fila en la Sheet** (canal fiable: fecha, contacto, si
+   subió imágenes, enlace del diseño, enlace para regenerar, contenido) y
+   llegarte un **correo** de aviso, corto y en texto plano.
+   - El `.zip` **no** va por correo. Se descarga desde el preview de ese diseño:
+     abre la columna **"Descargar proyecto (tú)"** (un enlace `preview.html?studio=…`)
+     y pulsa **⬇ Descargar proyecto (.zip)** abajo a la derecha.
+   - Las **imágenes que sube el cliente no viajan** en el enlace. La columna
+     "Imágenes (pídelas)" y el correo te dicen qué secciones traían fotos; se
+     las pides al cliente al responderle con el presupuesto.
    - Con `onboarding@resend.dev` el correo puede ir a spam: revísalo y marca
      "no es spam". La confirmación al cliente solo se envía si su email coincide
      con el de tu cuenta de Resend; si no, falla en silencio y no pasa nada.
 3. Si el modal muestra error: falta una variable o no has redesplegado. Mira
    Vercel → deployment → **Functions** → logs de `/api/lead`.
+4. **Anti-spam**: el endpoint descarta envíos con el campo trampa relleno o
+   hechos en menos de 2,5 s (bots). A un bot le responde "ok" pero no registra
+   nada — así que si pruebas muy rápido, espera unos segundos antes de enviar.
 
 En local (`npm run dev`) la función `/api/lead` no corre. Usa `npx vercel dev`
 o prueba en el deploy.
+
+### Modo estudio en el deploy
+
+En local es automático. En la versión desplegada necesitas
+`https://…/app.html?studio=<REACT_STUDIO_KEY>` para ver el panel de proyectos y el
+botón de descargar el `.zip`. Sin `REACT_STUDIO_KEY` configurada, `?studio` a secas
+todavía vale — pero entonces cualquiera puede activarlo, así que ponla. La clave
+viaja en el bundle JS: es para que un cliente no lo active sin querer, no un candado.
 
 ## 6. Móvil
 

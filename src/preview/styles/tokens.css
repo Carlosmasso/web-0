@@ -187,6 +187,12 @@
   color: var(--heading-color);
 }
 
+/* Defensa: un texto largo (de un enlace viejo o pegado a mano, saltándose los
+   topes del formulario) parte palabra antes que desbordar y romper el layout. */
+.pv-canvas :is(h1, h2, h3, h4, p, li, a, span) {
+  overflow-wrap: break-word;
+}
+
 .db-page { overflow-x: clip; }
 
 .db-container {

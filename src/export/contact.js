@@ -21,11 +21,30 @@ const stripDataUris = (_k, v) =>
     : v
 
 /**
+ * Resumen legible de qué secciones traen imágenes subidas (no URLs): las fotos
+ * no caben en el enlace, así que la hoja solo puede decir "hero, features (2)"
+ * y tú se las pides al cliente al responder.
+ */
+export function summariseImages(content) {
+  const hits = []
+  for (const [section, value] of Object.entries(content || {})) {
+    let n = 0
+    JSON.stringify(value, (_k, v) => {
+      if (typeof v === 'string' && v.startsWith('data:image/')) n += 1
+      return v
+    })
+    if (n) hits.push(n > 1 ? `${section} (${n})` : section)
+  }
+  return hits.join(', ')
+}
+
+/**
  * @param {{ content: object, previewLink: string, editLink: string,
- *           lead: { name: string, email: string, phone?: string, note?: string } }} args
+ *           lead: { name: string, email: string, phone?: string, note?: string, company?: string },
+ *           elapsedMs?: number }} args
  * @returns {Promise<void>} resuelve si la solicitud quedó registrada; lanza si no.
  */
-export async function submitLead({ content, previewLink, editLink, lead }) {
+export async function submitLead({ content, previewLink, editLink, lead, elapsedMs = 0 }) {
   const res = await fetch('/api/lead', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -35,10 +54,14 @@ export async function submitLead({ content, previewLink, editLink, lead }) {
       phone: lead.phone || '',
       note: lead.note || '',
       brand: content?.brand?.name || '',
+      images: summariseImages(content),
       previewLink,
       editLink,
       consent: true,
       contentText: JSON.stringify(content, stripDataUris, 2),
+      // anti-spam: campo trampa (siempre vacío para un humano) y tiempo en el form.
+      company: lead.company || '',
+      elapsedMs,
     }),
   }).catch(() => null)
 

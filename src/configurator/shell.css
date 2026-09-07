@@ -1041,6 +1041,14 @@ body {
   font-weight: 400;
   color: var(--c-faint);
 }
+.field__count {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.field__count--max {
+  color: var(--c-pending);
+  font-weight: 600;
+}
 .field__pending {
   margin-left: 6px;
   font-size: 0.62rem;
@@ -1403,6 +1411,7 @@ body {
 }
 
 .stage__device {
+  position: relative;
   width: 100%;
   border-radius: 14px;
   overflow: hidden;
@@ -1410,6 +1419,28 @@ body {
   box-shadow: 0 30px 70px -24px rgba(0, 0, 0, 0.55);
   background: #fff;
   transition: max-width 260ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Tapa el iframe hasta la primera config real. Un barrido suave, no un spinner. */
+.stage__loading {
+  position: absolute;
+  inset: 0;
+  background: var(--c-panel);
+  background-image: linear-gradient(
+    100deg,
+    transparent 30%,
+    color-mix(in srgb, var(--c-line) 45%, transparent) 50%,
+    transparent 70%
+  );
+  background-size: 220% 100%;
+  animation: stage-shimmer 1.1s ease-in-out infinite;
+}
+@keyframes stage-shimmer {
+  from { background-position: 180% 0; }
+  to { background-position: -80% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stage__loading { animation: none; }
 }
 .stage--desktop .stage__device {
   max-width: 100%;
@@ -1585,6 +1616,22 @@ body {
   color: var(--c-muted);
   line-height: 1.55;
   margin: 6px 0 18px;
+}
+.modal__done-note {
+  border: 1px solid var(--c-line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin: 0 0 18px !important;
+  text-align: left;
+}
+
+/* Honeypot: fuera de pantalla pero "visible" para un bot (no display:none). */
+.modal__hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 }
 
 @keyframes modal-veil-in {
