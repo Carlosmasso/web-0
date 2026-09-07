@@ -41,7 +41,8 @@ Proyecto en Vercel → **Settings → Environment Variables** (para *Production*
 | `REACT_STUDIO_KEY` | texto largo aleatorio; hará falta `?studio=<esa-clave>` para el modo estudio |
 
 Redeploy después de añadirlas. `REACT_STUDIO_KEY` es de *build*: si la cambias, hay que
-volver a desplegar para que entre en el bundle.
+volver a desplegar para que entre en el bundle. **Mientras no esté puesta, el modo estudio
+no se puede abrir en el deploy** (solo en local) — así un cliente no lo activa por accidente.
 
 Si ya tenías una Sheet de antes: se añadió la columna **"Imágenes (pídelas)"**. O borras
 las filas para que regenere la cabecera, o añades tú la columna en la posición 7 (tras "Nota").
@@ -80,10 +81,11 @@ o prueba en el deploy.
 ### Modo estudio en el deploy
 
 En local es automático. En la versión desplegada necesitas
-`https://…/app.html?studio=<REACT_STUDIO_KEY>` para ver el panel de proyectos y el
-botón de descargar el `.zip`. Sin `REACT_STUDIO_KEY` configurada, `?studio` a secas
-todavía vale — pero entonces cualquiera puede activarlo, así que ponla. La clave
-viaja en el bundle JS: es para que un cliente no lo active sin querer, no un candado.
+`https://…/app.html?studio=<REACT_STUDIO_KEY>` con la clave **exacta** para ver el
+panel de proyectos y el botón de descargar el `.zip`. Si `REACT_STUDIO_KEY` no está
+configurada, el modo estudio no se abre en el deploy de ninguna forma (trabaja en
+local). La clave viaja en el bundle JS: es para que un cliente no lo active sin
+querer, no un candado.
 
 ## 6. Móvil
 

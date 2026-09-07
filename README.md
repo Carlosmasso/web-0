@@ -189,11 +189,11 @@ misma estética y no parecerse en nada.
 ### Dos personas, una instancia
 
 `src/config/mode.js` decide el modo con `isStudio`. En local es automático; en el
-deploy hace falta `?studio=<REACT_STUDIO_KEY>` (la clave viaja en el bundle: es
-ofuscación para que un cliente no lo active sin querer, no un candado). Sin
-`REACT_STUDIO_KEY` configurada, `?studio` a secas sigue valiendo.
+deploy hace falta `?studio=<REACT_STUDIO_KEY>` con la clave exacta (viaja en el
+bundle vía `envPrefix` en `vite.config.js`: es ofuscación, no un candado). Si
+`REACT_STUDIO_KEY` no está configurada, el modo estudio no se abre en el deploy.
 
-- **Estudio** — `import.meta.env.DEV`, `localhost` / `127.0.0.1`, o `?studio=<clave>`.
+- **Estudio** — `import.meta.env.DEV`, `localhost` / `127.0.0.1`, o `?studio=<clave exacta>`.
 - **Cliente** — la versión desplegada en Vercel.
 
 ### Qué puede hacer el cliente
