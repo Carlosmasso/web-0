@@ -35,7 +35,6 @@
     ) {
     transition-duration: 0.01ms;
   }
-  .db-card:hover .db-frame img, .db-row:hover .db-frame img { transform: none; }
 }
 
 /* ============================================================

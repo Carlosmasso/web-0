@@ -66,9 +66,9 @@ panel marque la opción activa; el motor lo ignora.
   neo-brutalismo el botón cae sobre su sombra dura; en cyberpunk un destello
   barre la superficie; en claymorfismo se hunde con sombra interior; en material
   se eleva y aterriza. Encima hay una capa de hover discreta y común a todas (el
-  borde de la tarjeta se calienta, la imagen dentro hace un zoom mínimo); la
-  barra de navegación se compacta y gana fondo y sombra al bajar
-  (`.db-nav[data-scrolled]`, un listener de scroll en `Chrome.jsx`). Los fondos
+  borde de la tarjeta se calienta hacia el acento); la barra de navegación se
+  compacta y gana fondo y sombra al bajar (`.db-nav[data-scrolled]`, un listener
+  de scroll en `Chrome.jsx`). Los fondos
   (`tokens.css`) son capas fijas y sin dependencias: aurora (manchas
   desenfocadas a la deriva) y malla de color (`--theme-mesh`, tres radiales
   derivados de la paleta con un `transform` y un `hue-rotate` mínimo vía
