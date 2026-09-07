@@ -43,13 +43,13 @@ export const TOUR_STEPS = [
   {
     target: '[data-tour="identity"]',
     title: 'Ponle tu marca',
-    body: 'Tu color, tu tipografía, la forma de las esquinas y cuánto respira el diseño. Elijas el color que elijas, el resto de la paleta se ajusta solo para que todo se lea bien.',
+    body: 'Tu color, tu tipografía, la forma de las esquinas y el movimiento. Elijas el color que elijas, el resto de la paleta se ajusta solo para que todo se lea bien.',
   },
   {
     target: '[data-tour="fine"]',
     expand: true,
     title: 'Afina los detalles, si quieres',
-    body: 'Aquí eliges qué secciones aparecen y en qué orden, y ajustas cosas como las sombras o los botones. Va plegado a propósito: la base ya viene bien, esto es solo para rematar.',
+    body: 'Aquí eliges qué secciones aparecen y en qué orden, y retocas detalles como el fondo de la portada o el estilo de los botones. Va plegado a propósito: la base ya viene bien, esto es solo para rematar.',
   },
   {
     target: '.stage',

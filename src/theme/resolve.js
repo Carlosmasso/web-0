@@ -10,8 +10,6 @@
 /* Escalas: única fuente de verdad para traducir intención -> CSS. */
 const RADIUS = { none: '0px', soft: '10px', round: '24px', pill: '999px' }
 const BORDER = { thin: '1px', thick: '3px' }
-const DENSITY = { compact: 0.8, normal: 1, spacious: 1.3 }
-const CARD_PAD = { compact: '16px', normal: '24px', spacious: '34px' }
 
 const round1 = (n) => Math.round(n * 10) / 10
 
@@ -111,8 +109,13 @@ export function resolveTheme(c) {
     '--theme-shadow': (SHADOWS[s.style] ?? SHADOWS.none)(shadowColor, s.intensity),
     '--theme-shadow-color': shadowColor,
 
-    /* degradados */
-    '--theme-gradient': gradientToCss(c.gradients.primaryGradient),
+    /* degradados. `--theme-gradient` alimenta el relleno "Degradado" del botón
+       principal; como primaryGradient casi siempre es null, sin un derivado
+       ese relleno no pintaba nada. El derivado va de la marca a una mezcla
+       marca+acento: siempre visible, siempre coherente con la paleta. */
+    '--theme-gradient': c.gradients.primaryGradient
+      ? gradientToCss(c.gradients.primaryGradient)
+      : `linear-gradient(120deg, ${p.primary}, color-mix(in srgb, ${p.primary} 55%, ${p.accent}))`,
     '--theme-gradient-bg': gradientToCss(c.gradients.backgroundGradient),
 
     /* Degradado de portada: SIEMPRE existe (a diferencia de primaryGradient,
@@ -144,10 +147,11 @@ export function resolveTheme(c) {
     '--theme-heading-track': t.headingTracking,
     '--theme-scale': String(t.scaleRatio),
 
-    /* layout */
-    '--theme-space': String(DENSITY[c.layout.density] ?? 1),
+    /* layout — la densidad es fija (normal); se mantiene el token por si
+       algún día vuelve a ser una elección. */
+    '--theme-space': '1',
     '--theme-container': `${c.layout.containerWidth}px`,
-    '--theme-card-pad': CARD_PAD[c.layout.density] ?? CARD_PAD.normal,
+    '--theme-card-pad': '24px',
   }
 }
 

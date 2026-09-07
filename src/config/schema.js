@@ -126,7 +126,7 @@ export const DEFAULT_CONFIG = {
   },
 
   layout: {
-    density: 'normal', // compact | normal | spacious
+    density: 'normal', // fijo: el control se retiró, la densidad "normal" es la única
     containerWidth: 1180,
   },
 
@@ -172,9 +172,13 @@ export function normalizeConfig(input) {
     base.gradients.backgroundGradient = normalizeGradient(gradients.backgroundGradient)
   }
   base.sectionOrder = normalizeSectionOrder(base.sectionOrder)
-  // 'aurora' como fondo de portada se retiró: ahora las luces de fondo son un
-  // efecto de página aparte. Un valor antiguo pasa a 'bare' (transparente).
-  if (base.components.hero.background === 'aurora') base.components.hero.background = 'bare'
+  // El fondo de portada de cara al cliente es solo 'liso' o 'degradado'.
+  // 'aurora' (retirado) y 'bare' (idéntico a 'solid' en pantalla) caen a 'solid';
+  // 'image' lo mantiene la variante de portada con foto a sangre.
+  const hb = base.components.hero.background
+  if (hb === 'aurora' || hb === 'bare') base.components.hero.background = 'solid'
+  // La densidad dejó de ser una elección: un valor antiguo (compact/spacious) vuelve a normal.
+  base.layout.density = 'normal'
   return base
 }
 

@@ -54,7 +54,7 @@ export const PRESETS = [
       shadows: { style: 'soft-elevation', color: 'auto', intensity: 0.5 },
       gradients: { primaryGradient: null, backgroundGradient: null },
       effects: { blur: 0, noise: false, aurora: false, mesh: false },
-      layout: { density: 'spacious', containerWidth: 1140 },
+      layout: { containerWidth: 1140 },
       sections: {
         hero: 'split', logos: 'plain', features: 'grid', carousel: 'cards',
         pricing: 'cards', testimonial: 'grid', faq: 'accordion', cta: 'boxed',
@@ -97,7 +97,7 @@ export const PRESETS = [
       shadows: { style: 'none', color: 'auto', intensity: 1 },
       gradients: { primaryGradient: null, backgroundGradient: null },
       effects: { blur: 0, noise: false, aurora: false, mesh: false },
-      layout: { density: 'spacious', containerWidth: 1180 },
+      layout: { containerWidth: 1180 },
       sections: {
         hero: 'split', logos: 'headline', features: 'rows', carousel: 'cards',
         pricing: 'rows', testimonial: 'quote', faq: 'grid', cta: 'banner',
@@ -140,7 +140,7 @@ export const PRESETS = [
       shadows: { style: 'inset-3d', color: 'auto', intensity: 1.1 },
       gradients: { primaryGradient: null, backgroundGradient: null },
       effects: { blur: 0, noise: true, aurora: false, mesh: false },
-      layout: { density: 'normal', containerWidth: 1120 },
+      layout: { containerWidth: 1120 },
       sections: {
         hero: 'image', logos: 'plain', features: 'grid', carousel: 'peek',
         pricing: 'cards', testimonial: 'quote', faq: 'accordion', cta: 'boxed',
@@ -183,7 +183,7 @@ export const PRESETS = [
       shadows: { style: 'none', color: 'auto', intensity: 1 },
       gradients: { primaryGradient: null, backgroundGradient: null },
       effects: { blur: 0, noise: false, aurora: false, mesh: false },
-      layout: { density: 'spacious', containerWidth: 1200 },
+      layout: { containerWidth: 1200 },
       // Una inmobiliaria no vende planes: la sección de precios se oculta.
       sectionOrder: ['hero', 'logos', 'features', 'carousel', 'testimonial', 'faq', 'cta'],
       sections: {
@@ -228,7 +228,7 @@ export const PRESETS = [
       shadows: { style: 'inset-3d', color: 'auto', intensity: 1.1 },
       gradients: { primaryGradient: null, backgroundGradient: null },
       effects: { blur: 0, noise: false, aurora: false, mesh: true },
-      layout: { density: 'spacious', containerWidth: 1120 },
+      layout: { containerWidth: 1120 },
       sections: {
         hero: 'centered', logos: 'plain', features: 'bento', carousel: 'cards',
         pricing: 'cards', testimonial: 'grid', faq: 'accordion', cta: 'boxed',
@@ -271,7 +271,7 @@ export const PRESETS = [
       shadows: { style: 'none', color: 'auto', intensity: 1 },
       gradients: { primaryGradient: null, backgroundGradient: null },
       effects: { blur: 0, noise: true, aurora: false, mesh: false },
-      layout: { density: 'spacious', containerWidth: 1160 },
+      layout: { containerWidth: 1160 },
       // Un restaurante no tiene planes ni muro de logos.
       sectionOrder: ['hero', 'features', 'carousel', 'testimonial', 'faq', 'cta'],
       sections: {
@@ -319,7 +319,7 @@ export const PRESETS = [
       shadows: { style: 'flat-hard', color: '#0a0a0a', intensity: 1.4 },
       gradients: { primaryGradient: null, backgroundGradient: null },
       effects: { blur: 0, noise: false, aurora: false, mesh: false },
-      layout: { density: 'normal', containerWidth: 1200 },
+      layout: { containerWidth: 1200 },
       sections: {
         hero: 'centered', logos: 'plain', features: 'grid', carousel: 'cards',
         pricing: 'cards', testimonial: 'grid', faq: 'grid', cta: 'boxed',
@@ -379,13 +379,13 @@ export const PRESETS = [
         },
       },
       effects: { blur: 18, noise: true, aurora: true, mesh: false },
-      layout: { density: 'spacious', containerWidth: 1180 },
+      layout: { containerWidth: 1180 },
       sections: {
         hero: 'centered', logos: 'headline', features: 'bento', carousel: 'peek',
         pricing: 'cards', testimonial: 'quote', faq: 'accordion', cta: 'boxed',
       },
       components: {
-        hero: { background: 'bare' },
+        hero: { background: 'solid' },
         card: { media: 'auto' },
         button: { shape: 'pill', fill: 'gradient' },
         input: { variant: 'filled' },
@@ -431,7 +431,7 @@ export const PRESETS = [
         backgroundGradient: null,
       },
       effects: { blur: 0, noise: false, aurora: false, mesh: false },
-      layout: { density: 'spacious', containerWidth: 1140 },
+      layout: { containerWidth: 1140 },
       sections: {
         hero: 'centered', logos: 'plain', features: 'bento', carousel: 'cards',
         pricing: 'cards', testimonial: 'grid', faq: 'accordion', cta: 'boxed',
@@ -474,7 +474,7 @@ export const PRESETS = [
       shadows: { style: 'soft-elevation', color: '#03040a', intensity: 1 },
       gradients: { primaryGradient: null, backgroundGradient: null },
       effects: { blur: 0, noise: false, aurora: false, mesh: true },
-      layout: { density: 'normal', containerWidth: 1200 },
+      layout: { containerWidth: 1200 },
       sections: {
         hero: 'split', logos: 'headline', features: 'bento', carousel: 'peek',
         pricing: 'cards', testimonial: 'grid', faq: 'accordion', cta: 'boxed',
@@ -517,7 +517,7 @@ export const PRESETS = [
       shadows: { style: 'none', color: 'auto', intensity: 1 },
       gradients: { primaryGradient: null, backgroundGradient: null },
       effects: { blur: 0, noise: false, aurora: false, mesh: false },
-      layout: { density: 'spacious', containerWidth: 1140 },
+      layout: { containerWidth: 1140 },
       sections: {
         hero: 'centered', logos: 'plain', features: 'rows', carousel: 'full',
         pricing: 'cards', testimonial: 'quote', faq: 'grid', cta: 'boxed',

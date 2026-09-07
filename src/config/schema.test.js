@@ -25,9 +25,13 @@ describe('normalizeConfig (endurece config de fuera)', () => {
     expect(normalizeConfig({ sectionOrder: 'nope' }).sectionOrder).toEqual([...SECTION_ORDER])
   })
 
-  it("migra hero.background 'aurora' -> 'bare'", () => {
-    const c = normalizeConfig({ components: { hero: { background: 'aurora' } } })
-    expect(c.components.hero.background).toBe('bare')
+  it("migra hero.background 'aurora' y 'bare' -> 'solid'", () => {
+    expect(
+      normalizeConfig({ components: { hero: { background: 'aurora' } } }).components.hero.background,
+    ).toBe('solid')
+    expect(
+      normalizeConfig({ components: { hero: { background: 'bare' } } }).components.hero.background,
+    ).toBe('solid')
   })
 
   it('entrada no-objeto -> copia de DEFAULT_CONFIG', () => {

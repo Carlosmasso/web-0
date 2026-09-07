@@ -97,7 +97,6 @@ export function PreviewCanvas({ config, doc = document, children }) {
         data-radius={config.borders.radius}
         data-border={config.borders.width}
         data-shadow={config.shadows.style}
-        data-density={config.layout.density}
         data-scheme={schemeOf(config)}
         data-noise={config.effects.noise ? 'on' : 'off'}
         data-aurora={config.effects.aurora ? 'on' : 'off'}

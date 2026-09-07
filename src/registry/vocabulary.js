@@ -41,19 +41,6 @@ export const VOCABULARY = {
     ],
   },
 
-  'shadows.style': {
-    label: 'Personalidad visual',
-    affects: { selector: '.db-card, .db-frame, .db-slide', label: 'Tarjetas, imágenes y diapositivas' },
-    question: '¿Qué relieve tienen los elementos?',
-    options: [
-      { id: 'none', label: 'Plana', tone: 'Todo al mismo nivel. Sobrio y rápido de leer' },
-      { id: 'soft-elevation', label: 'Elevada', tone: 'Las tarjetas flotan sobre la página' },
-      { id: 'flat-hard', label: 'Recortada', tone: 'Sombra sólida, como papel sobre papel' },
-      { id: 'inset-3d', label: 'Táctil / 3D', tone: 'Volumen inflado que invita a tocar' },
-      { id: 'glowing-neon', label: 'Luminosa', tone: 'Resplandor de neón, pantalla encendida' },
-    ],
-  },
-
   'shadows.intensity': {
     label: 'Fuerza del relieve',
     affects: { selector: '.db-card, .db-frame, .db-slide', label: 'Tarjetas, imágenes y diapositivas' },
@@ -64,44 +51,22 @@ export const VOCABULARY = {
     format: (v) => (v < 0.8 ? 'Apenas perceptible' : v < 1.3 ? 'Natural' : v < 1.7 ? 'Marcado' : 'Dramático'),
   },
 
-  'layout.density': {
-    label: 'Respiración',
-    affects: { selector: '.db-section', label: 'El aire entre secciones y dentro de las tarjetas' },
-    question: '¿Cuánto aire hay entre las cosas?',
-    options: [
-      { id: 'compact', label: 'Compacta', tone: 'Cabe más en pantalla. Para catálogos y paneles' },
-      { id: 'normal', label: 'Normal', tone: 'El equilibrio habitual' },
-      { id: 'spacious', label: 'Amplia', tone: 'Aire y calma. Transmite precio alto' },
-    ],
-  },
-
   'components.hero.background': {
     label: 'Fondo de la portada',
     affects: { selector: '.db-hero', label: 'La portada' },
     options: [
-      { id: 'solid', label: 'Color liso', tone: 'Limpio y directo' },
-      { id: 'gradient', label: 'Degradado', tone: 'Un lavado suave con los colores de tu paleta' },
-      { id: 'bare', label: 'Transparente', tone: 'Deja ver el fondo de la página: color, malla o luces' },
-    ],
-  },
-
-  'components.button.shape': {
-    label: 'Forma de los botones',
-    affects: { selector: '.db-btn', label: 'Todos los botones' },
-    options: [
-      { id: 'inherit', label: 'Como el resto', tone: 'Coherente con las esquinas' },
-      { id: 'pill', label: 'Cápsula', tone: 'Amable, muy usado en apps' },
-      { id: 'sharp', label: 'Recta', tone: 'Seria y editorial' },
+      { id: 'solid', label: 'Liso', tone: 'El color de fondo de la página, sin más' },
+      { id: 'gradient', label: 'Degradado', tone: 'Un lavado diagonal con los colores de tu paleta' },
     ],
   },
 
   'components.button.fill': {
-    label: 'Relleno de los botones',
+    label: 'Botones principales',
     affects: { selector: '.db-btn--primary', label: 'Los botones principales' },
     options: [
-      { id: 'solid', label: 'Macizo', tone: 'Máxima llamada de atención' },
-      { id: 'outline', label: 'Contorno', tone: 'Presente pero contenido' },
-      { id: 'gradient', label: 'Degradado', tone: 'Vistoso, tono producto digital' },
+      { id: 'solid', label: 'Macizo', tone: 'Relleno de tu color. Máxima llamada de atención' },
+      { id: 'outline', label: 'Contorno', tone: 'Solo el borde. Presente pero contenido' },
+      { id: 'gradient', label: 'Degradado', tone: 'De tu color al acento. Tono producto digital' },
     ],
   },
 
@@ -115,17 +80,6 @@ export const VOCABULARY = {
     ],
   },
 
-  'components.carousel.controls': {
-    label: 'Navegación del carrusel',
-    affects: { selector: '.db-carousel__arrows, .db-carousel__dots', label: 'La navegación del carrusel' },
-    options: [
-      { id: 'arrows', label: 'Flechas' },
-      { id: 'dots', label: 'Puntos' },
-      { id: 'both', label: 'Ambos' },
-      { id: 'none', label: 'Solo arrastrar' },
-    ],
-  },
-
   motion: {
     label: 'Movimiento',
     affects: { selector: '.db-section__head, .db-card', label: 'Cómo entra cada bloque al desplazarte' },
@@ -134,15 +88,6 @@ export const VOCABULARY = {
       { id: 'none', label: 'Ninguno', tone: 'Todo aparece ya colocado' },
       { id: 'subtle', label: 'Discreto', tone: 'Entradas cortas al llegar a cada bloque' },
       { id: 'expressive', label: 'Expresivo', tone: 'Escalonado y con profundidad' },
-    ],
-  },
-
-  iconSet: {
-    label: 'Iconos',
-    affects: { selector: '.db-feature__icon', label: 'Los iconos de las características' },
-    options: [
-      { id: 'phosphor', label: 'Redondeados', tone: 'Trazo amable' },
-      { id: 'tabler', label: 'Técnicos', tone: 'Trazo recto y uniforme' },
     ],
   },
 

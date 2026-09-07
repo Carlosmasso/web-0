@@ -224,14 +224,11 @@
 .db-hero .db-lead { margin-top: var(--space-4); }
 .db-hero__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: var(--space-5); }
 
-/* Lavado diagonal derivado de la paleta (--theme-hero-grad). Siempre visible,
-   ya calibrado para no comerse el titular. */
+/* Lavado diagonal derivado de la paleta (--theme-hero-grad). Ya calibrado para
+   no comerse el titular. 'solid' (sin regla) deja el fondo de la página. */
 .db-hero[data-bg='gradient'] {
   background: var(--theme-hero-grad);
 }
-
-/* Transparente: la portada deja ver el fondo de la página (color, malla, luces). */
-.db-hero[data-bg='bare'] { background-color: transparent; }
 
 .db-hero__grid {
   display: grid;

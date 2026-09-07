@@ -1,7 +1,7 @@
 # Maqueta — configurador de webs a medida
 
 Marketplace donde un cliente arma su web eligiendo paleta, tipografía, esquinas,
-densidad, iconos, efectos y una variante por sección. La vista previa se
+movimiento, efectos y una variante por sección. La vista previa se
 renderiza en vivo; cuando le gusta lo que ve, te contacta y **tú** le entregas
 la web construida. El cliente nunca se descarga el proyecto.
 
@@ -91,8 +91,8 @@ por **cuánto compromete cada decisión**, no por qué propiedad de CSS toca:
 | Capa | Qué decide | Cómo |
 | --- | --- | --- |
 | **1 · Punto de partida** | El mundo entero | Presets comerciales/tendencia · 6 chips de estética base · el dado 🎲 |
-| **2 · Tu identidad** | Color de marca, tipografía, esquinas, densidad, movimiento | Controles libres con recomendación |
-| **3 · Ajuste fino** | Personalidad de relieve, grano y luces de fondo, portada, botones y campos, iconos, y qué secciones aparecen | Plegado por defecto |
+| **2 · Tu identidad** | Color de marca, tipografía, esquinas, movimiento | Controles libres con recomendación |
+| **3 · Ajuste fino** | Fondo de la portada (liso/degradado), relleno de los botones, estilo de los campos, luces de fondo, grano, y qué secciones aparecen | Plegado por defecto |
 
 `src/registry/vocabulary.js` es la única capa donde vive el lenguaje de cara al
 usuario: nadie ve `box-shadow: inset` ni `border-radius: 32px`, ven
@@ -200,7 +200,7 @@ bajo las pestañas lo relanza, y `?tour` lo fuerza aunque ya se haya visto.
 
 | Acción | Dónde |
 | --- | --- |
-| Elegir diseño: preset, estética, color de marca, tipografía, esquinas, densidad, iconos, efectos, variante por sección | Pestaña **Diseño** (`Sidebar`) |
+| Elegir diseño: preset, estética, color de marca, tipografía, esquinas, movimiento, efectos, variante por sección | Pestaña **Diseño** (`Sidebar`) |
 | Mostrar / ocultar y reordenar secciones (la cabecera va fija) | Capa 3 del panel — "Secciones". La lista de secciones visibles vive en el contrato (`sectionOrder`); el formulario de Contenido solo pide las visibles. |
 | Escribir sus textos y subir sus imágenes (opcional) | Pestaña **Contenido**. Las imágenes se comprimen en el navegador y viajan dentro del `.zip`; también admite pegar una URL. |
 | **Deshacer / Rehacer** cualquier cambio de diseño | Botón **Deshacer** en la barra, siempre visible (`⌘Z` / `⇧⌘Z` como extra). "Rehacer" solo aparece si hay algo que rehacer. |

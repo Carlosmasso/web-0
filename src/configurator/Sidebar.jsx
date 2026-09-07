@@ -322,7 +322,6 @@ export function Sidebar({
         </Group>
 
         {vocab('borders.radius')}
-        {vocab('layout.density')}
         {vocab('motion')}
 
         {aestheticNote && <p className="grp__hint" style={{ margin: '4px 0 0' }}>{aestheticNote}</p>}
@@ -337,15 +336,11 @@ export function Sidebar({
         tone="pro"
         tourId="fine"
       >
-        {vocab('shadows.style')}
-        {vocab('effects.noise')}
-        {vocab('effects.aurora')}
         {vocab('components.hero.background')}
-        {vocab('components.button.shape')}
         {vocab('components.button.fill')}
         {vocab('components.input.variant')}
-        {vocab('components.carousel.controls')}
-        {vocab('iconSet')}
+        {vocab('effects.aurora')}
+        {vocab('effects.noise')}
 
         <Group title="Secciones" hint="Muestra u oculta cada bloque y cámbialo de orden. La cabecera siempre va primero.">
           {config.sectionOrder.map((type, idx) => {
