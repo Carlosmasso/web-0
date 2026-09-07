@@ -81,7 +81,7 @@ export function Preview() {
 const studioBtn = {
   position: 'fixed',
   bottom: 16,
-  right: 16,
+  left: 16, // a la izquierda: los botones flotantes del sitio van a la derecha
   zIndex: 99999,
   padding: '10px 16px',
   font: '600 13px/1 system-ui, sans-serif',

@@ -108,7 +108,11 @@ export function ContactModal({ open, onClose, content, previewLink, editLink }) 
               ✓
             </span>
             <h2 id="contact-title">¡Recibido!</h2>
-            <p>Te paso el presupuesto en menos de un día laborable. Sin compromiso.</p>
+            <p>
+              Te escribo desde <strong>{CONTACT_EMAIL}</strong> con el presupuesto
+              en menos de un día laborable. Sin compromiso. (Si no lo ves, mira en
+              spam.)
+            </p>
             {hadImages.current && (
               <p className="modal__done-note">
                 Subiste fotos: guárdalas a mano. Te las pediré al responderte —

@@ -4,6 +4,7 @@ import { ContentContext } from '../content/context'
 import { DEFAULT_CONTENT } from '../content/defaults'
 import { useStructure } from './PreviewCanvas'
 import { Nav, Footer } from './Chrome'
+import { FloatingActions } from './FloatingActions'
 
 export function DemoPage({ content = DEFAULT_CONTENT }) {
   const { sections, sectionOrder } = useStructure()
@@ -20,6 +21,7 @@ export function DemoPage({ content = DEFAULT_CONTENT }) {
           })}
         </main>
         <Footer />
+        <FloatingActions />
       </div>
     </ContentContext.Provider>
   )

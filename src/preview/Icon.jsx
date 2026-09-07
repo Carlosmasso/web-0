@@ -1,5 +1,6 @@
 import {
   ArrowRight,
+  ArrowUp,
   Check,
   Path,
   BellRinging,
@@ -10,9 +11,11 @@ import {
   ArrowUUpLeft,
   ArrowUUpRight,
   ArrowClockwise,
+  WhatsappLogo,
 } from '@phosphor-icons/react'
 import {
   IconArrowRight,
+  IconArrowUp,
   IconCheck,
   IconRoute,
   IconBellRinging,
@@ -23,6 +26,7 @@ import {
   IconArrowBackUp,
   IconArrowForwardUp,
   IconRefresh,
+  IconBrandWhatsappFilled,
 } from '@tabler/icons-react'
 
 // One glyph name maps to a component in each family. Keeps a single icon
@@ -33,6 +37,7 @@ const SETS = {
     bell: BellRinging,
     signature: Signature,
     arrow: ArrowRight,
+    'arrow-up': ArrowUp,
     check: Check,
     menu: List,
     close: X,
@@ -40,12 +45,14 @@ const SETS = {
     undo: ArrowUUpLeft,
     redo: ArrowUUpRight,
     refresh: ArrowClockwise,
+    whatsapp: WhatsappLogo,
   },
   tabler: {
     route: IconRoute,
     bell: IconBellRinging,
     signature: IconSignature,
     arrow: IconArrowRight,
+    'arrow-up': IconArrowUp,
     check: IconCheck,
     menu: IconMenu2,
     close: IconX,
@@ -53,13 +60,20 @@ const SETS = {
     undo: IconArrowBackUp,
     redo: IconArrowForwardUp,
     refresh: IconRefresh,
+    whatsapp: IconBrandWhatsappFilled, // Tabler: la versión rellena es un componente aparte
   },
 }
 
-export function Icon({ set = 'phosphor', name, size = 22 }) {
+// Iconos que se pintan macizos (el resto va de trazo). En Phosphor es un
+// `weight`; en Tabler ya es un componente `*Filled` en el mapa de arriba.
+const FILLED = new Set(['whatsapp'])
+
+export function Icon({ set = 'phosphor', name, size = 22, weight }) {
   const family = SETS[set] ?? SETS.phosphor
   const Cmp = family[name]
   if (!Cmp) return null
-  // Phosphor reads `weight`, Tabler reads `stroke`; each ignores the other.
-  return <Cmp size={size} weight="regular" stroke={1.6} aria-hidden />
+  // Phosphor lee `weight` (thin|light|regular|bold|fill); Tabler lo ignora y lee
+  // `stroke`. `weight` explícito manda; si no, los de FILLED van macizos.
+  const w = weight ?? (FILLED.has(name) ? 'fill' : 'regular')
+  return <Cmp size={size} weight={w} stroke={1.6} aria-hidden />
 }

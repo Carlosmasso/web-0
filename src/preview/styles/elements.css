@@ -250,6 +250,85 @@
   }
 }
 
+/* ---------- botones flotantes (WhatsApp · subir arriba) ---------- */
+
+.db-fab {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none; /* el contenedor no captura; cada botón sí */
+}
+.db-fab__btn {
+  pointer-events: auto;
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--theme-border-color);
+  box-shadow: 0 12px 30px -8px color-mix(in srgb, var(--theme-shadow-color) 45%, transparent);
+  transition: transform 180ms cubic-bezier(0.23, 1, 0.32, 1), filter 180ms ease;
+}
+/* Verde de marca de WhatsApp: fijo a propósito, se reconoce al instante. Va
+   abajo (order 2) y con una entrada suave al cargar la página. */
+.db-fab__wa {
+  order: 2;
+  background: #25d366;
+  color: #fff;
+  border-color: transparent;
+  animation: db-fab-in 240ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+/* El de "subir arriba" está siempre presente encima (order 1). Oculto = escala
+   pequeña + transparente; nunca cambia el tamaño del contenedor, así que no
+   empuja al de WhatsApp. Aparece atenuándose, no de golpe. */
+.db-fab__top {
+  order: 1;
+  background: var(--theme-surface);
+  color: var(--theme-text);
+  opacity: 0;
+  transform: scale(0.5);
+  pointer-events: none;
+  transition: opacity 200ms ease, transform 260ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.db-fab[data-scrolled='true'] .db-fab__top {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+.db-fab__wa:active,
+.db-fab[data-scrolled='true'] .db-fab__top:active {
+  transform: translateY(1px);
+}
+@keyframes db-fab-in {
+  from { opacity: 0; transform: translateY(10px); }
+}
+@media (hover: hover) and (pointer: fine) {
+  .db-fab__wa:hover,
+  .db-fab[data-scrolled='true'] .db-fab__top:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+  }
+}
+@media (max-width: 560px) {
+  .db-fab {
+    right: 12px;
+    bottom: 12px;
+    gap: 10px;
+  }
+  .db-fab__btn {
+    width: 46px;
+    height: 46px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .db-fab__wa { animation: none; }
+  .db-fab__top { transition-duration: 0.01ms; }
+}
+
 /* ---------- hero ---------- */
 
 .db-hero {

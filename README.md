@@ -71,7 +71,9 @@ panel marque la opción activa; el motor lo ignora.
   se eleva y aterriza. Encima hay una capa de hover discreta y común a todas (el
   borde de la tarjeta se calienta hacia el acento); la barra de navegación se
   compacta y gana fondo y sombra al bajar (`.db-nav[data-scrolled]`, un listener
-  de scroll en `Chrome.jsx`). Los fondos
+  de scroll en `Chrome.jsx`); y `FloatingActions.jsx` pinta abajo a la derecha un
+  botón de "subir arriba" (tras bajar) y, si el cliente puso `brand.whatsapp`, uno
+  de WhatsApp. Los fondos
   (`tokens.css`) son capas fijas y sin dependencias: aurora (manchas
   desenfocadas a la deriva) y malla de color (`--theme-mesh`, tres radiales
   derivados de la paleta con un `transform` y un `hue-rotate` mínimo vía

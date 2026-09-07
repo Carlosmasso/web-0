@@ -8,6 +8,7 @@ export const DEFAULT_CONTENT = {
     navLinks: ['Producto', 'Precios', 'Clientes', 'Recursos'],
     login: 'Entrar',
     navCta: 'Probar gratis',
+    whatsapp: '', // con prefijo internacional; vacío = sin botón flotante
   },
 
   hero: {
