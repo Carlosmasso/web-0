@@ -53,6 +53,10 @@ En Vercel → pestaña **Analytics** → **Enable**. El script ya está en `inde
 y `app.html` (`/_vercel/insights/script.js`), sin cookies ni banner. Verás
 páginas vistas y de dónde llega la gente.
 
+El configurador manda además cuatro eventos de embudo (solo en modo cliente):
+`configurator_opened` → `preset_applied` → `contact_opened` → `lead_submitted`.
+Con eso ves en qué paso se cae la gente. En Analytics aparecen bajo **Events**.
+
 ## 5. Comprobar (hazlo ANTES de compartir el enlace)
 
 1. Abre la web desplegada, diseña algo, pulsa **Pedir presupuesto**, marca el
@@ -101,9 +105,19 @@ justo en móvil. Si no cuela, decidir si se hace usable o se muestra un aviso
 persona física. Cuando te des de alta como autónomo: añadir NIF y domicilio, y
 revisar el aviso legal con un gestor.
 
+## Antes de fiarte de una entrega
+
+`npm run verify:export` genera un proyecto desde un preset, hace `npm install` y
+`vite build` en un temporal, y comprueba que sale `dist/`. Tarda ~40 s (baja
+dependencias). Hazlo tras tocar cualquier componente de `src/preview/`.
+
 ## Pendiente (cuando haya tracción)
 
 - Dominio propio (`.es` ~10 €/año) apuntando a Vercel → hace el test real para
-  leads y permite verificar el dominio en Resend (mejor entregabilidad).
+  leads y permite verificar el dominio en Resend (mejor entregabilidad). Sin
+  esto, la confirmación por correo al cliente NO le llega (Resend sin dominio
+  solo envía a tu propia cuenta).
 - `og.png` (1200×630) para la tarjeta al compartir el enlace — captura de `og.html`.
+- Subir las imágenes del cliente a un bucket (Vercel Blob) al enviar el lead, en
+  vez de solo listar qué secciones traían fotos.
 - Pasada de móvil en el configurador.

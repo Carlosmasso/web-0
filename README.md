@@ -9,8 +9,9 @@ la web construida. El cliente nunca se descarga el proyecto.
 
 ```bash
 npm install
-npm run dev      # http://localhost:5173
-npm test         # vitest: núcleo puro + el .zip del export
+npm run dev            # http://localhost:5173
+npm test               # vitest: núcleo puro + integridad del .zip
+npm run verify:export  # genera un proyecto y lo compila de verdad (~40 s, baja deps)
 ```
 
 - `/` — la landing (HTML estático, `index.html` + `public/landing.css`).
@@ -19,9 +20,11 @@ npm test         # vitest: núcleo puro + el .zip del export
 
 Los tests (`src/**/*.test.js`) cubren lo que más duele si se rompe sin avisar:
 `encode`/`decode` de enlaces, `normalizeConfig` y guardarraíles (los 11 presets
-cumplen WCAG), `resolveTheme`, el registro de proyectos, y `buildProjectFiles`
-(que el `.zip` lleve los archivos, las imágenes subidas salgan a `public/img/` y
-el CSS llegue resuelto).
+cumplen WCAG), `resolveTheme`, el registro de proyectos, el filtro anti-spam de
+`/api/lead`, y `buildProjectFiles` — que el `.zip` lleve los archivos, que cada
+import relativo cierre contra un archivo incluido y ningún componente arrastre el
+configurador, que las imágenes subidas salgan a `public/img/` y el CSS llegue
+resuelto. `verify:export` va más allá: `npm install` + `vite build` reales.
 
 ## El motor de estilos: dos canales
 

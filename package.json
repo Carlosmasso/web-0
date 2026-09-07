@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "verify:export": "VERIFY_EXPORT_BUILD=1 vitest run export-build --testTimeout=240000"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.7",

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import { DEFAULT_CONFIG, SECTION_ORDER } from '../config/schema'
 import { isStudio, STUDIO_QUERY } from '../config/mode'
+import { track } from '../config/analytics'
 import { normalizeConfigWithGuardrails } from '../config/guardrails'
 import { useHistory } from './useHistory'
 import {
@@ -119,6 +120,10 @@ export function App() {
     clearTimeout(focusTimer.current)
   }, [])
 
+  useEffect(() => {
+    if (!isStudio) track('configurator_opened')
+  }, [])
+
   // Tour de bienvenida: la primera vez que se abre (en cualquier modo), tras un
   // respiro para que el preview haya cargado. Una vez visto, no vuelve solo;
   // el botón "¿Cómo funciona?" o `?tour` lo relanzan.
@@ -157,7 +162,10 @@ export function App() {
   const set = useCallback((path, value) => setRaw((prev) => setIn(prev, path, value)), [])
   const merge = useCallback((patch) => setRaw((prev) => deepMerge(prev, patch)), [])
 
-  const applyPreset = useCallback((preset) => setRaw(structuredClone(preset.config)), [])
+  const applyPreset = useCallback((preset) => {
+    setRaw(structuredClone(preset.config))
+    if (!isStudio) track('preset_applied', { preset: preset.id })
+  }, [])
 
   const applyType = useCallback(
     (id) => merge({ typography: getTypePairing(id).values, meta: { typeId: id } }),
@@ -510,7 +518,14 @@ export function App() {
                 {zipping ? 'Empaquetando…' : 'Descargar .zip'}
               </button>
             )}
-            <button onClick={() => setShowContact(true)} type="button" className="shell__cta">
+            <button
+              onClick={() => {
+                setShowContact(true)
+                if (!isStudio) track('contact_opened')
+              }}
+              type="button"
+              className="shell__cta"
+            >
               Pedir presupuesto
             </button>
           </div>

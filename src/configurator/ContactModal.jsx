@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { submitLead, summariseImages, CONTACT_EMAIL } from '../export/contact'
+import { track } from '../config/analytics'
+import { isStudio } from '../config/mode'
 
 const EMPTY = { name: '', email: '', phone: '', note: '', company: '' }
 
@@ -81,6 +83,7 @@ export function ContactModal({ open, onClose, content, previewLink, editLink }) 
         },
       })
       setStatus('sent')
+      if (!isStudio) track('lead_submitted')
     } catch {
       setStatus('error')
     }
