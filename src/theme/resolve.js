@@ -8,7 +8,7 @@
 // ============================================================
 
 /* Escalas: única fuente de verdad para traducir intención -> CSS. */
-const RADIUS = { none: '0px', soft: '10px', round: '24px', pill: '999px' }
+const RADIUS = { none: '0px', soft: '10px', round: '24px' }
 const BORDER = { thin: '1px', thick: '3px' }
 
 const round1 = (n) => Math.round(n * 10) / 10
@@ -100,7 +100,7 @@ export function resolveTheme(c) {
 
     /* bordes */
     '--theme-radius': radius,
-    '--theme-radius-sm': b.radius === 'pill' ? '999px' : `calc(${radius} * 0.6)`,
+    '--theme-radius-sm': `calc(${radius} * 0.6)`,
     '--theme-border-w': BORDER[b.width] ?? BORDER.thin,
     '--theme-border-style': b.style,
     '--theme-border-color': borderColor,

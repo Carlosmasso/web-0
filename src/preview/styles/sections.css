@@ -9,6 +9,20 @@
     box-shadow 160ms ease;
 }
 
+/* Hover discreto de base: el borde se calienta hacia el acento en cualquier
+   estética (incluida la que no mueve la tarjeta, como el neo-brutalismo). Las
+   estéticas que además elevan o iluminan lo hacen encima, en aesthetics.css. */
+@media (hover: hover) and (pointer: fine) {
+  .db-card:hover {
+    border-color: color-mix(in srgb, var(--theme-accent) 45%, var(--theme-border-color));
+  }
+  /* La imagen dentro de una tarjeta o fila hace un zoom mínimo al pasar por
+     encima: gesto moderno y contenido, el marco recorta el sobrante. */
+  .db-frame img { transition: transform 500ms cubic-bezier(0.23, 1, 0.32, 1); }
+  .db-card:hover .db-frame img,
+  .db-row:hover .db-frame img { transform: scale(1.04); }
+}
+
 .db-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap); }
 
 /* Rejilla de características: la primera es una banda ancha horizontal, las otras
@@ -455,3 +469,33 @@
 .db-footer__legal-links { display: flex; flex-wrap: wrap; gap: 20px; }
 .db-footer__legal-links a { color: inherit; }
 .db-footer__legal-links a:hover { color: var(--theme-text); }
+
+/* ---------- pie sobrio: una sola fila ---------- */
+
+.db-footer--slim .db-footer__slim {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px 40px;
+  padding-block: 30px;
+}
+.db-footer--slim .db-footer__brand {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+}
+.db-footer--slim .db-footer__brand p {
+  margin-top: 0;
+  max-width: 42ch;
+  font-size: 0.9rem;
+}
+.db-footer__slim-end {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  font-size: 0.82rem;
+  color: var(--theme-text-muted);
+}

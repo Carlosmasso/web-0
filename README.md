@@ -65,10 +65,14 @@ panel marque la opción activa; el motor lo ignora.
   (`aesthetics.css`) no son cosmética: definen qué significa `:active`. En
   neo-brutalismo el botón cae sobre su sombra dura; en cyberpunk un destello
   barre la superficie; en claymorfismo se hunde con sombra interior; en material
-  se eleva y aterriza. Los fondos (`tokens.css`) son capas fijas y sin
-  dependencias: aurora (manchas desenfocadas a la deriva) y malla de color
-  (`--theme-mesh`, tres radiales derivados de la paleta con un `transform` y un
-  `hue-rotate` mínimo vía `@property`, que se paran con movimiento reducido).
+  se eleva y aterriza. Encima hay una capa de hover discreta y común a todas (el
+  borde de la tarjeta se calienta, la imagen dentro hace un zoom mínimo); la
+  barra de navegación se compacta y gana fondo y sombra al bajar
+  (`.db-nav[data-scrolled]`, un listener de scroll en `Chrome.jsx`). Los fondos
+  (`tokens.css`) son capas fijas y sin dependencias: aurora (manchas
+  desenfocadas a la deriva) y malla de color (`--theme-mesh`, tres radiales
+  derivados de la paleta con un `transform` y un `hue-rotate` mínimo vía
+  `@property`, que se paran con movimiento reducido).
 
 **Dos niveles de elección**: las 6 *estéticas* (`registry/aesthetics.js`) parchean solo
 el acabado sobre la paleta que el cliente ya eligió; las *plantillas*
@@ -92,7 +96,7 @@ por **cuánto compromete cada decisión**, no por qué propiedad de CSS toca:
 | --- | --- | --- |
 | **1 · Punto de partida** | El mundo entero | Presets comerciales/tendencia · 6 chips de estética base · el dado 🎲 |
 | **2 · Tu identidad** | Color de marca, tipografía, esquinas, movimiento | Controles libres con recomendación |
-| **3 · Ajuste fino** | Fondo de la portada (liso/degradado), relleno de los botones, estilo de los campos, luces de fondo, grano, y qué secciones aparecen | Plegado por defecto |
+| **3 · Ajuste fino** | Fondo de la portada (liso/degradado), relleno de los botones, estilo de los campos, luces de fondo, grano, estilo de cabecera y pie, y qué secciones aparecen | Plegado por defecto |
 
 `src/registry/vocabulary.js` es la única capa donde vive el lenguaje de cara al
 usuario: nadie ve `box-shadow: inset` ni `border-radius: 32px`, ven
@@ -201,7 +205,7 @@ bajo las pestañas lo relanza, y `?tour` lo fuerza aunque ya se haya visto.
 | Acción | Dónde |
 | --- | --- |
 | Elegir diseño: preset, estética, color de marca, tipografía, esquinas, movimiento, efectos, variante por sección | Pestaña **Diseño** (`Sidebar`) |
-| Mostrar / ocultar y reordenar secciones (la cabecera va fija) | Capa 3 del panel — "Secciones". La lista de secciones visibles vive en el contrato (`sectionOrder`); el formulario de Contenido solo pide las visibles. |
+| Mostrar / ocultar y reordenar secciones (la cabecera va fija); elegir estilo de cabecera y pie | Capa 3 del panel — "Secciones". La lista de secciones visibles vive en el contrato (`sectionOrder`); el formulario de Contenido solo pide las visibles. Cabecera (`components.nav.variant`: completa/mínima) y pie (`components.footer.variant`: completo/sobrio) son filas fijas del grupo. |
 | Escribir sus textos y subir sus imágenes (opcional) | Pestaña **Contenido**. Las imágenes se comprimen en el navegador y viajan dentro del `.zip`; también admite pegar una URL. |
 | **Deshacer / Rehacer** cualquier cambio de diseño | Botón **Deshacer** en la barra, siempre visible (`⌘Z` / `⇧⌘Z` como extra). "Rehacer" solo aparece si hay algo que rehacer. |
 | Ver en escritorio / móvil | Conmutador de la barra |

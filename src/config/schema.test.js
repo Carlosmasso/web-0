@@ -25,6 +25,10 @@ describe('normalizeConfig (endurece config de fuera)', () => {
     expect(normalizeConfig({ sectionOrder: 'nope' }).sectionOrder).toEqual([...SECTION_ORDER])
   })
 
+  it("migra borders.radius 'pill' -> 'round'", () => {
+    expect(normalizeConfig({ borders: { radius: 'pill' } }).borders.radius).toBe('round')
+  })
+
   it("migra hero.background 'aurora' y 'bare' -> 'solid'", () => {
     expect(
       normalizeConfig({ components: { hero: { background: 'aurora' } } }).components.hero.background,
@@ -32,6 +36,15 @@ describe('normalizeConfig (endurece config de fuera)', () => {
     expect(
       normalizeConfig({ components: { hero: { background: 'bare' } } }).components.hero.background,
     ).toBe('solid')
+  })
+
+  it('cabecera y pie: variante por defecto, y un patch parcial de components no las borra', () => {
+    expect(normalizeConfig({}).components.nav.variant).toBe('standard')
+    expect(normalizeConfig({}).components.footer.variant).toBe('full')
+    const c = normalizeConfig({ components: { footer: { variant: 'slim' } } })
+    expect(c.components.footer.variant).toBe('slim')
+    expect(c.components.nav.variant).toBe('standard')
+    expect(c.components.button.fill).toBe(DEFAULT_CONFIG.components.button.fill)
   })
 
   it('entrada no-objeto -> copia de DEFAULT_CONFIG', () => {

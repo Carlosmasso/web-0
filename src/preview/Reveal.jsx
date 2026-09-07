@@ -16,17 +16,27 @@ export function Reveal({ children, delay = 0, className, style, ...rest }) {
     )
   }
 
-  const rise = level === 'expressive' ? 26 : 12
-  const duration = level === 'expressive' ? 0.7 : 0.5
+  // 'expressive' añade desenfoque de entrada y un punto de escala: la aparición
+  // se lee como "revelado con profundidad", no solo un desplazamiento un poco
+  // más largo. 'subtle' es una entrada corta y limpia.
+  const expressive = level === 'expressive'
+  const from = expressive
+    ? { opacity: 0, filter: 'blur(10px)', transform: 'translateY(32px) scale(0.985)' }
+    : { opacity: 0, filter: 'blur(0px)', transform: 'translateY(12px) scale(1)' }
+  const to = { opacity: 1, filter: 'blur(0px)', transform: 'translateY(0px) scale(1)' }
 
   return (
     <motion.div
       className={className}
       style={style}
-      initial={{ opacity: 0, transform: `translateY(${rise}px)` }}
-      whileInView={{ opacity: 1, transform: 'translateY(0px)' }}
+      initial={from}
+      whileInView={to}
       viewport={{ once: true, amount: 0.25 }}
-      transition={{ duration, delay, ease: [0.23, 1, 0.32, 1] }}
+      transition={{
+        duration: expressive ? 0.8 : 0.5,
+        delay: expressive ? delay * 1.4 : delay,
+        ease: [0.23, 1, 0.32, 1],
+      }}
       {...rest}
     >
       {children}

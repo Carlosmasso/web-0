@@ -4,11 +4,31 @@ import { useStructure } from './PreviewCanvas'
 import { Icon } from './Icon'
 import { Button } from './ui'
 
+/** Los enlaces legales llegan como una cadena separada por "·". */
+function legalItems(legal) {
+  return (legal || '')
+    .split('·')
+    .map((item) => item.trim())
+    .filter(Boolean)
+}
+
 export function Nav() {
   const { brand } = useContent()
-  const { iconSet } = useStructure()
+  const { iconSet, components } = useStructure()
+  const minimal = components.nav?.variant === 'minimal'
   const [open, setOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const navRef = useRef(null)
+
+  // Al bajar, la barra se compacta y gana fondo y sombra: le da presencia y
+  // "capa" sin robar altura mientras lees. Se lee la posición una vez y luego
+  // en cada scroll (pasivo, sin trabajo si el estado no cambia).
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 6)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   // Cierra con Escape o al tocar fuera. Solo se engancha mientras el menú
   // está abierto: nada de listeners de documento colgados en reposo.
@@ -27,7 +47,13 @@ export function Nav() {
   }, [open])
 
   return (
-    <header className="db-nav" data-open={open} ref={navRef}>
+    <header
+      className="db-nav"
+      data-nav={minimal ? 'minimal' : 'standard'}
+      data-open={open}
+      data-scrolled={scrolled}
+      ref={navRef}
+    >
       <div className="db-container db-nav__inner">
         <span className="db-wordmark">{brand.name}</span>
         <nav className="db-nav__links">
@@ -38,9 +64,11 @@ export function Nav() {
           ))}
         </nav>
         <div className="db-nav__actions">
-          <a className="db-nav__login" href="#">
-            {brand.login}
-          </a>
+          {!minimal && (
+            <a className="db-nav__login" href="#">
+              {brand.login}
+            </a>
+          )}
           <Button>{brand.navCta}</Button>
           <button
             className="db-nav__burger"
@@ -62,9 +90,11 @@ export function Nav() {
               {link}
             </a>
           ))}
-          <a className="db-nav__mobile-login" href="#" onClick={() => setOpen(false)}>
-            {brand.login}
-          </a>
+          {!minimal && (
+            <a className="db-nav__mobile-login" href="#" onClick={() => setOpen(false)}>
+              {brand.login}
+            </a>
+          )}
         </div>
       </nav>
     </header>
@@ -72,6 +102,12 @@ export function Nav() {
 }
 
 export function Footer() {
+  const { components } = useStructure()
+  return components.footer?.variant === 'slim' ? <FooterSlim /> : <FooterFull />
+}
+
+/** Pie completo: marca + tagline + tres columnas de enlaces + línea legal. */
+function FooterFull() {
   const { brand, footer } = useContent()
 
   return (
@@ -99,16 +135,39 @@ export function Footer() {
       <div className="db-container db-footer__legal">
         <span>© 2026 {brand.name}</span>
         <span className="db-footer__legal-links">
-          {(footer.legal || '')
-            .split('·')
-            .map((item) => item.trim())
-            .filter(Boolean)
-            .map((item) => (
+          {legalItems(footer.legal).map((item) => (
+            <a href="#" key={item}>
+              {item}
+            </a>
+          ))}
+        </span>
+      </div>
+    </footer>
+  )
+}
+
+/** Pie sobrio: una sola fila. Sin columnas de enlaces inventadas — para la
+    mayoría de negocios pequeños es lo honesto. */
+function FooterSlim() {
+  const { brand, footer } = useContent()
+
+  return (
+    <footer className="db-footer db-footer--slim">
+      <div className="db-container db-footer__slim">
+        {/* <div className="db-footer__brand"> */}
+          <span className="db-wordmark">{brand.name}</span>
+        {/* </div> */}
+          <p>{footer.tagline}</p>
+        <div className="db-footer__slim-end">
+          <span className="db-footer__legal-links">
+            {legalItems(footer.legal).map((item) => (
               <a href="#" key={item}>
                 {item}
               </a>
             ))}
-        </span>
+          </span>
+          <span className="db-footer__copy">© 2026 {brand.name}</span>
+        </div>
       </div>
     </footer>
   )

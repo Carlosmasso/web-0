@@ -24,8 +24,18 @@
 
 @media (prefers-reduced-motion: reduce) {
   .pv-aurora i { animation: none; }
-  .db-btn, .db-card, .db-carousel__arrow, .db-field__control,
   .db-faq__q svg, .db-faq__a-wrap { transition-duration: 0.01ms; }
+  /* Se iguala la especificidad de los bloques `data-ready` de tokens.css y del
+     hover del botón en elements.css, si no esos 0.4s/220ms les ganarían. La
+     barra sigue cambiando de fondo/sombra al bajar, solo que sin animarlo. */
+  .pv-canvas[data-ready] :is(
+      .db-card, .db-frame, .db-slide, .db-btn, .db-field__control,
+      .db-nav, .db-nav__inner, .db-cta--boxed, .db-carousel__arrow,
+      .db-carousel__dot, .db-feature__icon, .db-section--tint, .db-footer, .db-hero
+    ) {
+    transition-duration: 0.01ms;
+  }
+  .db-card:hover .db-frame img, .db-row:hover .db-frame img { transform: none; }
 }
 
 /* ============================================================

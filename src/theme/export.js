@@ -14,7 +14,7 @@
 import { resolveTheme } from './resolve'
 import { hexToHsl } from './color'
 
-const RADIUS_PX = { none: '0px', soft: '10px', round: '24px', pill: '9999px' }
+const RADIUS_PX = { none: '0px', soft: '10px', round: '24px' }
 const BORDER_PX = { thin: '1px', thick: '3px' }
 
 /** Escala tipográfica desplegada a partir de la razón modular. */

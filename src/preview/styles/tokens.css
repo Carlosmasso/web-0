@@ -18,8 +18,8 @@
   --step-4: calc(var(--step-3) * var(--theme-scale));
   --step-5: calc(var(--step-4) * var(--theme-scale));
 
-  /* Escala de espaciado: un único origen, escalado por la densidad del
-     contrato. Los componentes tiran de aquí en vez de números sueltos. */
+  /* Escala de espaciado: un único origen. `--theme-space` es hoy siempre 1
+     (la densidad dejó de ser una elección); se mantiene por si vuelve. */
   --space-1: calc(6px * var(--theme-space));
   --space-2: calc(10px * var(--theme-space));
   --space-3: calc(16px * var(--theme-space));
@@ -198,6 +198,14 @@
 
 .db-section { padding-block: var(--section-py); }
 .db-section--tint { background: var(--theme-surface-2); }
+
+/* Con las luces de fondo encendidas, las franjas con tinte se vuelven algo
+   translúcidas para que el resplandor se note en toda la página y no solo en la
+   portada. Las estéticas que ya juegan con la translucidez (glassmorfismo)
+   mandan sobre esto porque su regla llega después. */
+.pv-canvas[data-aurora='on'] :where(.db-section--tint) {
+  background: color-mix(in srgb, var(--theme-surface-2) 82%, transparent);
+}
 
 .db-section__head {
   max-width: 46ch;

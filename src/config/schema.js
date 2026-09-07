@@ -17,7 +17,7 @@
 // ============================================================
 
 /**
- * @typedef {'none'|'soft'|'round'|'pill'} RadiusToken
+ * @typedef {'none'|'soft'|'round'} RadiusToken
  * @typedef {'thin'|'thick'} WidthToken
  * @typedef {'solid'|'dashed'} BorderStyle
  * @typedef {'flat-hard'|'soft-elevation'|'inset-3d'|'glowing-neon'|'none'} ShadowToken
@@ -77,6 +77,8 @@ export const DEFAULT_CONFIG = {
     button: { shape: 'inherit', fill: 'solid' }, // inherit|pill|sharp · solid|outline|gradient
     input: { variant: 'outline' }, // outline | filled | underline
     carousel: { controls: 'arrows', peek: true, slidesPerView: 3 },
+    nav: { variant: 'standard' }, // standard | minimal
+    footer: { variant: 'full' }, // full | slim
   },
 
   // ---------- cosmético ----------
@@ -101,7 +103,7 @@ export const DEFAULT_CONFIG = {
   },
 
   borders: {
-    radius: 'soft', // none | soft | round | pill
+    radius: 'soft', // none | soft | round
     width: 'thin', // thin | thick
     style: 'solid', // solid | dashed
     color: 'auto', // 'auto' | hex
@@ -179,6 +181,8 @@ export function normalizeConfig(input) {
   if (hb === 'aurora' || hb === 'bare') base.components.hero.background = 'solid'
   // La densidad dejó de ser una elección: un valor antiguo (compact/spacious) vuelve a normal.
   base.layout.density = 'normal'
+  // El radio "cápsula" se retiró (999px sobre un rectángulo se traga el contenido).
+  if (base.borders.radius === 'pill') base.borders.radius = 'round'
   return base
 }
 

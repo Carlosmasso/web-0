@@ -33,9 +33,26 @@
   border-radius: var(--theme-radius-sm);
   background: var(--theme-primary);
   color: var(--theme-on-primary);
-  transition: transform 130ms cubic-bezier(0.23, 1, 0.32, 1),
-    box-shadow 160ms ease, background-color 160ms ease, filter 160ms ease,
-    border-color 160ms ease;
+  transition: transform 220ms cubic-bezier(0.23, 1, 0.32, 1),
+    box-shadow 200ms ease, background-color 200ms ease, filter 220ms ease,
+    border-color 200ms ease;
+}
+
+/* El bloque `data-ready` global (tokens.css) recorta la lista de transiciones
+   para no animar reflows al cambiar de tema, y de paso deja fuera `transform` y
+   `filter` — el hover del botón daba entonces un salto seco. Aquí se los
+   devolvemos con una curva suave y algo más de recorrido (220 ms), y se dejan
+   los 400 ms del fundido de tema para color y sombra. El `:active` sigue siendo
+   rápido: tokens.css lo reafirma a 0.1 s con más especificidad. */
+.pv-canvas[data-ready] .db-btn {
+  transition:
+    transform 220ms cubic-bezier(0.23, 1, 0.32, 1),
+    filter 220ms cubic-bezier(0.23, 1, 0.32, 1),
+    box-shadow 400ms cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 400ms cubic-bezier(0.4, 0, 0.2, 1),
+    background-image 400ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 400ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 400ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .db-btn[data-shape='pill'] { border-radius: 999px; }
@@ -62,8 +79,11 @@
 .db-btn:active { transform: translateY(1px); }
 
 @media (hover: hover) and (pointer: fine) {
-  .db-btn--primary:hover { filter: brightness(1.08); }
+  /* Un pixel de elevación en el primario: se siente pulsable sin ser un rebote. */
+  .db-btn--primary:hover { filter: brightness(1.08); transform: translateY(-1px); }
   .db-btn--ghost:hover { border-color: var(--theme-accent); color: var(--theme-accent); }
+  /* El neo-brutalismo tiene su propia física de pulsación: nada de flotar. */
+  [data-aesthetic='neo-brutalism'] .db-btn--primary:hover { transform: none; }
 }
 
 /* ---------- campos ---------- */
@@ -117,12 +137,32 @@
   position: sticky;
   top: 0;
   z-index: 20;
-  background: color-mix(in srgb, var(--theme-bg) 82%, transparent);
+  background: color-mix(in srgb, var(--theme-bg) 80%, transparent);
   backdrop-filter: blur(10px);
-  border-bottom: var(--theme-border-w) var(--theme-border-style) var(--theme-border-color);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: var(--theme-border-w) var(--theme-border-style) transparent;
+  transition: background-color 240ms ease, border-color 240ms ease,
+    box-shadow 240ms ease, backdrop-filter 240ms ease;
 }
 
-.db-nav__inner { display: flex; align-items: center; gap: 32px; height: 68px; }
+/* Al bajar: fondo casi opaco, un filo de línea y una sombra ambiental. La barra
+   pasa a sentirse una capa por encima de la página, no parte de ella. */
+.db-nav[data-scrolled='true'] {
+  background: color-mix(in srgb, var(--theme-bg) 94%, transparent);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border-bottom-color: var(--theme-border-color);
+  box-shadow: 0 10px 30px -14px color-mix(in srgb, var(--theme-shadow-color) 40%, transparent);
+}
+
+.db-nav__inner {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  height: 72px;
+  transition: height 240ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.db-nav[data-scrolled='true'] .db-nav__inner { height: 58px; }
 
 .db-wordmark {
   font-family: var(--theme-font-heading);
@@ -148,6 +188,11 @@
 }
 .db-nav__actions { display: flex; align-items: center; gap: 14px; margin-left: auto; }
 .db-nav__actions .db-btn { padding: 9px 15px; font-size: 0.875rem; }
+
+/* Nav mínima: logo a la izquierda, enlaces y CTA agrupados a la derecha, sin
+   enlace de "acceder". Menos aire de aplicación, más de negocio. */
+.db-nav[data-nav='minimal'] .db-nav__links { margin-left: auto; }
+.db-nav[data-nav='minimal'] .db-nav__actions { margin-left: 0; }
 .db-nav__login { font-size: 0.9rem; color: var(--theme-text-muted); }
 .db-nav__burger { display: none; color: var(--theme-text); }
 

@@ -58,6 +58,54 @@ function Group({ title, hint, children }) {
   )
 }
 
+// La cabecera y el pie no son secciones (no se quitan ni se reordenan), pero sí
+// tienen estilo elegible. Se pintan como filas fijas dentro de "Secciones".
+const FRAME_ROWS = [
+  {
+    path: 'components.nav.variant',
+    label: 'Cabecera',
+    affects: { selector: '.db-nav', label: 'La barra de navegación' },
+    options: [
+      { id: 'standard', label: 'Completa', note: 'Enlaces, acceso y botón de acción' },
+      { id: 'minimal', label: 'Mínima', note: 'Enlaces y botón, agrupados a la derecha' },
+    ],
+  },
+  {
+    path: 'components.footer.variant',
+    label: 'Pie de página',
+    affects: { selector: '.db-footer', label: 'El pie de página' },
+    options: [
+      { id: 'full', label: 'Completo', note: 'Marca y columnas de enlaces' },
+      { id: 'slim', label: 'Sobrio', note: 'Una línea: marca y enlaces legales' },
+    ],
+  },
+]
+
+function FrameRow({ row, value, onChange, onFocus, onReveal }) {
+  return (
+    <div className="sec" {...focusProps(row.affects, onFocus)}>
+      <div className="sec__bar">
+        <span className="sec__pin">fija</span>
+        <span className="sec__label">{row.label}</span>
+      </div>
+      <Affects affects={row.affects} onReveal={onReveal} />
+      <div className="optlist">
+        {row.options.map((o) => (
+          <button
+            key={o.id}
+            type="button"
+            className={`opt ${value === o.id ? 'is-active' : ''}`}
+            onClick={() => onChange(o.id)}
+          >
+            <span className="opt__label">{o.label}</span>
+            <span className="opt__note">{o.note}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 /** Enciende el foco del lienzo al pasar el puntero o al recibir foco de teclado. */
 function focusProps(affects, onFocus) {
   if (!affects) return {}
@@ -342,7 +390,14 @@ export function Sidebar({
         {vocab('effects.aurora')}
         {vocab('effects.noise')}
 
-        <Group title="Secciones" hint="Muestra u oculta cada bloque y cámbialo de orden. La cabecera siempre va primero.">
+        <Group title="Secciones" hint="Muestra u oculta cada bloque y cámbialo de orden. La cabecera y el pie son fijos, pero puedes cambiar su estilo.">
+          <FrameRow
+            row={FRAME_ROWS[0]}
+            value={getIn(config, FRAME_ROWS[0].path)}
+            onChange={(v) => onSet(FRAME_ROWS[0].path, v)}
+            onFocus={onFocus}
+            onReveal={onReveal}
+          />
           {config.sectionOrder.map((type, idx) => {
             const meta = SECTION_META[type]
             const isHero = type === 'hero'
@@ -399,6 +454,14 @@ export function Sidebar({
               </div>
             )
           })}
+
+          <FrameRow
+            row={FRAME_ROWS[1]}
+            value={getIn(config, FRAME_ROWS[1].path)}
+            onChange={(v) => onSet(FRAME_ROWS[1].path, v)}
+            onFocus={onFocus}
+            onReveal={onReveal}
+          />
 
           {SECTION_ORDER.some((t) => !config.sectionOrder.includes(t)) && (
             <div className="sec-hidden">
