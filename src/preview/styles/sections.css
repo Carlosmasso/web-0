@@ -1,6 +1,24 @@
 /* Cada sección del sitio: características, carrusel, citas, logos,
    precios, FAQ, llamada a la acción y pie. */
 
+/* ---------- destinos del menú ----------
+   Los enlaces de la cabecera bajan hasta su sección. Como la barra es sticky
+   (72 px, 58 al bajar), el destino tiene que frenar por debajo de ella: sin
+   este margen, el título de la sección aterriza tapado. Vale igual para el
+   salto del navegador al abrir tusitio.com/#pricing. */
+[data-section],
+.db-footer {
+  scroll-margin-top: 82px;
+}
+
+/* Al llegar se le da el foco a la sección para que teclado y lectores de
+   pantalla sigan leyendo desde ahí; el recuadro del navegador alrededor de
+   media página sobra. */
+[data-section]:focus,
+.db-footer:focus {
+  outline: none;
+}
+
 /* ---------- tarjetas y layouts de características ---------- */
 
 .db-card {

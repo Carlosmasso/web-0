@@ -1,8 +1,37 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { SECTION_ORDER } from '../config/schema'
+import { navTargets } from './nav-targets'
 import { useContent } from '../content/context'
 import { useStructure } from './PreviewCanvas'
 import { Icon } from './Icon'
 import { Button } from './ui'
+
+/**
+ * Baja hasta la sección SIN tocar la URL. El preview guarda el diseño entero en
+ * el hash (`preview.html#<config>~<contenido>`) y un salto de ancla nativo se lo
+ * llevaría por delante: el enlace compartido volvería al diseño por defecto.
+ * Los `id` siguen puestos, así que `tusitio.com/#pricing` sí funciona solo.
+ */
+function goToSection(event, id, motionLevel) {
+  const el = document.getElementById(id)
+  if (!el) return // sin destino, que el navegador haga lo suyo
+  event.preventDefault()
+
+  const quiet =
+    motionLevel === 'none' ||
+    window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true
+  const behavior = quiet ? 'auto' : 'smooth'
+
+  // La portada ES el principio: pararse en su borde dejaría la barra flotando
+  // sobre un trozo de hero en vez de enseñarlo entero.
+  if (id === 'hero') window.scrollTo({ top: 0, behavior })
+  else el.scrollIntoView({ behavior, block: 'start' })
+
+  // Quien navega con teclado o lector de pantalla tiene que llegar también, no
+  // solo ver cómo se mueve la página.
+  el.setAttribute('tabindex', '-1')
+  el.focus({ preventScroll: true })
+}
 
 /** Los enlaces legales llegan como una cadena separada por "·". */
 function legalItems(legal) {
@@ -14,11 +43,21 @@ function legalItems(legal) {
 
 export function Nav() {
   const { brand } = useContent()
-  const { iconSet, components } = useStructure()
+  const { iconSet, components, sectionOrder, motion: motionLevel } = useStructure()
   const minimal = components.nav?.variant === 'minimal'
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const navRef = useRef(null)
+
+  const targets = useMemo(
+    () => navTargets(brand.navLinks, sectionOrder),
+    [brand.navLinks, sectionOrder],
+  )
+  // El botón del menú es la promesa principal: lleva a donde se actúa.
+  const ctaTarget = (sectionOrder?.length ? sectionOrder : SECTION_ORDER).includes('cta')
+    ? 'cta'
+    : 'db-footer'
+  const go = (event, id) => goToSection(event, id, motionLevel)
 
   // Al bajar, la barra se compacta y gana fondo y sombra: le da presencia y
   // "capa" sin robar altura mientras lees. Se lee la posición una vez y luego
@@ -55,10 +94,10 @@ export function Nav() {
       ref={navRef}
     >
       <div className="db-container db-nav__inner">
-        <span className="db-wordmark">{brand.name}</span>
+        <a className="db-wordmark" href="#">{brand.name}</a>
         <nav className="db-nav__links">
-          {brand.navLinks.map((link) => (
-            <a key={link} href="#">
+          {brand.navLinks.map((link, i) => (
+            <a key={link} href={`#${targets[i]}`} onClick={(e) => go(e, targets[i])}>
               {link}
             </a>
           ))}
@@ -69,7 +108,7 @@ export function Nav() {
               {brand.login}
             </a>
           )}
-          <Button>{brand.navCta}</Button>
+          <Button onClick={(e) => go(e, ctaTarget)}>{brand.navCta}</Button>
           <button
             className="db-nav__burger"
             type="button"
@@ -85,8 +124,15 @@ export function Nav() {
 
       <nav id="db-mobile-menu" className="db-nav__mobile" inert={!open}>
         <div className="db-container db-nav__mobile-inner">
-          {brand.navLinks.map((link) => (
-            <a key={link} href="#" onClick={() => setOpen(false)}>
+          {brand.navLinks.map((link, i) => (
+            <a
+              key={link}
+              href={`#${targets[i]}`}
+              onClick={(e) => {
+                setOpen(false)
+                go(e, targets[i])
+              }}
+            >
               {link}
             </a>
           ))}
@@ -111,7 +157,7 @@ function FooterFull() {
   const { brand, footer } = useContent()
 
   return (
-    <footer className="db-footer">
+    <footer className="db-footer" id="db-footer">
       <div className="db-container db-footer__inner">
         <div className="db-footer__brand">
           <span className="db-wordmark">{brand.name}</span>
@@ -152,7 +198,7 @@ function FooterSlim() {
   const { brand, footer } = useContent()
 
   return (
-    <footer className="db-footer db-footer--slim">
+    <footer className="db-footer db-footer--slim" id="db-footer">
       <div className="db-container db-footer__slim">
         {/* <div className="db-footer__brand"> */}
           <span className="db-wordmark">{brand.name}</span>

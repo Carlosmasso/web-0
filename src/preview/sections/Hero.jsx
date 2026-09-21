@@ -35,7 +35,7 @@ export function HeroSplit() {
   const parallax = level === 'expressive' && !reduce
 
   return (
-    <section className="db-section db-hero db-hero--split" data-section="hero" data-bg={bg}>
+    <section className="db-section db-hero db-hero--split" id="hero" data-section="hero" data-bg={bg}>
       <div className="db-container db-hero__grid">
         <Reveal className="db-hero__body">
           <Body hero={hero} />
@@ -60,7 +60,7 @@ export function HeroCentered() {
   const bg = components.hero.background
 
   return (
-    <section className="db-section db-hero db-hero--centered" data-section="hero" data-bg={bg}>
+    <section className="db-section db-hero db-hero--centered" id="hero" data-section="hero" data-bg={bg}>
       <div className="db-container db-hero__center">
         <Reveal>
           <Body hero={hero} />
@@ -80,6 +80,7 @@ export function HeroImage() {
   return (
     <section
       className="db-section db-hero db-hero--image"
+      id="hero"
       data-section="hero"
       data-bg="image"
       style={hero.image ? { backgroundImage: `url(${hero.image})` } : undefined}

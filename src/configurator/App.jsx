@@ -77,6 +77,9 @@ export function App() {
     isStudio ? readProject(projectId).content : loadContent(),
   )
   const [mode, setMode] = useState('design')
+  // El panel de diseño va en tres pasos (ver Sidebar). El paso vive aquí porque
+  // el tour necesita llevar al usuario de uno a otro mientras explica.
+  const [designStep, setDesignStep] = useState('start')
   const [device, setDevice] = useState('desktop')
   const [zipping, setZipping] = useState(false)
   const [showContact, setShowContact] = useState(false)
@@ -137,9 +140,20 @@ export function App() {
     return () => clearTimeout(t)
   }, [])
 
+  // Abrir el tour pasea por los tres pasos; al cerrarlo se devuelve al usuario
+  // donde estaba, que puede haber lanzado la ayuda a mitad de un ajuste.
+  const stepBeforeTour = useRef('start')
+
+  const openTour = useCallback(() => {
+    stepBeforeTour.current = designStep
+    setMode('design')
+    setShowTour(true)
+  }, [designStep])
+
   const closeTour = useCallback(() => {
     setShowTour(false)
     markTourDone()
+    setDesignStep(stepBeforeTour.current)
   }, [])
 
   // Deshacer / rehacer con teclado. Solo sobre el diseño: si el foco está en un
@@ -182,6 +196,11 @@ export function App() {
   )
 
   const surprise = useCallback(() => setRaw(randomConfig()), [])
+
+  const openContact = useCallback(() => {
+    setShowContact(true)
+    if (!isStudio) track('contact_opened')
+  }, [])
 
   /** Cambia solo el acabado, conservando paleta, tipografía y estructura. */
   const switchAesthetic = useCallback(
@@ -398,10 +417,7 @@ export function App() {
           <button
             type="button"
             className="design shell__help"
-            onClick={() => {
-              setMode('design')
-              setShowTour(true)
-            }}
+            onClick={openTour}
           >
             ¿Cómo funciona?
           </button>
@@ -420,6 +436,9 @@ export function App() {
           {mode === 'design' ? (
             <Sidebar
               config={config}
+              step={designStep}
+              onStep={setDesignStep}
+              onContact={openContact}
               onSet={set}
               onApplyPreset={applyPreset}
               onApplyType={applyType}
@@ -519,10 +538,7 @@ export function App() {
               </button>
             )}
             <button
-              onClick={() => {
-                setShowContact(true)
-                if (!isStudio) track('contact_opened')
-              }}
+              onClick={openContact}
               type="button"
               className="shell__cta"
             >
@@ -544,7 +560,14 @@ export function App() {
         editLink={editLink}
       />
 
-      <Tour steps={TOUR_STEPS} open={showTour} onClose={closeTour} onReveal={revealInPreview} />
+      <Tour
+        steps={TOUR_STEPS}
+        open={showTour}
+        onClose={closeTour}
+        onReveal={revealInPreview}
+        panel={designStep}
+        onPanel={setDesignStep}
+      />
     </div>
   )
 }

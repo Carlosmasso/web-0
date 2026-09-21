@@ -38,7 +38,7 @@ function Row({ items }) {
 export function LogosPlain() {
   const { logos } = useContent()
   return (
-    <section className="db-section db-logos" data-section="logos">
+    <section className="db-section db-logos" id="logos" data-section="logos">
       <div className="db-container">
         <Row items={logos.items} />
       </div>
@@ -49,7 +49,7 @@ export function LogosPlain() {
 export function LogosHeadline() {
   const { logos } = useContent()
   return (
-    <section className="db-section db-logos" data-section="logos">
+    <section className="db-section db-logos" id="logos" data-section="logos">
       <div className="db-container">
         <Reveal className="db-logos__head">
           <p>{logos.headline}</p>

@@ -71,7 +71,8 @@ panel marque la opción activa; el motor lo ignora.
   se eleva y aterriza. Encima hay una capa de hover discreta y común a todas (el
   borde de la tarjeta se calienta hacia el acento); la barra de navegación se
   compacta y gana fondo y sombra al bajar (`.db-nav[data-scrolled]`, un listener
-  de scroll en `Chrome.jsx`); y `FloatingActions.jsx` pinta abajo a la derecha un
+  de scroll en `Chrome.jsx`); **los enlaces del menú bajan a su sección** (ver
+  más abajo); y `FloatingActions.jsx` pinta abajo a la derecha un
   botón de "subir arriba" (tras bajar) y, si el cliente puso `brand.whatsapp`, uno
   de WhatsApp. Los fondos
   (`tokens.css`) son capas fijas y sin dependencias: aurora (manchas
@@ -92,31 +93,69 @@ el acabado sobre la paleta que el cliente ya eligió; las *plantillas*
 | `src/preview/` | El sitio (componentes de producción). `PreviewCanvas.jsx` inyecta los tokens y provee el canal estructural; cada sección lee `useStructure()` y `useContent()`. |
 | `src/configurator/` | El shell: pestañas **Diseño** (`Sidebar`) y **Contenido** (`ContentForm`), historial de deshacer (`useHistory.js`) y, solo en estudio, el selector de proyectos (`projects.js` + `ProjectMenu.jsx`). Persiste en `localStorage`: por proyecto en estudio, en clave única + `?c=` en cliente. |
 
-## Libertad guiada: el panel en tres capas
+## Libertad guiada: el panel en tres pasos
 
 El problema no es la falta de opciones, es la parálisis. El panel está ordenado
 por **cuánto compromete cada decisión**, no por qué propiedad de CSS toca:
 
-| Capa | Qué decide | Cómo |
+| Paso | Qué decide | Cómo |
 | --- | --- | --- |
 | **1 · Punto de partida** | El mundo entero | Presets comerciales/tendencia · 6 chips de estética base · el dado 🎲 |
 | **2 · Tu identidad** | Color de marca, tipografía, esquinas, movimiento | Controles libres con recomendación |
-| **3 · Ajuste fino** | Fondo de la portada (liso/degradado), relleno de los botones, estilo de los campos, luces de fondo, grano, estilo de cabecera y pie, y qué secciones aparecen | Plegado por defecto |
+| **3 · Ajuste fino** | Qué secciones aparecen y en qué orden, estilo de cabecera y pie, fondo de la portada (liso/degradado), relleno de los botones, estilo de los campos, luces de fondo y grano | Marcado como opcional |
+
+Los tres viven en una **barra de pestañas fija** en lo alto del panel
+(`StepNav`, `DESIGN_STEPS` en `Sidebar.jsx`): se ven de un vistazo sin
+desplazarse y solo se pinta el paso activo, así que cada uno cabe en una o dos
+pantallas. Eran tres acordeones apilados y los pasos 2 y 3 quedaban a cientos de
+píxeles de scroll: nadie llegaba. La barra deja saltar libremente; el pie de
+cada paso ofrece además el camino guiado ("Siguiente: Tu identidad") y, al final
+del 3, el botón de pedir presupuesto. Cambiar de paso devuelve el panel arriba,
+y los pasos 2 y 3 recuerdan sobre qué base se está trabajando, con un atajo para
+volver al 1.
 
 `src/registry/vocabulary.js` es la única capa donde vive el lenguaje de cara al
 usuario: nadie ve `box-shadow: inset` ni `border-radius: 32px`, ven
 **"Táctil / 3D"** y **"Redondeadas"**, cada una con una línea que describe lo que
 *comunica*, no lo que hace.
 
+### El menú baja a su sección
+
+Es una landing de una sola página: el menú no lleva a otras páginas, lleva más
+abajo. Cada sección lleva su `id` (`#pricing`, `#faq`…) y
+`navTargets()` (`src/preview/nav-targets.js`) empareja cada enlace del menú con
+una de ellas **por lo que dice**, sin acentos ni mayúsculas de por medio:
+"Tarifas" → precios, "Opiniones" → testimonios, "Inicio" → arriba del todo. Lo
+que no encaja con ninguna palabra clave se reparte por orden de aparición entre
+las secciones que queden libres, de forma que ningún enlace del menú es un clic
+que no hace nada; si se acaban las secciones, el último recurso es el pie. La
+portada y la franja de logos nunca se reparten solas (a la franja aterrizar es
+un fallo aparente, mide dos centímetros), pero sí son destino si el enlace las
+nombra. El botón del menú va a la sección de llamada a la acción.
+
+El cliente escribe esos enlaces a mano en "Contenido" y **no hay ningún control
+nuevo** para elegir destino: el emparejamiento se rehace solo al cambiar el
+texto o las secciones visibles.
+
+El desplazamiento lo hace JavaScript (`goToSection` en `Chrome.jsx`) en vez del
+salto nativo del navegador, por una razón concreta: el preview guarda el diseño
+entero en el hash de la URL (`preview.html#<config>~<contenido>`) y un ancla
+nativa se lo llevaría por delante — el enlace compartido volvería al diseño por
+defecto. Los `id` siguen puestos, así que en la web entregada
+`tusitio.com/#pricing` funciona igual. Con movimiento en "ninguno" o
+`prefers-reduced-motion`, el salto es instantáneo en vez de suave; al llegar, la
+sección recibe el foco para que teclado y lectores de pantalla sigan desde ahí,
+y `scroll-margin-top: 82px` evita que la barra sticky tape el titular.
+
 ### El motor de restricciones
 
-**Regla de oro:** en las capas 2 y 3, cada control hace *exactamente* lo que dice.
+**Regla de oro:** en los pasos 2 y 3, cada control hace *exactamente* lo que dice.
 Nunca bloquea una opción, nunca teletransporta a otra estética, nunca salta a la
 siguiente. Si eliges "Suaves" en Esquinas, sales con esquinas suaves — aunque no
 sea lo que "pega" con la estética activa. El guardarraíl **guía, no encierra**:
 marca el valor recomendado con una etiqueta discreta y ya.
 
-Cambiar de mundo entero se hace **arriba**, en la capa 1: los 6 chips de estética
+Cambiar de mundo entero se hace en el **paso 1**: los 6 chips de estética
 base aplican un juego coherente de bordes, sombras y efectos de una vez
 (`src/registry/aesthetics.js`).
 
@@ -205,15 +244,16 @@ bundle vía `envPrefix` en `vite.config.js`: es ofuscación, no un candado). Si
 
 Todo lo de la venta, nada de la entrega. La primera vez que se abre la
 herramienta, un **tour guiado** (`Tour.jsx`, se marca visto en `localStorage`)
-explica para qué es y cómo usarla; un paso puede abrir una capa plegada
-(`expand`) o disparar el "Ver" en el lienzo para enseñarlo en vivo (`reveal`). El
+explica para qué es y cómo usarla; un paso puede llevar el panel a otro de sus
+tres pasos (`panel`) o disparar el "Ver" en el lienzo para enseñarlo en vivo
+(`reveal`). Al cerrarlo, el panel vuelve al paso en el que estaba. El
 botón "¿Cómo funciona?" bajo las pestañas lo relanza, y `?tour` lo fuerza aunque
 ya se haya visto.
 
 | Acción | Dónde |
 | --- | --- |
 | Elegir diseño: preset, estética, color de marca, tipografía, esquinas, movimiento, efectos, variante por sección | Pestaña **Diseño** (`Sidebar`) |
-| Mostrar / ocultar y reordenar secciones (la cabecera va fija); elegir estilo de cabecera y pie | Capa 3 del panel — "Secciones". La lista de secciones visibles vive en el contrato (`sectionOrder`); el formulario de Contenido solo pide las visibles. Cabecera (`components.nav.variant`: completa/mínima) y pie (`components.footer.variant`: completo/sobrio) son filas fijas del grupo. |
+| Mostrar / ocultar y reordenar secciones (la cabecera va fija); elegir estilo de cabecera y pie | Paso 3 del panel — "Secciones". La lista de secciones visibles vive en el contrato (`sectionOrder`); el formulario de Contenido solo pide las visibles. Cabecera (`components.nav.variant`: completa/mínima) y pie (`components.footer.variant`: completo/sobrio) son filas fijas del grupo. |
 | Escribir sus textos y subir sus imágenes (opcional) | Pestaña **Contenido**. Las imágenes se comprimen en el navegador y viajan dentro del `.zip`; también admite pegar una URL. |
 | **Deshacer / Rehacer** cualquier cambio de diseño | Botón **Deshacer** en la barra, siempre visible (`⌘Z` / `⇧⌘Z` como extra). "Rehacer" solo aparece si hay algo que rehacer. |
 | Ver en escritorio / móvil | Conmutador de la barra |

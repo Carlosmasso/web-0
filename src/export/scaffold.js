@@ -14,6 +14,7 @@
 import previewCanvas from '../preview/PreviewCanvas.jsx?raw'
 import demoPage from '../preview/DemoPage.jsx?raw'
 import chrome from '../preview/Chrome.jsx?raw'
+import navTargetsSrc from '../preview/nav-targets.js?raw'
 import floatingActions from '../preview/FloatingActions.jsx?raw'
 import reveal from '../preview/Reveal.jsx?raw'
 import icon from '../preview/Icon.jsx?raw'
@@ -46,6 +47,7 @@ const RUNTIME_FILES = {
   'src/preview/PreviewCanvas.jsx': previewCanvas,
   'src/preview/DemoPage.jsx': demoPage,
   'src/preview/Chrome.jsx': chrome,
+  'src/preview/nav-targets.js': navTargetsSrc,
   'src/preview/FloatingActions.jsx': floatingActions,
   'src/preview/Reveal.jsx': reveal,
   'src/preview/Icon.jsx': icon,

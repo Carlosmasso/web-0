@@ -40,7 +40,7 @@ export function CtaBoxed() {
   const { cta } = useContent()
 
   return (
-    <section className="db-section" data-section="cta">
+    <section className="db-section" id="cta" data-section="cta">
       <div className="db-container">
         <Reveal className="db-cta db-cta--boxed">
           <h2>{cta.title}</h2>
@@ -57,7 +57,7 @@ export function CtaBanner() {
   const { cta } = useContent()
 
   return (
-    <section className="db-cta db-cta--banner" data-section="cta">
+    <section className="db-cta db-cta--banner" id="cta" data-section="cta">
       <div className="db-container db-cta__inner">
         <Reveal>
           <h2>{cta.title}</h2>

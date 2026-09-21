@@ -15,9 +15,9 @@
 //   coherence   arregla contradicciones que el usuario no puede ver.
 //   a11y floor  contraste mínimo WCAG. Innegociable, para cualquier estética.
 //
-// Cambiar de mundo entero se hace en la capa 1 (presets y estética base), que
+// Cambiar de mundo entero se hace en el paso 1 (presets y estética base), que
 // aplica un juego de valores coherente de una vez. Los knobs sueltos de las
-// capas 2 y 3 solo mueven su propia propiedad.
+// pasos 2 y 3 solo mueven su propia propiedad.
 // ============================================================
 
 import { normalizeConfig } from './schema'

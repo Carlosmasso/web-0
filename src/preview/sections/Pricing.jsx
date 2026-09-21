@@ -31,7 +31,7 @@ export function PricingCards() {
   const { iconSet } = useStructure()
 
   return (
-    <section className="db-section" data-section="pricing">
+    <section className="db-section" id="pricing" data-section="pricing">
       <div className="db-container">
         <Heading pricing={pricing} />
         <div className="db-grid-3 db-plans">
@@ -66,7 +66,7 @@ export function PricingRows() {
   const { iconSet } = useStructure()
 
   return (
-    <section className="db-section" data-section="pricing">
+    <section className="db-section" id="pricing" data-section="pricing">
       <div className="db-container">
         <Heading pricing={pricing} />
         <div className="db-plan-rows">

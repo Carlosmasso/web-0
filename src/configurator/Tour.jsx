@@ -8,8 +8,8 @@ import { useCallback, useEffect, useLayoutEffect, useState } from 'react'
 // "¿Cómo funciona?" lo vuelve a lanzar.
 //
 // Un paso puede llevar:
-//   - `expand: true` — si apunta a la cabecera de una capa plegada, la abre
-//     antes de resaltarla.
+//   - `panel: 'start' | 'identity' | 'fine'` — lleva el panel de diseño a ese
+//     paso antes de resaltarlo, porque solo se pinta el paso activo.
 //   - `reveal: { selector, label }` — dispara el mismo "Ver" del panel en el
 //     lienzo, para enseñar en vivo cómo el panel señala partes del sitio.
 // ============================================================
@@ -39,20 +39,28 @@ export const TOUR_STEPS = [
     body: 'Aquí diseñas tu propia web: eliges cómo se ve. Cuando te guste, pides un presupuesto sin compromiso y yo la construyo con tu contenido y te la entrego.',
   },
   {
+    target: '[data-tour="steps"]',
+    panel: 'start',
+    title: 'Tres pasos, siempre a la vista',
+    body: 'El diseño se hace en tres: eliges una base, le pones tu marca y, si te apetece, afinas los detalles. Puedes saltar de uno a otro cuando quieras — nada se pierde por el camino.',
+  },
+  {
     target: '[data-tour="start"]',
-    title: 'No empiezas de cero',
+    panel: 'start',
+    title: 'Paso 1 · No empiezas de cero',
     body: 'Elige una base por tu sector (dentista, bufete, cafetería…) o por el estilo que te guste. Viene con colores, tipografía y secciones que ya encajan entre sí, y puedes cambiarla cuando quieras.',
   },
   {
     target: '[data-tour="identity"]',
-    title: 'Ponle tu marca',
+    panel: 'identity',
+    title: 'Paso 2 · Ponle tu marca',
     body: 'Tu color, tu tipografía, la forma de las esquinas y el movimiento. Elijas el color que elijas, el resto de la paleta se ajusta solo para que todo se lea bien.',
   },
   {
     target: '[data-tour="fine"]',
-    expand: true,
-    title: 'Afina los detalles, si quieres',
-    body: 'Aquí eliges qué secciones aparecen y en qué orden, y retocas detalles como el fondo de la portada o el estilo de los botones. Va plegado a propósito: la base ya viene bien, esto es solo para rematar.',
+    panel: 'fine',
+    title: 'Paso 3 · Afina los detalles, si quieres',
+    body: 'Aquí eliges qué secciones aparecen y en qué orden, y retocas detalles como el fondo de la portada o el estilo de los botones. Es opcional: la base ya viene bien, esto es solo para rematar.',
   },
   {
     target: '.stage',
@@ -86,7 +94,7 @@ function placeCard(rect) {
   return { left: clamp(rect.left, 12, vw - CARD_W - 12), top: clamp(rect.bottom + gap, 12, vh - 260) }
 }
 
-export function Tour({ steps, open, onClose, onReveal }) {
+export function Tour({ steps, open, onClose, onReveal, panel, onPanel }) {
   const [i, setI] = useState(0)
   const [rect, setRect] = useState(null)
   const step = steps[i]
@@ -95,6 +103,14 @@ export function Tour({ steps, open, onClose, onReveal }) {
   useEffect(() => {
     if (open) setI(0)
   }, [open])
+
+  // Pasos con `panel`: llevan el panel a ese paso. Va en su propio efecto y
+  // antes del que mide, porque el objetivo (`[data-tour="identity"]`, por
+  // ejemplo) no existe en el DOM hasta que el panel ha cambiado de paso; el
+  // `panel` que llega de vuelta como prop es lo que dispara la medición.
+  useEffect(() => {
+    if (open && step.panel) onPanel?.(step.panel)
+  }, [open, i, step, onPanel])
 
   // Pasos con `reveal`: disparan el "Ver" en el lienzo, con un respiro para que
   // la tarjeta y el recuadro ya estén puestos. Al salir del paso se limpia.
@@ -119,11 +135,6 @@ export function Tour({ steps, open, onClose, onReveal }) {
       return undefined
     }
 
-    // Si el paso apunta a una capa plegada, ábrela para que se vea qué lleva.
-    if (step.expand && el.closest('.layer')?.classList.contains('is-open') === false) {
-      el.click()
-    }
-
     el.scrollIntoView({ block: 'center', behavior: 'auto' })
 
     const measure = () => setRect(el.getBoundingClientRect())
@@ -140,7 +151,7 @@ export function Tour({ steps, open, onClose, onReveal }) {
       cancelAnimationFrame(raf2)
       window.removeEventListener('resize', measure)
     }
-  }, [open, i, step])
+  }, [open, i, step, panel])
 
   const next = useCallback(() => {
     if (last) onClose()

@@ -26,7 +26,7 @@ export function FeatureGrid() {
   const { features } = useContent()
 
   return (
-    <section className="db-section" data-section="features">
+    <section className="db-section" id="features" data-section="features">
       <div className="db-container">
         <Heading features={features} />
         <div className="db-feature-grid">
@@ -55,7 +55,7 @@ export function FeatureRows() {
   const showMedia = components.card.media !== 'none'
 
   return (
-    <section className="db-section" data-section="features">
+    <section className="db-section" id="features" data-section="features">
       <div className="db-container">
         <Heading features={features} />
         <div className="db-rows">
@@ -86,7 +86,7 @@ export function FeatureBento() {
   const [a, b, c] = features.items
 
   return (
-    <section className="db-section" data-section="features">
+    <section className="db-section" id="features" data-section="features">
       <div className="db-container">
         <Heading features={features} />
         <div className="db-bento">

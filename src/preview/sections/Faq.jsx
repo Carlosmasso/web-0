@@ -30,7 +30,7 @@ export function FaqAccordion() {
   const { iconSet } = useStructure()
 
   return (
-    <section className="db-section" data-section="faq">
+    <section className="db-section" id="faq" data-section="faq">
       <div className="db-container db-faq__narrow">
         <Reveal className="db-section__head db-section__head--center">
           <h2>{faq.title}</h2>
@@ -49,7 +49,7 @@ export function FaqGrid() {
   const { faq } = useContent()
 
   return (
-    <section className="db-section" data-section="faq">
+    <section className="db-section" id="faq" data-section="faq">
       <div className="db-container">
         <Reveal className="db-section__head">
           <h2>{faq.title}</h2>

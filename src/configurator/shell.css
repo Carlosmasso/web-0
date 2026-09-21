@@ -52,7 +52,7 @@ body {
 .shell__panel,
 .stage,
 .cform,
-.sidebar {
+.sidebar__scroll {
   scrollbar-color: color-mix(in srgb, var(--c-line) 70%, transparent) transparent;
 }
 
@@ -96,8 +96,9 @@ body {
   min-height: 0;
   border-right: 1px solid var(--c-hair);
   background: var(--c-panel);
-  overflow-y: auto;
-  overscroll-behavior: contain;
+  /* El scroll vive DENTRO (.sidebar__scroll / .cform): así la marca y las
+     pestañas de paso no se van nunca de la vista. */
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
@@ -105,11 +106,12 @@ body {
 /* ---------- cabecera del panel ---------- */
 
 .shell__brand {
+  flex: none;
   padding: 20px 20px 16px;
   border-bottom: 1px solid var(--c-hair);
-  position: sticky;
-  top: 0;
   background: var(--c-panel);
+  /* Por encima del cuerpo, para que el menú de proyectos lo tape al abrirse. */
+  position: relative;
   z-index: 3;
 }
 
@@ -366,13 +368,35 @@ body {
 /* ---------- zonas scrollables: cada tarjeta flota con margen ---------- */
 
 .sidebar {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar__scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
+/* Estas columnas se desplazan Y son flex: sin esto, sus hijos se encogerían
+   para caber en el alto disponible en vez de desbordar, y tanto la tarjeta del
+   paso como los bloques del formulario saldrían recortados por dentro. */
+.sidebar__scroll > *,
+.cform > * {
+  flex: none;
+}
 
 .cform {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 16px;
   display: flex;
   flex-direction: column;
@@ -380,10 +404,81 @@ body {
 }
 
 /* ============================================================
-   PANEL EN TRES CAPAS  ·  cada capa es una tarjeta
+   PANEL EN TRES PASOS
+
+   Las pestañas van fijas arriba (fuera del scroll) y solo se pinta
+   el paso activo. Antes era un acordeón de tres capas apiladas y
+   los pasos 2 y 3 vivían a cientos de píxeles de scroll.
    ============================================================ */
 
-.layer {
+.steps {
+  flex: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  padding: 12px 16px;
+  background: var(--c-panel);
+  border-bottom: 1px solid var(--c-hair);
+}
+
+.steps__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 7px;
+  padding: 11px 6px 12px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  background: var(--c-void);
+  color: var(--c-muted);
+  text-align: center;
+  transition: background 140ms ease, color 140ms ease, border-color 140ms ease;
+}
+.steps__item:hover {
+  color: var(--c-text);
+  background: var(--c-card);
+}
+.steps__item.is-active {
+  background: var(--c-card);
+  border-color: var(--c-accent-line);
+  color: var(--c-text);
+  box-shadow: var(--c-lift);
+}
+.steps__item:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
+}
+
+.steps__n {
+  flex: none;
+  width: 21px;
+  height: 21px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--c-field);
+  color: var(--c-muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  transition: background 140ms ease, color 140ms ease;
+}
+.steps__item.is-active .steps__n {
+  background: var(--c-accent-strong);
+  color: #fff;
+}
+
+.steps__label {
+  font-size: 0.74rem;
+  font-weight: 600;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+/* ---------- el paso activo: una tarjeta con su cabecera ---------- */
+
+.step {
   background: var(--c-card);
   border: 1px solid var(--c-line);
   border-radius: var(--c-radius-lg);
@@ -391,75 +486,113 @@ body {
   overflow: hidden;
 }
 
-.layer__head {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  padding: 16px 16px;
-  text-align: left;
-  color: var(--c-text);
-  transition: background 140ms ease;
-}
-.layer__head:hover {
+.step__head {
+  padding: 15px 16px 14px;
+  border-bottom: 1px solid var(--c-hair);
   background: var(--c-card-head);
 }
-
-.layer.is-open .layer__head {
-  border-bottom: 1px solid var(--c-hair);
-}
-
-.layer__n {
-  flex: none;
-  width: 24px;
-  height: 24px;
-  display: grid;
-  place-items: center;
-  border-radius: 7px;
-  background: var(--c-accent-soft);
-  color: var(--c-accent);
-  font-size: 0.74rem;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-}
-.layer__titles {
+.step__title {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
-  flex: 1;
-  min-width: 0;
-}
-.layer__title {
-  font-size: 0.94rem;
+  align-items: center;
+  gap: 9px;
+  font-size: 0.95rem;
   font-weight: 600;
 }
-.layer__sub {
-  font-size: 0.77rem;
-  color: var(--c-muted);
-}
-.layer__chevron {
-  color: var(--c-faint);
-  font-size: 1.05rem;
-  flex: none;
-}
-.layer__body {
-  padding: 18px 16px 20px;
-}
-.layer--pro .layer__n {
+.step__opt {
+  padding: 3px 8px;
+  border-radius: 999px;
   background: var(--c-pending-soft);
   color: var(--c-pending);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.step__lead {
+  margin-top: 5px;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--c-muted);
 }
 
-/* ---------- grupos dentro de una capa: divisores suaves, mucho aire ---------- */
+/* De qué base salió esto: el contexto que se pierde al dejar atrás el paso 1. */
+.step__base {
+  margin-top: 11px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  font-size: 0.76rem;
+  color: var(--c-faint);
+}
+.step__base strong {
+  color: var(--c-text);
+  font-weight: 600;
+}
+.step__base button {
+  color: var(--c-accent);
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+.step__base button:hover {
+  text-decoration: underline;
+}
 
-.layer .grp {
+.step__body {
+  padding: 18px 16px 20px;
+}
+
+/* ---------- pie del paso: el camino guiado ---------- */
+
+.stepfoot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 2px 10px;
+}
+.stepfoot__done {
+  flex: 1 1 100%;
+  font-size: 0.77rem;
+  line-height: 1.5;
+  color: var(--c-muted);
+}
+.stepfoot__back {
+  padding: 9px 12px;
+  font-size: 0.79rem;
+  font-weight: 550;
+  color: var(--c-muted);
+  border-radius: 9px;
+  transition: background 140ms ease, color 140ms ease;
+}
+.stepfoot__back:hover {
+  color: var(--c-text);
+  background: var(--c-card);
+}
+.stepfoot__next {
+  padding: 10px 15px;
+  font-size: 0.81rem;
+  font-weight: 650;
+  color: #fff;
+  background: var(--c-accent-strong);
+  border-radius: 10px;
+  transition: filter 140ms ease;
+}
+.stepfoot__next:hover {
+  filter: brightness(1.08);
+}
+
+/* ---------- grupos dentro de un paso: divisores suaves, mucho aire ---------- */
+
+.step .grp {
   padding: 20px 0;
   border-bottom: 1px solid var(--c-hair);
 }
-.layer .grp:first-child {
+.step .grp:first-child {
   padding-top: 2px;
 }
-.layer .grp:last-child {
+.step .grp:last-child {
   padding-bottom: 0;
   border-bottom: none;
 }
@@ -482,7 +615,7 @@ body {
   margin: -8px 0 14px;
 }
 
-/* ---------- capa 1: presets ---------- */
+/* ---------- paso 1: presets ---------- */
 
 .preset-grid {
   display: flex;
@@ -634,7 +767,7 @@ body {
 .ctrl {
   margin-bottom: 24px;
 }
-.layer__body > .ctrl:last-child,
+.step__body > .ctrl:last-child,
 .grp .ctrl:last-child {
   margin-bottom: 0;
 }
@@ -1469,8 +1602,36 @@ body {
     height: auto;
     overflow: visible;
   }
+  /* Apilado, el panel es corto y el armazón fijo se lo comería entero: aquí
+     vuelve a desplazarse de una pieza (marca y aviso se van hacia arriba) y
+     solo las pestañas de paso se quedan pegadas al borde. Siguen a la vista,
+     que es de lo que se trata, sin robarle alto al contenido. */
   .shell__panel {
-    max-height: 48vh;
+    max-height: 56vh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .sidebar,
+  .sidebar__scroll,
+  .cform {
+    flex: none;
+    overflow: visible;
+  }
+  .steps {
+    position: sticky;
+    top: 0;
+    z-index: 4;
+    padding: 10px 12px;
+  }
+  .shell__brand {
+    padding: 14px 16px 12px;
+  }
+  .steps__item {
+    padding: 9px 4px 10px;
+    gap: 5px;
+  }
+  .shell__legal {
+    padding: 10px 16px;
   }
   .stage {
     min-height: 60vh;
