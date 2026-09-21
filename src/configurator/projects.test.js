@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import {
   ensureSeeded,
+  freeName,
   createProject,
   listProjects,
   readProject,
@@ -23,7 +24,7 @@ beforeEach(() => {
   }
 })
 
-describe('projects (multi-proyecto en estudio)', () => {
+describe('registro de trabajos guardados', () => {
   it('ensureSeeded crea "Proyecto 1" desde cero y es idempotente', () => {
     const id = ensureSeeded()
     expect(listProjects().map((p) => p.name)).toEqual(['Proyecto 1'])
@@ -38,6 +39,36 @@ describe('projects (multi-proyecto en estudio)', () => {
     const p = readProject(id)
     expect(p.config.aesthetic).toBe('cyberpunk')
     expect(p.content.brand.name).toBe('X')
+  })
+
+  it('ensureSeeded nombra el primero según quién mire', () => {
+    ensureSeeded('Mi web')
+    expect(listProjects().map((p) => p.name)).toEqual(['Mi web'])
+  })
+
+  it('freeName da el primer hueco de la serie', () => {
+    createProject('Mi web', { config: {}, content: {} })
+    expect(freeName('Versión', 2)).toBe('Versión 2')
+
+    createProject('Versión 2', { config: {}, content: {} })
+    expect(freeName('Versión', 2)).toBe('Versión 3')
+
+    // sin número de partida: el nombre desnudo si está libre, con sufijo si no
+    expect(freeName('Diseño recibido')).toBe('Diseño recibido')
+    createProject('Diseño recibido', { config: {}, content: {} })
+    expect(freeName('Diseño recibido')).toBe('Diseño recibido 2')
+  })
+
+  it('writeProject dice si pudo guardar (la cuota se avisa, no se traga)', () => {
+    const id = createProject('A', { config: {}, content: {} })
+    expect(writeProject(id, { config: { x: 1 }, content: {} })).toBe(true)
+
+    const ok = localStorage.setItem
+    localStorage.setItem = () => {
+      throw new Error('QuotaExceededError')
+    }
+    expect(writeProject(id, { config: { x: 2 }, content: {} })).toBe(false)
+    localStorage.setItem = ok
   })
 
   it('crear / renombrar / borrar', () => {

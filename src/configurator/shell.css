@@ -120,14 +120,92 @@ body {
   font-size: 1.05rem;
   letter-spacing: -0.01em;
 }
-.shell__help {
+/* Fila de acciones de texto bajo las pestañas. Botones con su nombre escrito,
+   nunca un icono suelto: quien usa esto no es del oficio. */
+.shell__links {
   margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+}
+.shell__help {
   font-size: 0.76rem;
   font-weight: 550;
   color: var(--c-accent);
 }
 .shell__help:hover {
   text-decoration: underline;
+}
+
+/* Con forma de botón, no de enlace: así "desactivado" se lee como "ahora no
+   puedes", y no como una etiqueta gris más. */
+.shell__save {
+  padding: 5px 10px;
+  font-size: 0.75rem;
+  font-weight: 550;
+  color: var(--c-muted);
+  border: 1px solid var(--c-line);
+  border-radius: 8px;
+  transition: color 130ms ease, border-color 130ms ease, background 130ms ease;
+}
+.shell__save:not(:disabled):hover {
+  color: var(--c-text);
+  border-color: var(--c-accent-line);
+  background: var(--c-card);
+}
+.shell__save:disabled {
+  color: var(--c-faint);
+  border-color: var(--c-hair);
+  border-style: dashed;
+  cursor: not-allowed;
+}
+/* Las dos formas de tener otra versión, juntas y en su propia línea: son
+   hermanas entre sí y no compiten con "¿Cómo funciona?", que es la puerta de
+   entrada de quien llega por primera vez. */
+.shell__vers {
+  margin-top: 9px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Scope hasta `.shell__brand` a propósito: `.shell__brand p` (más específico)
+   la pintaba gris y grande, y el motivo de un botón apagado no puede leerse
+   como un párrafo secundario más. */
+.shell__brand .shell__cap {
+  margin-top: 6px;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: var(--c-pending);
+}
+
+/* Aviso de guardado fallido: la cuota de localStorage existe y las fotos
+   subidas pesan. Ocupa sitio a propósito — es una pérdida de trabajo. */
+.shell__warn {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 12px 20px;
+  background: var(--c-pending-soft);
+  border-bottom: 1px solid color-mix(in srgb, var(--c-pending) 40%, transparent);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--c-text);
+}
+.shell__warn button {
+  padding: 6px 12px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--c-pending);
+  border: 1px solid color-mix(in srgb, var(--c-pending) 45%, transparent);
+  border-radius: 7px;
+}
+.shell__warn button:hover {
+  background: color-mix(in srgb, var(--c-pending) 14%, transparent);
 }
 
 /* Aviso de móvil: no bloquea, solo avisa y ofrece guardar el sitio. En
@@ -289,6 +367,13 @@ body {
   border-radius: 7px;
   transition: background 130ms ease, color 130ms ease;
 }
+.pmenu__actions button:disabled {
+  color: var(--c-faint);
+  cursor: not-allowed;
+}
+.pmenu__actions button:disabled:hover {
+  background: none;
+}
 .pmenu__actions button:hover {
   background: var(--c-field);
 }
@@ -298,6 +383,18 @@ body {
 .pmenu__actions .pmenu__del:disabled {
   opacity: 0.35;
   cursor: not-allowed;
+}
+
+.pmenu__note {
+  margin: 8px 4px 2px;
+  font-size: 0.71rem;
+  line-height: 1.45;
+  color: var(--c-faint);
+}
+/* Va pegada a los botones que acaba de apagar: si fuera gris como el resto de
+   la letra pequeña, el usuario vería el botón muerto y no el motivo. */
+.pmenu__note.pmenu__note--cap {
+  color: var(--c-pending);
 }
 
 .pmenu__rename {
@@ -1687,6 +1784,17 @@ body {
   margin-top: 4px;
   line-height: 1.5;
 }
+/* Qué versión se está pidiendo. Marcada como dato, no como párrafo más. */
+.modal__head .modal__version {
+  margin-top: 10px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: var(--c-accent-soft);
+  border: 1px solid var(--c-accent-line);
+  color: var(--c-text);
+  font-size: 0.77rem;
+}
+
 .modal__close {
   flex: none;
   width: 28px;

@@ -8,7 +8,14 @@ const EMPTY = { name: '', email: '', phone: '', note: '', company: '' }
 // Lo único que ve el cliente al pulsar "Pedir presupuesto": sus datos + el
 // consentimiento. Al enviar, todo va por fetch a /api/lead — nada se abre en
 // su pantalla. No hay pago ni venta aquí, solo una petición de presupuesto.
-export function ContactModal({ open, onClose, content, previewLink, editLink }) {
+export function ContactModal({
+  open,
+  onClose,
+  content,
+  previewLink,
+  editLink,
+  versionName = null,
+}) {
   const [lead, setLead] = useState(EMPTY)
   const [consent, setConsent] = useState(false)
   const [status, setStatus] = useState('idle') // idle | sending | sent | error
@@ -129,6 +136,14 @@ export function ContactModal({ open, onClose, content, previewLink, editLink }) 
               <div>
                 <h2 id="contact-title">Presupuesto sin compromiso</h2>
                 <p>Déjame tus datos y te paso un presupuesto de esta web. No hay ningún pago ni obligación ahora.</p>
+                {/* Con varias versiones guardadas hay que decir cuál se está
+                    pidiendo: el enlace que viaja es el del diseño en pantalla. */}
+                {versionName && (
+                  <p className="modal__version">
+                    Pides presupuesto de <strong>{versionName}</strong>, la versión que tienes
+                    en pantalla.
+                  </p>
+                )}
               </div>
               <button
                 type="button"

@@ -91,7 +91,7 @@ el acabado sobre la paleta que el cliente ya eligió; las *plantillas*
 | `src/registry/` | Catálogo del marketplace: paletas, emparejamientos tipográficos, las 6 estéticas, las plantillas completas y el mapa sección→componente. |
 | `src/content/` | Capa de contenido, separada del diseño. `defaults.js` es el relleno; `fields.js` define qué campos pide cada sección según su variante (fuente única); `checklist.js` deriva de ahí la lista a pedir al cliente. |
 | `src/preview/` | El sitio (componentes de producción). `PreviewCanvas.jsx` inyecta los tokens y provee el canal estructural; cada sección lee `useStructure()` y `useContent()`. |
-| `src/configurator/` | El shell: pestañas **Diseño** (`Sidebar`) y **Contenido** (`ContentForm`), historial de deshacer (`useHistory.js`) y, solo en estudio, el selector de proyectos (`projects.js` + `ProjectMenu.jsx`). Persiste en `localStorage`: por proyecto en estudio, en clave única + `?c=` en cliente. |
+| `src/configurator/` | El shell: pestañas **Diseño** (`Sidebar`) y **Contenido** (`ContentForm`), historial de deshacer (`useHistory.js`) y el selector de lo guardado (`projects.js` + `ProjectMenu.jsx` + `incoming.js`): tus proyectos en estudio, las versiones de su web de cara al cliente. Todo en `localStorage`, una clave por trabajo guardado. |
 
 ## Libertad guiada: el panel en tres pasos
 
@@ -257,13 +257,55 @@ ya se haya visto.
 | Escribir sus textos y subir sus imágenes (opcional) | Pestaña **Contenido**. Las imágenes se comprimen en el navegador y viajan dentro del `.zip`; también admite pegar una URL. |
 | **Deshacer / Rehacer** cualquier cambio de diseño | Botón **Deshacer** en la barra, siempre visible (`⌘Z` / `⇧⌘Z` como extra). "Rehacer" solo aparece si hay algo que rehacer. |
 | Ver en escritorio / móvil | Conmutador de la barra |
-| Guardar una versión para volver luego | **Copiar enlace** — el `?c=` lleva toda la config en la URL |
+| **Guardar otra versión** de su web (copia de la actual) o **empezar otra en blanco** (diseño por defecto, sus textos intactos), y saltar entre ellas | Dos botones de texto bajo las pestañas; el selector de versiones aparece en la cabecera en cuanto hay más de una. Máximo tres (ver más abajo). |
+| Guardar una versión para volver luego desde otro sitio | **Copiar enlace** — el `?c=` lleva toda la config en la URL |
 | Probar el formulario del sitio | El CTA responde con su mensaje de confirmación (envío de maqueta) |
 | **Pedir presupuesto** | **"Pedir presupuesto"** — el único botón destacado |
 
 Lo que **no** ve: el botón **Descargar .zip**, el chip de "ajustes automáticos",
-el selector de proyectos, ni los botones internos de Contenido ("Copiar lista
-para el cliente", "Restablecer").
+ni los botones internos de Contenido ("Copiar lista para el cliente",
+"Restablecer"). Del menú del selector ve cambiar de versión, renombrar y
+borrar; crear y duplicar no están ahí dentro sino como botones de texto en la
+cabecera, visibles desde la primera visita — cuando el menú todavía no existe.
+
+#### Versiones de su web
+
+El caso real: no se decide entre dos rumbos y quiere compararlos. El almacén es
+el mismo que el de tus proyectos (`projects.js`), leído de otra manera:
+
+- **Se llaman versiones, no proyectos** ("Mi web", "Versión 2"). El vocabulario
+  de proyectos es tuyo, de quien lleva varios clientes; él tiene una web.
+- **Solo aparece cuando hace falta.** Con una sola versión, la cabecera es la
+  marca de siempre; el selector se monta a partir de la segunda. Lo que sí está
+  desde el principio son los dos botones, con su texto escrito: **"Guardar otra
+  versión"** (copia de lo que hay) y **"Empezar otra en blanco"**.
+- **"En blanco" es el diseño, no los textos.** Una versión nueva arranca con el
+  diseño por defecto pero conserva lo que el cliente haya escrito: perder el
+  nombre del negocio y los enlaces del menú por probar otra idea sería una
+  trampa. En estudio, "Nuevo" sí arranca todo limpio — ahí un proyecto nuevo es
+  otro cliente, no otra versión de la misma web.
+- **Máximo tres.** Tres bastan para comparar, y cada versión duplica el
+  contenido — con las fotos subidas dentro. Al llegar al tope, el botón se
+  desactiva y dice por qué.
+- **Se dice que esto no es una cuenta.** El menú avisa de que las versiones
+  viven solo en ese navegador y de que el enlace es la forma de conservar una.
+  Si `localStorage` se queda sin espacio, `writeProject` devuelve `false` y el
+  panel saca un aviso con el botón de copiar enlace: perder trabajo en silencio
+  no es una opción.
+- **Al pedir presupuesto**, el modal dice de qué versión se trata — la de la
+  pantalla, que es la que viaja en el enlace del lead.
+
+#### La regla del enlace entrante
+
+La URL del configurador lleva el diseño en `?c=`, así que se llega de dos
+maneras que por fuera son idénticas: el enlace que le mandas y el marcador de su
+propia sesión de ayer. Con trabajo guardado hace falta una regla, y
+`openIncomingDesign()` (`src/configurator/incoming.js`) aplica la única
+aceptable: **un enlace nunca pisa lo guardado**. Si el diseño del enlace ya es
+una de sus versiones, se abre esa; si no es ninguna, entra como **"Diseño
+recibido"**, una versión más. La comparación es por huella
+(`encodeConfig(normalizar(config))`), así que recargar la página no duplica
+nada. Un `?c=` que no se puede normalizar se ignora en vez de guardarse.
 
 ### Qué puedes hacer tú (estudio / admin)
 
@@ -271,14 +313,16 @@ Todo lo del cliente, más:
 
 | Acción | Dónde |
 | --- | --- |
-| **Varios proyectos**, uno por cliente, sin que se pisen | Selector en la cabecera del panel: **Nuevo / Duplicar / Renombrar / Borrar**. Cada proyecto guarda su config y su contenido en `localStorage` bajo su propia clave (`src/configurator/projects.js`). En el primer arranque, tu trabajo actual migra a "Proyecto 1". |
+| **Varios proyectos**, uno por cliente, sin que se pisen, y **sin tope** | Selector en la cabecera del panel: **Nuevo / Duplicar / Renombrar / Borrar** (el cliente solo ve renombrar y borrar). Cada proyecto guarda su config y su contenido en `localStorage` bajo su propia clave (`src/configurator/projects.js`). En el primer arranque, tu trabajo actual migra a "Proyecto 1". |
 | Ver qué han corregido los guardarraíles | Chip *"N ajustes automáticos"* en la barra |
 | **Copiar lista para el cliente** — el texto exacto a pedirle según las variantes que eligió | Pestaña **Contenido** |
 | **Restablecer** el contenido al relleno de ejemplo | Pestaña **Contenido** |
 | Descargar el proyecto `.zip` | Botón **Descargar .zip** en la barra, o el enlace `?studio` de la hoja de leads (botón en el propio preview) |
 
-En estudio, cambiar de proyecto **vacía el historial de deshacer** (no se cruza
-entre proyectos) y el `?c=` de la URL se ignora: manda el proyecto activo.
+Cambiar de proyecto **vacía el historial de deshacer** (no se cruza entre
+proyectos). Un `?c=` en la URL se resuelve con la misma regla del enlace
+entrante que en cliente: si es un proyecto que ya tienes se abre ese, y si no,
+entra como "Diseño recibido" sin tocar lo demás.
 
 ### El cliente pide, tú entregas
 
@@ -330,9 +374,9 @@ y para que los estilos de la demo no toquen los del panel.
 - Combos curados (no toda paleta pega con toda tipografía y estética).
 - Reordenar secciones arrastrando (hoy es con flechas ↑↓).
 - Más secciones (equipo, estadísticas) y más variantes de las 8 actuales.
-- Los proyectos de estudio viven en `localStorage`: faltan cuentas y revisiones
-  con historial en servidor.
-- Importar un `?c=` de cliente como proyecto nuevo en estudio (hoy se ignora).
+- Todo lo guardado vive en `localStorage`: faltan cuentas y revisiones con
+  historial en servidor. Por eso el tope de tres versiones de cara al cliente y
+  el aviso de que el enlace es la copia de seguridad de verdad.
 - Las imágenes que sube el cliente no viajan en el lead (no caben en la URL): la
   hoja solo dice qué secciones traían fotos y se las pides al responder. Lo suyo
   sería subirlas a un bucket (Vercel Blob) al enviar.

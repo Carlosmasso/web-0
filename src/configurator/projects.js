@@ -1,12 +1,19 @@
 // ============================================================
-// REGISTRO DE PROYECTOS — SOLO MODO ESTUDIO
+// REGISTRO DE TRABAJOS GUARDADOS
 //
-// El cliente configura una única web y no ve nada de esto: su trabajo se
-// autoguarda en las claves planas de App.jsx (web0.config.v2 / web0.content).
+// Un mismo almacén para dos lecturas del mismo dato:
+//   - ESTUDIO: tus proyectos, uno por cliente, sin límite.
+//   - CLIENTE: las VERSIONES de su web ("Mi web", "Versión 2"), para poder
+//     comparar dos rumbos antes de pedir presupuesto. Máximo tres.
 //
-// En estudio, tú llevas varios clientes en local. Cada proyecto guarda su
-// config y su contenido bajo su propia clave, y un índice aparte lista los
-// nombres. Nunca se pisan entre sí.
+// Cada entrada guarda su config y su contenido bajo su propia clave, y un
+// índice aparte lista los nombres. Nunca se pisan entre sí.
+//
+// Todo vive en el `localStorage` de ESTE navegador: no hay cuentas ni nube.
+// La interfaz tiene que decirlo y ofrecer el enlace como copia de seguridad —
+// prometer "tus versiones" y perderlas al abrir el móvil sería mentir. Por lo
+// mismo, `writeProject` devuelve si pudo guardar: con la cuota llena el aviso
+// le llega al usuario en vez de quedarse en un `catch` mudo.
 // ============================================================
 
 import { DEFAULT_CONFIG } from '../config/schema'
@@ -26,11 +33,13 @@ const read = (k, fallback) => {
     return fallback
   }
 }
+/** @returns {boolean} si se pudo guardar (cuota llena o bloqueado -> false). */
 const write = (k, v) => {
   try {
     localStorage.setItem(k, JSON.stringify(v))
+    return true
   } catch {
-    /* cuota llena o almacenamiento bloqueado: se ignora */
+    return false
   }
 }
 
@@ -53,19 +62,21 @@ export function readProject(id) {
   }
 }
 
+/** @returns {boolean} si el guardado llegó al disco. */
 export function writeProject(id, { config, content }) {
-  write(dataKey(id), { config, content })
+  const ok = write(dataKey(id), { config, content })
   const idx = readIndex()
   if (idx[id]) {
     idx[id].updatedAt = Date.now()
     write(INDEX_KEY, idx)
   }
+  return ok
 }
 
 export function createProject(name, { config, content }) {
   const id = uid()
   const idx = readIndex()
-  idx[id] = { name: name || 'Proyecto', updatedAt: Date.now() }
+  idx[id] = { name: name || 'Sin nombre', updatedAt: Date.now() }
   write(INDEX_KEY, idx)
   write(dataKey(id), { config, content })
   return id
@@ -105,12 +116,29 @@ export const setActiveId = (id) => {
   }
 }
 
+/** Tope de versiones de cara al cliente: tres bastan para comparar. */
+export const MAX_VERSIONS = 3
+
 /**
- * Primera vez en estudio: si ya hay proyectos devuelve el activo; si no, migra
- * lo que hubiera en las claves antiguas a "Proyecto 1", o crea uno en blanco.
- * Idempotente: se puede llamar en cada arranque.
+ * Primer nombre libre de la serie. Con `from`, numera desde ahí ("Versión 2",
+ * "Versión 3"…); sin él, usa el nombre desnudo si está libre y le pone sufijo
+ * si no ("Diseño recibido", "Diseño recibido 2").
  */
-export function ensureSeeded() {
+export function freeName(base, from) {
+  const taken = new Set(listProjects().map((p) => p.name))
+  if (from === undefined && !taken.has(base)) return base
+  let n = from ?? 2
+  while (taken.has(`${base} ${n}`)) n += 1
+  return `${base} ${n}`
+}
+
+/**
+ * Primer arranque: si ya hay trabajos guardados devuelve el activo; si no,
+ * migra lo que hubiera en las claves antiguas al primero, o lo crea en blanco.
+ * `name` es cómo se llama ese primero ("Proyecto 1" en estudio, "Mi web" de
+ * cara al cliente). Idempotente: se puede llamar en cada arranque.
+ */
+export function ensureSeeded(name = 'Proyecto 1') {
   const idx = readIndex()
   if (Object.keys(idx).length) {
     const active = getActiveId()
@@ -122,7 +150,7 @@ export function ensureSeeded() {
 
   const legacyConfig = read(LEGACY_CONFIG, null)
   const legacyContent = read(LEGACY_CONTENT, null)
-  const id = createProject('Proyecto 1', {
+  const id = createProject(name, {
     config: legacyConfig ?? structuredClone(DEFAULT_CONFIG),
     content: legacyContent
       ? { ...structuredClone(DEFAULT_CONTENT), ...legacyContent }
