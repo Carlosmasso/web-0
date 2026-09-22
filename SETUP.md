@@ -7,7 +7,7 @@ leads no se pierdan. Todo es gratis para empezar.
 
 ## 1. Google Sheet (registro de solicitudes)
 
-1. Crea una Google Sheet nueva. Ponle nombre, p. ej. *Leads Maqueta*.
+1. Crea una Google Sheet nueva. Ponle nombre, p. ej. *Leads Maketa*.
 2. **Extensiones → Apps Script**. Borra el código de ejemplo y pega el contenido
    de [`apps-script/lead-sheet.gs`](apps-script/lead-sheet.gs).
 3. Cambia `TOKEN` por un texto secreto largo (genera uno cualquiera). Anótalo.
@@ -24,7 +24,7 @@ leads no se pierdan. Todo es gratis para empezar.
    - Para **probar ya**: usa `onboarding@resend.dev` como `LEAD_FROM_EMAIL`.
    - Para **producción**: **Domains → Add Domain**, añade tu dominio y los
      registros DNS que te da. Cuando esté *verified*, usa
-     `"Maqueta <hola@tudominio.com>"`.
+     `"Maketa <hola@maketa.es>"`.
 
 ## 3. Variables de entorno en Vercel
 
@@ -36,7 +36,7 @@ Proyecto en Vercel → **Settings → Environment Variables** (para *Production*
 | `LEAD_SHEET_URL` | la URL `/exec` del paso 1.5 |
 | `LEAD_SHEET_TOKEN` | el `TOKEN` del paso 1.3 |
 | `RESEND_API_KEY` | la clave del paso 2.2 |
-| `LEAD_FROM_EMAIL` | `onboarding@resend.dev` o `"Maqueta <hola@tudominio.com>"` |
+| `LEAD_FROM_EMAIL` | `onboarding@resend.dev` o `"Maketa <hola@maketa.es>"` |
 | `LEAD_TO_EMAIL` | tu correo, donde quieres los avisos |
 | `REACT_STUDIO_KEY` | texto largo aleatorio; hará falta `?studio=<esa-clave>` para el modo estudio |
 

@@ -2,11 +2,35 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="data:," />
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <title>Vista previa</title>
+
+    <!-- Esta página es el enlace que el cliente comparte con SU diseño, así que
+         necesita identidad propia: llegaba como una URL pelada, sin título ni
+         tarjeta, y con el favicon vacío.
+
+         `noindex` a propósito: el diseño viaja en el hash (que nunca llega al
+         servidor), así que para un buscador todas las previsualizaciones son la
+         misma página con el diseño de demostración. Los rastreadores de tarjetas
+         (WhatsApp, LinkedIn, X) sí la leen: eso no lo impide `noindex`. -->
+    <meta name="robots" content="noindex" />
+    <title>Mira el diseño de mi web · Maketa</title>
+    <meta
+      name="description"
+      content="Una web diseñada con Maketa: el configurador donde eliges cómo se ve tu web y la ves en vivo antes de que exista."
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Mira el diseño de mi web" />
+    <meta
+      property="og:description"
+      content="Hecho con Maketa: diseñas tu web en un configurador visual y la ves en vivo."
+    />
+    <meta property="og:image" content="https://maketa.es/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
     <div id="preview"></div>

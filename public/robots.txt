@@ -1,0 +1,12 @@
+# La portada es lo único que tiene sentido en un buscador.
+User-agent: *
+Allow: /
+
+# El configurador y las previsualizaciones no son contenido: son la herramienta.
+# Cada previsualización lleva el diseño en el hash (que no llega al servidor),
+# así que para un rastreador todas serían la misma página repetida.
+Disallow: /app.html
+Disallow: /preview.html
+Disallow: /og.html
+
+Sitemap: https://maketa.es/sitemap.xml

@@ -1,4 +1,14 @@
-# Maqueta — configurador de webs a medida
+# Maketa — configurador de webs a medida
+
+> **Marca y dominio.** El producto se llama **Maketa** (con k) y vive en
+> **maketa.es**: marca y dominio coinciden exactamente, que es lo ideal — no hay
+> que explicar ningún sufijo por teléfono. El `.es` además refuerza el ámbito,
+> que es España.
+>
+> `og:url`, el `canonical`, el `sitemap.xml` y el `robots.txt` apuntan ahí:
+> **hasta que maketa.es sirva el despliegue, esas referencias mienten** (un
+> `canonical` a un dominio que no responde es peor que no tenerlo). Si tarda en
+> enganchar, cámbialas a la URL de Vercel y vuelve a ponerlas después.
 
 Marketplace donde un cliente arma su web eligiendo paleta, tipografía, esquinas,
 movimiento, efectos y una variante por sección. La vista previa se
@@ -92,6 +102,29 @@ el acabado sobre la paleta que el cliente ya eligió; las *plantillas*
 | `src/content/` | Capa de contenido, separada del diseño. `defaults.js` es el relleno; `fields.js` define qué campos pide cada sección según su variante (fuente única); `checklist.js` deriva de ahí la lista a pedir al cliente. |
 | `src/preview/` | El sitio (componentes de producción). `PreviewCanvas.jsx` inyecta los tokens y provee el canal estructural; cada sección lee `useStructure()` y `useContent()`. |
 | `src/configurator/` | El shell: pestañas **Diseño** (`Sidebar`) y **Contenido** (`ContentForm`), historial de deshacer (`useHistory.js`) y el selector de lo guardado (`projects.js` + `ProjectMenu.jsx` + `incoming.js`): tus proyectos en estudio, las versiones de su web de cara al cliente. Todo en `localStorage`, una clave por trabajo guardado. |
+
+## Buscadores y tarjetas al compartir
+
+Cuatro páginas estáticas, así que todo va a mano y cabe en un vistazo:
+
+| Pieza | Dónde | Qué hace |
+| --- | --- | --- |
+| `canonical` | portada y las tres legales | Una sola URL buena por página. |
+| JSON-LD | `index.html` | `WebSite` + `Person` + `Service`. **Sin `LocalBusiness`**: no hay alta de autónomo, ni NIF ni domicilio, y marcar un negocio que no existe es pedir una penalización. Tampoco hay precios ni valoraciones. |
+| `robots.txt` | `public/` | Abre la portada, cierra `app.html`, `preview.html` y `og.html`. |
+| `sitemap.xml` | `public/` | Las cuatro páginas reales. |
+| `og.png` | `public/` | **Se rinde desde `public/og.html`** (1200x630). Si tocas esa plantilla, vuelve a exportarla: sirve cualquier navegador headless contra `/og.html` y captura 1200x630. |
+| `apple-touch-icon.png` | `public/` | 180x180 desde el mismo dibujo del favicon; es el que usa iOS al guardar en pantalla de inicio. |
+
+`preview.html` —el enlace que el cliente comparte con SU diseño— llegaba como
+una URL pelada: sin título, sin descripción, sin tarjeta y con el favicon vacío.
+Ahora tiene identidad propia y lleva `noindex`: el diseño viaja en el hash (que
+nunca llega al servidor), así que para un buscador todas las previsualizaciones
+serían la misma página repetida con el diseño de demostración. Los rastreadores
+de tarjetas (WhatsApp, LinkedIn, X) sí la leen; eso no lo impide `noindex`.
+
+Detalle que cuesta una tarjeta en blanco si se olvida: **`og:image` tiene que ser
+una URL absoluta**. Con ruta relativa, WhatsApp y LinkedIn no resuelven la imagen.
 
 ## Libertad guiada: el panel en tres pasos
 
@@ -405,6 +438,9 @@ y para que los estilos de la demo no toquen los del panel.
 - Todo lo guardado vive en `localStorage`: faltan cuentas y revisiones con
   historial en servidor. Por eso el tope de tres versiones de cara al cliente y
   el aviso de que el enlace es la copia de seguridad de verdad.
+- Capturas de diseños reales en la portada (hoy es todo texto) y una página por
+  sector generada desde el registro de presets: es la superficie de búsqueda que
+  falta, casi sin contenido nuevo que escribir.
 - Las imágenes que sube el cliente no viajan en el lead (no caben en la URL): la
   hoja solo dice qué secciones traían fotos y se las pides al responder. Lo suyo
   sería subirlas a un bucket (Vercel Blob) al enviar.

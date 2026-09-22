@@ -430,7 +430,7 @@ export function App() {
             onDelete={deleteCurrent}
           />
           {/* ) : (
-            <span className="shell__logo">Maqueta</span>
+            <span className="shell__logo">Maketa</span>
           )} */}
           <div className="shell__tabs">
             <button

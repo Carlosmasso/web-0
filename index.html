@@ -4,32 +4,84 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-    <title>Maqueta · Diseña tu web y yo la construyo</title>
+    <title>Maketa · Diseña tu web y yo la construyo</title>
     <meta
       name="description"
       content="Elige cómo se ve tu web en un configurador visual, la ves en vivo, y cuando te guste me la pides. Yo la construyo con tu contenido y te la entrego lista para publicar."
     />
 
-    <!-- Tarjeta al compartir el enlace. [[ CARLOS: añade /og.png (1200x630) ]] -->
+    <!-- Tarjeta al compartir el enlace. `og.png` se rinde desde `public/og.html`
+         (1200x630); si tocas esa plantilla, vuelve a exportarla. -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://maquetaweb-v0.vercel.app/" />
-    <meta property="og:title" content="Maqueta · Diseña tu web y yo la construyo" />
+    <meta property="og:url" content="https://maketa.es/" />
+    <meta property="og:title" content="Maketa · Diseña tu web y yo la construyo" />
     <meta
       property="og:description"
       content="Elige el diseño en un configurador visual, míralo en vivo y pídeme un presupuesto sin compromiso."
     />
-    <meta property="og:image" content="/og.png" />
+    <meta property="og:image" content="https://maketa.es/og.png" />
     <meta name="twitter:card" content="summary_large_image" />
 
+    <link rel="canonical" href="https://maketa.es/" />
     <link rel="stylesheet" href="/landing.css" />
+
+    <!-- Datos estructurados. Solo lo que es verdad hoy: no hay empresa dada de
+         alta, así que nada de LocalBusiness con dirección, NIF ni precios —
+         eso sería inventarse un negocio que todavía no existe. Un sitio, un
+         servicio y la persona que lo presta. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://maketa.es/#sitio",
+            "url": "https://maketa.es/",
+            "name": "Maketa",
+            "inLanguage": "es-ES",
+            "description": "Configurador visual para diseñar tu web y pedir presupuesto sin compromiso."
+          },
+          {
+            "@type": "Person",
+            "@id": "https://maketa.es/#carlos",
+            "name": "Carlos Mass\u00f3",
+            "jobTitle": "Dise\u00f1ador y desarrollador web",
+            "email": "cmassoweb@gmail.com",
+            "url": "https://maketa.es/"
+          },
+          {
+            "@type": "Service",
+            "name": "Dise\u00f1o y desarrollo de p\u00e1ginas web a medida",
+            "serviceType": "Dise\u00f1o web",
+            "provider": { "@id": "https://maketa.es/#carlos" },
+            "areaServed": { "@type": "Country", "name": "Espa\u00f1a" },
+            "audience": {
+              "@type": "Audience",
+              "audienceType": "Peque\u00f1os negocios y profesionales aut\u00f3nomos"
+            },
+            "description": "Dise\u00f1as tu web en un configurador visual y la ves en vivo; yo la construyo con tu contenido y te la entrego lista para publicar.",
+            "offers": {
+              "@type": "Offer",
+              "url": "https://maketa.es/app.html",
+              "availability": "https://schema.org/InStock",
+              "priceSpecification": {
+                "@type": "PriceSpecification",
+                "description": "Presupuesto a medida, sin compromiso. No se cobra nada en el sitio."
+              }
+            }
+          }
+        ]
+      }
+    </script>
 
     <!-- Vercel Web Analytics (activar en Vercel → pestaña Analytics). Sin cookies. -->
     <script defer src="/_vercel/insights/script.js"></script>
   </head>
   <body>
     <header class="nav">
-      <span class="wordmark">Maqueta</span>
+      <span class="wordmark">Maketa</span>
       <nav>
         <a href="#como-funciona">Cómo funciona</a>
         <a class="btn btn--ghost" href="/app.html">Abrir el configurador</a>
@@ -120,7 +172,7 @@
     </main>
 
     <footer class="foot">
-      <span>Maqueta · Carlos Massó · Madrid</span>
+      <span>Maketa · Carlos Massó · Madrid</span>
       <nav>
         <a href="/aviso-legal.html">Aviso legal</a>
         <a href="/privacidad.html">Privacidad</a>

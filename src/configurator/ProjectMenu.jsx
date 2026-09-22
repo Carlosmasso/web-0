@@ -4,7 +4,7 @@ import { listProjects } from "./projects";
 
 // Selector de lo guardado. Dos lecturas del mismo menú (ver App.jsx):
 //
-//   ESTUDIO   "Maqueta · proyecto" — Nuevo / Duplicar / Renombrar / Borrar.
+//   ESTUDIO   "Maketa · proyecto" — Nuevo / Duplicar / Renombrar / Borrar.
 //   CLIENTE   "Tu web · versión"   — lo mismo con otras palabras, y solo se
 //             monta cuando ya hay más de una versión.
 //
@@ -66,7 +66,7 @@ export function ProjectMenu({
         className="pmenu__trigger"
         onClick={() => setOpen((v) => !v)}
       >
-        <span className="pmenu__eyebrow">Maqueta · proyecto</span>
+        <span className="pmenu__eyebrow">Maketa · proyecto</span>
         <span className="pmenu__name">
           {active?.name ?? "Proyecto por defecto"}
           <Icon set="tabler" name="chevron" size={13} />
