@@ -121,7 +121,7 @@ function StepFoot({ step, onStep, onContact }) {
       )}
       {next ? (
         <button type="button" className="stepfoot__next" onClick={() => onStep(next.id)}>
-          Siguiente: {next.label} <span aria-hidden="true">→</span>
+          {next.label} <span aria-hidden="true">→</span>
         </button>
       ) : (
         <button type="button" className="stepfoot__next" onClick={onContact}>
