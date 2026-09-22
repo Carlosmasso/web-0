@@ -44,7 +44,13 @@ function legalItems(legal) {
 export function Nav() {
   const { brand } = useContent()
   const { iconSet, components, sectionOrder, motion: motionLevel } = useStructure()
-  const minimal = components.nav?.variant === 'minimal'
+  // Cuatro barras que se distinguen de un vistazo: la completa (todo), la
+  // centrada (enlaces en el eje), la compacta (todo a la derecha) y la isla
+  // flotante. El reparto lo hace el CSS a partir de [data-nav]; aquí solo se
+  // decide QUÉ va dentro. El "Entrar" es de la completa: en las demás la
+  // derecha se queda con el botón solo, que es lo que las hace respirar.
+  const variant = components.nav?.variant ?? 'standard'
+  const withLogin = variant === 'standard'
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const navRef = useRef(null)
@@ -88,7 +94,7 @@ export function Nav() {
   return (
     <header
       className="db-nav"
-      data-nav={minimal ? 'minimal' : 'standard'}
+      data-nav={variant}
       data-open={open}
       data-scrolled={scrolled}
       ref={navRef}
@@ -103,7 +109,7 @@ export function Nav() {
           ))}
         </nav>
         <div className="db-nav__actions">
-          {!minimal && (
+          {withLogin && (
             <a className="db-nav__login" href="#">
               {brand.login}
             </a>
@@ -136,7 +142,7 @@ export function Nav() {
               {link}
             </a>
           ))}
-          {!minimal && (
+          {withLogin && (
             <a className="db-nav__mobile-login" href="#" onClick={() => setOpen(false)}>
               {brand.login}
             </a>

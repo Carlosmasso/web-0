@@ -151,9 +151,30 @@ const FRAME_ROWS = [
     // dos filas seguidas con el mismo nombre y estilos distintos.
     label: 'Barra de navegación',
     affects: { selector: '.db-nav', label: 'La barra de navegación' },
+    // Cuatro opciones que se distinguen a un metro de la pantalla. Antes eran
+    // dos que solo cambiaban si llevaban "Entrar" y a qué lado caían los
+    // enlaces: puestas una al lado de la otra, no parecían una elección.
     options: [
-      { id: 'standard', label: 'Completa', note: 'Enlaces, acceso y botón de acción' },
-      { id: 'minimal', label: 'Mínima', note: 'Enlaces y botón, agrupados a la derecha' },
+      {
+        id: 'standard',
+        label: 'Completa',
+        note: 'Enlaces junto a la marca, acceso y botón. La de una aplicación',
+      },
+      {
+        id: 'centered',
+        label: 'Centrada',
+        note: 'Los enlaces en el eje de la barra. Clásica y tranquila',
+      },
+      {
+        id: 'minimal',
+        label: 'Compacta',
+        note: 'Marca a un lado, enlaces y botón al otro. Sin acceso',
+      },
+      {
+        id: 'island',
+        label: 'Flotante',
+        note: 'La barra se separa del borde, como una isla sobre la página',
+      },
     ],
   },
   {

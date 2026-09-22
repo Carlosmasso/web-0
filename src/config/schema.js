@@ -77,7 +77,7 @@ export const DEFAULT_CONFIG = {
     button: { shape: 'inherit', fill: 'solid' }, // inherit|pill|sharp · solid|outline|gradient
     input: { variant: 'outline' }, // outline | filled | underline
     carousel: { controls: 'arrows', peek: true, slidesPerView: 3 },
-    nav: { variant: 'standard' }, // standard | minimal
+    nav: { variant: 'standard' }, // standard | centered | minimal | island
     footer: { variant: 'full' }, // full | slim
   },
 

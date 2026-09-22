@@ -147,6 +147,34 @@ defecto. Los `id` siguen puestos, así que en la web entregada
 sección recibe el foco para que teclado y lectores de pantalla sigan desde ahí,
 y `scroll-margin-top: 82px` evita que la barra sticky tape el titular.
 
+### Las cuatro barras de navegación
+
+`components.nav.variant` empezó con dos valores —completa y mínima— que solo se
+diferenciaban en si llevaban "Entrar" y a qué lado caían los enlaces: puestos uno
+al lado del otro en el panel, no parecían una elección. Ahora son cuatro, y cada
+uno mueve un eje distinto para que se distingan a un metro de la pantalla:
+
+| Valor | En el panel | Qué cambia |
+| --- | --- | --- |
+| `standard` | **Completa** | Enlaces junto a la marca, "Entrar" y botón. La de una aplicación — es la única que trae acceso. |
+| `centered` | **Centrada** | Rejilla de tres columnas (`1fr auto 1fr`) para que los enlaces caigan en el eje de la barra, no "casi" en el centro. |
+| `minimal` | **Compacta** | Marca a un lado, enlaces y botón al otro. |
+| `island` | **Flotante** | La barra se despega del borde. |
+
+La isla no trae estilo propio: el `<header>` se queda transparente y la
+superficie baja al `__inner`, que toma radio, borde y sombra **del tema**. Así,
+con neo-brutalismo sale una placa de sombra dura y con glassmorfismo, un cristal
+flotando, sin una sola regla por estética. Dos detalles que costaron su comentario
+en el CSS: el selector lleva `.pv-canvas` delante porque `aesthetics.css` se
+importa después y su regla de glassmorfismo para `.db-nav` empataba en
+especificidad; y el hueco lateral se fija con `width: calc(100% - 28px)` en vez
+de dejarlo al padding del contenedor, que en un teléfono es de un par de píxeles
+y dejaba la "isla" pegada a los bordes con el menú desplegable más estrecho que
+ella.
+
+Dos presets las estrenan: **"Restauración de mantel"** va centrada (el gesto
+clásico de carta) y **"SaaS de cristal"**, flotante.
+
 ### El motor de restricciones
 
 **Regla de oro:** en los pasos 2 y 3, cada control hace *exactamente* lo que dice.
@@ -253,7 +281,7 @@ ya se haya visto.
 | Acción | Dónde |
 | --- | --- |
 | Elegir diseño: preset, estética, color de marca, tipografía, esquinas, movimiento, efectos, variante por sección | Pestaña **Diseño** (`Sidebar`) |
-| Mostrar / ocultar y reordenar secciones (la cabecera va fija); elegir estilo de cabecera y pie | Paso 3 del panel — "Secciones". La lista de secciones visibles vive en el contrato (`sectionOrder`); el formulario de Contenido solo pide las visibles. Cabecera (`components.nav.variant`: completa/mínima) y pie (`components.footer.variant`: completo/sobrio) son filas fijas del grupo. |
+| Mostrar / ocultar y reordenar secciones (la cabecera va fija); elegir estilo de cabecera y pie | Paso 3 del panel — "Secciones". La lista de secciones visibles vive en el contrato (`sectionOrder`); el formulario de Contenido solo pide las visibles. Cabecera (`components.nav.variant`: completa / centrada / compacta / flotante) y pie (`components.footer.variant`: completo/sobrio) son filas fijas del grupo. |
 | Escribir sus textos y subir sus imágenes (opcional) | Pestaña **Contenido**. Las imágenes se comprimen en el navegador y viajan dentro del `.zip`; también admite pegar una URL. |
 | **Deshacer / Rehacer** cualquier cambio de diseño | Botón **Deshacer** en la barra, siempre visible (`⌘Z` / `⇧⌘Z` como extra). "Rehacer" solo aparece si hay algo que rehacer. |
 | Ver en escritorio / móvil | Conmutador de la barra |
