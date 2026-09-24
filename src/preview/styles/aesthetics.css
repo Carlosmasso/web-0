@@ -3,10 +3,28 @@
    Cada bloque [data-aesthetic] reajusta la capa de estilo y define qué
    significa :active. Aquí la estética deja de ser cosmética y pasa a ser
    conducta.
+
+   POR QUÉ HAY `!important` EN LOS TOKENS `--theme-*`
+   `PreviewCanvas` escribe el canal cosmético con `setProperty` sobre este
+   mismo nodo, y un estilo en línea gana a cualquier regla de esta hoja por
+   mucha especificidad que tenga. Sin `!important`, estas tres líneas eran
+   letra muerta: el minimalista no conseguía sus líneas finísimas, el
+   neo-brutalismo no teñía de negro más que los botones (que lo forzaban
+   aparte) y el claymorfismo seguía dibujando bordes que dice no querer.
+   Los tokens sin el prefijo `--theme-` (`--card-shadow`, `--surface-bg`)
+   no hacen falta marcarlos: nadie los escribe en línea.
    ============================================================ */
 
 /* --- Material limpio: la elevación responde al puntero --- */
 [data-aesthetic='material-clean'] { --card-shadow: var(--theme-shadow); }
+/* La portada no tiene tarjetas, así que sin esto la estética no se distinguía
+   del minimalista hasta que bajabas a las características. El marco de la
+   imagen es la superficie grande que sí está en el primer golpe de vista, y
+   `--theme-shadow` a intensidad 1 (7% de opacidad) no se ve a ese tamaño: la
+   elevación del hero se pinta aparte y algo más marcada. */
+[data-aesthetic='material-clean'] .db-frame {
+  box-shadow: 0 20px 44px -18px color-mix(in srgb, var(--theme-shadow-color) 55%, transparent);
+}
 [data-aesthetic='material-clean'] .db-btn--primary {
   box-shadow: 0 2px 5px -1px color-mix(in srgb, var(--theme-shadow-color) 26%, transparent);
 }
@@ -22,10 +40,16 @@
 [data-aesthetic='minimalist-flat'] {
   --card-shadow: none;
   --surface-bg: transparent;
-  --theme-border-color: color-mix(in srgb, var(--theme-text) 11%, transparent);
+  --theme-border-color: color-mix(in srgb, var(--theme-text) 11%, transparent) !important;
 }
 [data-aesthetic='minimalist-flat'] .db-frame,
 [data-aesthetic='minimalist-flat'] .db-slide__media { background-color: var(--theme-surface-2); }
+/* "Líneas finísimas" tiene que cumplirse donde se mira primero. El marco de
+   la imagen pierde el contorno —se funde con la página— y el botón fantasma
+   deja su borde fijo del 34% para seguir al token de la estética, que aquí
+   es un 11% translúcido. */
+[data-aesthetic='minimalist-flat'] .db-frame { border-color: transparent; }
+[data-aesthetic='minimalist-flat'] .db-btn--ghost { border-color: var(--theme-border-color); }
 [data-aesthetic='minimalist-flat'] .db-field__control:focus {
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--theme-accent) 28%, transparent);
 }
@@ -34,7 +58,7 @@
        elemento cae sobre ella y la sombra desaparece. --- */
 [data-aesthetic='neo-brutalism'] {
   --card-shadow: var(--theme-shadow);
-  --theme-border-color: var(--theme-text);
+  --theme-border-color: var(--theme-text) !important;
 }
 [data-aesthetic='neo-brutalism'] .db-btn {
   border-color: var(--theme-text);
@@ -81,7 +105,7 @@
        pasa de exterior a interior. --- */
 [data-aesthetic='claymorphism'] {
   --card-shadow: var(--theme-shadow);
-  --theme-border-color: transparent;
+  --theme-border-color: transparent !important;
   --surface-bg: color-mix(in srgb, var(--theme-surface) 92%, var(--theme-primary));
 }
 [data-aesthetic='claymorphism'] .db-btn {
