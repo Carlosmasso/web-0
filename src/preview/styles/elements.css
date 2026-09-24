@@ -160,6 +160,7 @@
   align-items: center;
   gap: 32px;
   height: 72px;
+  justify-content: space-between;
   transition: height 240ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .db-nav[data-scrolled='true'] .db-nav__inner { height: 58px; }

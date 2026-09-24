@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { isStudio } from '../config/mode'
 import { buildForm, getPath, setPath, blankItem } from '../content/fields'
 import { checklistToText } from '../content/checklist'
@@ -114,14 +114,7 @@ function Control({ field, value, onChange, cap }) {
     )
   }
   if (field.kind === 'list') {
-    return (
-      <textarea
-        rows={3}
-        maxLength={cap}
-        value={(value ?? []).join('\n')}
-        onChange={(e) => onChange(e.target.value.split('\n').map((s) => s.trim()).filter(Boolean))}
-      />
-    )
+    return <ListControl value={value} onChange={onChange} cap={cap} />
   }
   if (field.kind === 'image') {
     return <ImageControl value={value} onChange={onChange} />
@@ -132,6 +125,54 @@ function Control({ field, value, onChange, cap }) {
       maxLength={cap}
       value={value ?? ''}
       onChange={(e) => onChange(e.target.value)}
+    />
+  )
+}
+
+/**
+ * Lista con un elemento por línea (enlaces del menú, "incluye" de un plan…).
+ *
+ * El textarea escribe sobre un borrador propio mientras tiene el foco. Antes
+ * normalizaba en cada pulsación —`trim()` por línea y fuera las vacías— y el
+ * texto se recomponía desde el array ya limpio, así que la lista se defendía
+ * de lo que estabas tecleando: la línea que nace al pulsar Intro está vacía y
+ * desaparecía al instante, y el espacio al final de una palabra se borraba
+ * antes de poder escribir la siguiente. Al salir del campo, el borrador se
+ * resincroniza con la lista ya normalizada.
+ */
+function ListControl({ value, onChange, cap }) {
+  const joined = (value ?? []).join('\n')
+  const [draft, setDraft] = useState(joined)
+  const editing = useRef(false)
+
+  // Cambios que vienen de fuera (preset, deshacer, cargar otro proyecto) solo
+  // pisan el borrador si no se está escribiendo.
+  useEffect(() => {
+    if (!editing.current) setDraft(joined)
+  }, [joined])
+
+  return (
+    <textarea
+      rows={3}
+      maxLength={cap}
+      value={draft}
+      onFocus={() => {
+        editing.current = true
+      }}
+      onChange={(e) => {
+        editing.current = true
+        setDraft(e.target.value)
+        onChange(
+          e.target.value
+            .split('\n')
+            .map((s) => s.trim())
+            .filter(Boolean),
+        )
+      }}
+      onBlur={() => {
+        editing.current = false
+        setDraft((value ?? []).join('\n'))
+      }}
     />
   )
 }
