@@ -12,7 +12,7 @@
 // ============================================================
 
 // Solo para el enlace `mailto:` de respaldo que muestra el modal si algo falla.
-export const CONTACT_EMAIL = 'cmassoweb@gmail.com'
+export const CONTACT_EMAIL = 'hola@maketa.es'
 
 /** En el volcado de contenido para la hoja, acorta las imágenes subidas grandes. */
 const stripDataUris = (_k, v) =>
