@@ -83,8 +83,14 @@ panel marque la opción activa; el motor lo ignora.
   compacta y gana fondo y sombra al bajar (`.db-nav[data-scrolled]`, un listener
   de scroll en `Chrome.jsx`); **los enlaces del menú bajan a su sección** (ver
   más abajo); y `FloatingActions.jsx` pinta abajo a la derecha un
-  botón de "subir arriba" (tras bajar) y, si el cliente puso `brand.whatsapp`, uno
-  de WhatsApp. Los fondos
+  botón de "subir arriba" (tras bajar) y, si hay `brand.whatsapp`, uno de
+  WhatsApp — que **viene puesto de serie con un número de ejemplo** (`+34 600
+  000 000`, que no existe; `runContentMigrations()` en `projects.js` lo rellena
+  también en el contenido ya guardado, una sola vez, porque un default nuevo
+  solo lo ve quien empieza de cero — y si luego lo vacías a mano, se queda
+  vacío): vacío, la función más vendible para un negocio
+  pequeño no se veía en pantalla y había que adivinar que existía. El campo de
+  Contenido avisa de que es un ejemplo y de que vaciarlo quita el botón. Los fondos
   (`tokens.css`) son capas fijas y sin dependencias: aurora (manchas
   desenfocadas a la deriva) y malla de color (`--theme-mesh`, tres radiales
   derivados de la paleta con un `transform` y un `hue-rotate` mínimo vía
@@ -305,9 +311,16 @@ bundle vía `envPrefix` en `vite.config.js`: es ofuscación, no un candado). Si
 
 Todo lo de la venta, nada de la entrega. La primera vez que se abre la
 herramienta, un **tour guiado** (`Tour.jsx`, se marca visto en `localStorage`)
-explica para qué es y cómo usarla; un paso puede llevar el panel a otro de sus
-tres pasos (`panel`) o disparar el "Ver" en el lienzo para enseñarlo en vivo
-(`reveal`). Al cerrarlo, el panel vuelve al paso en el que estaba. El
+explica para qué es y cómo usarla en diez pasos. Un paso puede llevar el panel a
+otro de sus tres pasos (`panel`), cambiar de pestaña (`tab`, que es como el paso
+del WhatsApp llega hasta su campo en Contenido) o disparar el "Ver" en el lienzo
+para enseñarlo en vivo (`reveal`). Al cerrarlo, panel y pestaña vuelven a donde
+estaban. Dos de los diez pasos existen porque lo que cuentan no se descubre solo:
+el **dado de "Sorpréndeme"**, que es la vía más rápida a un diseño entero para
+quien no sabe por dónde empezar, y el **botón de WhatsApp**, para que se vea que
+ese número se cambia y de dónde sale. La tarjeta del tour mide su propia altura
+antes de colocarse: con un texto de seis líneas se salía por abajo de la ventana
+y el botón "Siguiente" quedaba fuera. El
 botón "¿Cómo funciona?" bajo las pestañas lo relanza, y `?tour` lo fuerza aunque
 ya se haya visto.
 

@@ -8,7 +8,12 @@ export const DEFAULT_CONTENT = {
     navLinks: ['Producto', 'Precios', 'Clientes', 'Recursos'],
     login: 'Entrar',
     navCta: 'Probar gratis',
-    whatsapp: '', // con prefijo internacional; vacío = sin botón flotante
+    // Número de EJEMPLO (el 600 000 000 de toda la vida, que no existe), no el de
+    // nadie. Va puesto para que el botón flotante de WhatsApp se vea desde el
+    // primer segundo: vacío, la función más vendible para un negocio pequeño no
+    // aparecía en pantalla y había que adivinar que existía. Se cambia por el
+    // propio en Contenido, o se vacía para quitar el botón.
+    whatsapp: '+34 600 000 000',
   },
 
   hero: {

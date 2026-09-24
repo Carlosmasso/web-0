@@ -33,6 +33,7 @@ import {
   MAX_VERSIONS,
   readProject,
   renameProject,
+  runContentMigrations,
   setActiveId,
   writeProject,
 } from "./projects";
@@ -48,12 +49,16 @@ export function App() {
   // Todo el mundo trabaja sobre el registro: tú con varios proyectos, el
   // cliente con las versiones de su web. Un `?c=` en la URL se resuelve contra
   // lo guardado antes de arrancar (ver `openIncomingDesign`).
-  const [projectId, setProjectId] = useState(() =>
-    openIncomingDesign(
+  const [projectId, setProjectId] = useState(() => {
+    const seeded = ensureSeeded(FIRST_NAME);
+    // Después de sembrar, para que alcance también a lo recién migrado de las
+    // claves antiguas; antes de leer el contenido, unas líneas más abajo.
+    runContentMigrations();
+    return openIncomingDesign(
       new URLSearchParams(window.location.search).get("c"),
-      ensureSeeded(FIRST_NAME),
-    ),
-  );
+      seeded,
+    );
+  });
   const [registryTick, bumpRegistry] = useReducer((n) => n + 1, 0);
 
   const {
@@ -141,17 +146,20 @@ export function App() {
   // Abrir el tour pasea por los tres pasos; al cerrarlo se devuelve al usuario
   // donde estaba, que puede haber lanzado la ayuda a mitad de un ajuste.
   const stepBeforeTour = useRef("start");
+  const modeBeforeTour = useRef("design");
 
   const openTour = useCallback(() => {
     stepBeforeTour.current = designStep;
+    modeBeforeTour.current = mode;
     setMode("design");
     setShowTour(true);
-  }, [designStep]);
+  }, [designStep, mode]);
 
   const closeTour = useCallback(() => {
     setShowTour(false);
     markTourDone();
     setDesignStep(stepBeforeTour.current);
+    setMode(modeBeforeTour.current);
   }, []);
 
   // Deshacer / rehacer con teclado. Solo sobre el diseño: si el foco está en un
@@ -632,6 +640,8 @@ export function App() {
         onReveal={revealInPreview}
         panel={designStep}
         onPanel={setDesignStep}
+        tab={mode}
+        onTab={setMode}
       />
     </div>
   );

@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import {
   ensureSeeded,
   freeName,
+  runContentMigrations,
   createProject,
   listProjects,
   readProject,
@@ -69,6 +70,35 @@ describe('registro de trabajos guardados', () => {
     }
     expect(writeProject(id, { config: { x: 2 }, content: {} })).toBe(false)
     localStorage.setItem = ok
+  })
+
+  // Un default nuevo solo lo ve quien empieza de cero: lo guardado manda. Esto
+  // es lo que hace que el número de ejemplo de WhatsApp llegue a quien ya tenía
+  // trabajo hecho, y lo que impide que vuelva después de que lo vacíe a mano.
+  describe('migración del WhatsApp de ejemplo', () => {
+    const contenido = (whatsapp) => ({ brand: { name: 'X', whatsapp } })
+
+    it('rellena el número de ejemplo en lo ya guardado', () => {
+      const id = createProject('Mi web', { config: {}, content: contenido('') })
+      runContentMigrations()
+      expect(readProject(id).content.brand.whatsapp).toBe('+34 600 000 000')
+    })
+
+    it('no toca un número que el usuario ya puso', () => {
+      const id = createProject('Mi web', { config: {}, content: contenido('+34 611 223 344') })
+      runContentMigrations()
+      expect(readProject(id).content.brand.whatsapp).toBe('+34 611 223 344')
+    })
+
+    it('corre una sola vez: vaciarlo a propósito se respeta', () => {
+      const id = createProject('Mi web', { config: {}, content: contenido('') })
+      runContentMigrations()
+
+      // el usuario borra el número porque no quiere el botón
+      writeProject(id, { config: {}, content: contenido('') })
+      runContentMigrations()
+      expect(readProject(id).content.brand.whatsapp).toBe('')
+    })
   })
 
   it('crear / renombrar / borrar', () => {

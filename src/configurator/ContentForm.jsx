@@ -72,7 +72,7 @@ function Field({ field, value, onChange }) {
   const len = typeof value === 'string' ? value.length : 0
   const near = len >= cap * 0.85
   return (
-    <label className={`field ${empty ? 'field--empty' : ''}`}>
+    <label className={`field ${empty ? 'field--empty' : ''}`} data-field={field.path}>
       <span className="field__label">
         <span>
           {field.label}

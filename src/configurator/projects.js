@@ -20,6 +20,7 @@ import { DEFAULT_CONFIG } from '../config/schema'
 import { DEFAULT_CONTENT } from '../content/defaults'
 
 const INDEX_KEY = 'web0.projects.v1' //  { [id]: { name, updatedAt } }
+const MIGRATIONS_KEY = 'web0.migraciones' //  { [id de migración]: timestamp }
 const ACTIVE_KEY = 'web0.projects.active' //  id en texto plano
 const dataKey = (id) => `web0.project.${id}`
 const LEGACY_CONFIG = 'web0.config.v2'
@@ -130,6 +131,34 @@ export function freeName(base, from) {
   let n = from ?? 2
   while (taken.has(`${base} ${n}`)) n += 1
   return `${base} ${n}`
+}
+
+/**
+ * Retoques sobre contenido YA guardado.
+ *
+ * Un valor por defecto nuevo solo lo ve quien empieza de cero: lo que hay en
+ * `localStorage` manda y no vuelve a mirar `DEFAULT_CONTENT`. Sin esto, el
+ * número de ejemplo de WhatsApp no lo vería nadie que hubiera abierto la
+ * herramienta antes de hoy — empezando por ti, con tus proyectos de trabajo.
+ *
+ * Cada migración se anota y corre UNA sola vez. Quien vacíe el número a
+ * propósito después se queda sin botón, que es justo lo que ha pedido: esto no
+ * vuelve a pasar por encima de su decisión.
+ *
+ * Llamar DESPUÉS de `ensureSeeded`, para que alcance también al proyecto que
+ * este acaba de crear migrando las claves antiguas.
+ */
+export function runContentMigrations() {
+  const done = read(MIGRATIONS_KEY, {})
+  if (done['whatsapp-ejemplo']) return
+
+  for (const { id } of listProjects()) {
+    const data = read(dataKey(id), null)
+    if (!data?.content?.brand || data.content.brand.whatsapp) continue
+    data.content.brand.whatsapp = DEFAULT_CONTENT.brand.whatsapp
+    write(dataKey(id), data)
+  }
+  write(MIGRATIONS_KEY, { ...done, 'whatsapp-ejemplo': Date.now() })
 }
 
 /**

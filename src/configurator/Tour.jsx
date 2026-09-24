@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 // ============================================================
 // TOUR GUIADO
@@ -10,6 +10,9 @@ import { useCallback, useEffect, useLayoutEffect, useState } from 'react'
 // Un paso puede llevar:
 //   - `panel: 'start' | 'identity' | 'fine'` — lleva el panel de diseño a ese
 //     paso antes de resaltarlo, porque solo se pinta el paso activo.
+//   - `tab: 'design' | 'content'` — cambia de pestaña del panel. Sin él, un paso
+//     con `panel` vuelve solo a Diseño, para que ir hacia atrás no deje la
+//     pestaña cruzada con el paso que se está explicando.
 //   - `reveal: { selector, label }` — dispara el mismo "Ver" del panel en el
 //     lienzo, para enseñar en vivo cómo el panel señala partes del sitio.
 // ============================================================
@@ -51,6 +54,12 @@ export const TOUR_STEPS = [
     body: 'Elige una base por tu sector (dentista, bufete, cafetería…) o por el estilo que te guste. Viene con colores, tipografía y secciones que ya encajan entre sí, y puedes cambiarla cuando quieras.',
   },
   {
+    target: '.surprise',
+    panel: 'start',
+    title: 'Y si no sabes por dónde empezar, tira el dado',
+    body: 'Pulsa "Sorpréndeme" y te monta una combinación entera —color, tipografía, acabado y estructura— coherente y sin romper nada. Púlsalo las veces que quieras: es la forma más rápida de descubrir qué te gusta, y lo que salga sigue siendo tuyo para retocarlo.',
+  },
+  {
     target: '[data-tour="identity"]',
     panel: 'identity',
     title: 'Paso 2 · Ponle tu marca',
@@ -71,7 +80,13 @@ export const TOUR_STEPS = [
   {
     target: '.shell__tabs',
     title: 'Tus textos y fotos, si quieres',
-    body: 'En "Contenido" escribes tus textos y subes imágenes. Ahí va también tu WhatsApp, si quieres un botón flotante para que te escriban. Todo opcional: si lo prefieres, lo pongo yo al construirla.',
+    body: 'En "Contenido" escribes tus textos y subes tus imágenes. Es opcional: si lo prefieres, lo pongo yo al construirla con lo que me pases.',
+  },
+  {
+    target: '[data-field="brand.whatsapp"]',
+    tab: 'content',
+    title: 'El botón de WhatsApp es tuyo',
+    body: 'Ese botón verde flotante que ves abajo a la derecha en tu web abre una conversación de WhatsApp contigo. Ahora lleva un número de ejemplo que no existe: escribe aquí el tuyo con el prefijo (+34…) y ya funciona. Si no lo quieres, borra el campo y el botón desaparece.',
   },
   {
     target: '.shell__cta',
@@ -83,20 +98,33 @@ export const TOUR_STEPS = [
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v))
 const CARD_W = 320
 
-/** Coloca la tarjeta a un lado del elemento resaltado, o debajo si no cabe. */
-function placeCard(rect) {
+/**
+ * Coloca la tarjeta a un lado del elemento resaltado, o debajo si no cabe.
+ *
+ * `cardH` es la altura MEDIDA, no una estimación: con un texto de seis líneas la
+ * tarjeta pasaba de los 260px que se daban por hechos y el botón "Siguiente"
+ * se quedaba por debajo del borde de la ventana — el paso se volvía un callejón
+ * sin salida para quien no supiera que Enter también avanza.
+ */
+function placeCard(rect, cardH) {
   const vw = window.innerWidth
   const vh = window.innerHeight
   const gap = 16
-  const top = clamp(rect.top, 12, vh - 260)
+  const maxTop = Math.max(12, vh - cardH - 12)
+  const top = clamp(rect.top, 12, maxTop)
   if (vw - rect.right > CARD_W + gap + 12) return { left: rect.right + gap, top }
   if (rect.left > CARD_W + gap + 12) return { left: rect.left - CARD_W - gap, top }
-  return { left: clamp(rect.left, 12, vw - CARD_W - 12), top: clamp(rect.bottom + gap, 12, vh - 260) }
+  return {
+    left: clamp(rect.left, 12, vw - CARD_W - 12),
+    top: clamp(rect.bottom + gap, 12, maxTop),
+  }
 }
 
-export function Tour({ steps, open, onClose, onReveal, panel, onPanel }) {
+export function Tour({ steps, open, onClose, onReveal, panel, onPanel, tab, onTab }) {
   const [i, setI] = useState(0)
   const [rect, setRect] = useState(null)
+  const cardRef = useRef(null)
+  const [cardH, setCardH] = useState(260)
   const step = steps[i]
   const last = i === steps.length - 1
 
@@ -111,6 +139,14 @@ export function Tour({ steps, open, onClose, onReveal, panel, onPanel }) {
   useEffect(() => {
     if (open && step.panel) onPanel?.(step.panel)
   }, [open, i, step, onPanel])
+
+  // La pestaña, por el mismo motivo que el paso: el objetivo de un paso de
+  // Contenido no existe en el DOM mientras se está mirando Diseño.
+  useEffect(() => {
+    if (!open) return
+    if (step.tab) onTab?.(step.tab)
+    else if (step.panel) onTab?.('design')
+  }, [open, i, step, onTab])
 
   // Pasos con `reveal`: disparan el "Ver" en el lienzo, con un respiro para que
   // la tarjeta y el recuadro ya estén puestos. Al salir del paso se limpia.
@@ -151,7 +187,14 @@ export function Tour({ steps, open, onClose, onReveal, panel, onPanel }) {
       cancelAnimationFrame(raf2)
       window.removeEventListener('resize', measure)
     }
-  }, [open, i, step, panel])
+  }, [open, i, step, panel, tab])
+
+  // La altura real de la tarjeta, para que `placeCard` no la deje a medias
+  // fuera de la ventana. El guarda de 2px evita el bucle medir -> pintar.
+  useLayoutEffect(() => {
+    const h = cardRef.current?.offsetHeight
+    if (h && Math.abs(h - cardH) > 2) setCardH(h)
+  })
 
   const next = useCallback(() => {
     if (last) onClose()
@@ -169,10 +212,12 @@ export function Tour({ steps, open, onClose, onReveal, panel, onPanel }) {
     return () => window.removeEventListener('keydown', onKey)
   }, [open, next, onClose])
 
+  // Todos los hooks quedan por encima de esta línea: el early return no puede
+  // saltarse ninguno o React pierde el orden entre renders.
   if (!open) return null
 
   const cardStyle = rect
-    ? placeCard(rect)
+    ? placeCard(rect, cardH)
     : { left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }
 
   return (
@@ -192,7 +237,7 @@ export function Tour({ steps, open, onClose, onReveal, panel, onPanel }) {
       )}
       {!rect && <div className="tour__veil" />}
 
-      <div className="tour__card" style={cardStyle}>
+      <div className="tour__card" style={cardStyle} ref={cardRef}>
         <p className="tour__count">
           {i + 1} / {steps.length}
         </p>

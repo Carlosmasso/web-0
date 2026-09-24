@@ -30,7 +30,7 @@ export function buildForm(config) {
       f('brand.login', 'Enlace de acceso', 'text', { max: 24 }),
       f('brand.navCta', 'Botón del menú', 'text', { hint: '1 a 2 palabras', max: 24 }),
       f('brand.whatsapp', 'WhatsApp', 'text', {
-        hint: 'opcional, con prefijo (+34…). Muestra un botón flotante',
+        hint: 'el número de ejemplo no existe: pon el tuyo, o vacíalo para quitar el botón',
         max: 20,
       }),
     ],
