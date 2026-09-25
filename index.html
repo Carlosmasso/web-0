@@ -171,34 +171,6 @@
       </section>
     </main>
 
-    <!-- ============================================================
-         DE DÓNDE VIENE LA VISITA
-
-         El panel de Vercel cuenta `/` y `/app.html` por separado, así que una
-         visita que entra por `/?utm_source=instagram` y pulsa "Diseñar mi web"
-         llegaría al configurador sin parámetro y sin rastro de su origen.
-
-         Esto hace dos cosas, las dos sin cookies y sin identificar a nadie:
-         guardar la fuente para el resto de la sesión (el configurador la
-         adjunta a sus eventos, ver `src/config/analytics.js`) y pasarle el
-         parámetro a los enlaces del configurador, para que también aparezca en
-         la pestaña de UTM del panel.
-         ============================================================ -->
-    <script>
-      (function () {
-        try {
-          var qs = window.location.search
-          var u = new URLSearchParams(qs).get('utm_source')
-          if (u) sessionStorage.setItem('web0.fuente', u.slice(0, 40))
-          if (!qs) return
-          var enlaces = document.querySelectorAll('a[href="/app.html"]')
-          for (var i = 0; i < enlaces.length; i++) enlaces[i].href = '/app.html' + qs
-        } catch (e) {
-          /* sin almacenamiento o navegador antiguo: la web funciona igual */
-        }
-      })()
-    </script>
-
     <footer class="foot">
       <span>Maketa · Carlos Massó · Madrid</span>
       <nav>
