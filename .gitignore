@@ -5,3 +5,7 @@ dist
 .env
 .env*.local
 .vercel
+
+# material generado para redes (pesa y se regenera con un comando)
+scripts/social/salida
+scripts/social/lib/mux

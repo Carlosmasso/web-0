@@ -1,0 +1,35 @@
+{
+  "_nota": "Fotos de Pexels (licencia libre, uso comercial sin atribución). Se enlazan por URL, no se descargan. El tamaño y el recorte se piden por parámetros al propio CDN: ?w=&h=&fit=crop. Para cambiar una, pega aquí otra URL base de images.pexels.com y ejecuta: node scripts/social/revisar-imagenes.mjs",
+  "rural": {
+    "vertical": "https://images.pexels.com/photos/17732626/pexels-photo-17732626.jpeg",
+    "apaisada": "https://images.pexels.com/photos/33232165/pexels-photo-33232165.jpeg"
+  },
+  "dental": {
+    "vertical": "https://images.pexels.com/photos/3946835/pexels-photo-3946835.jpeg",
+    "apaisada": "https://images.pexels.com/photos/6627838/pexels-photo-6627838.jpeg"
+  },
+  "abogados": {
+    "vertical": "https://images.pexels.com/photos/3927126/pexels-photo-3927126.jpeg",
+    "apaisada": "https://images.pexels.com/photos/8731036/pexels-photo-8731036.jpeg"
+  },
+  "obrador": {
+    "vertical": "https://images.pexels.com/photos/8633662/pexels-photo-8633662.jpeg",
+    "apaisada": "https://images.pexels.com/photos/15009979/pexels-photo-15009979.jpeg"
+  },
+  "fisio": {
+    "vertical": "https://images.pexels.com/photos/20860592/pexels-photo-20860592.jpeg",
+    "apaisada": "https://images.pexels.com/photos/5793904/pexels-photo-5793904.jpeg"
+  },
+  "arquitectura": {
+    "vertical": "https://images.pexels.com/photos/1974596/pexels-photo-1974596.jpeg",
+    "apaisada": "https://images.pexels.com/photos/16631149/pexels-photo-16631149.jpeg"
+  },
+  "peluqueria": {
+    "vertical": "https://images.pexels.com/photos/7195803/pexels-photo-7195803.jpeg",
+    "apaisada": "https://images.pexels.com/photos/9146943/pexels-photo-9146943.jpeg"
+  },
+  "taller": {
+    "vertical": "https://images.pexels.com/photos/6870300/pexels-photo-6870300.jpeg",
+    "apaisada": "https://images.pexels.com/photos/34337558/pexels-photo-34337558.jpeg"
+  }
+}
