@@ -20,6 +20,8 @@ const c = (reel, n) => reel.compas(n)
 export const FORMATOS = {
   // ----------------------------------------------------------
   rafaga: {
+    queSeVe:
+      'Cuatro estilos completos en los dos primeros segundos, separados por destellos blancos. Freno en seco, dos titulares de golpe, y la cámara entra en la portada mientras el color de marca cambia tres veces. Cierra volviendo al estilo del principio y sin pantalla negra, para que al repetirse no se vea la costura.',
     voz: 'Trepidante, 9 s, bucle cerrado. La de captar.',
     duracion: 9,
     async guion(reel, negocio) {
@@ -68,8 +70,10 @@ Gratis y sin registro: maketa.es`,
 
   // ----------------------------------------------------------
   identidad: {
-    voz: 'Un solo gesto repetido, cámara entrando. 12 s.',
-    duracion: 12,
+    queSeVe:
+      'Un titular presenta la idea y la cámara se va acercando a la portada mientras el color de marca cambia cinco veces seguidas. En cada cambio se recalculan sombras, degradados y el contraste del texto, que es lo que una plantilla no hace.',
+    voz: 'Un solo gesto repetido, cámara entrando. 8 s.',
+    duracion: 8,
     async guion(reel, negocio) {
       await reel.partida(negocio, 700)
       await reel.grabar()
@@ -101,8 +105,10 @@ Gratis y sin registro: maketa.es`,
 
   // ----------------------------------------------------------
   portada: {
-    voz: 'Plano fijo, tres estados, pausado. 14 s.',
-    duracion: 14,
+    queSeVe:
+      'La portada se rehace tres veces —dividida, centrada y foto a sangre— con un destello entre cada una y la cámara ligeramente acercada. Cierra con «Tres portadas, un clic».',
+    voz: 'Plano fijo, tres estados, pausado. 8 s.',
+    duracion: 8,
     async guion(reel, negocio) {
       await reel.preset(negocio.preset, 800)
       await reel.paso(2)
@@ -132,8 +138,10 @@ Gratis: maketa.es`,
 
   // ----------------------------------------------------------
   escribir: {
-    voz: 'Quieto salvo el texto. Íntimo, 13 s.',
-    duracion: 13,
+    queSeVe:
+      'La cámara se queda cerca de la portada y no se mueve nada salvo el titular, que se teclea letra a letra. Se ve aparecer en la web al mismo tiempo que se escribe.',
+    voz: 'Quieto salvo el texto. Íntimo, 10 s.',
+    duracion: 10,
     async guion(reel, negocio) {
       await reel.partida(negocio, 800)
       await reel.grabar()
@@ -166,8 +174,10 @@ Gratis: maketa.es`,
 
   // ----------------------------------------------------------
   recorrido: {
-    voz: 'Plano largo sin cortes, contemplativo. 15 s. El contrapunto.',
-    duracion: 15,
+    queSeVe:
+      'Plano largo sin un solo corte: el nombre del negocio y después la web entera desplazándose de arriba abajo con un acercamiento lentísimo. Es el contrapunto tranquilo del resto de formatos.',
+    voz: 'Plano largo sin cortes, contemplativo. 14 s. El contrapunto.',
+    duracion: 14,
     async guion(reel, negocio) {
       await reel.partida(negocio, 900)
       await reel.grabar()

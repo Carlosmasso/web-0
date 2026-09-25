@@ -26,6 +26,13 @@ const SALTO = 3 // coprimo con el número de negocios: dispersa sin repetir
 
 export const TOTAL = NEG.length * FOR.length
 
+/** Tres publicaciones por semana: sostenible y suficiente para no desaparecer. */
+export const POR_SEMANA = 3
+export const SEMANAS = Math.ceil(TOTAL / POR_SEMANA)
+
+/** Las piezas de una semana (la 1 es la primera). */
+export const semana = (n) => cola((n - 1) * POR_SEMANA, POR_SEMANA)
+
 /** La pieza número i de la cola (0 es la primera). */
 export function pieza(i) {
   const formato = FOR[i % FOR.length]
@@ -36,17 +43,28 @@ export function pieza(i) {
 export const cola = (desde = 0, cuantas = TOTAL) =>
   Array.from({ length: Math.min(cuantas, TOTAL - desde) }, (_, k) => pieza(desde + k))
 
-/** Convierte una entrada de la cola en una pieza grabable. */
+/** Convierte una entrada de la cola en una pieza grabable y documentada. */
 export function materializar({ i, formato, negocio }) {
   const f = FORMATOS[formato]
   const n = NEGOCIOS[negocio]
-  const nombre = `p${String(i + 1).padStart(2, '0')}-${negocio}-${formato}`
   const etiquetas = ['diseñoweb', ...n.etiquetas, 'pequeñocomercio'].map((e) => '#' + e).join(' ')
+  const semanaN = Math.floor(i / POR_SEMANA) + 1
+  const dentro = (i % POR_SEMANA) + 1
 
   return {
     ficha: {
-      nombre,
+      nombre: `${dentro}-${negocio}-${formato}`,
       titulo: `${n.sector} · ${formato}`,
+      carpeta: `semana-${String(semanaN).padStart(2, '0')}/${dentro}-${negocio}-${formato}`,
+      semana: semanaN,
+      dentro,
+      numero: i + 1,
+      sector: n.sector,
+      marca: n.contenido['brand.name'],
+      formato,
+      voz: f.voz,
+      queSeVe: f.queSeVe,
+      dura: f.duracion,
       pie: `${f.pie(n)}\n\n${etiquetas}`,
       pieTikTok: `${f.pieTikTok(n)}\n\n#diseñoweb #${n.etiquetas[0]} #negociolocal`,
     },
@@ -90,12 +108,18 @@ export function revisar(piezas = cola()) {
   return problemas
 }
 
-/** Listado legible del calendario, para saber qué toca. */
-export function calendario(desde = 0, cuantas = 12) {
-  return cola(desde, cuantas)
-    .map((p) => {
-      const n = NEGOCIOS[p.negocio]
-      return `  ${String(p.i + 1).padStart(2)}. ${n.sector.padEnd(26)} · ${p.formato.padEnd(10)} · ${FORMATOS[p.formato].voz}`
-    })
-    .join('\n')
+/** Calendario legible, agrupado por semanas. */
+export function calendario(desde = 0, cuantas = TOTAL) {
+  const filas = []
+  let actual = 0
+  for (const p of cola(desde, cuantas)) {
+    const s = Math.floor(p.i / POR_SEMANA) + 1
+    if (s !== actual) {
+      filas.push(`${actual ? '\n' : ''}Semana ${s}`)
+      actual = s
+    }
+    const n = NEGOCIOS[p.negocio]
+    filas.push(`  ${String(p.i + 1).padStart(2)}. ${n.sector.padEnd(24)} · ${p.formato.padEnd(10)} · ${FORMATOS[p.formato].voz}`)
+  }
+  return filas.join('\n')
 }
