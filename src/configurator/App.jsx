@@ -79,13 +79,15 @@ export function App() {
   const [zipping, setZipping] = useState(false);
   const [showContact, setShowContact] = useState(false);
   const [showTour, setShowTour] = useState(false);
-  const [mnote, setMnote] = useState(() => {
-    try {
-      return sessionStorage.getItem("web0.mnote") !== "1";
-    } catch {
-      return true;
-    }
-  });
+  // ---- la hoja del panel en móvil ----
+  //
+  // En móvil el lienzo manda: ocupa la parte de arriba y no se mueve, y el
+  // panel vive en una hoja que sube y baja. Arranca asomada, con los pasos y
+  // los primeros presets a la vista, para que el primer gesto ya cambie algo
+  // que se ve. Antes esto se apilaba y la web quedaba bajo el pliegue: nadie
+  // llegaba a ver cambiar nada, que es lo único que vende el producto.
+  const [hoja, setHoja] = useState("peek");
+  const hojaRef = useRef(null);
   const [copied, setCopied] = useState(null);
   // El guardado puede fallar de verdad: `localStorage` tiene cuota y las fotos
   // subidas van dentro del contenido. Callarlo dejaría al usuario tocando cosas
@@ -381,12 +383,52 @@ export function App() {
     flash("link");
   };
 
-  const dismissMnote = () => {
-    setMnote(false);
-    try {
-      sessionStorage.setItem("web0.mnote", "1");
-    } catch {
-      /* ignore */
+  /**
+   * Arrastre de la hoja.
+   *
+   * El desplazamiento se escribe DIRECTAMENTE sobre el nodo mientras dura el
+   * gesto. Si pasara por estado de React, cada píxel del dedo provocaría un
+   * render del panel entero y en un teléfono se vería a tirones. Al soltar,
+   * React recupera el mando: se decide a qué altura encaja y el estado vuelve
+   * a ser la única verdad.
+   */
+  const arrastrarHoja = (e) => {
+    const hojaEl = hojaRef.current;
+    if (!hojaEl || e.pointerType === "mouse") return; // en escritorio no hay hoja
+    const y0 = e.clientY;
+    const abierta = hoja === "full";
+    const alto = hojaEl.getBoundingClientRect().height;
+    let dy = 0;
+
+    hojaEl.style.transition = "none";
+    const mover = (ev) => {
+      dy = ev.clientY - y0;
+      // Resistencia al tirar en la dirección donde ya no hay recorrido.
+      const libre = abierta ? Math.max(0, dy) : Math.min(0, dy);
+      const preso = (abierta ? Math.min(0, dy) : Math.max(0, dy)) * 0.18;
+      hojaEl.style.setProperty("--hoja-arrastre", `${libre + preso}px`);
+    };
+    const soltar = () => {
+      hojaEl.style.transition = "";
+      hojaEl.style.removeProperty("--hoja-arrastre");
+      window.removeEventListener("pointermove", mover);
+      window.removeEventListener("pointerup", soltar);
+      // Un cuarto de la hoja, o un gesto claro, bastan para cambiar de altura.
+      if (Math.abs(dy) > alto * 0.25) setHoja(dy > 0 ? "peek" : "full");
+    };
+    window.addEventListener("pointermove", mover);
+    window.addEventListener("pointerup", soltar, { once: true });
+  };
+
+  /**
+   * Al tocar algo que cambia el diseño, la hoja se aparta para que el cambio
+   * se vea. Va en un solo sitio y no en los quince manejadores que ya existen:
+   * cualquier control nuevo queda cubierto sin acordarse de esto.
+   */
+  const apartarHoja = (e) => {
+    if (hoja !== "full") return;
+    if (e.target.closest(".preset, .chip, .surprise, .opt, .sec__toggle")) {
+      setHoja("peek");
     }
   };
 
@@ -405,26 +447,24 @@ export function App() {
   };
 
   return (
-    <div className="shell">
-      <aside className="shell__panel">
-        {mnote && (
-          <div className="shell__mnote">
-            <span>El configurador va mejor desde un ordenador.</span>
-            <button type="button" onClick={copyLink}>
-              {copied === "link"
-                ? "Enlace copiado"
-                : "Copiar enlace para seguir"}
-            </button>
-            <button
-              type="button"
-              className="shell__mnote-x"
-              onClick={dismissMnote}
-              aria-label="Cerrar aviso"
-            >
-              ✕
-            </button>
-          </div>
-        )}
+    <div className="shell" data-hoja={hoja}>
+      <aside className="shell__panel" ref={hojaRef} onClickCapture={apartarHoja}>
+        {/* Tirador de la hoja. Solo existe en móvil (el CSS lo esconde en
+            escritorio), y es un botón de verdad: se puede arrastrar, pero
+            también pulsar con el teclado o con un lector de pantalla. */}
+        <button
+          type="button"
+          className="hoja__tirador"
+          onPointerDown={arrastrarHoja}
+          onClick={() => setHoja((v) => (v === "full" ? "peek" : "full"))}
+          aria-expanded={hoja === "full"}
+        >
+          <span className="hoja__asa" aria-hidden="true" />
+          <span className="hoja__texto">
+            {hoja === "full" ? "Ver mi web" : "Ajustar el diseño"}
+          </span>
+        </button>
+
         <div className="shell__brand">
           {/* {showPicker ? ( */}
           <ProjectMenu

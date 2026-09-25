@@ -212,39 +212,6 @@ body {
   background: color-mix(in srgb, var(--c-pending) 14%, transparent);
 }
 
-/* Aviso de móvil: no bloquea, solo avisa y ofrece guardar el sitio. En
-   escritorio no existe. */
-.shell__mnote {
-  display: none;
-}
-@media (max-width: 900px) {
-  .shell__mnote {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px 12px;
-    padding: 12px 16px;
-    background: var(--c-accent-soft);
-    border-bottom: 1px solid var(--c-accent-line);
-    font-size: 0.82rem;
-    color: var(--c-text);
-  }
-  .shell__mnote button {
-    padding: 6px 12px;
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--c-accent);
-    border: 1px solid var(--c-accent-line);
-    border-radius: 7px;
-  }
-  .shell__mnote-x {
-    margin-left: auto;
-    padding: 4px 9px !important;
-    color: var(--c-muted) !important;
-    border: 0 !important;
-  }
-}
-
 .shell__legal {
   margin-top: auto;
   display: flex;
@@ -1736,23 +1703,126 @@ body {
    RESPONSIVE
    ============================================================ */
 
+/* ============================================================
+   MÓVIL: EL LIENZO MANDA, EL PANEL ES UNA HOJA
+
+   Antes esto se apilaba: panel arriba, lienzo debajo. En un teléfono de 844 px
+   el panel se comía 472 y la web del cliente quedaba bajo el pliegue, así que
+   el único momento que vende el producto —tocas algo y tu web cambia delante
+   de ti— no llegaba a ocurrir. Y el tráfico de redes es casi todo móvil.
+
+   Ahora el lienzo ocupa la mitad de arriba y no se mueve, y el panel vive en
+   una hoja que sube y baja, como el buscador de un mapa. Dos alturas:
+
+     peek  (por defecto)  los pasos y los primeros presets, 44dvh
+     full  (al tirar)     el panel entero, 88dvh
+
+   Se usa `dvh` y no `vh` a propósito: en iOS Safari la barra de direcciones
+   aparece y desaparece, y con `vh` la hoja daría un salto cada vez.
+   ============================================================ */
 @media (max-width: 1000px) {
   .shell {
-    grid-template-columns: 1fr;
-    /* apilado: el documento vuelve a desplazarse con normalidad */
-    grid-template-rows: auto;
-    height: auto;
-    overflow: visible;
+    display: block;
+    height: 100dvh;
+    overflow: hidden;
   }
-  /* Apilado, el panel es corto y el armazón fijo se lo comería entero: aquí
-     vuelve a desplazarse de una pieza (marca y aviso se van hacia arriba) y
-     solo las pestañas de paso se quedan pegadas al borde. Siguen a la vista,
-     que es de lo que se trata, sin robarle alto al contenido. */
+
+  /* --- el lienzo, fijo arriba --- */
+  .shell__stage-wrap {
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: 56dvh;
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+  }
+  .shell__stage-row,
+  .stage {
+    flex: 1;
+    min-height: 0;
+  }
+  .stage {
+    padding: 10px 10px 0;
+  }
+  /* La barra de acciones se aprieta para no robarle alto a la web: una sola
+     fila que se desplaza de lado. Los botones NO parten de línea; un rótulo
+     en dos líneas dobla el alto de la barra y se lee como un fallo. */
+  .shell__bar {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    gap: 8px;
+    padding: 8px 10px;
+  }
+  .shell__bar::-webkit-scrollbar {
+    display: none;
+  }
+  .shell__actions {
+    flex-wrap: nowrap;
+    flex: none;
+  }
+  .shell__bar button {
+    white-space: nowrap;
+    flex: none;
+  }
+
+  /* --- el panel, hoja inferior --- */
   .shell__panel {
-    max-height: 56vh;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 88dvh;
+    border-right: 0;
+    border-top: 1px solid var(--c-line);
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 -14px 44px rgba(0, 0, 0, 0.5);
     overflow-y: auto;
     overscroll-behavior: contain;
+    z-index: 20;
+    /* `--hoja-arrastre` lo escribe el gesto directamente sobre el nodo; en
+       reposo vale 0 y manda el estado de React. */
+    transform: translateY(calc(var(--hoja-alto, 44dvh) + var(--hoja-arrastre, 0px)));
+    transition: transform 380ms cubic-bezier(0.32, 0.72, 0, 1);
+    will-change: transform;
   }
+  .shell[data-hoja="full"] .shell__panel {
+    --hoja-alto: 0dvh;
+  }
+
+  /* --- el tirador --- */
+  .hoja__tirador {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px 12px;
+    background: var(--c-panel);
+    border: 0;
+    border-radius: 18px 18px 0 0;
+    color: var(--c-text);
+    font: 600 13px/1 inherit;
+    letter-spacing: -0.01em;
+    cursor: grab;
+    touch-action: none; /* el gesto lo maneja el puntero, no el scroll */
+  }
+  .hoja__tirador:active {
+    cursor: grabbing;
+  }
+  .hoja__asa {
+    width: 38px;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--c-line);
+  }
+  .hoja__texto {
+    color: var(--c-muted);
+  }
+
   .sidebar,
   .sidebar__scroll,
   .cform {
@@ -1761,22 +1831,34 @@ body {
   }
   .steps {
     position: sticky;
-    top: 0;
+    top: 46px; /* justo bajo el tirador, que también es sticky */
     z-index: 4;
     padding: 10px 12px;
   }
   .shell__brand {
-    padding: 14px 16px 12px;
+    padding: 12px 16px 10px;
   }
   .steps__item {
     padding: 9px 4px 10px;
     gap: 5px;
   }
   .shell__legal {
-    padding: 10px 16px;
+    padding: 10px 16px 28px;
   }
-  .stage {
-    min-height: 60vh;
+}
+
+/* El tirador no existe en escritorio: allí el panel es una columna fija. */
+@media (min-width: 1001px) {
+  .hoja__tirador {
+    display: none;
+  }
+}
+
+/* Quien pide menos movimiento recibe el cambio de altura sin animación: la
+   hoja sigue funcionando igual, solo que sin deslizarse. */
+@media (prefers-reduced-motion: reduce) {
+  .shell__panel {
+    transition: none;
   }
 }
 
