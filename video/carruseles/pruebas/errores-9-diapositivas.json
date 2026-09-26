@@ -1,0 +1,13 @@
+{
+  "plantilla": "errores",
+  "portada": { "antetitulo": "Prueba · 9 diapositivas", "titulo": "7 errores *pequeños* en una web", "texto": "Uno por diapositiva, para comprobar el ritmo con muchas." },
+  "puntos": [
+    { "titulo": "El teléfono no se puede pulsar", "texto": "En el móvil, un número escrito como texto obliga a copiarlo.", "mejor": "Que el teléfono sea un enlace de llamada." },
+    { "titulo": "El horario está desactualizado", "texto": "Es de lo primero que se mira.", "mejor": "Ponlo en un sitio fácil de cambiar." },
+    { "titulo": "No hay dirección ni mapa", "texto": "Si tienes local, es lo que más se busca.", "mejor": "Dirección escrita y un enlace al mapa." },
+    { "titulo": "El botón principal no dice qué hace", "texto": "\"Enviar\" o \"Más\" no dicen nada.", "mejor": "Un verbo y un objeto: \"Pedir cita\"." },
+    { "titulo": "El menú tiene demasiadas opciones", "texto": "Cada opción de más compite con las importantes.", "mejor": "Cinco o seis como mucho." },
+    { "titulo": "El pie está vacío", "texto": "Mucha gente baja hasta abajo buscando el contacto.", "mejor": "Contacto, horario y enlaces legales." },
+    { "titulo": "La web no tiene favicon", "texto": "Es el icono de la pestaña: sin él, parece a medio hacer.", "mejor": "Tu logo, simplificado, en un cuadrado." }
+  ]
+}

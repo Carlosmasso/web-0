@@ -1,0 +1,59 @@
+{
+  "plantilla": "errores",
+  "tema": "contratar-web",
+  "nivel": 2,
+  "portada": {
+    "antetitulo": "Antes de encargar tu web",
+    "titulo": "5 errores al encargar una web que *se notan después*",
+    "texto": "Ninguno es técnico. Todos se evitan con una pregunta a tiempo."
+  },
+  "puntos": [
+    {
+      "icono": "dominio",
+      "titulo": "No saber a nombre de quién está el dominio",
+      "texto": "El dominio es la dirección de tu web. Si lo registra otra persona a su nombre, para llevártelo necesitarás que te lo transfiera.",
+      "mejor": "Pide que se registre a tu nombre y con un correo tuyo."
+    },
+    {
+      "icono": "accesos",
+      "titulo": "No pedir los accesos al terminar",
+      "texto": "Alojamiento, dominio, panel, analítica… Si solo los tiene quien hizo la web, cualquier cambio pasa por esa persona.",
+      "mejor": "Que la entrega incluya la lista de accesos y que puedas entrar en todos."
+    },
+    {
+      "icono": "textos",
+      "titulo": "Dejar los textos para el final",
+      "texto": "El diseño se construye alrededor del contenido. Si los textos llegan tarde, o se retrasa todo o se diseña con relleno que luego no encaja.",
+      "mejor": "Empieza a escribirlos mientras se diseña, aunque sea un borrador."
+    },
+    {
+      "icono": "movil",
+      "titulo": "Aprobarla sin mirarla en el móvil",
+      "texto": "Buena parte de tus visitas llegará desde el teléfono. Lo que se ve bien en una pantalla grande puede quedar apretado en una pequeña.",
+      "mejor": "Antes de dar el visto bueno, revísala en tu propio móvil, sección a sección."
+    },
+    {
+      "icono": "cambios",
+      "titulo": "No preguntar qué pasa después de publicar",
+      "texto": "Cambiar un horario, añadir una foto, actualizar lo que haga falta. Alguien tendrá que hacerlo.",
+      "mejor": "Pregunta quién hará los cambios, cómo se piden y cuánto tardan."
+    }
+  ],
+  "preguntas": {
+    "antetitulo": "Antes de empezar",
+    "titulo": "Pregunta *esto*:",
+    "lista": [
+      "¿A nombre de quién se registra el dominio?",
+      "¿Tendré acceso a todo cuando se entregue?",
+      "¿Quién escribe los textos, y para cuándo?",
+      "¿Podré revisarla en el móvil antes de publicar?",
+      "¿Quién hace los cambios después?"
+    ]
+  },
+  "cierre": {
+    "titulo": "Cinco preguntas que *te ahorran sustos*.",
+    "texto": "Mejor al principio que al final.",
+    "cta": "Guárdalo para cuando hables con proveedores."
+  },
+  "pie": "Cinco errores al encargar una web que no se ven hasta que ya es tarde. Ninguno es técnico: todos se resuelven con una pregunta a tiempo. Guárdalo para cuando hables con proveedores."
+}

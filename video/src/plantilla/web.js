@@ -19,12 +19,12 @@ import { SECCIONES } from '../../../scripts/social/lib/secciones.mjs'
 // exactamente lo que vería quien pulsara ese botón.
 // ============================================================
 
-const alLienzo = (raw) =>
+export const alLienzo = (raw) =>
   // El movimiento propio del sitio va por reloj y no por fotograma: se apaga.
   normalizeConfigWithGuardrails({ ...raw, motion: 'none' }).config
 
 /** Punto de partida: el preset del negocio, su portada y su contenido. */
-function partida(clave) {
+export function partida(clave) {
   const negocio = NEGOCIOS[clave]
   if (!negocio) throw new Error(`negocio desconocido: ${clave}`)
   const preset = PRESETS.find((p) => p.label.includes(negocio.preset))

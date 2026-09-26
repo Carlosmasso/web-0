@@ -81,7 +81,7 @@ guardarraíl recomienda, no bloquea ni cambia de estética.
 | `api/lead.js` | Función serverless de Vercel: filtro anti-spam, fila en Google Sheet, aviso por Resend |
 | `apps-script/` | El script de la Sheet de leads |
 | `scripts/social/` | Catálogos de los reels: negocios, formatos (gancho, frases y cambios de cada reel, como datos) y la cola de publicación |
-| `video/` | Subproyecto de Remotion con sus propias dependencias (`cd video && pnpm install`): la plantilla maestra de reels (`src/plantilla/`, con el sitio real en una tarjeta flotante), el vídeo de marca y `pnpm reels N` para renderizar una semana. Ver su README |
+| `video/` | Subproyecto de Remotion con sus propias dependencias (`cd video && pnpm install`): la plantilla maestra de reels (`src/plantilla/`, con el sitio real en una tarjeta flotante), el vídeo de marca, `pnpm reels N` para renderizar una semana y los carruseles (`src/carrusel/`, datos en `carruseles/`). Ver su README |
 
 Si añades un componente al runtime del sitio, regístralo también en `scaffold.js`; el test
 `export-integrity` comprueba que cada import relativo del `.zip` cierra y que nada arrastra
@@ -117,7 +117,7 @@ suyo, el preset solo cambia el diseño.
 - Imágenes de stock: Pexels, enlazadas por URL (sin descargar archivos).
 - `og:image` debe ser URL absoluta; `og.png` se regenera capturando `public/og.html` a 1200×630.
 
-## Reels y vídeo
+## Reels, carruseles y vídeo
 
 Los reels de Instagram y TikTok salen de la plantilla de Remotion de `video/src/plantilla/`,
 con el acabado del vídeo de marca `IntroMaketa`. Es una decisión tomada tras dos correcciones;
@@ -128,8 +128,19 @@ antes de proponer otro estilo, lee `video/README.md` ("Tres reglas de acabado"):
 - Los muelles de `video/src/marca.js`, Inter 700 y el azul de la marca como único acento. Nada de
   subtítulos en mayúsculas con contorno, amarillos ni rebotes.
 - Voz en primera persona: "Diséñala tú. Yo la construyo."
-- Un reel nuevo es **datos**: un formato en `scripts/social/lib/formatos.mjs` o una copia de
-  `video/src/plantilla/ejemplo.js`. `cd video && pnpm reels N` renderiza la semana N.
+- Un reel nuevo es **datos**, nunca una composición nueva. Hay dos familias:
+  - la cola semanal (`scripts/social/lib/formatos.mjs`, `cd video && pnpm reels N`);
+  - el motor "¿qué cambia si modifico X?": un JSON en `video/reels/` con plantilla (`preset`,
+    `estilo`, `color`, `tipografia` o combinación), negocio y variantes o `"auto"`
+    (`pnpm reel reels/x.json`). Ideas en `video/reels/IDEAS.md`.
+
+Los **carruseles** educativos (Instagram y LinkedIn, 1080x1350) salen del mismo subproyecto y
+con el mismo acabado: portada tinta con halo, contenido sobre fondo claro con la tarjeta y la
+pastilla, cierre de marca. Un carrusel es un JSON en `video/carruseles/` con plantilla
+(`pregunta`, `errores`, `checklist`) y contenido con sentido, no diapositivas
+(`pnpm carrusel carruseles/x.json` → PNG por diapositiva, PDF y hoja de contactos). El texto se
+ajusta solo y, si no cabe, el render falla. Nada de cifras inventadas ni, en fase 0, de dinero.
+100 ideas en `video/carruseles/IDEAS.md`.
 
 ## Tests
 

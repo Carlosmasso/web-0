@@ -1,0 +1,7 @@
+{
+  "plantilla": "errores",
+  "portada": { "antetitulo": "Prueba · 3 diapositivas", "titulo": "Un solo error, *bien contado*" },
+  "puntos": [
+    { "icono": "aviso", "titulo": "Publicar sin probar el formulario", "texto": "Si el formulario no llega, no te enteras de que alguien te ha escrito.", "mejor": "Envíate un mensaje de prueba el día que se publique." }
+  ]
+}

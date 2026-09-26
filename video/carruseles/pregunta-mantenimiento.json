@@ -1,0 +1,50 @@
+{
+  "plantilla": "pregunta",
+  "tema": "mantenimiento",
+  "nivel": 1,
+  "portada": {
+    "antetitulo": "Una duda habitual",
+    "titulo": "¿Mi web necesita *mantenimiento* todos los meses?",
+    "texto": "La respuesta corta y los tres casos más comunes."
+  },
+  "respuesta": {
+    "titulo": "Depende.",
+    "texto": "Sobre todo, de cómo esté hecha y de para qué la uses:"
+  },
+  "casos": [
+    {
+      "icono": "capas",
+      "si": "Tu web usa un gestor como *WordPress*, con plugins",
+      "resumen": "Si usa un gestor con plugins",
+      "entonces": "Necesita actualizaciones periódicas: del gestor, del tema y de cada plugin.",
+      "texto": "Muchas actualizaciones corrigen fallos de seguridad. Dejarlas pasar meses es arriesgado."
+    },
+    {
+      "icono": "archivos",
+      "si": "Es una web sencilla, sin gestor ni base de datos",
+      "resumen": "Si es una web sencilla, sin gestor",
+      "entonces": "Hay mucho menos que actualizar. Suele bastar con revisarla de vez en cuando.",
+      "texto": "Aun así, el dominio y el alojamiento se renuevan, y alguien tiene que estar pendiente."
+    },
+    {
+      "icono": "tienda",
+      "si": "Vendes online o recibes reservas desde la web",
+      "resumen": "Si vende o gestiona reservas",
+      "entonces": "Conviene un seguimiento continuo: pagos, formularios y avisos tienen que funcionar siempre.",
+      "texto": "Un fallo aquí no siempre se ve a simple vista, pero se nota en los pedidos."
+    }
+  ],
+  "resumen": {
+    "titulo": "Antes de contratarlo, *pregunta*:",
+    "lista": [
+      "¿Qué incluye exactamente?",
+      "¿Cada cuánto se actualiza y se hace copia de seguridad?",
+      "¿Qué pasa si un mes no lo contrato?"
+    ]
+  },
+  "cierre": {
+    "titulo": "No hay una respuesta única, *pero sí preguntas claras*.",
+    "cta": "Guárdalo para cuando te lo ofrezcan."
+  },
+  "pie": "¿Una web necesita mantenimiento todos los meses? Depende de cómo esté hecha y de para qué la uses. Tres casos y las preguntas que conviene hacer antes de contratarlo."
+}

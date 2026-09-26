@@ -1,0 +1,43 @@
+{
+  "plantilla": "pregunta",
+  "tema": "propiedad",
+  "nivel": 1,
+  "portada": {
+    "antetitulo": "Propiedad y accesos",
+    "titulo": "¿De quién es *el dominio* de mi web?",
+    "texto": "No siempre es de quien encarga la web. Depende de quién lo registró."
+  },
+  "respuesta": {
+    "titulo": "De quien *lo registró*.",
+    "texto": "Y eso te deja en una de estas tres situaciones:"
+  },
+  "casos": [
+    {
+      "icono": "persona",
+      "si": "Está registrado *a tu nombre*",
+      "resumen": "Está a tu nombre",
+      "entonces": "Puedes cambiar de proveedor y llevarte el dominio contigo.",
+      "texto": "Guarda el acceso al registrador en un sitio seguro: es la llave de tu web."
+    },
+    {
+      "icono": "equipo",
+      "si": "Está a nombre de *quien te hizo la web*",
+      "resumen": "Está a nombre de tu proveedor",
+      "entonces": "Para llevártelo, necesitas que te lo transfiera.",
+      "texto": "Es un trámite habitual. Mejor pedirlo con calma que el día que lo necesites."
+    },
+    {
+      "icono": "pregunta",
+      "si": "*No lo sabes*",
+      "resumen": "No lo sabes",
+      "entonces": "Pregunta en qué registrador está y a nombre de quién.",
+      "texto": "Es una pregunta rápida, y la respuesta te dice cuánto control tienes sobre tu web."
+    }
+  ],
+  "cierre": {
+    "titulo": "Tu dominio es *tu dirección*. Que esté a tu nombre.",
+    "texto": "Las webs que construyo en Maketa se entregan para que queden tuyas.",
+    "cta": "Guárdalo para cuando encargues tu web."
+  },
+  "pie": "¿De quién es el dominio de tu web? De quien lo registró, que no siempre es quien la encarga. Tres situaciones y qué hacer en cada una."
+}

@@ -1,8 +1,8 @@
 # Vídeos con Remotion
 
-Todo en 1080x1920 a 30 fps. Es un subproyecto aparte, con sus propias
-dependencias: Remotion no entra en el bundle de la app. `out/` está en
-`.gitignore`.
+Los vídeos, en 1080x1920 a 30 fps; los carruseles, imágenes de 1080x1350.
+Es un subproyecto aparte, con sus propias dependencias: Remotion no entra en
+el bundle de la app. `out/` está en `.gitignore`.
 
 ```bash
 cd video
@@ -10,9 +10,146 @@ pnpm install
 pnpm studio      # editor en el navegador: PlantillaReel, las 40 piezas, el intro
 pnpm reels       # el calendario de publicación
 pnpm reels 1     # renderiza la semana 1 → out/semana-01/…/video.mp4 + pies + ficha
+pnpm carrusel carruseles/x.json   # un carrusel → out/carruseles/x/ (PNG, PDF, hoja)
 ```
 
-## La plantilla de los reels
+## El motor de reels: "¿qué cambia si modifico X?"
+
+Reels de 9 a 12 s que enseñan **una variable** del configurador sobre la web
+real de un negocio: preset, estilo, color, tipografía o una combinación. Cada
+reel es un JSON en [`reels/`](reels/); la composición es siempre la misma.
+
+```bash
+pnpm reel reels/color01.json           # → out/reels/color01.mp4
+pnpm reel reels/*.json                 # todos
+```
+
+```json
+{ "plantilla": "color", "negocio": "dental", "variantes": "auto", "cantidad": 5 }
+```
+
+| Pieza | Archivo | Qué hace |
+| --- | --- | --- |
+| Datos | `reels/*.json` | Un reel: plantilla, negocio, variantes (o `"auto"`), y opcionalmente `gancho`, `pregunta` y `base`. Se registran solos como composiciones `Reel-<nombre>` |
+| Plantillas | `src/motor/plantillas.js` | Qué ejes cambia cada una, su gancho, su pregunta final y sus ajustes de base. `preset`, `estilo`, `color`, `tipografia` y las combinaciones con sentido |
+| Ejes | `src/motor/ejes.js` | Cómo se aplica cada variable (el mismo parche que el configurador), cómo se nombra y su transición |
+| Selección automática | `src/motor/elegir.js` | Las N variantes más distintas entre sí, por muestreo del punto más lejano con distancias explícitas (estética, modo, tono, clase de letra) |
+| Resolutor | `src/motor/resolver.js` | JSON → pasos (fotograma, config, etiqueta) y duración |
+| Composición | `src/motor/Reel.jsx` | Gancho → variantes → cierre, con el acabado del intro |
+| Animaciones | `src/animaciones.js` | Entrada, salida, texto palabra a palabra, barrido y mezcla de colores y configs. Compartidas con la plantilla de la cola |
+
+**Dos transiciones, según lo que cambie.** El color hace *morph*: la paleta del
+contrato se interpola fotograma a fotograma y la web entera se transforma en
+su sitio, porque sombras, degradados y contraste se derivan de ella. Lo
+discreto (preset, estilo, letra) hace *barrido*: la variante nueva se pinta
+de arriba abajo sobre la anterior, con una línea de luz. En ningún caso es un
+fundido entre capturas.
+
+Las ideas pendientes están en [`reels/IDEAS.md`](reels/IDEAS.md).
+
+## Carruseles para Instagram y LinkedIn
+
+Carruseles educativos (1080x1350, 4:5) sobre cómo encargar, tener y mejorar
+una web. **Mismo universo visual que los reels, mismo motor**: Remotion
+también renderiza imágenes fijas, así que los carruseles comparten las
+fuentes, los colores de `marca.js`, el logo, el empaquetado y el render.
+
+```bash
+pnpm carrusel carruseles/pregunta-dominio.json   # → out/carruseles/pregunta-dominio/
+pnpm carrusel carruseles/*.json                  # todos
+pnpm carrusel carruseles/pruebas/*.json          # los de resistencia (3, 5, 9 diapositivas, textos largos)
+```
+
+Cada carrusel deja en su carpeta `01.png`, `02.png`… (Instagram),
+`carrusel.pdf` (LinkedIn publica los carruseles como documento), `hoja.png`
+(todas en pequeño, para revisar el ritmo de un vistazo) y `pie.txt` si el
+JSON trae `pie`. En `pnpm studio` cada JSON aparece como `Carrusel-<nombre>`,
+una diapositiva por segundo.
+
+### Cómo está montado
+
+```
+carruseles/x.json      CONTENIDO con sentido: pregunta y casos, errores, comprobaciones
+        ↓
+plantillas.js          la NARRATIVA: qué diapositivas salen, en qué orden y con qué variante
+        ↓
+Diapositiva.jsx        el DISEÑO: siete variantes genéricas hechas con piezas.jsx
+        ↓
+Carrusel.jsx           un fotograma por diapositiva → carrusel.mjs captura PNG, PDF y hoja
+```
+
+| Pieza | Archivo | Qué hace |
+| --- | --- | --- |
+| Datos | `carruseles/*.json` | Un carrusel. Se registran solos como composiciones |
+| Plantillas | `src/carrusel/plantillas.js` | `pregunta`, `errores`, `checklist`: contenido → diapositivas, con errores legibles si falta un campo |
+| Variantes | `src/carrusel/Diapositiva.jsx` | `portada`, `respuesta`, `punto`, `caso`, `item`, `lista`, `cierre` |
+| Piezas | `src/carrusel/piezas.jsx` | Titular, texto con `*acento*`, antetítulo, iconos, casilla, tarjeta, pastilla |
+| Formato | `src/carrusel/formato.js` | Tamaño, márgenes y escala tipográfica |
+| Ajuste | `src/carrusel/Ajustar.jsx` | Que el texto quepa (ver abajo) |
+| Composiciones | `src/carrusel/Carrusel.jsx` | `Carrusel` (una diapositiva por fotograma) y `CarruselHoja` |
+| Exportación | `carrusel.mjs` | PNG por diapositiva, PDF y hoja de contactos |
+
+**El JSON describe contenido, no diapositivas.** Dice "estos son los casos"
+o "estos son los errores", y la plantilla decide cómo se cuentan. Por eso
+mañana el mismo JSON puede alimentar una plantilla de reel (gancho con la
+portada, un caso por escena, el cierre de siempre) sin reescribirse: las
+diapositivas ya son componentes de Remotion, y animarlas es envolverlas con
+los gestos de `animaciones.js`.
+
+### Las tres plantillas
+
+Todas empiezan con la **portada** (fondo tinta con el halo, como el gancho de
+los reels) y acaban con el **cierre** (fondo blanco, la llamada a la acción en
+la pastilla y la marca con "Diséñala tú. Yo la construyo.", como el cierre del
+intro). Lo que va `*entre asteriscos*` sale en el azul de marca. Campos comunes:
+`portada { antetitulo, titulo, texto }`, `cierre { antetitulo, titulo, texto,
+cta, ctaIcono }`, y `tema`, `nivel` y `pie` para organizarlos.
+
+```jsonc
+// pregunta: portada → la respuesta corta ("Depende.") y de qué depende → un caso
+// por diapositiva (si… → entonces…) → [resumen] → cierre
+{ "plantilla": "pregunta",
+  "respuesta": { "titulo": "Depende.", "texto": "Sobre todo, de…" },
+  "casos": [{ "icono": "capas", "si": "Tu web usa *WordPress*", "resumen": "Si usa un gestor",
+              "entonces": "Necesita actualizaciones…", "texto": "…" }],
+  "resumen": { "titulo": "Antes de contratarlo, *pregunta*:", "lista": ["¿Qué incluye?"] } }
+
+// errores: portada → un error por diapositiva (número, qué pasa, "mejor así")
+// → [preguntas] → cierre
+{ "plantilla": "errores",
+  "puntos": [{ "icono": "dominio", "titulo": "…", "texto": "…", "mejor": "…" }],
+  "preguntas": { "titulo": "Pregunta *esto*:", "lista": ["…"] } }
+
+// checklist: portada → una comprobación por diapositiva, con la lista en
+// casillas que se van marcando → la lista entera para guardar → cierre
+{ "plantilla": "checklist",
+  "items": [{ "icono": "dominio", "titulo": "El dominio, a tu nombre", "corto": "El dominio está a mi nombre",
+              "texto": "…", "pregunta": "¿A nombre de quién…?" }] }
+```
+
+Los iconos son conceptos (`dominio`, `hosting`, `accesos`, `movil`, `seo`,
+`mantenimiento`, `seguridad`…; la lista entera en `ICONOS` de `piezas.jsx`)
+dibujados con Phosphor, la misma familia que el sitio.
+
+### Que el texto quepa
+
+Todos los tamaños se escriben con `px()`, que multiplica por `--k`. Cuando las
+fuentes han cargado, `Ajustar` mide la zona de contenido y, si algo se sale,
+baja `--k` hasta que quepa: el bloque entero encoge en proporción y la
+jerarquía se mantiene. Si ni al 62 % cabe, **el render falla** diciendo qué
+diapositiva y qué texto; es preferible a publicar una frase cortada. Los
+titulares largos empiezan además más pequeños (`tamanoTitular`), para que un
+titular corto no encoja por culpa del texto de debajo.
+
+### Una plantilla nueva
+
+Una función más en `plantillas.js` que devuelva diapositivas con las variantes
+que ya hay. Solo si ninguna sirve (la comparación a dos columnas, el árbol de
+decisión) se añade una variante en `Diapositiva.jsx`, con las piezas de
+`piezas.jsx` y nunca con estilos propios. Las siete plantillas que faltan y
+las 100 ideas están en [`carruseles/IDEAS.md`](carruseles/IDEAS.md).
+
+## La plantilla de los reels de la cola
 
 [`src/plantilla/PlantillaReel.jsx`](src/plantilla/PlantillaReel.jsx): 15 s
 (450 fotogramas) con **la misma estructura y el mismo acabado que el vídeo de

@@ -1,4 +1,5 @@
-import { interpolate, spring, useCurrentFrame, useVideoConfig } from 'remotion'
+import { spring, useCurrentFrame, useVideoConfig } from 'remotion'
+import { revelarPalabra, salir } from '../animaciones'
 import { SANS } from '../fuentes'
 import { MUELLE } from '../marca'
 
@@ -9,8 +10,6 @@ import { MUELLE } from '../marca'
 // sale en el color de acento. Si hay `hasta`, el bloque entero se va hacia
 // arriba en los últimos fotogramas.
 // ============================================================
-
-const clamp = { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }
 
 /** "La web de *tu taller*, en seis estilos." → palabras con su marca de acento. */
 export function partir(texto) {
@@ -46,8 +45,7 @@ export function Palabras({ texto, desde = 0, hasta = null, color, acento, tamano
         letterSpacing: '-0.04em',
         lineHeight: 1.08,
         color,
-        opacity: 1 - salida,
-        transform: `translateY(${-60 * salida}px)`,
+        ...salir(salida),
       }}
     >
       {partir(texto).map(({ p, acento: esAcento }, i) => {
@@ -55,13 +53,7 @@ export function Palabras({ texto, desde = 0, hasta = null, color, acento, tamano
         return (
           <span
             key={i}
-            style={{
-              display: 'inline-block',
-              color: esAcento ? acento : undefined,
-              opacity: interpolate(e, [0, 0.6], [0, 1], clamp),
-              transform: `translateY(${(1 - e) * tamano * 0.65}px)`,
-              filter: `blur(${Math.max(0, 1 - e) * 10}px)`,
-            }}
+            style={{ ...revelarPalabra(e, tamano), color: esAcento ? acento : undefined }}
           >
             {p}
           </span>

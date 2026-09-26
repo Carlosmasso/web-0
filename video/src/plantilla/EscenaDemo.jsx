@@ -1,9 +1,10 @@
-import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from 'remotion'
+import { AbsoluteFill, useCurrentFrame } from 'remotion'
 import { Etiqueta, Valor } from '../escenas/Demo'
 import { SANS } from '../fuentes'
-import { ACENTO, FONDO, FONDO_ALT, LINEA, MUELLE, TINTA } from '../marca'
+import { ACENTO, FONDO_ALT, LINEA, TINTA } from '../marca'
 import { Palabras } from './Palabras'
 import { Pantalla } from './Pantallas'
+import { Tarjeta } from './Tarjeta'
 import { gruposDe } from './web'
 
 // ============================================================
@@ -19,7 +20,6 @@ import { gruposDe } from './web'
 
 // La tarjeta: 820 x 960, la web dentro a 410 px de ancho (un teléfono) x2.
 const TARJETA = { arriba: 400, ancho: 820, alto: 960, escala: 2 }
-const clamp = { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }
 
 const Icono = ({ grupo, paso }) => {
   if (grupo.tipo === 'color') {
@@ -56,9 +56,6 @@ function Pastilla({ grupo }) {
 }
 
 export function EscenaDemo({ pantalla, frases = [] }) {
-  const frame = useCurrentFrame()
-  const { fps } = useVideoConfig()
-  const entrada = spring({ frame: frame - 4, fps, config: MUELLE.vivo })
   const grupos = pantalla.tipo === 'web' ? gruposDe(pantalla.cambios ?? []) : []
 
   return (
@@ -67,29 +64,14 @@ export function EscenaDemo({ pantalla, frases = [] }) {
         <Pastilla key={g.desde} grupo={g} />
       ))}
 
-      <div
-        style={{
-          position: 'absolute',
-          top: TARJETA.arriba,
-          left: (1080 - TARJETA.ancho) / 2,
-          width: TARJETA.ancho,
-          height: TARJETA.alto,
-          overflow: 'hidden',
-          background: FONDO,
-          borderRadius: 44,
-          border: `2px solid ${LINEA}`,
-          boxShadow: '0 40px 90px -40px rgba(22,23,27,0.35)',
-          opacity: interpolate(entrada, [0, 0.4], [0, 1], clamp),
-          transform: `translateY(${(1 - entrada) * 160}px) scale(${interpolate(entrada, [0, 1], [0.92, 1])})`,
-        }}
-      >
+      <Tarjeta arriba={TARJETA.arriba} ancho={TARJETA.ancho} alto={TARJETA.alto}>
         <Pantalla
           pantalla={pantalla}
           ancho={TARJETA.ancho / TARJETA.escala}
           alto={TARJETA.alto / TARJETA.escala}
           escala={TARJETA.escala}
         />
-      </div>
+      </Tarjeta>
 
       {/* La frase va entre la tarjeta y la franja que tapa la interfaz de Instagram. */}
       <div

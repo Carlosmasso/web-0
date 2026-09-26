@@ -1,0 +1,26 @@
+{
+  "plantilla": "checklist",
+  "portada": {
+    "antetitulo": "Prueba de resistencia · títulos y textos largos a propósito",
+    "titulo": "Antes de contratar una web profesional para tu negocio, comprueba con calma *estas diez cosas importantes* que casi nadie revisa",
+    "texto": "Este carrusel existe para comprobar que los textos largos encogen en proporción y no se salen de la diapositiva ni se cortan a media frase, aunque el subtítulo también sea exageradamente largo."
+  },
+  "items": [
+    { "icono": "dominio", "titulo": "Que el dominio principal y todos los secundarios estén registrados a tu nombre y con tu correo", "corto": "Todos los dominios a mi nombre y con mi correo de contacto", "texto": "Es tu dirección en internet, y quien lo tiene registrado decide qué se hace con él, si se renueva, si se transfiere y a dónde apunta; por eso conviene que la titularidad sea tuya desde el primer día.", "pregunta": "¿A nombre de quién se van a registrar el dominio principal y los secundarios, y con qué correo electrónico de contacto?" },
+    { "icono": "hosting", "titulo": "Dónde se aloja", "corto": "Alojamiento", "texto": "Corto.", "pregunta": "¿Dónde?" },
+    { "icono": "accesos", "titulo": "Accesos", "corto": "Accesos" },
+    { "titulo": "Propiedad del código", "corto": "Código" },
+    { "titulo": "Móvil", "corto": "Móvil" },
+    { "titulo": "SEO básico", "corto": "SEO" },
+    { "titulo": "Mantenimiento", "corto": "Mantenimiento" },
+    { "titulo": "Copias de seguridad", "corto": "Copias de seguridad automáticas, guardadas fuera del mismo servidor" },
+    { "titulo": "Formularios", "corto": "Formularios probados" },
+    { "titulo": "Textos legales", "corto": "Aviso legal, privacidad y cookies" }
+  ],
+  "cierre": {
+    "antetitulo": "Un cierre con todos los campos llenos",
+    "titulo": "Diez comprobaciones que te llevarán un rato pero que te ahorran *muchos disgustos* a medio plazo",
+    "texto": "Y un texto de cierre también largo, para ver que la pastilla y la marca siguen en su sitio cuando todo lo demás crece.",
+    "cta": "Guárdalo y compártelo con quien esté buscando web para su negocio."
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "plantilla": "pregunta",
+  "portada": { "titulo": "¿Qué ocurre exactamente con mi web, mi dominio, mi correo y todos mis datos si un día decido cambiar de agencia o de proveedor?" },
+  "respuesta": { "titulo": "Depende de lo que se haya acordado por escrito.", "texto": "Y de a nombre de quién esté cada cosa, que no siempre es lo mismo:" },
+  "casos": [
+    { "icono": "contrato", "si": "Todo está a tu nombre y lo tienes por escrito en el contrato desde el principio", "resumen": "Todo a tu nombre y por escrito", "entonces": "El cambio es un trámite: se exporta la web, se apunta el dominio al nuevo alojamiento y se migra el correo con calma.", "texto": "Aun así, conviene planificarlo para que la web y el correo no dejen de funcionar ni un día durante el cambio." }
+  ],
+  "cierre": { "cta": "Compártelo con quien esté buscando web.", "ctaIcono": "compartir" }
+}

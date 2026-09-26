@@ -1,0 +1,68 @@
+{
+  "plantilla": "checklist",
+  "tema": "contratar-web",
+  "nivel": 3,
+  "portada": {
+    "antetitulo": "Antes de contratar una web",
+    "titulo": "Comprueba *estas 7 cosas*",
+    "texto": "Una por diapositiva, con la pregunta que conviene hacer. Al final, la lista entera."
+  },
+  "items": [
+    {
+      "icono": "dominio",
+      "titulo": "El dominio, a tu nombre",
+      "corto": "El dominio está a mi nombre",
+      "texto": "Es tu dirección en internet. Quien lo tiene registrado decide qué se hace con él.",
+      "pregunta": "¿A nombre de quién se va a registrar el dominio?"
+    },
+    {
+      "icono": "hosting",
+      "titulo": "Dónde estará alojada",
+      "corto": "Sé dónde está alojada",
+      "texto": "El alojamiento (hosting) es el servidor donde vive tu web. Conviene saber cuál es y quién lo contrata.",
+      "pregunta": "¿Dónde se aloja y a nombre de quién está el servicio?"
+    },
+    {
+      "icono": "accesos",
+      "titulo": "Acceso a todo",
+      "corto": "Tengo todos los accesos",
+      "texto": "Dominio, alojamiento, panel, analítica. Si tú no puedes entrar, tampoco puedes decidir.",
+      "pregunta": "¿Me daréis todos los accesos al terminar?"
+    },
+    {
+      "icono": "propiedad",
+      "titulo": "Que la web sea tuya",
+      "corto": "La web es mía",
+      "texto": "Diseño, código y textos. Que quede por escrito qué te llevas si un día cambias de proveedor.",
+      "pregunta": "Si cambio de proveedor, ¿qué me puedo llevar?"
+    },
+    {
+      "icono": "movil",
+      "titulo": "Que funcione bien en el móvil",
+      "corto": "La he revisado en el móvil",
+      "texto": "No basta con que se adapte: menús, botones y formularios tienen que poder usarse con el dedo.",
+      "pregunta": "¿Podré probarla en mi móvil antes de publicarla?"
+    },
+    {
+      "icono": "seo",
+      "titulo": "Lo básico para aparecer en Google",
+      "corto": "Tiene el SEO básico",
+      "texto": "Un título y una descripción por página, textos que se entiendan y una web rápida. No garantiza posiciones, pero sin esto cuesta más.",
+      "pregunta": "¿Qué parte del SEO básico está incluida?"
+    },
+    {
+      "icono": "mantenimiento",
+      "titulo": "Qué pasa después de publicar",
+      "corto": "Sé quién hace los cambios",
+      "texto": "Actualizaciones, copias de seguridad y cambios de contenido. Alguien tiene que ocuparse.",
+      "pregunta": "¿Quién hará los cambios y cómo se piden?"
+    }
+  ],
+  "cierre": {
+    "titulo": "Siete preguntas. *Cinco minutos.*",
+    "texto": "Y sabrás exactamente qué estás contratando.",
+    "cta": "Compártelo con quien esté buscando web.",
+    "ctaIcono": "compartir"
+  },
+  "pie": "Siete cosas que conviene comprobar antes de contratar una web, cada una con la pregunta que hay que hacer. La última diapositiva es la lista entera: guárdala y márcala antes de firmar."
+}

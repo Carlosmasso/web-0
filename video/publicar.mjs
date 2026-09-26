@@ -19,11 +19,9 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { bundle } from '@remotion/bundler'
-import { renderMedia, selectComposition } from '@remotion/renderer'
 import { calendario, materializar, revisar, semana, POR_SEMANA, SEMANAS, TOTAL } from '../scripts/social/plan.mjs'
 import { idDe, propsDe } from './src/piezas.js'
-import { crearWebpackOverride } from './webpack.mjs'
+import { empaquetar, renderizar } from './render.mjs'
 
 const AQUI = path.dirname(fileURLToPath(import.meta.url))
 const SALIDA = path.join(AQUI, 'out')
@@ -95,10 +93,7 @@ pulsar. El protocolo de después de publicar está en DIFUSION.md.
 let serveUrl = null
 if (!soloTextos) {
   console.log('empaquetando…')
-  serveUrl = await bundle({
-    entryPoint: path.join(AQUI, 'src/index.jsx'),
-    webpackOverride: crearWebpackOverride(AQUI),
-  })
+  serveUrl = await empaquetar()
 }
 
 for (const pieza of piezas) {
@@ -111,24 +106,13 @@ for (const pieza of piezas) {
     continue
   }
 
-  const inputProps = propsDe(pieza)
-  const composition = await selectComposition({ serveUrl, id: idDe(pieza), inputProps })
-  let ultimo = -1
-  await renderMedia({
+  await renderizar({
     serveUrl,
-    composition,
-    inputProps,
-    codec: 'h264',
-    outputLocation: path.join(destino, 'video.mp4'),
-    onProgress: ({ progress }) => {
-      const pct = Math.floor(progress * 10) * 10
-      if (pct !== ultimo) {
-        ultimo = pct
-        process.stdout.write(`\r${ficha.carpeta}  ${pct}%   `)
-      }
-    },
+    id: idDe(pieza),
+    inputProps: propsDe(pieza),
+    salida: path.join(destino, 'video.mp4'),
+    etiqueta: ficha.carpeta,
   })
-  console.log(`\r✓ ${ficha.carpeta}          `)
 }
 
 console.log(`\nlisto en ${path.relative(process.cwd(), SALIDA)}/`)

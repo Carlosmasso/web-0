@@ -6,7 +6,7 @@
 >
 > **Cómo se mantiene.** Al cerrar una tarea, se tacha y se anota qué se aprendió.
 > Cuando una decisión cambie, se corrige aquí mismo en vez de dejar dos
-> versiones dando vueltas. Última revisión: **25 de septiembre de 2026**.
+> versiones dando vueltas. Última revisión: **26 de septiembre de 2026**.
 
 ---
 
@@ -233,6 +233,24 @@ Las 40 piezas son unos tres meses. Pasado eso, la salida no es estirar la cola
 sino meter ejes nuevos: clientes reales, antes/después, consejos para dueños de
 negocio. Un generador evita que las ideas se pisen; no las tiene por ti.
 
+### Carruseles educativos (sept. 2026)
+
+El eje de "consejos para dueños de negocio" ya tiene sistema: **carruseles**
+para Instagram y LinkedIn sobre cómo encargar, tener y mejorar una web, con el
+mismo acabado que los reels y el mismo motor (Remotion renderiza también
+imágenes fijas). Un carrusel es un JSON; `pnpm carrusel` saca los PNG, el PDF
+de LinkedIn y una hoja de contactos. Hay tres plantillas (`pregunta`,
+`errores`, `checklist`), cuatro carruseles listos y 100 ideas en
+[`video/carruseles/IDEAS.md`](video/carruseles/IDEAS.md), las 20 primeras
+producibles hoy. Detalle en [`video/README.md`](video/README.md).
+
+**Choque con la fase 0, sin resolver.** Los carruseles hablan de contratar una
+web, y la regla de difusión dice que no se habla de dinero ni de presupuesto.
+Criterio aplicado mientras Carlos no diga otra cosa: los carruseles hablan de
+propiedad, accesos, proceso y calidad, que no son dinero; **las seis ideas de
+precio quedan en espera** (⏸ en `IDEAS.md`) y ninguno usa "presupuesto" ni
+cifras. Cuando haya alta, se revisa.
+
 ---
 
 ## Lo que NO hacemos
@@ -273,10 +291,11 @@ correcto.
 - ~~**Fotos en los reels.**~~ Resuelto: los reels montan el contenido por
   sector del producto, y los cuatro negocios cuyo preset no es de su sector
   llevan secciones propias con fotos temáticas (`scripts/social/lib/secciones.mjs`).
-- **Iconos de las secciones de sector.** Los contenidos de `sectores.js` piden
-  iconos (`bread`, `tooth`, `fire`…) que no existen en `src/preview/Icon.jsx`,
-  así que en las webs de demostración la caja del icono sale vacía. Hay que
-  añadirlos al mapa o cambiar los nombres por los que existen.
+- ~~**Iconos de las secciones de sector.**~~ Resuelto: los 29 iconos que pide el
+  contenido (`bread`, `tooth`, `scissors`…) están en el mapa de
+  `src/preview/Icon.jsx` en las dos familias, y `src/preview/icon.test.js`
+  falla si algún contenido pide uno que no exista. Coste: unos 30 kB
+  comprimidos más en el bundle.
 - **Los UTM.** Se implementaron y se revirtieron: con el referrer basta para
   LinkedIn. Aviso para el futuro: Instagram y TikTok **no envían referrer
   fiable** —su navegador interno lo pierde— y aparecerán como tráfico directo.
@@ -300,4 +319,6 @@ correcto.
 | sept. 2026 | Vídeo de marca en Remotion (`video/`, composición `IntroMaketa`): 15 s en vertical, problema → demostración abstracta de color, tipografía y variantes → cierre "Diséñala tú. Yo la construyo." Es una pieza de marca: los reels de la cola enseñan el producto real. |
 | sept. 2026 | Los reels pasan a Remotion con una plantilla de 15 s (`video/src/plantilla/`) con el acabado del vídeo de marca: gancho, web real en tarjeta con fundidos entre cambios y pastilla, cierre de marca. Los cinco formatos, reescritos como datos; `pnpm reels N` renderiza una semana con sus pies. Fuera Playwright (`grabar.mjs`, `plato.mjs`, `mux.swift` y la dependencia). |
 | sept. 2026 | Voz única en primera persona: el cierre del intro y de los reels dice "Diséñala tú. Yo la construyo.", como la landing. Secciones propias para casa rural, fisio, peluquería y taller, que heredaban el contenido de otro sector. |
+| sept. 2026 | Motor de reels "¿qué cambia si modifico X?" (`video/src/motor/`): un JSON por reel, plantillas de preset, estilo, color, tipografía y combinaciones, selección automática de las variantes más distintas, el color transformándose en continuo sobre la web real. `pnpm reel reels/x.json`. Seis reels de ejemplo y 30 ideas en `video/reels/IDEAS.md`. |
+| sept. 2026 | Carruseles educativos en Remotion (`video/src/carrusel/`): un JSON por carrusel, plantillas `pregunta`, `errores` y `checklist`, una diapositiva por fotograma exportada a PNG 1080x1350, PDF para LinkedIn y hoja de contactos. El texto encoge solo para caber y, si no cabe, el render falla. Cuatro carruseles reales (dominio, mantenimiento, errores al encargar, checklist antes de contratar), cinco de resistencia y 100 ideas. |
 | sept. 2026 | Barra de navegación del sitio en móvil: la hamburguesa ya no se aplasta con marcas largas (la marca baja a dos líneas y la hamburguesa es una zona táctil de 44 px), la barra "centrada" deja el botón y la hamburguesa a la derecha, los enlaces del menú se alinean con la marca, y el panel tiene sombra y se desplaza por dentro si no cabe. |

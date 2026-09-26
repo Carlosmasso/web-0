@@ -1,0 +1,12 @@
+{
+  "plantilla": "color",
+  "negocio": "obrador",
+  "gancho": "El mismo obrador. *Cuatro colores.*",
+  "pregunta": "¿Cuál pega con tu pan?",
+  "variantes": [
+    { "color": "#b45309" },
+    { "color": "#0f766e" },
+    { "color": "#be123c" },
+    { "color": "#1d4ed8" }
+  ]
+}

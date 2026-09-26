@@ -26,7 +26,7 @@ const between = (min, max, rng) => min + rng() * (max - min)
  * Se evitan las franjas donde el ojo humano percibe suciedad (amarillo-verde
  * apagado, naranja-marrón desaturado) salvo que se vayan a saturar mucho.
  */
-const HUE_FAMILIES = [
+export const HUE_FAMILIES = [
   { name: 'azul', range: [200, 245], sat: [55, 78], light: [38, 52] },
   { name: 'índigo', range: [245, 268], sat: [50, 72], light: [42, 56] },
   { name: 'verde', range: [140, 178], sat: [42, 68], light: [30, 42] },
@@ -37,7 +37,7 @@ const HUE_FAMILIES = [
 ]
 
 /** Tipografías que pegan con cada estética. Armonía, no capricho. */
-const TYPE_AFFINITY = {
+export const TYPE_AFFINITY = {
   'neo-brutalism': ['space-grotesk', 'archivo-black', 'bricolage-work'],
   glassmorphism: ['sora', 'inter-clean', 'outfit'],
   claymorphism: ['outfit', 'bricolage-work', 'inter-clean'],

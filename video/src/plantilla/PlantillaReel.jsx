@@ -29,7 +29,7 @@ const TIEMPOS = { gancho: 100, demo: 290, cierre: 90, cruce: 15 }
 const cruce = springTiming({ config: MUELLE.suave, durationInFrames: TIEMPOS.cruce })
 
 /** Barra de progreso: una línea fina arriba que se llena de forma lineal. */
-function BarraProgreso() {
+export function BarraProgreso() {
   const frame = useCurrentFrame()
   const { durationInFrames } = useVideoConfig()
   const lleno = interpolate(frame, [0, durationInFrames - 1], [0, 100], { extrapolateRight: 'clamp' })
