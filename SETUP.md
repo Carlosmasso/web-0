@@ -79,7 +79,7 @@ Con eso ves en qué paso se cae la gente. En Analytics aparecen bajo **Events**.
    hechos en menos de 2,5 s (bots). A un bot le responde "ok" pero no registra
    nada — así que si pruebas muy rápido, espera unos segundos antes de enviar.
 
-En local (`npm run dev`) la función `/api/lead` no corre. Usa `npx vercel dev`
+En local (`pnpm dev`) la función `/api/lead` no corre. Usa `pnpm dlx vercel dev`
 o prueba en el deploy.
 
 ### Modo estudio en el deploy
@@ -107,7 +107,7 @@ revisar el aviso legal con un gestor.
 
 ## Antes de fiarte de una entrega
 
-`npm run verify:export` genera un proyecto desde un preset, hace `npm install` y
+`pnpm verify:export` genera un proyecto desde un preset, instala sus dependencias y
 `vite build` en un temporal, y comprueba que sale `dist/`. Tarda ~40 s (baja
 dependencias). Hazlo tras tocar cualquier componente de `src/preview/`.
 

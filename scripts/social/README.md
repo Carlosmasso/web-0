@@ -6,7 +6,7 @@ Móvil y se pulsan sus controles desde un guion. Lo que se ve en pantalla es lo
 que vería cualquiera que entre en maketa.es.
 
 ```bash
-npm i -D playwright                        # una sola vez
+pnpm add -D playwright                     # una sola vez
 
 node scripts/social/grabar.mjs             # enseña el calendario, no graba
 node scripts/social/grabar.mjs 1           # graba la semana 1

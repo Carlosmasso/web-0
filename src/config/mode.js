@@ -2,7 +2,7 @@
 // MODO ESTUDIO vs MODO CLIENTE
 //
 // Una sola instancia de la herramienta sirve a dos personas:
-//   - TÚ, levantándola en local para entregar (`npm run dev` -> localhost).
+//   - TÚ, levantándola en local para entregar (`pnpm dev` -> localhost).
 //   - EL CLIENTE, en la versión desplegada, jugando con el diseño.
 //
 // En local (dev o localhost) el modo estudio es automático. En la versión

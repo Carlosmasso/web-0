@@ -13,6 +13,11 @@ import { isStudio, STUDIO_QUERY } from "../config/mode";
 import { deepMerge, setIn } from "../config/patch";
 import { DEFAULT_CONFIG, SECTION_ORDER } from "../config/schema";
 import { DEFAULT_CONTENT } from "../content/defaults";
+import {
+  contenidoDeSector,
+  esContenidoDeDemostracion as esDemo,
+  mezclarContenido,
+} from "../content/sectores";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { Icon } from "../preview/Icon";
 import { getAesthetic } from "../registry/aesthetics";
@@ -190,10 +195,30 @@ export function App() {
     [],
   );
 
-  const applyPreset = useCallback((preset) => {
-    setRaw(structuredClone(preset.config));
-    if (!isStudio) track("preset_applied", { preset: preset.id });
-  }, []);
+  /**
+   * Aplica un punto de partida y, si el preset es de sector, también su
+   * contenido.
+   *
+   * La regla es la que importa: **el contenido solo se pisa si sigue siendo el
+   * de demostración**. En cuanto alguien ha escrito una línea suya, el preset
+   * cambia el diseño y no toca ni una palabra; perder el texto que acabas de
+   * escribir por probar otro estilo sería imperdonable.
+   */
+  const applyPreset = useCallback(
+    (preset) => {
+      setRaw(structuredClone(preset.config));
+      const delSector = contenidoDeSector(preset.id);
+      if (delSector) {
+        setContent((actual) =>
+          esDemo(actual, DEFAULT_CONTENT)
+            ? mezclarContenido(DEFAULT_CONTENT, delSector)
+            : actual,
+        );
+      }
+      if (!isStudio) track("preset_applied", { preset: preset.id });
+    },
+    [setContent],
+  );
 
   const applyType = useCallback(
     (id) =>

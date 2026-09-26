@@ -1832,7 +1832,7 @@ body {
   .steps {
     position: sticky;
     top: 46px; /* justo bajo el tirador, que también es sticky */
-    z-index: 4;
+    z-index: 1;
     padding: 10px 12px;
   }
   .shell__brand {

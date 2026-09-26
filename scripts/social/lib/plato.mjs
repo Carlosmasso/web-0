@@ -24,8 +24,8 @@ async function cargarPlaywright() {
     return (await import('playwright')).chromium
   } catch {
     throw new Error(
-      'falta Playwright. Instálalo una vez con:  npm i -D playwright\n' +
-        'Si ya lo tienes pero no hay navegador:   npx playwright install chromium',
+      'falta Playwright. Instálalo una vez con:  pnpm add -D playwright\n' +
+        'Si ya lo tienes pero no hay navegador:   pnpm exec playwright install chromium',
     )
   }
 }

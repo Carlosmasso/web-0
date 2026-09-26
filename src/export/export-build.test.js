@@ -9,10 +9,16 @@ import { PRESETS } from '../registry/presets'
 import { normalizeConfigWithGuardrails } from '../config/guardrails'
 import { DEFAULT_CONTENT } from '../content/defaults'
 
-// Lento y con red: solo corre con VERIFY_EXPORT_BUILD=1 (`npm run verify:export`).
+// Lento y con red: solo corre con VERIFY_EXPORT_BUILD=1 (`pnpm verify:export`).
 // Genera un proyecto desde un preset, lo escribe en un temp, hace `npm install`
 // y `vite build`, y comprueba que sale `dist/`. Es la única prueba de que el
 // .zip que entregas de verdad compila.
+//
+// AQUÍ SÍ SE USA npm, Y A PROPÓSITO. Este repositorio va con pnpm, pero el
+// proyecto que sale en el .zip es de otra persona: su README dice `npm install`
+// (ver `scaffold.js`) porque npm viene con Node y pnpm hay que instalarlo
+// aparte. La prueba tiene que hacer exactamente lo que hará quien reciba el
+// .zip, no lo que hacemos nosotros.
 const RUN = process.env.VERIFY_EXPORT_BUILD === '1'
 
 describe.skipIf(!RUN)('el .zip compila (npm install + vite build)', () => {

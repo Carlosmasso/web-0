@@ -8,7 +8,7 @@
 // El .zip NO se envía por correo (los adjuntos disparan los filtros de spam):
 // se regenera desde el configurador con el enlace `?c=` que va en la hoja.
 //
-// En `npm run dev` la función no existe: usa `vercel dev` o el deploy.
+// En `pnpm dev` la función no existe: usa `vercel dev` o el deploy.
 // ============================================================
 
 // Solo para el enlace `mailto:` de respaldo que muestra el modal si algo falla.

@@ -145,9 +145,9 @@ if (!fs.existsSync(mux)) {
 
 console.log(`semanas ${desde}${hasta > desde ? '–' + hasta : ''} · ${piezas.length} piezas\n`)
 console.log('compilando el proyecto…')
-execFileSync('npm', ['run', 'build'], { cwd: RAIZ, stdio: ['ignore', 'ignore', 'inherit'] })
+execFileSync('pnpm', ['build'], { cwd: RAIZ, stdio: ['ignore', 'ignore', 'inherit'] })
 
-const servidor = spawn('npx', ['vite', 'preview', '--host', '--port', String(PUERTO)], {
+const servidor = spawn('pnpm', ['exec', 'vite', 'preview', '--host', '--port', String(PUERTO)], {
   cwd: RAIZ,
   stdio: 'ignore',
 })

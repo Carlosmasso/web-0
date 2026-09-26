@@ -18,10 +18,10 @@ la web construida. El cliente nunca se descarga el proyecto.
 ## Arranque
 
 ```bash
-npm install
-npm run dev            # http://localhost:5173
-npm test               # vitest: núcleo puro + integridad del .zip
-npm run verify:export  # genera un proyecto y lo compila de verdad (~40 s, baja deps)
+pnpm install
+pnpm dev               # http://localhost:5173
+pnpm test              # vitest: núcleo puro + integridad del .zip
+pnpm verify:export     # genera un proyecto y lo compila de verdad (~40 s, baja deps)
 ```
 
 - `/` — la landing (HTML estático, `index.html` + `public/landing.css`).
@@ -34,7 +34,7 @@ cumplen WCAG), `resolveTheme`, el registro de proyectos, el filtro anti-spam de
 `/api/lead`, y `buildProjectFiles` — que el `.zip` lleve los archivos, que cada
 import relativo cierre contra un archivo incluido y ningún componente arrastre el
 configurador, que las imágenes subidas salgan a `public/img/` y el CSS llegue
-resuelto. `verify:export` va más allá: `npm install` + `vite build` reales.
+resuelto. `verify:export` va más allá: instala de verdad y hace `vite build`.
 
 ## El motor de estilos: dos canales
 
@@ -421,10 +421,10 @@ entra como "Diseño recibido" sin tocar lo demás.
    fuente que corren en el preview (vía `?raw`; el CSS ya resuelto vía `?inline`),
    así que nunca se desincroniza. Las imágenes que subió el cliente salen del
    JSON a `public/img/` (pero no viajan en el enlace: se las pides al cliente).
-   `npm install && npm run build` y despliegas `dist/`.
+   `pnpm install && pnpm build` y despliegas `dist/`.
 
 > **Puesta en marcha:** ver **`SETUP.md`** — Google Sheet + Apps Script, cuenta
-> de Resend y variables de entorno en Vercel. En `npm run dev` la función no
+> de Resend y variables de entorno en Vercel. En `pnpm dev` la función no
 > corre (usa `vercel dev` o una preview de Vercel). Si el envío falla, el modal
 > muestra un `mailto:` de reserva.
 
