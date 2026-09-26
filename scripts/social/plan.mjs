@@ -64,12 +64,11 @@ export function materializar({ i, formato, negocio }) {
       formato,
       voz: f.voz,
       queSeVe: f.queSeVe,
-      dura: f.duracion,
+      dura: 15, // todos los reels usan la plantilla de 15 s
       pie: `${f.pie(n)}\n\n${etiquetas}`,
       pieTikTok: `${f.pieTikTok(n)}\n\n#diseñoweb #${n.etiquetas[0]} #negociolocal`,
     },
     contenido: n.contenido,
-    guion: (reel) => f.guion(reel, n),
   }
 }
 

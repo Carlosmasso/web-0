@@ -18,12 +18,14 @@
 //                 vertical sigue haciendo falta para la variante "Dividida".
 // ============================================================
 
-import fs from 'node:fs'
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
+// Import de JSON y no `fs`: así el catálogo se carga igual en Node (plan,
+// revisor de imágenes) que en el bundle de Remotion (`video/`), que corre en
+// el navegador.
+import IMAGENES from './imagenes.json' with { type: 'json' }
 
 export const NEGOCIOS = {
   rural: {
+    quien: 'tu casa rural', // así se le habla en los subtítulos
     sector: 'Turismo rural',
     preset: 'Hostelería y artesanía',
     portada: 'imagen',
@@ -43,6 +45,7 @@ export const NEGOCIOS = {
   },
 
   dental: {
+    quien: 'tu clínica', // así se le habla en los subtítulos
     sector: 'Clínica dental',
     preset: 'Salud y bienestar',
     portada: 'centrada',
@@ -62,6 +65,7 @@ export const NEGOCIOS = {
   },
 
   abogados: {
+    quien: 'tu despacho', // así se le habla en los subtítulos
     sector: 'Despacho de abogados',
     preset: 'Corporativo y legal',
     portada: 'centrada',
@@ -81,6 +85,7 @@ export const NEGOCIOS = {
   },
 
   obrador: {
+    quien: 'tu obrador', // así se le habla en los subtítulos
     sector: 'Panadería y obrador',
     preset: 'Hostelería y artesanía',
     portada: 'centrada',
@@ -100,6 +105,7 @@ export const NEGOCIOS = {
   },
 
   fisio: {
+    quien: 'tu consulta', // así se le habla en los subtítulos
     sector: 'Fisioterapia',
     preset: 'Salud y bienestar',
     portada: 'centrada',
@@ -119,6 +125,7 @@ export const NEGOCIOS = {
   },
 
   arquitectura: {
+    quien: 'tu estudio', // así se le habla en los subtítulos
     sector: 'Estudio de arquitectura',
     preset: 'Inmobiliaria y arquitectura',
     portada: 'imagen',
@@ -138,6 +145,7 @@ export const NEGOCIOS = {
   },
 
   peluqueria: {
+    quien: 'tu peluquería', // así se le habla en los subtítulos
     sector: 'Peluquería y estética',
     preset: 'Infancia y educación',
     portada: 'centrada',
@@ -157,6 +165,7 @@ export const NEGOCIOS = {
   },
 
   taller: {
+    quien: 'tu taller', // así se le habla en los subtítulos
     sector: 'Taller mecánico',
     preset: 'Corporativo y legal',
     portada: 'centrada',
@@ -180,9 +189,6 @@ export const NEGOCIOS = {
 // Las fotos se enchufan aquí, ya con su recorte, para que los guiones no
 // tengan que saber nada de esto.
 // ------------------------------------------------------------
-const AQUI = path.dirname(fileURLToPath(import.meta.url))
-const IMAGENES = JSON.parse(fs.readFileSync(path.join(AQUI, 'imagenes.json'), 'utf8'))
-
 /** URL de la foto de un negocio, recortada por el CDN a lo que pide el hueco. */
 export function foto(clave, forma) {
   const base = IMAGENES[clave]?.[forma]

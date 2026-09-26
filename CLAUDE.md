@@ -18,7 +18,7 @@ proyecto.**
 
 ## Comandos
 
-Gestor de paquetes: **pnpm** (nunca npm ni npx, aunque el README aún diga `npm`).
+Gestor de paquetes: **pnpm** (nunca npm ni npx; `pnpm dlx` en lugar de `npx`).
 
 ```bash
 pnpm install
@@ -31,7 +31,7 @@ pnpm verify:export       # genera un proyecto desde un preset, install + build r
 
 Ejecuta `verify:export` tras tocar cualquier cosa de `src/preview/` o `src/export/`: el
 `.zip` copia esos fuentes tal cual. `/api/lead` no corre con `pnpm dev` (hace falta
-`vercel dev` o un deploy de preview).
+`pnpm dlx vercel dev` o un deploy de preview).
 
 ## Arquitectura
 
@@ -80,7 +80,8 @@ guardarraíl recomienda, no bloquea ni cambia de estética.
 | `src/export/` | `scaffold.js` construye el `.zip` con los **mismos fuentes** del preview vía `?raw` (CSS resuelto con `?inline`); `contact.js` → `submitLead()` |
 | `api/lead.js` | Función serverless de Vercel: filtro anti-spam, fila en Google Sheet, aviso por Resend |
 | `apps-script/` | El script de la Sheet de leads |
-| `scripts/social/` | Grabación de reels con Playwright contra el build real (ver su README). `salida/` está ignorada |
+| `scripts/social/` | Catálogos de los reels: negocios, formatos (gancho, frases y cambios de cada reel, como datos) y la cola de publicación |
+| `video/` | Subproyecto de Remotion con sus propias dependencias (`cd video && pnpm install`): la plantilla maestra de reels (`src/plantilla/`, con el sitio real en una tarjeta flotante), el vídeo de marca y `pnpm reels N` para renderizar una semana. Ver su README |
 
 Si añades un componente al runtime del sitio, regístralo también en `scaffold.js`; el test
 `export-integrity` comprueba que cada import relativo del `.zip` cierra y que nada arrastra
@@ -115,6 +116,20 @@ suyo, el preset solo cambia el diseño.
   visible, no como atajo de teclado o icono suelto.
 - Imágenes de stock: Pexels, enlazadas por URL (sin descargar archivos).
 - `og:image` debe ser URL absoluta; `og.png` se regenera capturando `public/og.html` a 1200×630.
+
+## Reels y vídeo
+
+Los reels de Instagram y TikTok salen de la plantilla de Remotion de `video/src/plantilla/`,
+con el acabado del vídeo de marca `IntroMaketa`. Es una decisión tomada tras dos correcciones;
+antes de proponer otro estilo, lee `video/README.md` ("Tres reglas de acabado"):
+
+- Tres escenas: gancho sobre fondo tinta, demo con la web **real** en una tarjeta y la pastilla
+  que dice qué cambia, y el cierre del intro. Los cambios de la web se funden, no saltan.
+- Los muelles de `video/src/marca.js`, Inter 700 y el azul de la marca como único acento. Nada de
+  subtítulos en mayúsculas con contorno, amarillos ni rebotes.
+- Voz en primera persona: "Diséñala tú. Yo la construyo."
+- Un reel nuevo es **datos**: un formato en `scripts/social/lib/formatos.mjs` o una copia de
+  `video/src/plantilla/ejemplo.js`. `cd video && pnpm reels N` renderiza la semana N.
 
 ## Tests
 

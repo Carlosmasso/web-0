@@ -187,8 +187,21 @@
   outline-offset: 3px;
   border-radius: 2px;
 }
-.db-nav__actions { display: flex; align-items: center; gap: 14px; margin-left: auto; }
-.db-nav__actions .db-btn { padding: 9px 15px; font-size: 0.875rem; }
+.db-nav__actions { display: flex; align-items: center; gap: 14px; margin-left: auto; flex-shrink: 0; }
+.db-nav__actions .db-btn { padding: 9px 15px; font-size: 0.875rem; white-space: nowrap; }
+
+/* En la barra, la marca es lo único que cede: una larga ("Clínica Dental
+   Sonrisa Norte") baja a dos líneas apretadas en vez de estrujar el botón y la
+   hamburguesa, que llegaba a quedarse en 12px de ancho — invisible. */
+.db-nav .db-wordmark {
+  min-width: 0;
+  line-height: 1.15;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
 
 /* ---------- las cuatro barras ----------
    Un solo eje de cara al cliente, con cuatro respuestas que se distinguen a un
@@ -262,11 +275,31 @@
     inset: calc(100% - 6px) 14px auto 14px;
     border: var(--theme-border-w) var(--theme-border-style) var(--theme-border-color);
     border-radius: var(--theme-radius);
-    overflow: hidden;
+  }
+  /* Mismo sangrado que la marca dentro de la isla. */
+  .db-nav[data-nav='island'] .db-nav__mobile-inner {
+    padding-inline: clamp(14px, 2vw, 22px);
   }
 }
 .db-nav__login { font-size: 0.9rem; color: var(--theme-text-muted); }
-.db-nav__burger { display: none; color: var(--theme-text); }
+.db-nav__burger {
+  display: none;
+  flex-shrink: 0;
+  /* Zona táctil de 44px; el margen negativo devuelve el icono a su sitio para
+     que siga alineado con el borde del contenedor. */
+  width: 44px;
+  height: 44px;
+  margin: -10px -11px -10px -8px;
+  align-items: center;
+  justify-content: center;
+  color: var(--theme-text);
+  border-radius: var(--theme-radius);
+  -webkit-tap-highlight-color: transparent;
+}
+.db-nav__burger:focus-visible {
+  outline: 2px solid var(--theme-accent);
+  outline-offset: -2px;
+}
 
 /* ---------- menú móvil ---------- */
 /* .db-nav es sticky, así que ya es el contenedor de posicionamiento: el panel
@@ -283,6 +316,12 @@
     inset: 100% 0 auto 0;
     background: var(--theme-surface);
     border-bottom: var(--theme-border-w) var(--theme-border-style) var(--theme-border-color);
+    box-shadow: 0 18px 32px -18px color-mix(in srgb, var(--theme-shadow-color) 45%, transparent);
+    /* Con muchos enlaces o el móvil en horizontal, el panel se desplaza por
+       dentro en vez de salirse de la pantalla. */
+    max-height: calc(100dvh - 72px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
     opacity: 0;
     transform: translateY(-6px);
     pointer-events: none;
@@ -296,13 +335,15 @@
     pointer-events: auto;
   }
 
+  /* Conserva el padding lateral del contenedor: el texto de los enlaces cae en
+     la misma vertical que la marca, no 8px más a la izquierda. */
   .db-nav__mobile-inner {
     display: flex;
     flex-direction: column;
-    padding: 0px;
+    padding-block: 4px;
   }
   .db-nav__mobile-inner a {
-    padding: 16px;
+    padding: 15px 0;
     font-size: 0.98rem;
     color: var(--theme-text);
     border-bottom: 1px solid var(--theme-border-color);

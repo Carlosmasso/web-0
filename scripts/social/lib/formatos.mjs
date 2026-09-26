@@ -1,63 +1,54 @@
 // ============================================================
 // FORMATOS
 //
-// El segundo eje de variación. Cada formato tiene una VOZ VISUAL distinta —no
-// solo un guion distinto— para que dos piezas seguidas no se parezcan aunque
-// salga el mismo producto:
+// El segundo eje de variación. Todos los reels usan la MISMA plantilla de
+// Remotion (`video/src/plantilla/`), con el acabado del vídeo de marca:
+// gancho sobre fondo tinta, la web real en una tarjeta que se transforma y
+// cierre de marca, 15 s. Lo que cambia de un formato a otro es la IDEA que
+// enseña la web:
 //
-//   rafaga    · cortes a tempo, cámara acercada, 9 s. Captación.
-//   identidad · un solo gesto repetido (el color) con la cámara entrando.
-//   portada   · tres estados de una misma sección, plano fijo y pausado.
-//   escribir  · nada se mueve salvo el texto que alguien teclea.
-//   recorrido · plano largo y contemplativo, sin cortes. El contrapunto.
+//   rafaga    · seis estilos seguidos, uno por segundo. Captación.
+//   identidad · el color de marca y la tipografía, y se recoloca todo.
+//   portada   · tres portadas para el mismo negocio.
+//   escribir  · el titular se teclea y aparece en la web a la vez.
+//   recorrido · la web entera de arriba abajo. El contrapunto.
 //
-// Esa mezcla de ritmos importa tanto como el contenido: cinco piezas
-// trepidantes seguidas cansan igual que cinco lentas.
+// Cada formato es DATOS: `reel(n)` devuelve
+//
+//   gancho   la frase de la escena 1; *entre asteriscos* va en azul
+//   frases   [desde, hasta, 'texto'] bajo la tarjeta
+//   cambios  { frame, estetica | color | tipografia | portada }
+//            { desde, hasta, titular: true }   teclea el titular
+//            { desde, hasta, scroll: true }    recorre la web entera
+//
+// Los fotogramas (30 por segundo) cuentan desde que empieza la escena de la
+// demo, que dura 290. La pastilla de arriba se rellena sola con el nombre de
+// cada cambio. Para retocar un reel, se tocan aquí los textos y los números.
 // ============================================================
 
-const c = (reel, n) => reel.compas(n)
-
+// `n.quien` es "tu casa rural", "tu clínica"…: le habla a quien tiene ese negocio.
 export const FORMATOS = {
   // ----------------------------------------------------------
   rafaga: {
     queSeVe:
-      'Cuatro estilos completos en los dos primeros segundos, separados por destellos blancos. Freno en seco, dos titulares de golpe, y la cámara entra en la portada mientras el color de marca cambia tres veces. Cierra volviendo al estilo del principio y sin pantalla negra, para que al repetirse no se vea la costura.',
-    voz: 'Trepidante, 9 s, bucle cerrado. La de captar.',
-    duracion: 9,
-    async guion(reel, negocio) {
-      await reel.partida(negocio, 600)
-      await reel.camara(1.04, 0)
-      await reel.grabar()
-
-      for (const estilo of ['Neo-brutalismo', 'Glassmorfismo', 'Cyberpunk', 'Claymorfismo']) {
-        await reel.destello()
-        await reel.estetica(estilo, c(reel, 0.5))
-      }
-      await reel.destello()
-      await reel.estetica('Minimalista plano', c(reel, 0.25))
-      await reel.camara(1.0, c(reel, 2))
-      await reel.golpe('La misma web')
-      await reel.esperar(c(reel, 2))
-      await reel.golpe('Seis estilos')
-      await reel.esperar(c(reel, 2))
-      await reel.rotulo(null)
-
-      await reel.paso(1)
-      await reel.camara(1.12, c(reel, 6), '50% 26%')
-      for (const hex of ['#b45309', '#1d4ed8', '#be123c']) await reel.color(hex, c(reel, 1))
-
-      await reel.golpe('Sin saber diseño')
-      await reel.esperar(c(reel, 3))
-      await reel.rotulo(null)
-      await reel.camara(1.0, c(reel, 3), '50% 42%')
-
-      await reel.paso(0)
-      await reel.destello()
-      await reel.estetica('Material limpio', c(reel, 1.5))
-      await reel.golpe('maketa.es')
-      await reel.esperar(c(reel, 4))
-      return reel.parar()
-    },
+      'Gancho sobre fondo oscuro; después la web del negocio en una tarjeta que cambia de estilo seis veces, una por segundo, fundiéndose de uno a otro. La pastilla de arriba nombra cada estilo. Cierra con la marca.',
+    voz: 'Trepidante: un cambio por segundo. La de captar.',
+    reel: (n) => ({
+      gancho: `La web de *${n.quien}*, en seis estilos.`,
+      cambios: [
+        { frame: 30, estetica: 'neo-brutalism' },
+        { frame: 60, estetica: 'glassmorphism' },
+        { frame: 90, estetica: 'cyberpunk' },
+        { frame: 120, estetica: 'claymorphism' },
+        { frame: 150, estetica: 'minimalist-flat' },
+        { frame: 180, estetica: 'material-clean' },
+        { frame: 230, color: '#be123c' },
+      ],
+      frases: [
+        [20, 200, 'Un toque, *otro estilo*.'],
+        [205, 290, 'La misma web, *sin saber diseño*.'],
+      ],
+    }),
     pie: (n) => `Seis formas de ver la web de ${unA(n.sector)}. Elige la tuya 👇
 
 Tocas, y cambia delante de ti. Sin saber diseño, sin instalar nada, sin registrarte. Cuando des con la que te gusta, yo la construyo con tus textos y tus fotos.
@@ -71,28 +62,25 @@ Gratis y sin registro: maketa.es`,
   // ----------------------------------------------------------
   identidad: {
     queSeVe:
-      'Un titular presenta la idea y la cámara se va acercando a la portada mientras el color de marca cambia cinco veces seguidas. En cada cambio se recalculan sombras, degradados y el contraste del texto, que es lo que una plantilla no hace.',
-    voz: 'Un solo gesto repetido, cámara entrando. 8 s.',
-    duracion: 8,
-    async guion(reel, negocio) {
-      await reel.partida(negocio, 700)
-      await reel.grabar()
-      await reel.golpe('Tu color de marca')
-      await reel.esperar(c(reel, 3))
-      await reel.rotulo(null)
-
-      await reel.paso(1)
-      await reel.camara(1.13, c(reel, 10), '50% 24%')
-      for (const hex of ['#0f766e', '#b45309', '#1d4ed8', '#be123c', '#4d7c0f']) {
-        await reel.color(hex, c(reel, 1))
-      }
-      await reel.camara(1.0, c(reel, 4), '50% 42%')
-      await reel.golpe('Y se recoloca todo')
-      await reel.esperar(c(reel, 4))
-      await reel.rotulo(null)
-      await reel.esperar(c(reel, 1))
-      return reel.parar()
-    },
+      'Gancho sobre fondo oscuro; después el color de marca de la web cambia cinco veces (se recalculan botones, sombras y contraste) y luego la tipografía, tres. La pastilla de arriba dice cada color y cada letra.',
+    voz: 'Un solo gesto repetido: el color, y luego la letra.',
+    reel: () => ({
+      gancho: 'Cambia un color y *cambia toda tu web*.',
+      cambios: [
+        { frame: 30, color: '#0f766e' },
+        { frame: 60, color: '#b45309' },
+        { frame: 90, color: '#1d4ed8' },
+        { frame: 120, color: '#be123c' },
+        { frame: 150, color: '#4d7c0f' },
+        { frame: 195, tipografia: 'playfair' },
+        { frame: 225, tipografia: 'space-grotesk' },
+        { frame: 255, tipografia: 'archivo-black' },
+      ],
+      frases: [
+        [20, 180, 'Botones, sombras y *contraste*.'],
+        [185, 290, 'Y la letra, *también*.'],
+      ],
+    }),
     pie: (n) => `Cambias un color y se recoloca la web entera: sombras, degradados y hasta el contraste del texto 🎨
 
 Eso no lo hace una plantilla con tu logo encima. Esta es la web de ${unA(n.sector)}, pero funciona igual con la de cualquiera.
@@ -106,28 +94,20 @@ Gratis y sin registro: maketa.es`,
   // ----------------------------------------------------------
   portada: {
     queSeVe:
-      'La portada se rehace tres veces —dividida, centrada y foto a sangre— con un destello entre cada una y la cámara ligeramente acercada. Cierra con «Tres portadas, un clic».',
-    voz: 'Plano fijo, tres estados, pausado. 8 s.',
-    duracion: 8,
-    async guion(reel, negocio) {
-      await reel.preset(negocio.preset, 800)
-      await reel.paso(2)
-      await reel.grabar() // aquí no se fija portada: el formato las recorre
-      await reel.golpe('Lo primero que ven')
-      await reel.esperar(c(reel, 3))
-      await reel.rotulo(null)
-
-      await reel.camara(1.06, c(reel, 12), '50% 30%')
-      for (const variante of ['Dividida', 'Centrada', 'Imagen de fondo']) {
-        await reel.destello()
-        await reel.opcionDeSeccion('La portada', variante, c(reel, 3))
-      }
-      await reel.camara(1.0, c(reel, 3))
-      await reel.golpe('Tres portadas, un clic')
-      await reel.esperar(c(reel, 4))
-      await reel.rotulo(null)
-      return reel.parar()
-    },
+      'Gancho sobre fondo oscuro; después la portada del negocio se rehace tres veces, dividida, centrada y con foto a sangre, dos segundos y medio cada una. Cierra con la marca.',
+    voz: 'Pausado: tres estados, dos segundos cada uno.',
+    reel: (n) => ({
+      gancho: `Tres portadas para *${n.quien}*.`,
+      cambios: [
+        { frame: 30, portada: 'split' },
+        { frame: 105, portada: 'centered' },
+        { frame: 180, portada: 'image' },
+      ],
+      frases: [
+        [20, 250, 'Lo primero que *ve tu cliente*.'],
+        [250, 290, 'Un clic, *cada una*.'],
+      ],
+    }),
     pie: (n) => `La portada es lo único que mira un cliente antes de decidir si te llama. Aquí van tres para ${unA(n.sector)} 👀
 
 En Maketa las pruebas todas y te quedas con la que te representa. Gratis y sin registro 👉 maketa.es`,
@@ -139,29 +119,20 @@ Gratis: maketa.es`,
   // ----------------------------------------------------------
   escribir: {
     queSeVe:
-      'La cámara se queda cerca de la portada y no se mueve nada salvo el titular, que se teclea letra a letra. Se ve aparecer en la web al mismo tiempo que se escribe.',
-    voz: 'Quieto salvo el texto. Íntimo, 10 s.',
-    duracion: 10,
-    async guion(reel, negocio) {
-      await reel.partida(negocio, 800)
-      await reel.grabar()
-      await reel.camara(1.12, c(reel, 14), '50% 26%')
-      await reel.golpe('Los textos son tuyos')
-      await reel.esperar(c(reel, 3))
-      await reel.rotulo(null)
-
-      await reel.pestana('Contenido')
-      await reel.teclear('hero.title', negocio.contenido['hero.title'], {
-        velocidad: 62,
-        pausa: c(reel, 3),
-      })
-      await reel.pestana('Diseño')
-      await reel.camara(1.0, c(reel, 4), '50% 42%')
-      await reel.golpe('Y se ve mientras escribes')
-      await reel.esperar(c(reel, 4))
-      await reel.rotulo(null)
-      return reel.parar()
-    },
+      'Gancho sobre fondo oscuro; después el titular de la portada se teclea letra a letra y aparece en la web a la vez. Luego cambian la tipografía y el color, con el texto ya puesto.',
+    voz: 'Íntimo: casi todo quieto salvo el texto.',
+    reel: () => ({
+      gancho: 'Escribe tu frase. *Ya es tu web.*',
+      cambios: [
+        { desde: 25, hasta: 150, titular: true },
+        { frame: 190, tipografia: 'playfair' },
+        { frame: 235, color: '#b45309' },
+      ],
+      frases: [
+        [20, 170, 'Aparece *mientras la escribes*.'],
+        [175, 290, 'Con tu letra y *tu color*.'],
+      ],
+    }),
     pie: (n) => `Escribes el titular y aparece en tu web mientras lo tecleas ✍️
 
 Nada de rellenar un formulario y esperar a ver qué sale. Esto es ${unA(n.sector)}, pero el texto lo pone siempre quien conoce el negocio: tú.
@@ -175,23 +146,16 @@ Gratis: maketa.es`,
   // ----------------------------------------------------------
   recorrido: {
     queSeVe:
-      'Plano largo sin un solo corte: el nombre del negocio y después la web entera desplazándose de arriba abajo con un acercamiento lentísimo. Es el contrapunto tranquilo del resto de formatos.',
-    voz: 'Plano largo sin cortes, contemplativo. 14 s. El contrapunto.',
-    duracion: 14,
-    async guion(reel, negocio) {
-      await reel.partida(negocio, 900)
-      await reel.grabar()
-      await reel.golpe(negocio.contenido['brand.name'])
-      await reel.esperar(c(reel, 3))
-      await reel.rotulo(null)
-      await reel.camara(1.05, 12000, '50% 40%')
-      await reel.recorrer(10000)
-      await reel.esperar(c(reel, 1))
-      await reel.golpe('Hecha a medida')
-      await reel.esperar(c(reel, 4))
-      await reel.rotulo(null)
-      return reel.parar()
-    },
+      'Gancho sobre fondo oscuro; después la web entera del negocio desplazándose despacio de arriba abajo dentro de la tarjeta. El contrapunto tranquilo del resto de formatos.',
+    voz: 'Contemplativo, sin cortes. El contrapunto.',
+    reel: (n) => ({
+      gancho: `Así sería la web de *${n.quien}*.`,
+      cambios: [{ desde: 25, hasta: 270, scroll: true }],
+      frases: [
+        [20, 150, 'De arriba *abajo*.'],
+        [155, 290, 'Hecha *a medida*.'],
+      ],
+    }),
     pie: (n) => `Así queda la web de ${unA(n.sector)}, de arriba abajo 🏡
 
 No es una plantilla con el logo cambiado: la diseñas tú en un rato y yo la construyo con tu contenido real.

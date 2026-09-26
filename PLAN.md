@@ -180,6 +180,10 @@ Estos condicionan todo lo demás y no se resuelven programando:
 
 ## Difusión
 
+> **Plan de los primeros 30 días en Reels y TikTok** —pilares, calendario,
+> ganchos, bio, protocolo tras publicar, crecimiento y un guion de ejemplo—
+> en [`DIFUSION.md`](DIFUSION.md).
+
 ### La expectativa correcta
 
 **El primer cliente no va a venir de Instagram.** Una cuenta nueva tarda meses
@@ -190,15 +194,30 @@ para no desanimarse en la semana tres.
 
 ### El sistema que ya existe
 
-40 piezas, 3 por semana, 14 semanas sin que se repita ninguna combinación.
-Todo en [`scripts/social/`](scripts/social/README.md):
+40 piezas, 3 por semana, 14 semanas sin que se repita ninguna combinación. Qué
+toca y en qué orden lo deciden los catálogos de
+[`scripts/social/`](scripts/social/README.md) (negocios, formatos y la regla de
+la cola). El vídeo se produce con **Remotion** en [`video/`](video/README.md):
 
 ```bash
-node scripts/social/grabar.mjs        # ver el calendario
-node scripts/social/grabar.mjs 4-6    # grabar de la semana 4 a la 6
+cd video
+pnpm reels        # ver el calendario
+pnpm reels 1      # renderizar la semana 1 (vídeos, pies y fichas en out/semana-01/)
 ```
 
-Grabadas las semanas 1 a 3. Las demás, a razón de unos 23 segundos por pieza.
+**Decidido (sept. 2026): todos los reels se hacen con Remotion, desde la primera
+pieza.** Los que estaban grabados con Playwright (semanas 1 a 3) se descartan y
+no se publican, para que la cuenta arranque con un solo formato.
+
+Todos siguen **una misma plantilla de 15 s**, en la línea del vídeo de marca:
+gancho sobre fondo tinta, la web real del negocio en una tarjeta que se
+transforma (los cambios se funden, no saltan) con la pastilla que dice qué
+cambia, y el cierre del intro. Se probó un estilo de subtítulos Hormozi en
+amarillo y se descartó: parecía un vídeo cualquiera. La web de la
+tarjeta son los **componentes reales** del sitio con un config por fotograma:
+es el producto de verdad, no una maqueta. Cada formato es solo datos
+(gancho, frases y cambios, en `scripts/social/lib/formatos.mjs`), así que las 40
+piezas están listas para renderizar.
 
 ### Reparto del esfuerzo
 
@@ -251,11 +270,13 @@ correcto.
 
 ## Pendiente largo
 
-- **Fotos en los reels.** El configurador ya tiene fotos temáticas por sector
-  (`src/content/sectores.js`), pero el sistema de reels sigue con una sola foto
-  por negocio: al bajar la cámara reaparecen las imágenes de la demo de
-  Cartograma. Lo suyo es que los reels tiren del mismo contenido por sector que
-  ahora usa el producto, en vez de mantener dos catálogos.
+- ~~**Fotos en los reels.**~~ Resuelto: los reels montan el contenido por
+  sector del producto, y los cuatro negocios cuyo preset no es de su sector
+  llevan secciones propias con fotos temáticas (`scripts/social/lib/secciones.mjs`).
+- **Iconos de las secciones de sector.** Los contenidos de `sectores.js` piden
+  iconos (`bread`, `tooth`, `fire`…) que no existen en `src/preview/Icon.jsx`,
+  así que en las webs de demostración la caja del icono sale vacía. Hay que
+  añadirlos al mapa o cambiar los nombres por los que existen.
 - **Los UTM.** Se implementaron y se revirtieron: con el referrer basta para
   LinkedIn. Aviso para el futuro: Instagram y TikTok **no envían referrer
   fiable** —su navegador interno lo pierde— y aparecerán como tráfico directo.
@@ -276,3 +297,7 @@ correcto.
 | sept. 2026 | Páginas legales al día: reconocen Vercel Web Analytics, que antes se negaba. |
 | sept. 2026 | **P0 · 1**: el configurador en móvil pasa a lienzo fijo arriba y panel en hoja deslizable. De 0 a 408 px de web visible al abrir. |
 | sept. 2026 | **P0 · 2**: contenido de demostración para los seis sectores, con fotos temáticas de Pexels y la garantía de no pisar lo que el cliente haya escrito. |
+| sept. 2026 | Vídeo de marca en Remotion (`video/`, composición `IntroMaketa`): 15 s en vertical, problema → demostración abstracta de color, tipografía y variantes → cierre "Diséñala tú. Yo la construyo." Es una pieza de marca: los reels de la cola enseñan el producto real. |
+| sept. 2026 | Los reels pasan a Remotion con una plantilla de 15 s (`video/src/plantilla/`) con el acabado del vídeo de marca: gancho, web real en tarjeta con fundidos entre cambios y pastilla, cierre de marca. Los cinco formatos, reescritos como datos; `pnpm reels N` renderiza una semana con sus pies. Fuera Playwright (`grabar.mjs`, `plato.mjs`, `mux.swift` y la dependencia). |
+| sept. 2026 | Voz única en primera persona: el cierre del intro y de los reels dice "Diséñala tú. Yo la construyo.", como la landing. Secciones propias para casa rural, fisio, peluquería y taller, que heredaban el contenido de otro sector. |
+| sept. 2026 | Barra de navegación del sitio en móvil: la hamburguesa ya no se aplasta con marcas largas (la marca baja a dos líneas y la hamburguesa es una zona táctil de 44 px), la barra "centrada" deja el botón y la hamburguesa a la derecha, los enlaces del menú se alinean con la marca, y el panel tiene sombra y se desplaza por dentro si no cabe. |
