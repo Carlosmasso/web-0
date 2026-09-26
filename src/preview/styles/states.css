@@ -6,6 +6,10 @@
 @media (max-width: 860px) {
   .db-nav__links, .db-nav__login { display: none; }
   .db-nav__burger { display: inline-flex; }
+  /* Sin enlaces en medio, la rejilla de tres columnas de la centrada dejaba el
+     botón y la hamburguesa en el centro de la barra. En móvil es una fila más. */
+  .db-nav[data-nav='centered'] .db-nav__inner { display: flex; }
+  .db-nav[data-nav='centered'] .db-nav__actions { margin-left: auto; }
   .db-hero__grid { grid-template-columns: 1fr; }
   .db-hero--split .db-hero__visual { margin-left: 0; max-width: none; }
   .db-grid-3, .db-feature-grid, .db-footer__cols { grid-template-columns: 1fr; }
