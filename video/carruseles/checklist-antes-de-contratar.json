@@ -62,7 +62,7 @@
     "titulo": "Siete preguntas. *Cinco minutos.*",
     "texto": "Y sabrás exactamente qué estás contratando.",
     "cta": "Compártelo con quien esté buscando web.",
-    "ctaIcono": "compartir"
+    "icono": "compartir"
   },
   "pie": "Siete cosas que conviene comprobar antes de contratar una web, cada una con la pregunta que hay que hacer. La última diapositiva es la lista entera: guárdala y márcala antes de firmar."
 }

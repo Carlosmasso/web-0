@@ -1,51 +1,151 @@
-# Vídeos con Remotion
+# Vídeos e imágenes con Remotion
 
-Los vídeos, en 1080x1920 a 30 fps; los carruseles, imágenes de 1080x1350.
-Es un subproyecto aparte, con sus propias dependencias: Remotion no entra en
-el bundle de la app. `out/` está en `.gitignore`.
+Todo el contenido para redes de Maketa: los reels (1080x1920, 30 fps), el
+vídeo de marca y los carruseles (imágenes de 1080x1350). Es un subproyecto
+aparte, con sus propias dependencias: Remotion no entra en el bundle de la
+app. `out/` está en `.gitignore`.
 
 ```bash
 cd video
 pnpm install
-pnpm studio      # editor en el navegador: PlantillaReel, las 40 piezas, el intro
-pnpm reels       # el calendario de publicación
-pnpm reels 1     # renderiza la semana 1 → out/semana-01/…/video.mp4 + pies + ficha
-pnpm carrusel carruseles/x.json   # un carrusel → out/carruseles/x/ (PNG, PDF, hoja)
+pnpm studio                         # editor en el navegador: todo lo de abajo
+pnpm reel reels/color01.json        # un reel suelto   → out/reels/color01/
+pnpm reels                          # el calendario de la cola semanal
+pnpm reels 1                        # la semana 1      → out/semana-01/
+pnpm carrusel carruseles/x.json     # un carrusel      → out/carruseles/x/
+pnpm intro                          # el vídeo de marca → out/intro-maketa.mp4
+pnpm fotos                          # hoja para revisar las fotos de los negocios
 ```
 
-## El motor de reels: "¿qué cambia si modifico X?"
+## Cómo está organizado
 
-Reels de 9 a 12 s que enseñan **una variable** del configurador sobre la web
-real de un negocio: preset, estilo, color, tipografía o una combinación. Cada
-reel es un JSON en [`reels/`](reels/); la composición es siempre la misma.
-
-```bash
-pnpm reel reels/color01.json           # → out/reels/color01.mp4
-pnpm reel reels/*.json                 # todos
 ```
+video/
+  reels/          un JSON por reel suelto, e IDEAS.md
+  carruseles/     un JSON por carrusel, e IDEAS.md
+  datos/          los catálogos: negocios, fotos, secciones propias, formatos y la cola
+  src/
+    motor/        el motor de reels (una sola composición para todos)
+    carrusel/     los carruseles
+    intro/        el vídeo de marca
+    componentes/  lo compartido: la web real, texto palabra a palabra, tarjeta,
+                  pastilla, cierre y barra de progreso
+    animaciones.js, marca.js, fuentes.js, Logo.jsx, Root.jsx
+  reel.mjs · publicar.mjs · carrusel.mjs   los comandos
+  render.mjs · textos.mjs · webpack.mjs    lo que comparten los comandos
+```
+
+## El motor de reels
+
+Todos los reels, sueltos o de la cola, salen de **una sola composición**
+(`src/motor/Reel.jsx`) con el acabado del vídeo de marca: gancho sobre fondo
+tinta → la web real de un negocio en una tarjeta, transformándose → cierre
+"Diséñala tú. Yo la construyo.". Cada reel responde a una pregunta: **¿qué
+cambia si modifico X?** Duran de 9 a 13 s según cuántas variantes enseñen.
+
+Un reel es un JSON:
 
 ```json
 { "plantilla": "color", "negocio": "dental", "variantes": "auto", "cantidad": 5 }
 ```
 
+Opcionales: `variantes` como lista (`[{ "color": "#1d4ed8" }, …]`), `gancho`,
+`pregunta` (la del cierre), `base` (ajustes del configurador antes de las
+variantes), `pie` y `pieTikTok`. Cada JSON de `reels/` aparece solo en el
+studio como `Reel-<nombre>`, y `pnpm reel` deja en su carpeta el vídeo, los
+dos pies y la ficha de publicación.
+
+### Plantillas
+
+| Plantilla | Qué enseña |
+| --- | --- |
+| `preset` | La misma web con varios presets |
+| `estilo` | Solo el acabado: bordes, sombras, efectos |
+| `color` | El color de marca, transformando la web entera en su sitio |
+| `tipografia` | El mismo texto con otra letra |
+| `portada` | Dividida, centrada, con foto |
+| `titular` | El titular tecleándose, y luego otra letra |
+| `recorrido` | La web entera de arriba abajo |
+| `preset+color`, `estilo+color`, `tipografia+estilo`, `tipografia+color` | Las combinaciones que merecen un reel |
+
+No hay `preset+estilo` ni `preset+tipografia`: el preset ya fija las dos cosas
+y pisarlas enturbia la pregunta. Ideas pendientes en [`reels/IDEAS.md`](reels/IDEAS.md).
+
+### Piezas
+
 | Pieza | Archivo | Qué hace |
 | --- | --- | --- |
-| Datos | `reels/*.json` | Un reel: plantilla, negocio, variantes (o `"auto"`), y opcionalmente `gancho`, `pregunta` y `base`. Se registran solos como composiciones `Reel-<nombre>` |
-| Plantillas | `src/motor/plantillas.js` | Qué ejes cambia cada una, su gancho, su pregunta final y sus ajustes de base. `preset`, `estilo`, `color`, `tipografia` y las combinaciones con sentido |
-| Ejes | `src/motor/ejes.js` | Cómo se aplica cada variable (el mismo parche que el configurador), cómo se nombra y su transición |
-| Selección automática | `src/motor/elegir.js` | Las N variantes más distintas entre sí, por muestreo del punto más lejano con distancias explícitas (estética, modo, tono, clase de letra) |
-| Resolutor | `src/motor/resolver.js` | JSON → pasos (fotograma, config, etiqueta) y duración |
-| Composición | `src/motor/Reel.jsx` | Gancho → variantes → cierre, con el acabado del intro |
-| Animaciones | `src/animaciones.js` | Entrada, salida, texto palabra a palabra, barrido y mezcla de colores y configs. Compartidas con la plantilla de la cola |
+| Plantillas | `src/motor/plantillas.js` | Qué ejes cambia cada una, su movimiento, gancho, pregunta, pies y ficha |
+| Ejes | `src/motor/ejes.js` | Cada variable: cómo se aplica (el mismo parche que el configurador), cómo se nombra y su transición |
+| Selección | `src/motor/elegir.js` | Con `"auto"`, las N variantes más distintas entre sí, por muestreo del punto más lejano con distancias explícitas |
+| Resolutor | `src/motor/resolver.js` | JSON → pasos (fotograma, config, etiqueta), movimiento y duración |
+| Punto de partida | `src/motor/web.js` | El preset, la portada y el contenido de cada negocio |
+| Escenas | `src/motor/EscenaGancho.jsx`, `EscenaVariantes.jsx`, `WebEnCambio.jsx` | Lo que se ve |
 
-**Dos transiciones, según lo que cambie.** El color hace *morph*: la paleta del
-contrato se interpola fotograma a fotograma y la web entera se transforma en
-su sitio, porque sombras, degradados y contraste se derivan de ella. Lo
-discreto (preset, estilo, letra) hace *barrido*: la variante nueva se pinta
-de arriba abajo sobre la anterior, con una línea de luz. En ningún caso es un
-fundido entre capturas.
+**Dos transiciones, según lo que cambie.** El color hace *morph*: la paleta
+del contrato se interpola fotograma a fotograma y la web entera se transforma,
+porque sombras, degradados y contraste se derivan de ella. Lo discreto
+(preset, estilo, letra, portada) hace *barrido*: la variante nueva se pinta de
+arriba abajo con una línea de luz. Nunca es un fundido entre capturas.
 
-Las ideas pendientes están en [`reels/IDEAS.md`](reels/IDEAS.md).
+### Reglas de acabado
+
+Salen de dos correcciones y conviene no deshacerlas:
+
+- **Nada salta.** Sin golpes de escala ni rebotes en la tarjeta; los muelles
+  son los de `src/marca.js`, como en el intro.
+- **Tipografía y color de la marca.** Inter 700 con el interletraje del intro
+  y el azul de maketa.es como único acento. Nada de subtítulos en mayúsculas
+  con contorno ni colores de reclamo: se probó y parecía un vídeo cualquiera.
+- **Voz en primera persona**, como la landing: "Yo la construyo".
+
+### La web real dentro de la tarjeta
+
+[`src/componentes/Escenario.jsx`](src/componentes/Escenario.jsx) pinta
+`PreviewCanvas` + `DemoPage` de `../src/preview/`, con el mismo CSS y los
+mismos guardarraíles que el configurador. Cuatro decisiones:
+
+- **Va dentro de un iframe de 410 px, ampliado x2.** El CSS del sitio usa
+  media queries de ventana; sin iframe saldría la versión de escritorio.
+- **Transiciones y animaciones CSS del sitio apagadas, y `motion: 'none'`.**
+  Van por reloj, no por fotograma, y saldrían a medias.
+- **Fuentes e imágenes se precargan antes del primer fotograma** (`delayRender`).
+- **Una sola copia de React** ([`webpack.mjs`](webpack.mjs)): los componentes
+  de `../src/` la resolverían desde la raíz y los hooks fallarían. También
+  relaja la exigencia de extensiones, porque la raíz declara `"type": "module"`.
+
+## La cola semanal
+
+`pnpm reels N` renderiza lo que toca publicar la semana N. No tiene vídeo
+propio: cada pieza es un reel del motor.
+
+- [`datos/cola.mjs`](datos/cola.mjs) decide el orden: se cruzan 5 formatos y 8
+  negocios con `formato[i % 5]` y `negocio[(i * 3) % 8]`. Como 3 es invertible
+  módulo 8, no se repite ninguna combinación hasta la pieza 40, y un formato no
+  vuelve hasta 5 piezas después ni un negocio hasta 8: catorce semanas a tres
+  por semana. `revisar()` aborta si al tocar los catálogos la cola se pisa.
+- [`datos/formatos.mjs`](datos/formatos.mjs) dice con qué plantilla del motor
+  sale cada formato: `rafaga` → estilo, `identidad` → color, `portada`,
+  `escribir` → titular, `recorrido`.
+
+**El inventario es finito**: 40 piezas. Pasadas, la salida no es estirar la
+cola sino meter ejes nuevos (clientes reales, antes/después, consejos).
+
+## Los negocios
+
+[`datos/negocios.mjs`](datos/negocios.mjs): ocho negocios, cada uno con su
+preset, su contenido (nombre, titular, menú), su foto y `quien` ("tu casa
+rural"), que es como le habla el gancho. Su web se monta en tres capas: el
+contenido de demostración del sector de su preset; encima, sus secciones
+propias ([`datos/secciones.mjs`](datos/secciones.mjs)) cuando ese sector no le
+casa (hoy, casa rural, fisio, peluquería y taller); y encima, su marca y su
+portada. **Un negocio nuevo cuyo preset no sea de su sector necesita su
+entrada en `secciones.mjs`**, con fotos de Pexels comprobadas a ojo.
+
+Las fotos están en [`datos/imagenes.json`](datos/imagenes.json), enlazadas a
+Pexels y nunca descargadas: el recorte se pide por parámetros al CDN. Para
+cambiar una, se pega otra URL base y se revisa con `pnpm fotos`. No todas las
+fotos siguen el patrón `pexels-photo-<id>.jpeg`: conviene comprobar la URL.
 
 ## Carruseles para Instagram y LinkedIn
 
@@ -57,7 +157,7 @@ fuentes, los colores de `marca.js`, el logo, el empaquetado y el render.
 ```bash
 pnpm carrusel carruseles/pregunta-dominio.json   # → out/carruseles/pregunta-dominio/
 pnpm carrusel carruseles/*.json                  # todos
-pnpm carrusel carruseles/pruebas/*.json          # los de resistencia (3, 5, 9 diapositivas, textos largos)
+pnpm carrusel carruseles/pruebas/*.json          # los de resistencia (3, 5, 9 diapositivas, textos al límite)
 ```
 
 Cada carrusel deja en su carpeta `01.png`, `02.png`… (Instagram),
@@ -73,7 +173,7 @@ carruseles/x.json      CONTENIDO con sentido: pregunta y casos, errores, comprob
         ↓
 plantillas.js          la NARRATIVA: qué diapositivas salen, en qué orden y con qué variante
         ↓
-Diapositiva.jsx        el DISEÑO: siete variantes genéricas hechas con piezas.jsx
+Diapositiva.jsx        el DISEÑO: un solo esqueleto; cada variante rellena sus huecos
         ↓
 Carrusel.jsx           un fotograma por diapositiva → carrusel.mjs captura PNG, PDF y hoja
 ```
@@ -82,10 +182,10 @@ Carrusel.jsx           un fotograma por diapositiva → carrusel.mjs captura PNG
 | --- | --- | --- |
 | Datos | `carruseles/*.json` | Un carrusel. Se registran solos como composiciones |
 | Plantillas | `src/carrusel/plantillas.js` | `pregunta`, `errores`, `checklist`: contenido → diapositivas, con errores legibles si falta un campo |
-| Variantes | `src/carrusel/Diapositiva.jsx` | `portada`, `respuesta`, `punto`, `caso`, `item`, `lista`, `cierre` |
+| Esqueleto y variantes | `src/carrusel/Diapositiva.jsx` | Una sola retícula; las variantes (`portada`, `respuesta`, `punto`, `caso`, `item`, `lista`, `cierre`) solo rellenan sus huecos |
 | Piezas | `src/carrusel/piezas.jsx` | Titular, texto con `*acento*`, antetítulo, iconos, casilla, tarjeta, pastilla |
-| Formato | `src/carrusel/formato.js` | Tamaño, márgenes y escala tipográfica |
-| Ajuste | `src/carrusel/Ajustar.jsx` | Que el texto quepa (ver abajo) |
+| Formato | `src/carrusel/formato.js` | Tamaño, márgenes, la escala tipográfica fija y los espacios de la retícula |
+| Comprobación | `src/carrusel/Cabe.jsx` | Que el texto quepa sin cambiar de tamaño (ver abajo) |
 | Composiciones | `src/carrusel/Carrusel.jsx` | `Carrusel` (una diapositiva por fotograma) y `CarruselHoja` |
 | Exportación | `carrusel.mjs` | PNG por diapositiva, PDF y hoja de contactos |
 
@@ -102,15 +202,15 @@ Todas empiezan con la **portada** (fondo tinta con el halo, como el gancho de
 los reels) y acaban con el **cierre** (fondo blanco, la llamada a la acción en
 la pastilla y la marca con "Diséñala tú. Yo la construyo.", como el cierre del
 intro). Lo que va `*entre asteriscos*` sale en el azul de marca. Campos comunes:
-`portada { antetitulo, titulo, texto }`, `cierre { antetitulo, titulo, texto,
-cta, ctaIcono }`, y `tema`, `nivel` y `pie` para organizarlos.
+`portada { icono, antetitulo, titulo, texto }`, `cierre { icono, antetitulo,
+titulo, texto, cta }`, y `tema`, `nivel` y `pie` para organizarlos.
 
 ```jsonc
 // pregunta: portada → la respuesta corta ("Depende.") y de qué depende → un caso
 // por diapositiva (si… → entonces…) → [resumen] → cierre
 { "plantilla": "pregunta",
   "respuesta": { "titulo": "Depende.", "texto": "Sobre todo, de…" },
-  "casos": [{ "icono": "capas", "si": "Tu web usa *WordPress*", "resumen": "Si usa un gestor",
+  "casos": [{ "icono": "capas", "si": "Si tu web usa *WordPress*", "resumen": "Si usa un gestor",
               "entonces": "Necesita actualizaciones…", "texto": "…" }],
   "resumen": { "titulo": "Antes de contratarlo, *pregunta*:", "lista": ["¿Qué incluye?"] } }
 
@@ -131,127 +231,56 @@ Los iconos son conceptos (`dominio`, `hosting`, `accesos`, `movil`, `seo`,
 `mantenimiento`, `seguridad`…; la lista entera en `ICONOS` de `piezas.jsx`)
 dibujados con Phosphor, la misma familia que el sitio.
 
-### Que el texto quepa
+### Una sola retícula
 
-Todos los tamaños se escriben con `px()`, que multiplica por `--k`. Cuando las
-fuentes han cargado, `Ajustar` mide la zona de contenido y, si algo se sale,
-baja `--k` hasta que quepa: el bloque entero encoge en proporción y la
-jerarquía se mantiene. Si ni al 62 % cabe, **el render falla** diciendo qué
-diapositiva y qué texto; es preferible a publicar una frase cortada. Los
-titulares largos empiezan además más pequeños (`tamanoTitular`), para que un
-titular corto no encoja por culpa del texto de debajo.
+Todas las diapositivas de todos los carruseles tienen el mismo esqueleto, de
+arriba abajo: la marca y el contador; el icono en un cuadrado de 120 px; el
+antetítulo; el titular; el texto; y, pegado al pie, el bloque de la variante
+(el resalte, la lista, la firma). Solo cambia el fondo: tinta en la portada,
+claro en el contenido y blanco en el cierre, como las tres escenas de los
+reels.
+
+La escala es **fija** (`TIPO` en `formato.js`): 96 px el titular de la
+portada, 72 el de las demás, 40 el texto, 36 lo que va en tarjetas y 26 los
+antetítulos. Ningún tamaño depende de lo largo que sea el texto ni de la
+plantilla, así que el titular está a la misma altura y mide lo mismo en todas.
+
+Por eso **lo que se adapta es el texto**. Cuando las fuentes han cargado,
+`Cabe` mide la zona de contenido y, si algo se sale, el render falla diciendo
+qué diapositiva, qué texto y cuántos píxeles sobran. Como orientación
+(`pruebas/limites.json` está en el límite): el titular, dos o tres líneas; el
+texto, unas cuatro; el resalte, dos; una lista, siete filas de una línea; la
+llamada a la acción, una línea.
 
 ### Una plantilla nueva
 
 Una función más en `plantillas.js` que devuelva diapositivas con las variantes
 que ya hay. Solo si ninguna sirve (la comparación a dos columnas, el árbol de
-decisión) se añade una variante en `Diapositiva.jsx`, con las piezas de
-`piezas.jsx` y nunca con estilos propios. Las siete plantillas que faltan y
+decisión) se añade una variante en `Diapositiva.jsx`, que rellena los huecos
+del mismo esqueleto con las piezas de `piezas.jsx`: nunca con tamaños ni
+posiciones propios. Las siete plantillas que faltan y
 las 100 ideas están en [`carruseles/IDEAS.md`](carruseles/IDEAS.md).
 
-## La plantilla de los reels de la cola
+## El vídeo de marca (`IntroMaketa`)
 
-[`src/plantilla/PlantillaReel.jsx`](src/plantilla/PlantillaReel.jsx): 15 s
-(450 fotogramas) con **la misma estructura y el mismo acabado que el vídeo de
-marca**, para que la cuenta entera parezca de una sola mano:
-
-| Escena | Archivo | Qué se ve |
-| --- | --- | --- |
-| Gancho (100 f) | `EscenaGancho.jsx` | Fondo tinta con el halo azul; una frase grande que entra palabra a palabra, subiendo y enfocándose |
-| Demo (290 f) | `EscenaDemo.jsx` | Fondo claro. Arriba, la pastilla del intro dice qué cambia ("Estilo · Cyberpunk", "Color principal · #0F766E"…); en medio, la web real en una tarjeta que se transforma; debajo, una frase |
-| Cierre (90 f) | `../escenas/Cierre.jsx` | El mismo del intro: la marca y "Diséñala tú. Yo la construyo." |
-
-Entre escenas, el deslizamiento y el fundido del intro. Encima de todo, una
-línea fina de progreso en el azul de marca.
-
-Tres reglas de acabado, que salen de una corrección y conviene no deshacer:
-
-- **La web no salta.** Cada cambio de diseño se funde en un tercio de segundo
-  (dos capas de la web, la anterior y la nueva), como hacen los colores en el
-  propio configurador. Sin golpes de escala ni rebotes en la tarjeta.
-- **Los mismos muelles que el intro** (`MUELLE.suave`, `vivo` y `pop` de
-  `src/marca.js`). El rebote solo está en detalles pequeños, como el valor de la
-  pastilla.
-- **Tipografía y color de la marca.** Inter 700 con el interletraje del intro,
-  acento en el azul de maketa.es. Nada de subtítulos en mayúsculas con contorno
-  ni colores de reclamo (amarillo): se probó y el vídeo parecía uno cualquiera.
-
-### Dónde se edita cada cosa
-
-- **Un reel suelto**: copia el objeto de
-  [`src/plantilla/ejemplo.js`](src/plantilla/ejemplo.js): el gancho, qué va en
-  la tarjeta y qué cambia en cada fotograma, las frases de debajo
-  `[desde, hasta, 'texto']` y el cierre. Lo que va `*entre asteriscos*` sale en
-  azul. En `pnpm studio` se ve en vivo y se puede tocar desde el panel de props.
-- **Los reels de la cola**: los textos y tiempos de cada formato están en
-  [`scripts/social/lib/formatos.mjs`](../scripts/social/lib/formatos.mjs); el
-  cierre, el del ejemplo.
-- **Imagen o vídeo en vez de la web**: `pantalla: { tipo: 'imagen', src: 'captura.png' }`
-  o `{ tipo: 'video', src: 'clip.mp4' }`, con el archivo en `video/public/`.
-
-### La web real dentro de la tarjeta
-
-[`src/plantilla/Escenario.jsx`](src/plantilla/Escenario.jsx) pinta
-`PreviewCanvas` + `DemoPage` de `../src/preview/`, con el mismo CSS y los
-mismos guardarraíles que el configurador. Cada cambio (`estetica`, `color`,
-`tipografia`, `portada`) se aplica con el mismo parche que usa la herramienta
-([`web.js`](src/plantilla/web.js)): es el producto de verdad. Cuatro
-decisiones que no conviene deshacer sin pensarlo:
-
-- **Va dentro de un iframe de 410 px, ampliado x2.** El CSS del sitio usa
-  media queries de ventana; sin iframe saldría la versión de escritorio.
-- **Transiciones y animaciones CSS del sitio apagadas, y `motion: 'none'`.**
-  Van por reloj, no por fotograma, y saldrían a medias. El ritmo lo pone la
-  plantilla.
-- **Fuentes e imágenes se precargan antes del primer fotograma**
-  (`delayRender`), todas las del reel de una vez.
-- **Una sola copia de React** ([`webpack.mjs`](webpack.mjs), compartido por
-  `remotion.config.js` y `publicar.mjs`): los componentes de `../src/` la
-  resolverían desde la raíz y los hooks fallarían. También relaja la exigencia
-  de extensiones en los imports, porque la raíz declara `"type": "module"`.
-
-### Publicar
-
-[`publicar.mjs`](publicar.mjs) (`pnpm reels`) sustituye al antiguo
-`grabar.mjs`: empaqueta una vez y renderiza cada pieza de las semanas pedidas
-con sus pies (`instagram.txt`, `tiktok.txt`) y su ficha. Una semana (tres
-reels) tarda alrededor de un minuto.
-
-## `IntroMaketa`
-
-```bash
-cd video
-pnpm install
-pnpm studio    # editor en el navegador, para ajustar tiempos
-pnpm render    # out/intro-maketa.mp4 (unos 10 s)
-pnpm still --frame=150   # un fotograma suelto, para revisar
-pnpm exec remotion still src/index.jsx AvatarInstagram out/avatar-instagram.png   # foto de perfil 1080x1080
-```
-
-Es un subproyecto aparte, con sus propias dependencias: Remotion no entra en el
-bundle de la app. `out/` está en `.gitignore`.
-
-### Estructura
+15 s para fijar en el perfil: el problema, una web simulada que cambia de
+color, letra y secciones, y el cierre. `pnpm intro` lo renderiza; la foto de
+perfil sale con `pnpm exec remotion still src/index.jsx AvatarInstagram
+out/avatar-instagram.png`.
 
 | Archivo | Qué |
 | --- | --- |
-| `src/IntroMaketa.jsx` | Las tres escenas encadenadas con `TransitionSeries` y los cruces con muelle. |
-| `src/escenas/Problema.jsx` | 0-4 s: "Crear una landing page no debería tomar días.", se tacha "días" y entra la marca. |
-| `src/escenas/Demo.jsx` | 4-11 s: una web simulada que cambia de color, de tipografía y de variante de sección, con una etiqueta que dice qué cambia. |
-| `src/escenas/Cierre.jsx` | 11-15 s: la marca y "Diséñala tú. Yo la construyo." |
-| `src/marca.js` | Colores de la landing, las tres paletas de la demo y los muelles. |
-| `src/AvatarInstagram.jsx` | Foto de perfil: el favicon a sangre sobre el azul de marca, con margen para el recorte circular de Instagram. |
-| `src/Logo.jsx` | El dibujo del favicon; su último bloque "se coloca" al aparecer. |
+| `src/intro/IntroMaketa.jsx` | Las tres escenas encadenadas con `TransitionSeries` |
+| `src/intro/Problema.jsx` | 0-4 s: "Crear una landing page no debería tomar días.", se tacha "días" y entra la marca |
+| `src/intro/Demo.jsx` | 4-11 s: la web simulada y la pastilla que dice qué cambia |
+| `src/componentes/Cierre.jsx` | 11-15 s: la marca y "Diséñala tú. Yo la construyo." (lo comparten los reels) |
+| `src/marca.js` | Colores de la landing, las paletas de la demo y los muelles |
+| `src/AvatarInstagram.jsx` | Foto de perfil: el favicon a sangre sobre el azul de marca |
+| `src/Logo.jsx` | El dibujo del favicon; su último bloque "se coloca" al aparecer |
 
-Los tiempos de cada escena están arriba de cada archivo, en fotogramas locales.
-
-### Dos decisiones
-
-- **Nada se mueve en línea recta.** Todo sale de `spring()` con tres muelles
-  (`suave`, `vivo`, `pop`, en `marca.js`); cambiar uno cambia el carácter de todo
-  el vídeo a la vez.
-- **El cierre no promete autoservicio.** El cliente diseña y la web la monta
-  Carlos (PLAN.md, "Lo que NO hacemos"). Por eso no dice "lánzala en minutos".
+**Nada se mueve en línea recta**: todo sale de `spring()` con los tres muelles
+de `marca.js`. **El cierre no promete autoservicio**: el cliente diseña y la
+web la monta Carlos (PLAN.md, "Lo que NO hacemos").
 
 `Logo.jsx` no se llama `Marca.jsx` a propósito: en macOS, que no distingue
 mayúsculas, chocaría con `marca.js` al resolver `import '../Marca'`.

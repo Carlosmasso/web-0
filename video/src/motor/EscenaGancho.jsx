@@ -1,6 +1,6 @@
 import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion'
 import { ACENTO, ACENTO_CLARO, TINTA } from '../marca'
-import { Palabras } from './Palabras'
+import { Palabras } from '../componentes/Palabras'
 
 // Escena 1: el gancho. Fondo tinta con el halo del acento y una frase grande
 // que entra palabra a palabra, igual que la apertura del intro.

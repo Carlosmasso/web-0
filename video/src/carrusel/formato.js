@@ -1,11 +1,16 @@
 import { ACENTO, PALETAS } from '../marca'
 
 // ============================================================
-// FORMATO DE LOS CARRUSELES
+// FORMATO DE LOS CARRUSELES — una sola retícula para todos
 //
 // 1080 x 1350 (4:5), el vertical que Instagram y LinkedIn enseñan sin
 // recortar. Los colores, la letra y los muelles son los de `marca.js`: aquí
-// solo vive lo que es propio de una imagen fija, el tamaño y la escala.
+// vive lo propio de una imagen fija, el tamaño, la escala y los espacios.
+//
+// La escala es FIJA. Ningún tamaño depende de lo largo que sea el texto ni de
+// la plantilla: al pasar diapositivas, y de un carrusel a otro, el titular
+// mide lo mismo y está en el mismo sitio. Si un texto no cabe, se acorta el
+// texto (ver `Cabe.jsx`).
 // ============================================================
 
 export const ANCHO = 1080
@@ -17,35 +22,21 @@ export const MARGEN = { x: 88, y: 76 }
 /** El tinte casi blanco del azul de marca (el mismo de la demo del intro). */
 export const TINTE = PALETAS.find((p) => p.hex.toLowerCase() === ACENTO.toLowerCase()).tinte
 
-/**
- * Escala tipográfica, en px a 1080 de ancho. Todo se escribe con `px()`, que
- * multiplica por `--k`: si el contenido de una diapositiva no cabe,
- * `Ajustar` baja `--k` y encoge el bloque entero en proporción, sin romper la
- * jerarquía entre titular y texto.
- */
+/** Los cinco tamaños de letra que existen, en px. No hay más. */
 export const TIPO = {
-  portada: 104,
-  titulo: 76,
-  subtitulo: 44,
-  texto: 40,
-  numero: 210,
-  etiqueta: 26,
-  cta: 36,
+  portada: 96, // el titular de la portada
+  titular: 72, // el titular de cualquier otra diapositiva
+  texto: 40, // el texto bajo el titular
+  detalle: 36, // lo que va en tarjetas: resaltes, listas, llamada a la acción
+  etiqueta: 26, // antetítulo en mayúsculas, cabecera
 }
 
-/** Tamaño que se encoge con el ajuste de la diapositiva. */
-export const px = (n) => `calc(${n}px * var(--k, 1))`
-
-/**
- * Titulares largos empiezan más pequeños: así el ajuste solo interviene en
- * los casos raros, y un titular de tres palabras no se queda en 60 px porque
- * el texto de debajo sea largo.
- */
-export const tamanoTitular = (texto, base) => {
-  const n = String(texto ?? '').replace(/\*/g, '').length
-  if (n <= 28) return base
-  if (n <= 48) return base * 0.9
-  if (n <= 70) return base * 0.8
-  if (n <= 100) return base * 0.7
-  return base * 0.62
+/** El esqueleto de todas las diapositivas, de arriba abajo. */
+export const RETICULA = {
+  icono: 120, // el cuadrado del icono, siempre arriba a la izquierda
+  trasIcono: 56,
+  trasEtiqueta: 20,
+  trasTitular: 28,
+  bloque: 48, // separación mínima entre el texto y el bloque de abajo
+  cabecera: 48, // entre la cabecera y el contenido, y entre el contenido y el progreso
 }

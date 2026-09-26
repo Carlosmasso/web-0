@@ -80,8 +80,7 @@ guardarraíl recomienda, no bloquea ni cambia de estética.
 | `src/export/` | `scaffold.js` construye el `.zip` con los **mismos fuentes** del preview vía `?raw` (CSS resuelto con `?inline`); `contact.js` → `submitLead()` |
 | `api/lead.js` | Función serverless de Vercel: filtro anti-spam, fila en Google Sheet, aviso por Resend |
 | `apps-script/` | El script de la Sheet de leads |
-| `scripts/social/` | Catálogos de los reels: negocios, formatos (gancho, frases y cambios de cada reel, como datos) y la cola de publicación |
-| `video/` | Subproyecto de Remotion con sus propias dependencias (`cd video && pnpm install`): la plantilla maestra de reels (`src/plantilla/`, con el sitio real en una tarjeta flotante), el vídeo de marca, `pnpm reels N` para renderizar una semana y los carruseles (`src/carrusel/`, datos en `carruseles/`). Ver su README |
+| `video/` | Subproyecto de Remotion con sus propias dependencias (`cd video && pnpm install`): todo el contenido para redes. El motor de reels (`src/motor/`, con la web real en una tarjeta), el vídeo de marca (`src/intro/`), los carruseles (`src/carrusel/`) y los catálogos de negocios y la cola semanal (`datos/`). Ver su README |
 
 Si añades un componente al runtime del sitio, regístralo también en `scaffold.js`; el test
 `export-integrity` comprueba que cada import relativo del `.zip` cierra y que nada arrastra
@@ -119,27 +118,30 @@ suyo, el preset solo cambia el diseño.
 
 ## Reels, carruseles y vídeo
 
-Los reels de Instagram y TikTok salen de la plantilla de Remotion de `video/src/plantilla/`,
-con el acabado del vídeo de marca `IntroMaketa`. Es una decisión tomada tras dos correcciones;
-antes de proponer otro estilo, lee `video/README.md` ("Tres reglas de acabado"):
+Todos los reels de Instagram y TikTok salen de **una sola composición**, el motor de
+`video/src/motor/`, con el acabado del vídeo de marca `IntroMaketa`. Es una decisión tomada tras
+dos correcciones; antes de proponer otro estilo, lee `video/README.md` ("Reglas de acabado"):
 
-- Tres escenas: gancho sobre fondo tinta, demo con la web **real** en una tarjeta y la pastilla
-  que dice qué cambia, y el cierre del intro. Los cambios de la web se funden, no saltan.
+- Tres escenas: gancho sobre fondo tinta, la web **real** de un negocio en una tarjeta con la
+  pastilla que dice qué cambia, y el cierre del intro. El color se transforma en continuo; lo
+  demás, con un barrido. Nada salta.
 - Los muelles de `video/src/marca.js`, Inter 700 y el azul de la marca como único acento. Nada de
   subtítulos en mayúsculas con contorno, amarillos ni rebotes.
 - Voz en primera persona: "Diséñala tú. Yo la construyo."
-- Un reel nuevo es **datos**, nunca una composición nueva. Hay dos familias:
-  - la cola semanal (`scripts/social/lib/formatos.mjs`, `cd video && pnpm reels N`);
-  - el motor "¿qué cambia si modifico X?": un JSON en `video/reels/` con plantilla (`preset`,
-    `estilo`, `color`, `tipografia` o combinación), negocio y variantes o `"auto"`
-    (`pnpm reel reels/x.json`). Ideas en `video/reels/IDEAS.md`.
+- Un reel nuevo es **datos**, nunca una composición nueva: un JSON en `video/reels/` con
+  plantilla (`preset`, `estilo`, `color`, `tipografia`, `portada`, `titular`, `recorrido` o una
+  combinación), negocio y variantes o `"auto"`. `pnpm reel reels/x.json` lo deja con vídeo, pies y
+  ficha. Ideas en `video/reels/IDEAS.md`.
+- La cola semanal (`pnpm reels N`) no tiene vídeo propio: `video/datos/cola.mjs` decide qué
+  negocio y formato tocan, y cada pieza es un reel del motor.
 
 Los **carruseles** educativos (Instagram y LinkedIn, 1080x1350) salen del mismo subproyecto y
 con el mismo acabado: portada tinta con halo, contenido sobre fondo claro con la tarjeta y la
 pastilla, cierre de marca. Un carrusel es un JSON en `video/carruseles/` con plantilla
 (`pregunta`, `errores`, `checklist`) y contenido con sentido, no diapositivas
-(`pnpm carrusel carruseles/x.json` → PNG por diapositiva, PDF y hoja de contactos). El texto se
-ajusta solo y, si no cabe, el render falla. Nada de cifras inventadas ni, en fase 0, de dinero.
+(`pnpm carrusel carruseles/x.json` → PNG por diapositiva, PDF y hoja de contactos). Todas las
+diapositivas comparten **una sola retícula** con escala fija (mismas posiciones y tamaños): no se
+encoge nada, y si un texto no cabe, el render falla y se acorta el texto. Nada de cifras inventadas ni, en fase 0, de dinero.
 100 ideas en `video/carruseles/IDEAS.md`.
 
 ## Tests

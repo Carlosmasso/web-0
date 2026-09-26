@@ -1,5 +1,5 @@
 // ============================================================
-// EL PLAN — qué se publica y en qué orden
+// LA COLA — qué se publica y en qué orden
 //
 // El problema de producir contenido en serie no es fabricarlo, es que no se
 // repita. Aquí la cola se construye con una regla aritmética en vez de a ojo:
@@ -17,8 +17,8 @@
 // Un generador no tiene ideas; solo evita que las tuyas se pisen.
 // ============================================================
 
-import { NEGOCIOS, listaNegocios } from './lib/negocios.mjs'
-import { FORMATOS, listaFormatos } from './lib/formatos.mjs'
+import { NEGOCIOS, listaNegocios } from './negocios.mjs'
+import { FORMATOS, listaFormatos } from './formatos.mjs'
 
 const NEG = listaNegocios()
 const FOR = listaFormatos()
@@ -43,34 +43,20 @@ export function pieza(i) {
 export const cola = (desde = 0, cuantas = TOTAL) =>
   Array.from({ length: Math.min(cuantas, TOTAL - desde) }, (_, k) => pieza(desde + k))
 
-/** Convierte una entrada de la cola en una pieza grabable y documentada. */
-export function materializar({ i, formato, negocio }) {
-  const f = FORMATOS[formato]
-  const n = NEGOCIOS[negocio]
-  const etiquetas = ['diseñoweb', ...n.etiquetas, 'pequeñocomercio'].map((e) => '#' + e).join(' ')
-  const semanaN = Math.floor(i / POR_SEMANA) + 1
-  const dentro = (i % POR_SEMANA) + 1
+/** La semana de una pieza (la 1 es la primera) y su puesto dentro de ella. */
+export const semanaDe = ({ i }) => ({ semana: Math.floor(i / POR_SEMANA) + 1, dentro: (i % POR_SEMANA) + 1 })
 
-  return {
-    ficha: {
-      nombre: `${dentro}-${negocio}-${formato}`,
-      titulo: `${n.sector} · ${formato}`,
-      carpeta: `semana-${String(semanaN).padStart(2, '0')}/${dentro}-${negocio}-${formato}`,
-      semana: semanaN,
-      dentro,
-      numero: i + 1,
-      sector: n.sector,
-      marca: n.contenido['brand.name'],
-      formato,
-      voz: f.voz,
-      queSeVe: f.queSeVe,
-      dura: 15, // todos los reels usan la plantilla de 15 s
-      pie: `${f.pie(n)}\n\n${etiquetas}`,
-      pieTikTok: `${f.pieTikTok(n)}\n\n#diseñoweb #${n.etiquetas[0]} #negociolocal`,
-    },
-    contenido: n.contenido,
-  }
+/** P01-rural-rafaga: número de pieza, negocio y formato. */
+export const idDe = ({ i, negocio, formato }) => `P${String(i + 1).padStart(2, '0')}-${negocio}-${formato}`
+
+/** semana-01/1-rural-rafaga: dónde se guarda al renderizar. */
+export const carpetaDe = (p) => {
+  const { semana, dentro } = semanaDe(p)
+  return `semana-${String(semana).padStart(2, '0')}/${dentro}-${p.negocio}-${p.formato}`
 }
+
+/** La pieza como reel del motor: lo mismo que un JSON de video/reels/. */
+export const reelDe = ({ negocio, formato }) => ({ ...FORMATOS[formato].reel(NEGOCIOS[negocio]), negocio })
 
 /**
  * Comprueba que la cola no se pise: combinación repetida, o un formato o un

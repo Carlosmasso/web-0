@@ -1,5 +1,5 @@
 {
-  "_nota": "Fotos de Pexels (licencia libre, uso comercial sin atribución). Se enlazan por URL, no se descargan. El tamaño y el recorte se piden por parámetros al propio CDN: ?w=&h=&fit=crop. Para cambiar una, pega aquí otra URL base de images.pexels.com y ejecuta: node scripts/social/revisar-imagenes.mjs",
+  "_nota": "Fotos de Pexels (licencia libre, uso comercial sin atribución). Se enlazan por URL, no se descargan. El tamaño y el recorte se piden por parámetros al propio CDN: ?w=&h=&fit=crop. Para cambiar una, pega aquí otra URL base de images.pexels.com y ejecuta: pnpm fotos (en video/)",
   "rural": {
     "vertical": "https://images.pexels.com/photos/17732626/pexels-photo-17732626.jpeg",
     "apaisada": "https://images.pexels.com/photos/33232165/pexels-photo-33232165.jpeg"

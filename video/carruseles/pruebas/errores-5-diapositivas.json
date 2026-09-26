@@ -1,10 +1,32 @@
 {
   "plantilla": "errores",
-  "portada": { "antetitulo": "Prueba · 5 diapositivas", "titulo": "3 errores con las *fotos* de tu web" },
+  "portada": {
+    "antetitulo": "Prueba · 5 diapositivas",
+    "titulo": "3 errores con las *fotos* de tu web"
+  },
   "puntos": [
-    { "icono": "imagenes", "titulo": "Usar fotos sin saber si puedes", "texto": "Una imagen encontrada en Google no es libre por estar ahí.", "mejor": "Usa fotos propias o de bancos con licencia clara." },
-    { "icono": "velocidad", "titulo": "Subirlas enormes", "texto": "Una foto de móvil sin optimizar puede pesar varios megas y frenar la carga.", "mejor": "Pide que se optimicen al tamaño en que se muestran." },
-    { "icono": "textos", "titulo": "Olvidar el texto alternativo", "texto": "Lo leen los lectores de pantalla y lo usa Google para entender la imagen.", "mejor": "Una frase corta que describa lo que se ve." }
+    {
+      "icono": "imagenes",
+      "titulo": "Usar fotos sin saber si puedes",
+      "texto": "Una imagen encontrada en Google no es libre por estar ahí.",
+      "mejor": "Usa fotos propias o de bancos con licencia clara."
+    },
+    {
+      "icono": "velocidad",
+      "titulo": "Subirlas enormes",
+      "texto": "Una foto de móvil sin optimizar puede pesar varios megas y frenar la carga.",
+      "mejor": "Pide que se optimicen al tamaño en que se muestran."
+    },
+    {
+      "icono": "textos",
+      "titulo": "Olvidar el texto alternativo",
+      "texto": "Lo leen los lectores de pantalla y lo usa Google para entender la imagen.",
+      "mejor": "Una frase corta que describa lo que se ve."
+    }
   ],
-  "cierre": { "titulo": "Buenas fotos, *bien puestas*.", "cta": "Descubre más en maketa.es", "ctaIcono": "flecha" }
+  "cierre": {
+    "titulo": "Buenas fotos, *bien puestas*.",
+    "cta": "Descubre más en maketa.es",
+    "icono": "flecha"
+  }
 }

@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 // Hoja de contactos para revisar las fotos de los negocios.
 //
-//   node scripts/social/revisar-imagenes.mjs
+//   pnpm fotos        (o: node revisar-imagenes.mjs, desde video/)
 //
 // Escribe un HTML que muestra cada foto YA RECORTADA a las dos proporciones
 // que usa el producto, enlazada a Pexels y sin descargar nada. Se abre en el
 // navegador, se mira, y si alguna no convence se pega otra URL base en
-// `lib/imagenes.json` y se vuelve a ejecutar esto.
+// `datos/imagenes.json` y se vuelve a ejecutar esto.
 //
 // (Un artifact publicado no serviría: su política de seguridad bloquea las
 // imágenes de dominios externos.)
@@ -14,10 +14,10 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { NEGOCIOS, foto } from './lib/negocios.mjs'
+import { NEGOCIOS, foto } from './datos/negocios.mjs'
 
 const AQUI = path.dirname(fileURLToPath(import.meta.url))
-const SALIDA = path.join(AQUI, 'salida')
+const SALIDA = path.join(AQUI, 'out')
 fs.mkdirSync(SALIDA, { recursive: true })
 
 const tarjetas = Object.entries(NEGOCIOS)
@@ -70,8 +70,8 @@ const html = `<!doctype html>
 <p class="intro">Cada foto, recortada a las dos proporciones que usa el producto. La
 <b>resaltada</b> es la que sale en el hero según la portada del negocio; la otra se usa si el
 formato recorre las variantes. Para cambiar cualquiera: pega otra URL base de
-<code>images.pexels.com</code> en <code>scripts/social/lib/imagenes.json</code> y vuelve a
-ejecutar <code>node scripts/social/revisar-imagenes.mjs</code>.</p>
+<code>images.pexels.com</code> en <code>video/datos/imagenes.json</code> y vuelve a
+ejecutar <code>pnpm fotos</code> (en video/).</p>
 ${tarjetas}
 </body></html>`
 

@@ -14,21 +14,21 @@
   "casos": [
     {
       "icono": "persona",
-      "si": "Está registrado *a tu nombre*",
+      "si": "Si está registrado *a tu nombre*",
       "resumen": "Está a tu nombre",
       "entonces": "Puedes cambiar de proveedor y llevarte el dominio contigo.",
       "texto": "Guarda el acceso al registrador en un sitio seguro: es la llave de tu web."
     },
     {
       "icono": "equipo",
-      "si": "Está a nombre de *quien te hizo la web*",
+      "si": "Si está a nombre de *quien te hizo la web*",
       "resumen": "Está a nombre de tu proveedor",
       "entonces": "Para llevártelo, necesitas que te lo transfiera.",
       "texto": "Es un trámite habitual. Mejor pedirlo con calma que el día que lo necesites."
     },
     {
       "icono": "pregunta",
-      "si": "*No lo sabes*",
+      "si": "Si *no lo sabes*",
       "resumen": "No lo sabes",
       "entonces": "Pregunta en qué registrador está y a nombre de quién.",
       "texto": "Es una pregunta rápida, y la respuesta te dice cuánto control tienes sobre tu web."

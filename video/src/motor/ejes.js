@@ -1,7 +1,8 @@
 import { PRESETS } from '../../../src/registry/presets'
 import { AESTHETIC_OPTIONS, getAesthetic } from '../../../src/registry/aesthetics'
 import { TYPE_PAIRINGS, getTypePairing } from '../../../src/registry/fonts'
-import { deepMerge } from '../../../src/config/patch'
+import { SECTION_META } from '../../../src/registry/options'
+import { deepMerge, setIn } from '../../../src/config/patch'
 import { hexToHsl, hslToHex, safePalette } from '../../../src/theme/color'
 import { HUE_FAMILIES } from '../../../src/theme/randomize'
 
@@ -101,6 +102,15 @@ export const EJES = {
     etiqueta: (hex) => ({ titulo: nombreColor(hex), valor: hex.toUpperCase(), muestras: [hex] }),
   },
 
+  portada: {
+    nombre: 'Portada',
+    ritmo: 60, // la portada entera cambia de composición: pide más tiempo de lectura
+    transicion: 'barrido',
+    valores: () => SECTION_META.hero.variants.map((v) => v.id),
+    aplicar: (raw, id) => setIn(raw, 'sections.hero', id),
+    etiqueta: (id) => ({ titulo: SECTION_META.hero.variants.find((v) => v.id === id)?.label ?? id }),
+  },
+
   tipografia: {
     nombre: 'Tipografía',
     ritmo: 36,
@@ -117,4 +127,4 @@ export const EJES = {
 // El orden en que se aplican los ejes de una combinación: primero lo que
 // define la base (preset), después el acabado y la letra, y el color al final
 // para que siempre se vea el que se ha elegido.
-export const ORDEN_EJES = ['preset', 'estilo', 'tipografia', 'color']
+export const ORDEN_EJES = ['preset', 'portada', 'estilo', 'tipografia', 'color']

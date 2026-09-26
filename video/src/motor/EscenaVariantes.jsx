@@ -1,10 +1,10 @@
 import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from 'remotion'
 import { clamp, progreso } from '../animaciones'
-import { Etiqueta, Valor } from '../escenas/Demo'
+import { Etiqueta, Valor } from '../componentes/Etiqueta'
 import { SANS } from '../fuentes'
 import { ACENTO, FONDO_ALT, LINEA, MUELLE, TINTA } from '../marca'
-import { Palabras } from '../plantilla/Palabras'
-import { Tarjeta } from '../plantilla/Tarjeta'
+import { Palabras } from '../componentes/Palabras'
+import { Tarjeta } from '../componentes/Tarjeta'
 import { WebEnCambio } from './WebEnCambio'
 
 // ============================================================
@@ -74,7 +74,7 @@ function Puntos({ pasos, k }) {
 
 export function EscenaVariantes({ resuelto }) {
   const frame = useCurrentFrame()
-  const { pasos, contenido, nombreEje, demo } = resuelto
+  const { pasos, contenido, movimiento, nombreEje, demo } = resuelto
   const k = pasos.findLastIndex((p) => p.frame <= frame)
   const paso = pasos[k]
 
@@ -84,7 +84,7 @@ export function EscenaVariantes({ resuelto }) {
         {paso.muestras.length ? <Muestras colores={paso.muestras} /> : null}
         {nombreEje}
         <Valor key={k} desde={paso.frame}>
-          {paso.valor ?? `${String(k + 1).padStart(2, '0')} / ${String(pasos.length).padStart(2, '0')}`}
+          {paso.valor ?? (pasos.length > 1 ? `${String(k + 1).padStart(2, '0')} / ${String(pasos.length).padStart(2, '0')}` : null)}
         </Valor>
       </Etiqueta>
 
@@ -92,6 +92,7 @@ export function EscenaVariantes({ resuelto }) {
         <WebEnCambio
           pasos={pasos}
           contenido={contenido}
+          movimiento={movimiento}
           ancho={TARJETA.ancho / TARJETA.escala}
           alto={TARJETA.alto / TARJETA.escala}
           escala={TARJETA.escala}
@@ -117,7 +118,7 @@ export function EscenaVariantes({ resuelto }) {
       </div>
 
       <div style={{ position: 'absolute', top: TARJETA.arriba + TARJETA.alto + 118, left: 0, right: 0 }}>
-        <Puntos pasos={pasos} k={k} />
+        {pasos.length > 1 ? <Puntos pasos={pasos} k={k} /> : null}
       </div>
     </AbsoluteFill>
   )

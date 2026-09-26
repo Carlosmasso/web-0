@@ -6,8 +6,6 @@ dist
 .env*.local
 .vercel
 
-# material generado para redes (pesa y se regenera con un comando)
-scripts/social/salida
 
 # render del vídeo de Remotion
 video/out

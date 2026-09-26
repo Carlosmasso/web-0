@@ -1,31 +1,26 @@
 // ============================================================
-// PUBLICAR — los reels de la cola, por semanas, listos para subir
+// PUBLICAR — la cola semanal, lista para subir
 //
 //   pnpm reels               enseña el calendario
 //   pnpm reels 1             renderiza la semana 1
 //   pnpm reels 1-3           de la semana 1 a la 3
 //   pnpm reels 2 --textos    reescribe solo pies y fichas (no renderiza)
 //
-// Cada pieza sale en out/semana-XX/N-negocio-formato/ con:
-//   video.mp4      el reel (1080x1920, 15 s, mudo)
-//   instagram.txt  pie con párrafos y etiquetas
-//   tiktok.txt     pie de una frase
-//   ficha.md       qué se ve y cómo publicarlo
+// Cada pieza sale en out/semana-XX/N-negocio-formato/ con video.mp4,
+// instagram.txt, tiktok.txt y ficha.md.
 //
-// Qué toca cada semana lo decide scripts/social/plan.mjs; cómo es cada reel,
-// scripts/social/lib/formatos.mjs. Este script solo los junta y los renderiza.
+// Qué toca cada semana lo decide datos/cola.mjs; cada pieza es un reel del
+// motor (datos/formatos.mjs dice con qué plantilla). Este script no tiene
+// vídeo propio: renderiza la composición "Reel", como `pnpm reel`.
 // ============================================================
 
-import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { calendario, materializar, revisar, semana, POR_SEMANA, SEMANAS, TOTAL } from '../scripts/social/plan.mjs'
-import { idDe, propsDe } from './src/piezas.js'
+import { calendario, carpetaDe, reelDe, revisar, semana, semanaDe, POR_SEMANA, SEMANAS, TOTAL } from './datos/cola.mjs'
 import { empaquetar, renderizar } from './render.mjs'
+import { escribirTextos } from './textos.mjs'
 
-const AQUI = path.dirname(fileURLToPath(import.meta.url))
-const SALIDA = path.join(AQUI, 'out')
-
+const SALIDA = path.join(path.dirname(fileURLToPath(import.meta.url)), 'out')
 const soloTextos = process.argv.includes('--textos')
 const rango = process.argv.slice(2).find((a) => /^\d+(-\d+)?$/.test(a))
 
@@ -50,69 +45,26 @@ if (!piezas.length) {
   process.exit(1)
 }
 
-// ---------- lo que acompaña a cada vídeo ----------
-function escribirTextos(ficha, destino) {
-  fs.mkdirSync(destino, { recursive: true })
-  fs.writeFileSync(path.join(destino, 'instagram.txt'), ficha.pie + '\n')
-  fs.writeFileSync(path.join(destino, 'tiktok.txt'), ficha.pieTikTok + '\n')
-  fs.writeFileSync(
-    path.join(destino, 'ficha.md'),
-    `# ${ficha.sector} · formato «${ficha.formato}»
-
-**Semana ${ficha.semana}**, pieza ${ficha.dentro} de ${POR_SEMANA} · nº ${ficha.numero} de ${TOTAL} de la cola
-
-| | |
-| --- | --- |
-| Negocio | ${ficha.marca} (${ficha.sector}) |
-| Formato | ${ficha.formato} |
-| Ritmo | ${ficha.voz} |
-| Dura | ${ficha.dura} s · 1080x1920 · MP4 H.264 |
-
-## Qué se ve
-
-${ficha.queSeVe}
-
-## Cómo publicarlo
-
-El mismo \`video.mp4\` vale para Instagram y para TikTok: es 9:16 y no lleva
-marca de agua de ninguna plataforma. **Va mudo a propósito**: el audio se le
-pone en la propia aplicación, que es lo que premia el algoritmo y evita líos de
-derechos. Los cambios caen a 120 bpm, así que cualquier pista de ese tempo
-encaja sola.
-
-El texto NO es el mismo en las dos redes: \`instagram.txt\` allí y
-\`tiktok.txt\` en TikTok, donde solo se lee la primera línea antes del «más».
-
-El enlace va en la biografía (maketa.es), no en el pie: en el pie no se puede
-pulsar. El protocolo de después de publicar está en DIFUSION.md.
-`,
-  )
-}
-
-// ---------- render ----------
-let serveUrl = null
-if (!soloTextos) {
-  console.log('empaquetando…')
-  serveUrl = await empaquetar()
-}
-
+const serveUrl = soloTextos ? null : await empaquetar()
 for (const pieza of piezas) {
-  const { ficha } = materializar(pieza)
-  const destino = path.join(SALIDA, ficha.carpeta)
-  escribirTextos(ficha, destino)
+  const reel = reelDe(pieza)
+  const destino = path.join(SALIDA, carpetaDe(pieza))
+  const { semana: s, dentro } = semanaDe(pieza)
+  const cabecera = `**Semana ${s}**, pieza ${dentro} de ${POR_SEMANA} · nº ${pieza.i + 1} de ${TOTAL} de la cola · formato «${pieza.formato}»`
 
   if (soloTextos) {
-    console.log('✓ ' + ficha.carpeta + ' (textos)')
+    escribirTextos(reel, destino, { cabecera })
+    console.log('✓ ' + carpetaDe(pieza) + ' (textos)')
     continue
   }
-
-  await renderizar({
+  const { durationInFrames, fps } = await renderizar({
     serveUrl,
-    id: idDe(pieza),
-    inputProps: propsDe(pieza),
+    id: 'Reel',
+    inputProps: reel,
     salida: path.join(destino, 'video.mp4'),
-    etiqueta: ficha.carpeta,
+    etiqueta: carpetaDe(pieza),
   })
+  escribirTextos(reel, destino, { segundos: durationInFrames / fps, cabecera })
 }
 
 console.log(`\nlisto en ${path.relative(process.cwd(), SALIDA)}/`)

@@ -1,0 +1,33 @@
+{
+  "plantilla": "errores",
+  "portada": {
+    "antetitulo": "Prueba de límites · todo al máximo",
+    "titulo": "Un titular de portada largo, *para probar hasta dónde llega*",
+    "texto": "Y un subtítulo también largo, con la misma escala fija que el resto de carruseles, para ver que todo sigue en su sitio."
+  },
+  "puntos": [
+    {
+      "icono": "dominio",
+      "titulo": "Un titular de contenido largo, que ocupa más de una línea",
+      "texto": "El texto de debajo admite unas cuatro líneas: suficiente para explicar una idea con un ejemplo, y no tanto como para que la diapositiva deje de leerse de un vistazo.",
+      "mejor": "Y el resalte de abajo, dos líneas largas como mucho, para que la tarjeta no se coma el espacio."
+    }
+  ],
+  "preguntas": {
+    "titulo": "Una lista de *siete líneas*:",
+    "lista": [
+      "Siete filas de una línea caben",
+      "Cada una en una línea",
+      "Si alguna ocupa dos, hay que quitar otra",
+      "Cuarta línea",
+      "Quinta línea",
+      "Sexta línea",
+      "Séptima y última línea"
+    ]
+  },
+  "cierre": {
+    "titulo": "Un cierre largo, *en el límite* de lo que cabe",
+    "texto": "Y una línea de texto debajo.",
+    "cta": "Guárdalo para más adelante."
+  }
+}

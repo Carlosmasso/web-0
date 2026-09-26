@@ -42,8 +42,8 @@ por sector. Hay tres situaciones que se reconocen enseguida:
 las semanas 1-4: la prioridad del mes es conseguir webs reales, y las redes no
 pueden comérsela.
 
-- **Las fijas salen de la cola**: piezas 1 a 8 de `scripts/social/`,
-  producidas con la plantilla de **Remotion** (`cd video && pnpm reels 1`
+- **Las fijas salen de la cola**: piezas 1 a 8 de `video/datos/cola.mjs`,
+  producidas con el motor de **Remotion** (`cd video && pnpm reels 1`
   renderiza una semana con sus pies). Los reels grabados antes con Playwright
   se descartan: la cuenta arranca con un solo formato.
 - **La opcional** es de los pilares educativo o de humor, que la cola no cubre.
@@ -88,7 +88,7 @@ pueden comérsela.
 | **4** | #6 Taller · `rafaga` | #7 Abogados · `identidad` | Humor: "Mi web la hizo mi cuñado" |
 | **5** (días 29-30) | #8 Arquitectura · `portada` | — | Repaso del mes (ver "Qué medir") |
 
-Los números son los de la cola de `scripts/social/` (`cd video && pnpm reels`
+Los números son los de la cola de `video/datos/cola.mjs` (`cd video && pnpm reels`
 enseña el calendario). La pieza 9 y las siguientes ya
 son del mes 2.
 
@@ -119,7 +119,7 @@ al principio. La marca va al final.
 
 **Si algún día hay voz**, que sea la misma frase del rótulo y en los primeros
 1,5 s. Los rótulos, a 430 px del borde inferior como mínimo, porque la interfaz
-de Instagram tapa esa franja (`scripts/social/README.md`).
+de Instagram tapa esa franja.
 
 ---
 
@@ -259,18 +259,26 @@ en cuanto exista la primera web real, y la 2 como acuerdo con cada cliente.
 
 ## 3 · Guion de ejemplo: "La peluquera sin tiempo" (15 s)
 
-Es para **la dueña sin web**. Se hace con la plantilla de reels
-(`video/src/plantilla/`) sobre el negocio `peluqueria` (Estudio Vera, Málaga):
-la columna de la derecha es lo que se escribe en `pantalla.cambios`. Va sin
-audio: el sonido se añade en la app, a 120 bpm.
+Es para **la dueña sin web**, y es un reel del motor: un JSON en
+`video/reels/` sobre el negocio `peluqueria` (Estudio Vera, Málaga). Va sin
+audio: el sonido se añade en la app.
 
-| Tiempo | Escena | Texto | En la plantilla |
-| --- | --- | --- | --- |
-| **0,0-3,0 s** | Gancho, fondo tinta | **"Tienes una peluquería y *no tienes tiempo*."** | `gancho` |
-| **3,0-6,0 s** | La web de Estudio Vera entra; el titular "Sales con el pelo que pediste" se teclea | "Pon *tu frase*." | `{ desde: 25, hasta: 110, titular: true }` |
-| **6,0-8,5 s** | El color de marca cambia tres veces, fundiéndose | "Tu color, *al momento*." | `{ frame, color }` ×3 |
-| **8,5-11,0 s** | Cambio de portada | "Tú la diseñas. *Yo la construyo.*" | `{ frame, portada }` |
-| **11,0-15,0 s** | Cierre de marca: maketa.es | — | `cierre` |
+```json
+{
+  "plantilla": "titular",
+  "negocio": "peluqueria",
+  "gancho": "Tienes una peluquería y *no tienes tiempo*.",
+  "pregunta": "¿Qué pondrías en la tuya?",
+  "cantidad": 3
+}
+```
+
+| Tiempo | Escena | Qué se ve |
+| --- | --- | --- |
+| **0-2 s** | Gancho, fondo tinta | **"Tienes una peluquería y *no tienes tiempo*."** |
+| **2-6 s** | La web de Estudio Vera | El titular "Sales con el pelo que pediste" se teclea en la web |
+| **6-9 s** | La misma web | Cambia la tipografía dos veces, con el titular ya puesto |
+| **9-12 s** | Cierre de marca | "¿Qué pondrías en la tuya? Diséñala tú. Yo la construyo." |
 
 Por qué funciona:
 - **En el segundo 0 ya hay un nombre propio y un cambio**, sin intro.
@@ -333,9 +341,9 @@ landing (no reproducciones)? El mes 2 se reparte según esa respuesta.
 
 - [ ] Bio, foto de perfil y cuenta profesional en Instagram y TikTok.
 - [ ] Publicar el vídeo de marca (`video/out/intro-maketa.mp4`) y fijarlo.
-- [ ] Hacer los cuatro opcionales (2 educativos, 2 de humor) con la plantilla
-      de reels: copiando `video/src/plantilla/ejemplo.js` y cambiando
-      gancho, frases y cambios, o como un formato nuevo en `formatos.mjs`.
+- [ ] Hacer los cuatro opcionales (2 educativos, 2 de humor) con el motor de
+      reels (un JSON en `video/reels/` con su gancho) o como carruseles
+      (`video/carruseles/`).
 - [ ] **Código:** la píldora "Diseñada en maketa.es" en el `preview.html`
       compartido (Crecimiento · 1).
 - [ ] **Código:** el crédito opcional en el pie del export (Crecimiento · 2).

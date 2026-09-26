@@ -40,21 +40,21 @@ import {
 } from '@phosphor-icons/react'
 import { SANS } from '../fuentes'
 import { ACENTO, ACENTO_CLARO, FONDO, LINEA, TINTA } from '../marca'
-import { TINTE, TIPO, px } from './formato'
+import { RETICULA, TINTE, TIPO } from './formato'
 
 // ============================================================
 // PIEZAS DE LOS CARRUSELES
 //
 // Lo que se repite en todas las diapositivas, con el acabado de los reels:
 // Inter con el interletraje del intro, el azul de marca como único acento,
-// esquinas grandes, borde fino y sombra suave. Una diapositiva nueva se monta
-// con estas piezas, nunca con estilos propios.
+// esquinas grandes, borde fino y sombra suave. Los tamaños salen de `TIPO`
+// y `RETICULA` (formato.js); aquí no se inventa ninguno.
 // ============================================================
 
 /** Estilo de titular: el de `Palabras` (reels), en estático. */
 export const titular = (tamano, color = TINTA) => ({
   fontFamily: SANS,
-  fontSize: px(tamano),
+  fontSize: tamano,
   fontWeight: 700,
   letterSpacing: '-0.04em',
   lineHeight: 1.06,
@@ -66,7 +66,7 @@ export const titular = (tamano, color = TINTA) => ({
 /** Estilo de texto corrido. */
 export const cuerpo = (color, tamano = TIPO.texto) => ({
   fontFamily: SANS,
-  fontSize: px(tamano),
+  fontSize: tamano,
   fontWeight: 500,
   letterSpacing: '-0.015em',
   lineHeight: 1.34,
@@ -96,14 +96,14 @@ export function ConAcento({ texto, acento = ACENTO }) {
 
 /** La etiqueta de arriba: mayúsculas pequeñas y espaciadas, como en la landing. */
 export function Antetitulo({ children, oscuro = false, style }) {
-  if (!children) return null
   return (
     <div
       style={{
         fontFamily: SANS,
-        fontSize: px(TIPO.etiqueta),
+        fontSize: TIPO.etiqueta,
         fontWeight: 700,
         letterSpacing: '0.12em',
+        lineHeight: 1.2,
         textTransform: 'uppercase',
         color: oscuro ? ACENTO_CLARO : ACENTO,
         ...style,
@@ -163,32 +163,50 @@ export const ICONOS_DISPONIBLES = Object.keys(ICONOS)
 
 export function Icono({ nombre, tamano = 48, color = 'currentColor', peso = 'bold' }) {
   const Dibujo = ICONOS[nombre]
-  if (!Dibujo) return null
-  // El tamaño va en la caja y no en el SVG: `size` acaba en un atributo, donde
-  // `calc()` no vale, y así el icono también encoge con el ajuste.
-  return (
-    <span style={{ width: px(tamano), height: px(tamano), display: 'inline-flex', flexShrink: 0 }}>
-      <Dibujo size="100%" color={color} weight={peso} />
-    </span>
-  )
+  if (!Dibujo) throw new Error(`Carrusel: icono desconocido "${nombre}". Hay: ${ICONOS_DISPONIBLES.join(', ')}`)
+  return <Dibujo size={tamano} color={color} weight={peso} style={{ flexShrink: 0, display: 'block' }} />
 }
 
-/** El icono dentro de un cuadrado de esquinas redondas, sobre el tinte del acento. */
-export function CajaIcono({ nombre, tamano = 96, fondo = TINTE, color = ACENTO }) {
-  if (!ICONOS[nombre]) return null
+/**
+ * El icono dentro de un cuadrado de esquinas redondas, sobre el tinte del
+ * acento. Con `marcada`, lleva en la esquina la marca de "comprobado" (las
+ * diapositivas del checklist).
+ */
+export function CajaIcono({ nombre, tamano = RETICULA.icono, oscuro = false, marcada = false }) {
   return (
     <div
       style={{
-        width: px(tamano),
-        height: px(tamano),
-        borderRadius: px(tamano * 0.3),
-        background: fondo,
+        position: 'relative',
+        width: tamano,
+        height: tamano,
+        borderRadius: tamano * 0.3,
+        background: oscuro ? 'rgba(255,255,255,0.08)' : TINTE,
+        border: oscuro ? '2px solid rgba(255,255,255,0.14)' : 'none',
+        boxSizing: 'border-box',
         display: 'grid',
         placeItems: 'center',
         flexShrink: 0,
       }}
     >
-      <Icono nombre={nombre} tamano={tamano * 0.5} color={color} />
+      <Icono nombre={nombre} tamano={tamano * 0.5} color={oscuro ? ACENTO_CLARO : ACENTO} />
+      {marcada ? (
+        <div
+          style={{
+            position: 'absolute',
+            top: -tamano * 0.14,
+            right: -tamano * 0.14,
+            width: tamano * 0.42,
+            height: tamano * 0.42,
+            borderRadius: 999,
+            background: ACENTO,
+            border: `6px solid ${FONDO}`,
+            display: 'grid',
+            placeItems: 'center',
+          }}
+        >
+          <Icono nombre="check" tamano={tamano * 0.2} color="#fff" />
+        </div>
+      ) : null}
     </div>
   )
 }
@@ -197,20 +215,20 @@ export function CajaIcono({ nombre, tamano = 96, fondo = TINTE, color = ACENTO }
 // el borde de `LINEA` apenas se ve.
 const BORDE_CASILLA = '#cfcfca'
 
-/** Casilla de lista: marcada (acento con check), pendiente (borde) o actual (borde de acento). */
-export function Casilla({ estado = 'marcada', tamano = 56 }) {
+/** Casilla de lista: marcada (acento con check) o pendiente (borde). */
+export function Casilla({ estado = 'pendiente', tamano = 44 }) {
   const marcada = estado === 'marcada'
   return (
     <div
       style={{
-        width: px(tamano),
-        height: px(tamano),
-        borderRadius: px(tamano * 0.28),
+        width: tamano,
+        height: tamano,
+        borderRadius: tamano * 0.28,
         flexShrink: 0,
         display: 'grid',
         placeItems: 'center',
         background: marcada ? ACENTO : FONDO,
-        border: marcada ? 'none' : `${px(Math.max(3, tamano * 0.06))} solid ${estado === 'actual' ? ACENTO : BORDE_CASILLA}`,
+        border: marcada ? 'none' : `3px solid ${BORDE_CASILLA}`,
         boxSizing: 'border-box',
       }}
     >
@@ -220,15 +238,15 @@ export function Casilla({ estado = 'marcada', tamano = 56 }) {
 }
 
 /** La tarjeta del intro, en estático: esquinas grandes, borde fino, sombra suave. */
-export function Tarjeta({ children, fondo = FONDO, style }) {
+export function Tarjeta({ children, style }) {
   return (
     <div
       style={{
-        background: fondo,
-        borderRadius: px(40),
+        background: FONDO,
+        borderRadius: 40,
         border: `2px solid ${LINEA}`,
         boxShadow: '0 24px 50px -36px rgba(22,23,27,0.35)',
-        padding: `${px(44)} ${px(48)}`,
+        padding: '40px 48px',
         ...style,
       }}
     >
@@ -238,46 +256,48 @@ export function Tarjeta({ children, fondo = FONDO, style }) {
 }
 
 /** La pastilla de los reels (la que dice qué cambia), aquí para la llamada a la acción. */
-export function Pastilla({ icono, children, oscuro = false }) {
+export function Pastilla({ icono, children }) {
   return (
     <div
       style={{
         display: 'inline-flex',
         alignItems: 'center',
         alignSelf: 'flex-start',
-        gap: px(18),
-        padding: `${px(20)} ${px(34)} ${px(20)} ${px(24)}`,
-        background: oscuro ? 'rgba(255,255,255,0.06)' : FONDO,
-        border: `2px solid ${oscuro ? 'rgba(255,255,255,0.16)' : LINEA}`,
+        gap: 18,
+        padding: '20px 34px 20px 24px',
+        background: FONDO,
+        border: `2px solid ${LINEA}`,
         borderRadius: 999,
-        boxShadow: oscuro ? 'none' : '0 14px 34px -14px rgba(22,23,27,0.28)',
+        boxShadow: '0 14px 34px -14px rgba(22,23,27,0.28)',
         fontFamily: SANS,
-        fontSize: px(TIPO.cta),
+        fontSize: TIPO.detalle,
         fontWeight: 600,
         letterSpacing: '-0.02em',
         lineHeight: 1.2,
-        color: oscuro ? '#fff' : TINTA,
+        color: TINTA,
+        // Una línea siempre: si la llamada a la acción no cabe, se acorta.
+        whiteSpace: 'nowrap',
       }}
     >
-      {icono ? <Icono nombre={icono} tamano={40} color={oscuro ? ACENTO_CLARO : ACENTO} /> : null}
+      {icono ? <Icono nombre={icono} tamano={40} color={ACENTO} /> : null}
       <span>{children}</span>
     </div>
   )
 }
 
-/** Número de la lista ("01"), grande y en el acento. */
-export function Numero({ children, tamano = 56, color = ACENTO }) {
+/** Número de una lista ("01"), en el acento y del tamaño del detalle. */
+export function Numero({ children }) {
   return (
     <span
       style={{
         fontFamily: SANS,
-        fontSize: px(tamano),
+        fontSize: TIPO.detalle,
         fontWeight: 800,
-        letterSpacing: '-0.05em',
-        lineHeight: 0.9,
-        color,
+        letterSpacing: '-0.03em',
+        color: ACENTO,
         fontVariantNumeric: 'tabular-nums',
         flexShrink: 0,
+        width: 48,
       }}
     >
       {children}

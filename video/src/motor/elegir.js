@@ -53,6 +53,7 @@ export const DISTANCIAS = {
   },
   color: (a, b) => distanciaTono(a, b) * 2,
   tipografia: (a, b) => (claseTipografia(a) !== claseTipografia(b)) * 1.5 + (a !== b) * 0.3,
+  portada: (a, b) => (a !== b) * 1, // solo hay tres, y las tres son muy distintas
 }
 
 /**
@@ -81,6 +82,7 @@ export function valorInicial(eje, raw) {
   if (eje === 'preset') return raw.meta?.presetId
   if (eje === 'estilo') return raw.aesthetic
   if (eje === 'tipografia') return raw.meta?.typeId ?? null
+  if (eje === 'portada') return raw.sections?.hero
   // el color de marca del negocio, llevado al candidato de tono más parecido
   if (eje === 'color') {
     return [...COLORES_CANDIDATOS].sort(

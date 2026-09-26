@@ -14,21 +14,21 @@
   "casos": [
     {
       "icono": "capas",
-      "si": "Tu web usa un gestor como *WordPress*, con plugins",
+      "si": "Si tu web usa un gestor como *WordPress*, con plugins",
       "resumen": "Si usa un gestor con plugins",
       "entonces": "Necesita actualizaciones periódicas: del gestor, del tema y de cada plugin.",
       "texto": "Muchas actualizaciones corrigen fallos de seguridad. Dejarlas pasar meses es arriesgado."
     },
     {
       "icono": "archivos",
-      "si": "Es una web sencilla, sin gestor ni base de datos",
+      "si": "Si es una web sencilla, sin gestor ni base de datos",
       "resumen": "Si es una web sencilla, sin gestor",
       "entonces": "Hay mucho menos que actualizar. Suele bastar con revisarla de vez en cuando.",
       "texto": "Aun así, el dominio y el alojamiento se renuevan, y alguien tiene que estar pendiente."
     },
     {
       "icono": "tienda",
-      "si": "Vendes online o recibes reservas desde la web",
+      "si": "Si vendes online o recibes reservas desde la web",
       "resumen": "Si vende o gestiona reservas",
       "entonces": "Conviene un seguimiento continuo: pagos, formularios y avisos tienen que funcionar siempre.",
       "texto": "Un fallo aquí no siempre se ve a simple vista, pero se nota en los pedidos."

@@ -80,7 +80,7 @@ salto de "imagínate tu web" a "mira tu web" es el que más convierte.
 
 **Qué hacer.** Conectar cada preset por sector con un contenido propio. **Los
 textos ya están escritos**: los ocho negocios de
-[`scripts/social/lib/negocios.mjs`](scripts/social/lib/negocios.mjs) tienen
+[`video/datos/negocios.mjs`](video/datos/negocios.mjs) tienen
 titular, entradilla, botones, enlaces de menú y foto de Pexels verificada.
 
 1. Mover esos negocios a `src/content/` como contenidos de demostración.
@@ -196,8 +196,8 @@ para no desanimarse en la semana tres.
 
 40 piezas, 3 por semana, 14 semanas sin que se repita ninguna combinación. Qué
 toca y en qué orden lo deciden los catálogos de
-[`scripts/social/`](scripts/social/README.md) (negocios, formatos y la regla de
-la cola). El vídeo se produce con **Remotion** en [`video/`](video/README.md):
+[`video/datos/`](video/README.md) (negocios, formatos y la regla de la cola).
+El vídeo se produce con **Remotion** en [`video/`](video/README.md):
 
 ```bash
 cd video
@@ -209,15 +209,14 @@ pnpm reels 1      # renderizar la semana 1 (vídeos, pies y fichas en out/semana
 pieza.** Los que estaban grabados con Playwright (semanas 1 a 3) se descartan y
 no se publican, para que la cuenta arranque con un solo formato.
 
-Todos siguen **una misma plantilla de 15 s**, en la línea del vídeo de marca:
-gancho sobre fondo tinta, la web real del negocio en una tarjeta que se
-transforma (los cambios se funden, no saltan) con la pastilla que dice qué
-cambia, y el cierre del intro. Se probó un estilo de subtítulos Hormozi en
-amarillo y se descartó: parecía un vídeo cualquiera. La web de la
-tarjeta son los **componentes reales** del sitio con un config por fotograma:
-es el producto de verdad, no una maqueta. Cada formato es solo datos
-(gancho, frases y cambios, en `scripts/social/lib/formatos.mjs`), así que las 40
-piezas están listas para renderizar.
+Todos salen de **un solo motor** (`video/src/motor/`), en la línea del vídeo
+de marca: gancho sobre fondo tinta, la web real del negocio en una tarjeta que
+se transforma con la pastilla que dice qué cambia, y el cierre del intro. Se
+probó un estilo de subtítulos Hormozi en amarillo y se descartó: parecía un
+vídeo cualquiera. La web de la tarjeta son los **componentes reales** del
+sitio con un config por fotograma: es el producto de verdad, no una maqueta.
+Cada pieza de la cola es un reel del motor (`video/datos/formatos.mjs` dice
+con qué plantilla), así que las 40 están listas para renderizar.
 
 ### Reparto del esfuerzo
 
@@ -290,7 +289,7 @@ correcto.
 
 - ~~**Fotos en los reels.**~~ Resuelto: los reels montan el contenido por
   sector del producto, y los cuatro negocios cuyo preset no es de su sector
-  llevan secciones propias con fotos temáticas (`scripts/social/lib/secciones.mjs`).
+  llevan secciones propias con fotos temáticas (`video/datos/secciones.mjs`).
 - ~~**Iconos de las secciones de sector.**~~ Resuelto: los 29 iconos que pide el
   contenido (`bread`, `tooth`, `scissors`…) están en el mapa de
   `src/preview/Icon.jsx` en las dos familias, y `src/preview/icon.test.js`
@@ -320,5 +319,6 @@ correcto.
 | sept. 2026 | Los reels pasan a Remotion con una plantilla de 15 s (`video/src/plantilla/`) con el acabado del vídeo de marca: gancho, web real en tarjeta con fundidos entre cambios y pastilla, cierre de marca. Los cinco formatos, reescritos como datos; `pnpm reels N` renderiza una semana con sus pies. Fuera Playwright (`grabar.mjs`, `plato.mjs`, `mux.swift` y la dependencia). |
 | sept. 2026 | Voz única en primera persona: el cierre del intro y de los reels dice "Diséñala tú. Yo la construyo.", como la landing. Secciones propias para casa rural, fisio, peluquería y taller, que heredaban el contenido de otro sector. |
 | sept. 2026 | Motor de reels "¿qué cambia si modifico X?" (`video/src/motor/`): un JSON por reel, plantillas de preset, estilo, color, tipografía y combinaciones, selección automática de las variantes más distintas, el color transformándose en continuo sobre la web real. `pnpm reel reels/x.json`. Seis reels de ejemplo y 30 ideas en `video/reels/IDEAS.md`. |
-| sept. 2026 | Carruseles educativos en Remotion (`video/src/carrusel/`): un JSON por carrusel, plantillas `pregunta`, `errores` y `checklist`, una diapositiva por fotograma exportada a PNG 1080x1350, PDF para LinkedIn y hoja de contactos. El texto encoge solo para caber y, si no cabe, el render falla. Cuatro carruseles reales (dominio, mantenimiento, errores al encargar, checklist antes de contratar), cinco de resistencia y 100 ideas. |
+| sept. 2026 | Un solo sistema de reels: la cola semanal pasa a producirse con el motor (plantillas nuevas `portada`, `titular` y `recorrido`), y `pnpm reel` también saca pies y ficha. Fuera la plantilla antigua de la cola y `scripts/social/` entero (los catálogos viven en `video/datos/`), y los vídeos grabados con Playwright. |
+| sept. 2026 | Carruseles educativos en Remotion (`video/src/carrusel/`): un JSON por carrusel, plantillas `pregunta`, `errores` y `checklist`, una diapositiva por fotograma exportada a PNG 1080x1350, PDF para LinkedIn y hoja de contactos. Tras la primera revisión, **una sola retícula** para todos: escala fija (96/72/40/36/26 px), icono, antetítulo y titular siempre en el mismo sitio; nada encoge y, si un texto no cabe, el render falla. Cuatro carruseles reales (dominio, mantenimiento, errores al encargar, checklist antes de contratar), cuatro de resistencia y 100 ideas. |
 | sept. 2026 | Barra de navegación del sitio en móvil: la hamburguesa ya no se aplasta con marcas largas (la marca baja a dos líneas y la hamburguesa es una zona táctil de 44 px), la barra "centrada" deja el botón y la hamburguesa a la derecha, los enlaces del menú se alinean con la marca, y el panel tiene sombra y se desplaza por dentro si no cabe. |

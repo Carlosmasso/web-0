@@ -4,11 +4,12 @@
   "type": "module",
   "scripts": {
     "studio": "remotion studio src/index.jsx",
-    "reels": "node publicar.mjs",
-    "render": "remotion render src/index.jsx IntroMaketa out/intro-maketa.mp4",
-    "still": "remotion still src/index.jsx PlantillaReel out/fotograma.png",
     "reel": "node reel.mjs",
-    "carrusel": "node carrusel.mjs"
+    "reels": "node publicar.mjs",
+    "carrusel": "node carrusel.mjs",
+    "intro": "remotion render src/index.jsx IntroMaketa out/intro-maketa.mp4",
+    "still": "remotion still src/index.jsx Reel out/fotograma.png",
+    "fotos": "node revisar-imagenes.mjs"
   },
   "dependencies": {
     "@remotion/bundler": "4.0.529",

@@ -12,7 +12,7 @@
 // `DEFAULT_CONTENT`, que sigue siendo el ejemplo neutro de producto.
 //
 // Los nombres de negocio son los mismos que salen en los reels
-// (`scripts/social/lib/negocios.mjs`) a propósito: quien llega desde un vídeo
+// (`video/datos/negocios.mjs`) a propósito: quien llega desde un vídeo
 // y encuentra la misma clínica reconoce el sitio.
 //
 // SOBRE LAS FOTOS. Todas son de Pexels, enlazadas y recortadas por el propio
