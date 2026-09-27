@@ -1,5 +1,5 @@
 import { AbsoluteFill } from 'remotion'
-import { ACENTO } from './marca'
+import { ACENTO } from '../diseno/marca'
 
 /**
  * Foto de perfil de Instagram: el dibujo del favicon, pero a sangre. Instagram

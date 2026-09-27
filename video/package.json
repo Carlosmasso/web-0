@@ -3,13 +3,10 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "crear": "node crear.mjs",
     "studio": "remotion studio src/index.jsx",
-    "reel": "node reel.mjs",
-    "reels": "node publicar.mjs",
-    "carrusel": "node carrusel.mjs",
-    "intro": "remotion render src/index.jsx IntroMaketa out/intro-maketa.mp4",
-    "still": "remotion still src/index.jsx Reel out/fotograma.png",
-    "fotos": "node revisar-imagenes.mjs"
+    "test": "node --test test/*.test.mjs && node test/carruseles.mjs",
+    "intro": "remotion render src/index.jsx IntroMaketa out/intro-maketa.mp4"
   },
   "dependencies": {
     "@remotion/bundler": "4.0.529",

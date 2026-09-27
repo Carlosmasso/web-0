@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Hoja de contactos para revisar las fotos de los negocios.
 //
-//   pnpm fotos        (o: node revisar-imagenes.mjs, desde video/)
+//   node lib/fotos.mjs      (desde video/; casi nunca hace falta)
 //
 // Escribe un HTML que muestra cada foto YA RECORTADA a las dos proporciones
 // que usa el producto, enlazada a Pexels y sin descargar nada. Se abre en el
@@ -14,10 +14,10 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { NEGOCIOS, foto } from './datos/negocios.mjs'
+import { NEGOCIOS, foto } from '../datos/negocios.mjs'
 
 const AQUI = path.dirname(fileURLToPath(import.meta.url))
-const SALIDA = path.join(AQUI, 'out')
+const SALIDA = path.join(AQUI, '..', 'out')
 fs.mkdirSync(SALIDA, { recursive: true })
 
 const tarjetas = Object.entries(NEGOCIOS)
@@ -71,7 +71,7 @@ const html = `<!doctype html>
 <b>resaltada</b> es la que sale en el hero según la portada del negocio; la otra se usa si el
 formato recorre las variantes. Para cambiar cualquiera: pega otra URL base de
 <code>images.pexels.com</code> en <code>video/datos/imagenes.json</code> y vuelve a
-ejecutar <code>pnpm fotos</code> (en video/).</p>
+ejecutar <code>node lib/fotos.mjs</code> (en video/).</p>
 ${tarjetas}
 </body></html>`
 

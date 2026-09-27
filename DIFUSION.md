@@ -42,10 +42,10 @@ por sector. Hay tres situaciones que se reconocen enseguida:
 las semanas 1-4: la prioridad del mes es conseguir webs reales, y las redes no
 pueden comérsela.
 
-- **Las fijas salen de la cola**: piezas 1 a 8 de `video/datos/cola.mjs`,
-  producidas con el motor de **Remotion** (`cd video && pnpm reels 1`
-  renderiza una semana con sus pies). Los reels grabados antes con Playwright
-  se descartan: la cuenta arranca con un solo formato.
+- **Las fijas salen de `video/contenido/ideas.json`**: se elige la idea y
+  `cd video && pnpm crear <id>` la deja lista con sus pies; `pnpm crear feed
+  <ids…>` enseña cómo quedan juntas en el perfil. Los reels grabados antes con
+  Playwright se descartan: la cuenta arranca con un solo formato.
 - **La opcional** es de los pilares educativo o de humor, que la cola no cubre.
   Se hace si hay tiempo, nunca a costa de una web real.
 - **Instagram y TikTok comparten el mismo MP4**, sin marca de agua, pero cada
@@ -88,8 +88,8 @@ pueden comérsela.
 | **4** | #6 Taller · `rafaga` | #7 Abogados · `identidad` | Humor: "Mi web la hizo mi cuñado" |
 | **5** (días 29-30) | #8 Arquitectura · `portada` | — | Repaso del mes (ver "Qué medir") |
 
-Los números son los de la cola de `video/datos/cola.mjs` (`cd video && pnpm reels`
-enseña el calendario). La pieza 9 y las siguientes ya
+Los números son los de la antigua cola semanal: sirven como propuesta de
+negocio y formato para cada hueco; la pieza concreta se elige en `ideas.json`. La pieza 9 y las siguientes ya
 son del mes 2.
 
 ### Ganchos para los tres primeros segundos
@@ -259,8 +259,9 @@ en cuanto exista la primera web real, y la 2 como acuerdo con cada cliente.
 
 ## 3 · Guion de ejemplo: "La peluquera sin tiempo" (15 s)
 
-Es para **la dueña sin web**, y es un reel del motor: un JSON en
-`video/reels/` sobre el negocio `peluqueria` (Estudio Vera, Málaga). Va sin
+Es para **la dueña sin web**, y es una idea más de `video/contenido/ideas.json`
+(con su `"id"`, `"formato": "reel"` y este `"reel"`) sobre el negocio
+`peluqueria` (Estudio Vera, Málaga). Va sin
 audio: el sonido se añade en la app.
 
 ```json
@@ -342,8 +343,7 @@ landing (no reproducciones)? El mes 2 se reparte según esa respuesta.
 - [ ] Bio, foto de perfil y cuenta profesional en Instagram y TikTok.
 - [ ] Publicar el vídeo de marca (`video/out/intro-maketa.mp4`) y fijarlo.
 - [ ] Hacer los cuatro opcionales (2 educativos, 2 de humor) con el motor de
-      reels (un JSON en `video/reels/` con su gancho) o como carruseles
-      (`video/carruseles/`).
+      reels o carruseles: una idea más en `video/contenido/ideas.json`.
 - [ ] **Código:** la píldora "Diseñada en maketa.es" en el `preview.html`
       compartido (Crecimiento · 1).
 - [ ] **Código:** el crédito opcional en el pie del export (Crecimiento · 2).

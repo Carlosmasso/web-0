@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { AbsoluteFill, Easing, interpolate, useCurrentFrame, useVideoConfig } from 'remotion'
 import { setIn } from '../../../src/config/patch'
-import { barrido, clamp, mezclarConfig, progreso } from '../animaciones'
+import { barrido, clamp, mezclarConfig, progreso } from '../diseno/animaciones'
 import { Escenario } from '../componentes/Escenario'
 
 // ============================================================

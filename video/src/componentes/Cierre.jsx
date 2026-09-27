@@ -1,7 +1,7 @@
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from 'remotion'
-import { SANS } from '../fuentes'
-import { Marca } from '../Logo'
-import { ACENTO, FONDO, MUELLE, TINTA, TINTA_SUAVE } from '../marca'
+import { SANS } from '../diseno/fuentes'
+import { Marca } from './Logo'
+import { ACENTO, FONDO, MUELLE, TINTA, TINTA_SUAVE } from '../diseno/marca'
 
 // Escena 3 (11-15 s): la marca en grande y el modelo en una línea. El cliente
 // diseña; la web la monta Carlos (PLAN.md: nada de autoservicio). Por eso el

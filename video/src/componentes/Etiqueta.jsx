@@ -1,6 +1,6 @@
 import { interpolate, spring, useCurrentFrame, useVideoConfig } from 'remotion'
-import { MONO, SANS } from '../fuentes'
-import { FONDO, LINEA, MUELLE, TINTA, TINTA_TENUE } from '../marca'
+import { MONO, SANS } from '../diseno/fuentes'
+import { FONDO, LINEA, MUELLE, TINTA, TINTA_TENUE } from '../diseno/marca'
 
 // La pastilla del intro: flota sobre la web y dice qué se está cambiando
 // ("Color principal · #1D4ED8"). La usan el intro y el motor de reels.

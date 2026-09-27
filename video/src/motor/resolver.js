@@ -17,7 +17,8 @@ import { PLANTILLAS, enLetra } from './plantillas'
 //     "cantidad": 5,                   // con "auto"; por defecto 5
 //     "gancho": "…",                   // opcional: si no, lo genera la plantilla
 //     "base": { "ruta.del.config": v } // opcional: ajustes antes de las variantes
-//     "pregunta": "…"                  // opcional: la línea del cierre
+//     "pregunta": "…",                 // opcional: la línea del cierre
+//     "visual": { "tema", "layout" }   // opcional: dark|light|neutral|accent · A|B|C
 //   }
 //
 // Salida: todo lo que la composición necesita, ya calculado, y la duración.
@@ -109,6 +110,9 @@ export function resolverReel(reel) {
     gancho: reel.gancho ?? plantilla.gancho({ n: enLetra(variantes.length), quien: negocio.quien }),
     pregunta: reel.pregunta ?? plantilla.pregunta,
     nombreEje: plantilla.etiqueta ?? plantilla.ejes.map((e) => EJES[e].nombre).join(' + '),
+    // Cómo se ve: tema y layout los decide el planificador (lib/planificar.mjs)
+    // mirando el feed; sin él, el tema oscuro y la tarjeta de siempre.
+    visual: { tema: reel.visual?.tema ?? 'dark', layout: reel.visual?.layout ?? 'A' },
     contenido,
     movimiento,
     pasos,

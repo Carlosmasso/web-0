@@ -1,6 +1,6 @@
 import { AbsoluteFill, useCurrentFrame } from 'remotion'
 import { Diapositiva } from './Diapositiva'
-import { ALTO, ANCHO } from './formato'
+import { ALTO, ANCHO } from '../diseno/formatos'
 import { resolverCarrusel } from './plantillas'
 
 // ============================================================
@@ -18,7 +18,7 @@ import { resolverCarrusel } from './plantillas'
 // composición, y un campo opcional que faltase en un JSON (el cierre, el
 // resumen) se heredaría del carrusel de ejemplo.
 export const calcularCarrusel = ({ props }) => {
-  const diapositivas = resolverCarrusel(props.carrusel)
+  const diapositivas = resolverCarrusel(props.carrusel, { visual: props.visual, serie: props.serie })
   return { durationInFrames: diapositivas.length, props: { ...props, diapositivas } }
 }
 
@@ -50,7 +50,7 @@ const medidasHoja = (n) => {
 }
 
 export const calcularHoja = ({ props }) => {
-  const diapositivas = resolverCarrusel(props.carrusel)
+  const diapositivas = resolverCarrusel(props.carrusel, { visual: props.visual, serie: props.serie })
   const { width, height } = medidasHoja(diapositivas.length)
   return { durationInFrames: 1, width, height, props: { ...props, diapositivas } }
 }

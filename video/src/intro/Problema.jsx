@@ -1,7 +1,7 @@
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from 'remotion'
-import { SANS } from '../fuentes'
-import { Marca } from '../Logo'
-import { ACENTO, ACENTO_CLARO, MUELLE, TINTA } from '../marca'
+import { SANS } from '../diseno/fuentes'
+import { Marca } from '../componentes/Logo'
+import { ACENTO, ACENTO_CLARO, MUELLE, TINTA } from '../diseno/marca'
 
 // Escena 1 (0-4 s): el problema, tachado, y la presentación.
 

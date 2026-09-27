@@ -1,6 +1,6 @@
 import { interpolate } from 'remotion'
-import { SANS } from './fuentes'
-import { ACENTO, ACENTO_CLARO, TINTA } from './marca'
+import { SANS } from '../diseno/fuentes'
+import { ACENTO, ACENTO_CLARO, TINTA } from '../diseno/marca'
 
 /**
  * El dibujo del favicon: una lámina de maqueta con un bloque "por colocar".

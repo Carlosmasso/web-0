@@ -38,9 +38,10 @@ import {
   Wrench,
   X,
 } from '@phosphor-icons/react'
-import { SANS } from '../fuentes'
-import { ACENTO, ACENTO_CLARO, FONDO, LINEA, TINTA } from '../marca'
-import { RETICULA, TINTE, TIPO } from './formato'
+import { SANS } from '../diseno/fuentes'
+import { ACENTO, ACENTO_CLARO, FONDO, LINEA, TINTA } from '../diseno/marca'
+import { RETICULA, TINTE, TIPO } from '../diseno/formatos'
+import { antetitulo, cuerpo as cuerpoBase, titular as titularBase, trozos } from '../diseno/texto'
 
 // ============================================================
 // PIEZAS DE LOS CARRUSELES
@@ -51,61 +52,30 @@ import { RETICULA, TINTE, TIPO } from './formato'
 // y `RETICULA` (formato.js); aquí no se inventa ninguno.
 // ============================================================
 
-/** Estilo de titular: el de `Palabras` (reels), en estático. */
-export const titular = (tamano, color = TINTA) => ({
-  fontFamily: SANS,
-  fontSize: tamano,
-  fontWeight: 700,
-  letterSpacing: '-0.04em',
-  lineHeight: 1.06,
-  color,
-  textWrap: 'balance',
-  margin: 0,
-})
+// El titular, el texto corrido y el resaltado son los de todo el sistema
+// (`diseno/texto.js`); se reexportan para que las diapositivas los tomen de aquí.
+export const titular = (tamano, color = TINTA) => titularBase(tamano, color)
+export const cuerpo = (color, tamano = TIPO.texto) => cuerpoBase(color, tamano)
 
-/** Estilo de texto corrido. */
-export const cuerpo = (color, tamano = TIPO.texto) => ({
-  fontFamily: SANS,
-  fontSize: tamano,
-  fontWeight: 500,
-  letterSpacing: '-0.015em',
-  lineHeight: 1.34,
-  color,
-  textWrap: 'pretty',
-  margin: 0,
-})
-
-/**
- * Texto con *resaltados*: lo que va entre asteriscos sale en el acento, igual
- * que en los ganchos de los reels.
- */
+/** Texto con *resaltados* en el color de acento. */
 export function ConAcento({ texto, acento = ACENTO }) {
-  return String(texto ?? '')
-    .split(/(\*[^*]+\*)/)
-    .filter(Boolean)
-    .map((trozo, i) =>
-      trozo.startsWith('*') && trozo.endsWith('*') ? (
-        <span key={i} style={{ color: acento }}>
-          {trozo.slice(1, -1)}
-        </span>
-      ) : (
-        trozo
-      ),
-    )
+  return trozos(texto).map((t, i) =>
+    t.acento ? (
+      <span key={i} style={{ color: acento }}>
+        {t.texto}
+      </span>
+    ) : (
+      t.texto
+    ),
+  )
 }
 
 /** La etiqueta de arriba: mayúsculas pequeñas y espaciadas, como en la landing. */
-export function Antetitulo({ children, oscuro = false, style }) {
+export function Antetitulo({ children, oscuro = false, color, style }) {
   return (
     <div
       style={{
-        fontFamily: SANS,
-        fontSize: TIPO.etiqueta,
-        fontWeight: 700,
-        letterSpacing: '0.12em',
-        lineHeight: 1.2,
-        textTransform: 'uppercase',
-        color: oscuro ? ACENTO_CLARO : ACENTO,
+        ...antetitulo(TIPO.etiqueta, color ?? (oscuro ? ACENTO_CLARO : ACENTO)),
         ...style,
       }}
     >
@@ -167,16 +137,11 @@ export function Icono({ nombre, tamano = 48, color = 'currentColor', peso = 'bol
   return <Dibujo size={tamano} color={color} weight={peso} style={{ flexShrink: 0, display: 'block' }} />
 }
 
-/**
- * El icono dentro de un cuadrado de esquinas redondas, sobre el tinte del
- * acento. Con `marcada`, lleva en la esquina la marca de "comprobado" (las
- * diapositivas del checklist).
- */
-export function CajaIcono({ nombre, tamano = RETICULA.icono, oscuro = false, marcada = false }) {
+/** El icono dentro de un cuadrado de esquinas redondas, sobre el tinte del acento. */
+export function CajaIcono({ nombre, tamano = RETICULA.icono, oscuro = false }) {
   return (
     <div
       style={{
-        position: 'relative',
         width: tamano,
         height: tamano,
         borderRadius: tamano * 0.3,
@@ -189,24 +154,6 @@ export function CajaIcono({ nombre, tamano = RETICULA.icono, oscuro = false, mar
       }}
     >
       <Icono nombre={nombre} tamano={tamano * 0.5} color={oscuro ? ACENTO_CLARO : ACENTO} />
-      {marcada ? (
-        <div
-          style={{
-            position: 'absolute',
-            top: -tamano * 0.14,
-            right: -tamano * 0.14,
-            width: tamano * 0.42,
-            height: tamano * 0.42,
-            borderRadius: 999,
-            background: ACENTO,
-            border: `6px solid ${FONDO}`,
-            display: 'grid',
-            placeItems: 'center',
-          }}
-        >
-          <Icono nombre="check" tamano={tamano * 0.2} color="#fff" />
-        </div>
-      ) : null}
     </div>
   )
 }

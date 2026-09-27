@@ -1,92 +1,87 @@
 import { Composition } from 'remotion'
-import { AvatarInstagram } from './AvatarInstagram'
+import * as sistema from '../contenido/sistema.mjs'
+import ideasJson from '../contenido/ideas.json'
+import { listaParaCrear, validarTodas } from '../lib/modelo.mjs'
+import { celdasFeed, propsDe, propsPortada } from '../lib/props.mjs'
+import { Carrusel, HojaContactos, calcularCarrusel, calcularHoja } from './carrusel/Carrusel'
+import { CARRUSEL, REEL } from './diseno/formatos'
+import { Feed, medidasFeed } from './feed/Feed'
+import { AvatarInstagram } from './intro/AvatarInstagram'
 import { IntroMaketa } from './intro/IntroMaketa'
 import { Reel, calcularReel } from './motor/Reel'
-import { Carrusel, HojaContactos, calcularCarrusel, calcularHoja } from './carrusel/Carrusel'
-import { ALTO as ALTO_CARRUSEL, ANCHO as ANCHO_CARRUSEL } from './carrusel/formato'
-import { cola, idDe, reelDe } from '../datos/cola.mjs'
+import { PortadaComposicion } from './portadas/PortadaPieza'
 
 // ============================================================
-// TODAS LAS COMPOSICIONES
+// TODAS LAS COMPOSICIONES — salen de contenido/ideas.json
 //
-//   IntroMaketa       el vídeo de marca
-//   AvatarInstagram   la foto de perfil
-//   Reel              EL motor de reels: una sola composición para todos
-//     Reel-<nombre>     cada JSON de video/reels/
-//     P01-rural-rafaga  cada pieza de la cola semanal (datos/cola.mjs)
-//   Carrusel          los carruseles de video/carruseles/
-//
-// Los reels y los carruseles se detectan solos: añadir uno no toca este archivo.
+//   IR-01, IC-21…   cada idea que se puede crear ya (reel o carrusel)
+//   Portada-<id>    su portada
+//   Feed            el borrador del feed: props { ids: [...] }
+//   Reel · Carrusel · CarruselHoja   las genéricas que usa `pnpm crear`
+//   IntroMaketa · AvatarInstagram     el vídeo de marca y la foto de perfil
 // ============================================================
 
-const archivosReel = import.meta.webpackContext('../reels', { recursive: false, regExp: /\.json$/ })
-const reelsEnDatos = archivosReel.keys().map((ruta) => ({
-  id: 'Reel-' + ruta.replace(/^\.\//, '').replace(/\.json$/, ''),
-  datos: archivosReel(ruta),
-}))
+const ideas = validarTodas(ideasJson, sistema)
+const listas = ideas.filter(listaParaCrear)
 
-// Los carruseles admiten subcarpetas (`pruebas/` son los de resistencia).
-const archivosCarrusel = import.meta.webpackContext('../carruseles', { recursive: true, regExp: /\.json$/ })
-const carruselesEnDatos = archivosCarrusel.keys().map((ruta) => ({
-  id: ruta.replace(/^\.\//, '').replace(/\.json$/, '').replace(/[^a-zA-Z0-9]+/g, '-'),
-  datos: archivosCarrusel(ruta),
-}))
-
-const VERTICAL = { fps: 30, width: 1080, height: 1920 }
-
+const VERTICAL = { fps: 30, width: REEL.ancho, height: REEL.alto }
 // Carrusel: un fotograma por diapositiva, a 1 fps para pasarlas en el editor.
-const CARRUSEL = { fps: 1, width: ANCHO_CARRUSEL, height: ALTO_CARRUSEL }
+const FIJO = { fps: 1, width: CARRUSEL.ancho, height: CARRUSEL.alto }
 
-// Un reel del motor: la duración la calcula `calcularReel` a partir de los datos.
-const reel = (id, datos) => (
+const reel = (id, props) => (
+  <Composition key={id} id={id} component={Reel} durationInFrames={300} defaultProps={props} calculateMetadata={calcularReel} {...VERTICAL} />
+)
+const carrusel = (id, props) => (
+  <Composition key={id} id={id} component={Carrusel} durationInFrames={1} defaultProps={props} calculateMetadata={calcularCarrusel} {...FIJO} />
+)
+const portada = (p) => (
   <Composition
-    key={id}
-    id={id}
-    component={Reel}
-    durationInFrames={300}
-    defaultProps={datos}
-    calculateMetadata={calcularReel}
-    {...VERTICAL}
+    key={`Portada-${p.id}`}
+    id={`Portada-${p.id}`}
+    component={PortadaComposicion}
+    durationInFrames={1}
+    fps={1}
+    width={p.formato === 'reel' ? REEL.ancho : CARRUSEL.ancho}
+    height={p.formato === 'reel' ? REEL.alto : CARRUSEL.alto}
+    defaultProps={propsPortada(p, ideas, sistema)}
   />
 )
 
+const calcularFeed = ({ props }) => {
+  const celdas = celdasFeed(props.ids ?? [], ideas, sistema)
+  return { ...medidasFeed(celdas.length), props: { ...props, celdas } }
+}
+
+const primerReel = listas.find((p) => p.formato === 'reel')
+const primerCarrusel = listas.find((p) => p.formato === 'carrusel')
+
 export const RemotionRoot = () => (
   <>
-    <Composition id="IntroMaketa" component={IntroMaketa} durationInFrames={450} {...VERTICAL} />
-    <Composition id="AvatarInstagram" component={AvatarInstagram} durationInFrames={1} fps={30} width={1080} height={1080} />
+    {listas.map((p) => (p.formato === 'reel' ? reel(p.id, propsDe(p, ideas, sistema)) : carrusel(p.id, propsDe(p, ideas, sistema))))}
+    {listas.map(portada)}
 
-    {/* El motor: la composición genérica, los reels sueltos y la cola. */}
-    {reel('Reel', { plantilla: 'color', negocio: 'dental', variantes: 'auto', cantidad: 5 })}
-    {reelsEnDatos.map((r) => reel(r.id, r.datos))}
-    {cola().map((p) => reel(idDe(p), reelDe(p)))}
-
-    {/* Carruseles (imágenes 1080x1350): uno por JSON, y su hoja de contactos. */}
-    {carruselesEnDatos.map((c) => (
-      <Composition
-        key={c.id}
-        id={`Carrusel-${c.id}`}
-        component={Carrusel}
-        durationInFrames={1}
-        defaultProps={{ carrusel: c.datos }}
-        calculateMetadata={calcularCarrusel}
-        {...CARRUSEL}
-      />
-    ))}
     <Composition
-      id="Carrusel"
-      component={Carrusel}
+      id="Feed"
+      component={Feed}
       durationInFrames={1}
-      defaultProps={{ carrusel: carruselesEnDatos[0]?.datos }}
-      calculateMetadata={calcularCarrusel}
-      {...CARRUSEL}
+      fps={1}
+      {...medidasFeed(9)}
+      defaultProps={{ ids: listas.slice(0, 9).map((p) => p.id) }}
+      calculateMetadata={calcularFeed}
     />
+
+    {reel('Reel', propsDe(primerReel, ideas, sistema))}
+    {carrusel('Carrusel', propsDe(primerCarrusel, ideas, sistema))}
     <Composition
       id="CarruselHoja"
       component={HojaContactos}
       durationInFrames={1}
-      defaultProps={{ carrusel: carruselesEnDatos[0]?.datos }}
+      defaultProps={propsDe(primerCarrusel, ideas, sistema)}
       calculateMetadata={calcularHoja}
-      {...CARRUSEL}
+      {...FIJO}
     />
+
+    <Composition id="IntroMaketa" component={IntroMaketa} durationInFrames={450} {...VERTICAL} />
+    <Composition id="AvatarInstagram" component={AvatarInstagram} durationInFrames={1} fps={30} width={1080} height={1080} />
   </>
 )

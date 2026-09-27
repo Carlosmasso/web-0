@@ -1,8 +1,12 @@
 import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from 'remotion'
-import { clamp, progreso } from '../animaciones'
+import { clamp, progreso } from '../diseno/animaciones'
 import { Etiqueta, Valor } from '../componentes/Etiqueta'
-import { SANS } from '../fuentes'
-import { ACENTO, FONDO_ALT, LINEA, MUELLE, TINTA } from '../marca'
+import { SANS } from '../diseno/fuentes'
+import { TIPO_REEL } from '../diseno/formatos'
+import { layoutReel } from '../diseno/layouts'
+import { ACENTO, LINEA, MUELLE } from '../diseno/marca'
+import { antetitulo } from '../diseno/texto'
+import { fondoDe } from '../diseno/temas'
 import { Palabras } from '../componentes/Palabras'
 import { Tarjeta } from '../componentes/Tarjeta'
 import { WebEnCambio } from './WebEnCambio'
@@ -15,15 +19,14 @@ import { WebEnCambio } from './WebEnCambio'
 //   nombre     debajo, grande: cómo se llama la variante que está en pantalla
 //   puntos     en qué variante vamos, de cuántas
 //
-// El protagonista es el cambio: todo lo demás se queda quieto.
+// El protagonista es el cambio: todo lo demás se queda quieto. Dónde va cada
+// cosa lo dice el layout (diseno/layouts.js); los colores, el tema.
 // ============================================================
-
-const TARJETA = { arriba: 390, ancho: 820, alto: 900, escala: 2 }
 
 // El nombre de la variante va siempre en UNA línea: con dos ejes ("Glassmorfismo
 // · Space Grotesk") a 62 px no cabe y la segunda línea pisaría los puntos.
 const ANCHO_NOMBRE = 960
-const tamanoNombre = (titulo) => Math.min(62, Math.floor(ANCHO_NOMBRE / (titulo.length * 0.56)))
+const tamanoNombre = (titulo) => Math.min(TIPO_REEL.nombre, Math.floor(ANCHO_NOMBRE / (titulo.length * 0.56)))
 
 function Muestras({ colores }) {
   return (
@@ -46,7 +49,7 @@ function Muestras({ colores }) {
   )
 }
 
-function Puntos({ pasos, k }) {
+function Puntos({ pasos, k, tema }) {
   const frame = useCurrentFrame()
   const { fps } = useVideoConfig()
   const p = progreso(frame, fps, pasos[k].frame, MUELLE.vivo)
@@ -62,7 +65,7 @@ function Puntos({ pasos, k }) {
               width: ancho,
               height: 14,
               borderRadius: 7,
-              background: i <= k ? (paso.muestras[0] && paso.valor ? paso.muestras[0] : ACENTO) : '#d6d6d1',
+              background: i <= k ? (paso.muestras[0] && paso.valor ? paso.muestras[0] : tema.oscuro ? tema.acento : ACENTO) : tema.linea,
               opacity: i < k ? 0.45 : 1,
             }}
           />
@@ -72,43 +75,62 @@ function Puntos({ pasos, k }) {
   )
 }
 
-export function EscenaVariantes({ resuelto }) {
+export function EscenaVariantes({ resuelto, tema, layout }) {
   const frame = useCurrentFrame()
-  const { pasos, contenido, movimiento, nombreEje, demo } = resuelto
+  const { pasos, contenido, movimiento, nombreEje, demo, gancho } = resuelto
+  const L = layoutReel(layout)
+  const T = L.tarjeta
   const k = pasos.findLastIndex((p) => p.frame <= frame)
   const paso = pasos[k]
+  const contador = pasos.length > 1 ? `${String(k + 1).padStart(2, '0')} / ${String(pasos.length).padStart(2, '0')}` : null
 
   return (
-    <AbsoluteFill style={{ background: FONDO_ALT, fontFamily: SANS }}>
-      <Etiqueta desde={6}>
-        {paso.muestras.length ? <Muestras colores={paso.muestras} /> : null}
-        {nombreEje}
-        <Valor key={k} desde={paso.frame}>
-          {paso.valor ?? (pasos.length > 1 ? `${String(k + 1).padStart(2, '0')} / ${String(pasos.length).padStart(2, '0')}` : null)}
-        </Valor>
-      </Etiqueta>
+    <AbsoluteFill style={{ background: fondoDe(tema, '50% 30%'), fontFamily: SANS }}>
+      {L.pastilla ? (
+        <Etiqueta desde={6}>
+          {paso.muestras.length ? <Muestras colores={paso.muestras} /> : null}
+          {nombreEje}
+          <Valor key={k} desde={paso.frame}>
+            {paso.valor ?? contador}
+          </Valor>
+        </Etiqueta>
+      ) : (
+        // Sin pastilla, la variable va como antetítulo: "COLOR PRINCIPAL · 02 / 05".
+        <div style={{ position: 'absolute', top: L.antetitulo, left: 0, right: 0, textAlign: 'center' }}>
+          <span style={antetitulo(28, tema.acento)}>
+            {nombreEje}
+            {paso.valor ?? contador ? ` · ${paso.valor ?? contador}` : ''}
+          </span>
+        </div>
+      )}
 
-      <Tarjeta arriba={TARJETA.arriba} ancho={TARJETA.ancho} alto={TARJETA.alto}>
+      {L.titular != null ? (
+        <div style={{ position: 'absolute', top: L.titular, left: 0, right: 0, display: 'flex', justifyContent: 'center' }}>
+          <Palabras texto={gancho} color={tema.texto} acento={tema.acento} tamano={TIPO_REEL.frase} ancho={900} alinear="center" />
+        </div>
+      ) : null}
+
+      <Tarjeta arriba={T.arriba} ancho={T.ancho} alto={T.alto}>
         <WebEnCambio
           pasos={pasos}
           contenido={contenido}
           movimiento={movimiento}
-          ancho={TARJETA.ancho / TARJETA.escala}
-          alto={TARJETA.alto / TARJETA.escala}
-          escala={TARJETA.escala}
+          ancho={T.ancho / T.escala}
+          alto={T.alto / T.escala}
+          escala={T.escala}
         />
       </Tarjeta>
 
       {/* El nombre de la variante: entra con cada cambio y se va antes del siguiente. */}
-      <div style={{ position: 'absolute', top: TARJETA.arriba + TARJETA.alto + 30, left: 0, right: 0 }}>
+      <div style={{ position: 'absolute', top: L.nombre, left: 0, right: 0 }}>
         {pasos.map((pa, i) => (
           <div key={i} style={{ position: 'absolute', left: 0, right: 0, display: 'flex', justifyContent: 'center' }}>
             <Palabras
               texto={`*${pa.titulo}*`}
               desde={Math.max(8, pa.frame)}
               hasta={pasos[i + 1]?.frame ?? demo + 20}
-              color={TINTA}
-              acento={TINTA}
+              color={tema.texto}
+              acento={tema.texto}
               tamano={tamanoNombre(pa.titulo)}
               ancho={ANCHO_NOMBRE}
               alinear="center"
@@ -117,8 +139,8 @@ export function EscenaVariantes({ resuelto }) {
         ))}
       </div>
 
-      <div style={{ position: 'absolute', top: TARJETA.arriba + TARJETA.alto + 118, left: 0, right: 0 }}>
-        {pasos.length > 1 ? <Puntos pasos={pasos} k={k} /> : null}
+      <div style={{ position: 'absolute', top: L.puntos, left: 0, right: 0 }}>
+        {pasos.length > 1 ? <Puntos pasos={pasos} k={k} tema={tema} /> : null}
       </div>
     </AbsoluteFill>
   )

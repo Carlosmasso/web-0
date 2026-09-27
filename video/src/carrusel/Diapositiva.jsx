@@ -1,10 +1,13 @@
 import { AbsoluteFill } from 'remotion'
-import { SANS } from '../fuentes'
-import { Marca } from '../Logo'
-import { ACENTO, ACENTO_CLARO, FONDO, FONDO_ALT, LINEA, TINTA, TINTA_SUAVE, TINTA_TENUE } from '../marca'
-import { Cabe } from './Cabe'
-import { ALTO, ANCHO, MARGEN, RETICULA, TIPO } from './formato'
-import { Antetitulo, CajaIcono, Casilla, ConAcento, Icono, Numero, Pastilla, Tarjeta, cuerpo, titular } from './piezas'
+import { SANS } from '../diseno/fuentes'
+import { Marca } from '../componentes/Logo'
+import { Cabecera, Progreso, contador } from '../componentes/Marco'
+import { ACENTO, LINEA, TINTA, TINTA_SUAVE } from '../diseno/marca'
+import { Cabe } from '../componentes/Cabe'
+import { ALTO, ANCHO, MARGEN, RETICULA, TIPO } from '../diseno/formatos'
+import { TEMAS, fondoDe, tema as temaDe } from '../diseno/temas'
+import { Portada } from '../portadas/Portada'
+import { Antetitulo, CajaIcono, Casilla, ConAcento, Icono, Numero, Pastilla, Tarjeta, cuerpo, titular } from '../componentes/piezas'
 
 // ============================================================
 // UNA DIAPOSITIVA — todas con el mismo esqueleto
@@ -21,75 +24,35 @@ import { Antetitulo, CajaIcono, Casilla, ConAcento, Icono, Numero, Pastilla, Tar
 // hueco y en qué fondo. Así el titular está a la misma altura y mide lo
 // mismo en todas las diapositivas de todos los carruseles.
 //
-//   portada    fondo tinta con el halo, como el gancho de los reels
+//   portada    la Portada compartida (portadas/), con su tema y su layout
 //   respuesta  la respuesta corta y, abajo, de qué depende
 //   punto      un error y, abajo, "mejor así"
 //   caso       si pasa esto… y, abajo, "entonces"
 //   item       una comprobación y, abajo, la pregunta que hay que hacer
 //   lista      varias líneas con casilla o número, para guardar
+//   comparativa dos columnas: A frente a B, antes frente a después
 //   cierre     fondo blanco, la llamada a la acción y la marca, como el
 //              cierre del intro
 // ============================================================
 
-const FONDOS = {
-  tinta: { fondo: TINTA, oscuro: true },
-  claro: { fondo: FONDO_ALT, oscuro: false },
-  blanco: { fondo: FONDO, oscuro: false },
-}
-
-function Cabecera({ indice, total, oscuro }) {
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-      <Marca tamano={34} tema={oscuro ? 'oscuro' : 'claro'} />
-      <span
-        style={{
-          fontFamily: SANS,
-          fontSize: 28,
-          fontWeight: 600,
-          letterSpacing: '-0.01em',
-          color: oscuro ? 'rgba(255,255,255,0.5)' : TINTA_TENUE,
-          fontVariantNumeric: 'tabular-nums',
-        }}
-      >
-        {String(indice + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
-      </span>
-    </div>
-  )
-}
-
-/** La barra de progreso de los reels, en tramos: uno por diapositiva. */
-function Progreso({ indice, total, oscuro }) {
-  return (
-    <div style={{ display: 'flex', gap: 8 }}>
-      {Array.from({ length: total }, (_, i) => (
-        <div
-          key={i}
-          style={{
-            flex: 1,
-            height: 6,
-            borderRadius: 3,
-            background:
-              i <= indice ? (oscuro ? ACENTO_CLARO : ACENTO) : oscuro ? 'rgba(255,255,255,0.14)' : 'rgba(128,128,128,0.18)',
-          }}
-        />
-      ))}
-    </div>
-  )
-}
+// Los fondos de las diapositivas interiores son siempre claros (se leen mejor
+// con texto); el tema de la pieza manda en la portada.
+const FONDOS = { tinta: TEMAS.dark, claro: TEMAS.neutral, blanco: TEMAS.light }
 
 /**
  * El esqueleto. `abajo` se pega al pie de la zona de contenido; lo demás
  * empieza siempre en el mismo sitio.
  */
-function Esqueleto({ d, indice, total, fondo, marcada = false, tamanoTitular = TIPO.titular, extra, abajo }) {
-  const { fondo: color, oscuro } = FONDOS[fondo]
-  const acento = oscuro ? ACENTO_CLARO : ACENTO
+function Esqueleto({ d, indice, total, fondo, tamanoTitular = TIPO.titular, extra, abajo }) {
+  const t = FONDOS[fondo]
+  const { oscuro } = t
+  const acento = t.acento
   return (
     <AbsoluteFill
       style={{
         width: ANCHO,
         height: ALTO,
-        background: color,
+        background: fondoDe(t, '50% 40%'),
         padding: `${MARGEN.y}px ${MARGEN.x}px`,
         display: 'flex',
         flexDirection: 'column',
@@ -97,22 +60,19 @@ function Esqueleto({ d, indice, total, fondo, marcada = false, tamanoTitular = T
         boxSizing: 'border-box',
       }}
     >
-      {oscuro ? (
-        <AbsoluteFill style={{ background: `radial-gradient(circle at 50% 40%, ${ACENTO}38 0%, transparent 58%)` }} />
-      ) : null}
       <div style={{ position: 'relative', flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
-        <Cabecera indice={indice} total={total} oscuro={oscuro} />
+        <Cabecera tema={t} derecha={contador(indice, total)} />
         <div style={{ flex: 1, minHeight: 0, display: 'flex', margin: `${RETICULA.cabecera}px 0` }}>
           <Cabe nombre={`la diapositiva ${indice + 1}`}>
-            <CajaIcono nombre={d.icono} oscuro={oscuro} marcada={marcada} />
+            <CajaIcono nombre={d.icono} oscuro={oscuro} />
             <Antetitulo oscuro={oscuro} style={{ marginTop: RETICULA.trasIcono }}>
               {d.antetitulo}
             </Antetitulo>
-            <h1 style={{ ...titular(tamanoTitular, oscuro ? '#fff' : TINTA), marginTop: RETICULA.trasEtiqueta }}>
+            <h1 style={{ ...titular(tamanoTitular, t.texto), marginTop: RETICULA.trasEtiqueta }}>
               <ConAcento texto={d.titulo} acento={acento} />
             </h1>
             {d.texto ? (
-              <p style={{ ...cuerpo(oscuro ? 'rgba(255,255,255,0.68)' : TINTA_SUAVE), marginTop: RETICULA.trasTitular }}>
+              <p style={{ ...cuerpo(t.suave), marginTop: RETICULA.trasTitular }}>
                 <ConAcento texto={d.texto} acento={acento} />
               </p>
             ) : null}
@@ -120,7 +80,7 @@ function Esqueleto({ d, indice, total, fondo, marcada = false, tamanoTitular = T
             {abajo ? <div style={{ marginTop: 'auto', paddingTop: RETICULA.bloque }}>{abajo}</div> : null}
           </Cabe>
         </div>
-        <Progreso indice={indice} total={total} oscuro={oscuro} />
+        <Progreso indice={indice} total={total} tema={t} />
       </div>
     </AbsoluteFill>
   )
@@ -176,7 +136,23 @@ function Filas({ lista, marcador }) {
   )
 }
 
-const Desliza = () => (
+/** Dos columnas, cada una con su etiqueta: "Freelance / Agencia", "Antes / Después". */
+function Columnas({ columnas }) {
+  return (
+    <div style={{ display: 'flex', gap: 24, alignItems: 'stretch' }}>
+      {columnas.map((c, i) => (
+        <Tarjeta key={i} style={{ flex: 1, padding: '36px 36px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <Antetitulo color={i === 0 ? TINTA_SUAVE : ACENTO}>{c.etiqueta}</Antetitulo>
+          <p style={{ ...detalle(), fontWeight: i === 0 ? 500 : 600 }}>
+            <ConAcento texto={c.texto} />
+          </p>
+        </Tarjeta>
+      ))}
+    </div>
+  )
+}
+
+const Desliza = ({ tema }) => (
   <div
     style={{
       display: 'flex',
@@ -185,11 +161,11 @@ const Desliza = () => (
       gap: 14,
       fontSize: TIPO.etiqueta + 4,
       fontWeight: 600,
-      color: 'rgba(255,255,255,0.72)',
+      color: tema.suave,
     }}
   >
     Desliza
-    <Icono nombre="flecha" tamano={34} color={ACENTO_CLARO} />
+    <Icono nombre="flecha" tamano={34} color={tema.acento} />
   </div>
 )
 
@@ -213,14 +189,37 @@ const FirmaMarca = () => (
 const resalteDe = (d) => (d.resalte ? <Resalte resalte={d.resalte} /> : null)
 
 const VARIANTES = {
-  portada: (p) => <Esqueleto {...p} fondo="tinta" tamanoTitular={TIPO.portada} abajo={p.total > 1 ? <Desliza /> : null} />,
+  portada: ({ d, indice, total }) => {
+    const tema = temaDe(d.tema ?? 'dark')
+    return (
+      <Portada
+        formato="carrusel"
+        tema={tema}
+        layout={d.layout ?? 'A'}
+        antetitulo={d.antetitulo}
+        titulo={d.titulo}
+        texto={d.texto}
+        icono={d.icono}
+        numero={d.numero}
+        derecha={contador(indice, total)}
+        nombre="la portada"
+        pie={
+          <div style={{ display: 'flex', flexDirection: 'column', gap: RETICULA.cabecera }}>
+            {total > 1 ? <Desliza tema={tema} /> : null}
+            <Progreso indice={indice} total={total} tema={tema} />
+          </div>
+        }
+      />
+    )
+  },
   respuesta: (p) => (
     <Esqueleto {...p} fondo="claro" abajo={p.d.lista?.length ? <Filas lista={p.d.lista} marcador="icono" /> : null} />
   ),
   punto: (p) => <Esqueleto {...p} fondo="claro" abajo={resalteDe(p.d)} />,
   caso: (p) => <Esqueleto {...p} fondo="claro" abajo={resalteDe(p.d)} />,
-  item: (p) => <Esqueleto {...p} fondo="claro" marcada abajo={resalteDe(p.d)} />,
+  item: (p) => <Esqueleto {...p} fondo="claro" abajo={resalteDe(p.d)} />,
   lista: (p) => <Esqueleto {...p} fondo="claro" abajo={<Filas lista={p.d.lista} marcador={p.d.marcador} />} />,
+  comparativa: (p) => <Esqueleto {...p} fondo="claro" abajo={<Columnas columnas={p.d.columnas} />} />,
   cierre: (p) => (
     <Esqueleto
       {...p}

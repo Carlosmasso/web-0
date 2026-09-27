@@ -34,7 +34,14 @@ export function Cabe({ children, nombre = 'diapositiva' }) {
           contenido.current.scrollHeight - zona.current.clientHeight,
           contenido.current.scrollWidth - zona.current.clientWidth,
         )
-        cancelRender(new Error(`No cabe el texto de ${nombre} (sobran ${sobra} px); hay que acortarlo: "${texto}…"`))
+        const z = zona.current
+        const c = contenido.current
+        cancelRender(
+          new Error(
+            `No cabe el texto de ${nombre} (sobran ${sobra} px; zona ${z.clientWidth}x${z.clientHeight}, ` +
+              `contenido ${c.scrollWidth}x${c.scrollHeight}); hay que acortarlo: "${texto}…"`,
+          ),
+        )
         return
       }
       continueRender(espera)

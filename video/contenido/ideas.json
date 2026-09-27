@@ -1,0 +1,1981 @@
+[
+  {
+    "id": "IR-01",
+    "formato": "reel",
+    "gancho": "La misma casa rural, *en seis estilos*.",
+    "pilar": "inspiration",
+    "serie": "web-en-30-segundos",
+    "tema": "estilo",
+    "concepto": "Seis estéticas sobre la web real de una casa rural: el contenido no se mueve.",
+    "reel": {
+      "plantilla": "estilo",
+      "negocio": "rural",
+      "cantidad": 6
+    }
+  },
+  {
+    "id": "IR-02",
+    "formato": "reel",
+    "gancho": "Tu color de marca *lo cambia todo*.",
+    "pilar": "inspiration",
+    "serie": "web-en-30-segundos",
+    "tema": "color",
+    "concepto": "Cinco colores sobre la web de una peluquería, transformándose en continuo.",
+    "reel": {
+      "plantilla": "color",
+      "negocio": "peluqueria"
+    }
+  },
+  {
+    "id": "IR-03",
+    "formato": "reel",
+    "gancho": "Tu casa rural, *de cinco maneras*.",
+    "pilar": "inspiration",
+    "serie": "diseno-que-funciona",
+    "tema": "presets",
+    "visual": {
+      "tema": "neutral",
+      "layout": "B"
+    },
+    "concepto": "Cinco presets muy distintos sobre el mismo contenido.",
+    "reel": {
+      "plantilla": "preset",
+      "negocio": "rural"
+    }
+  },
+  {
+    "id": "IR-04",
+    "formato": "reel",
+    "gancho": "La letra *también se come*.",
+    "pilar": "inspiration",
+    "serie": "diseno-que-funciona",
+    "tema": "tipografia",
+    "concepto": "Cuatro tipografías en la web de un obrador: la voz del negocio cambia.",
+    "reel": {
+      "plantilla": "tipografia",
+      "negocio": "obrador",
+      "cantidad": 4
+    }
+  },
+  {
+    "id": "IR-05",
+    "formato": "reel",
+    "gancho": "La misma clínica, *irreconocible*.",
+    "pilar": "inspiration",
+    "serie": "web-en-30-segundos",
+    "tema": "combinaciones",
+    "concepto": "Preset y color a la vez: cuánto puede cambiar una web sin tocar el contenido.",
+    "reel": {
+      "plantilla": "preset+color",
+      "negocio": "dental",
+      "cantidad": 4
+    }
+  },
+  {
+    "id": "IR-06",
+    "formato": "reel",
+    "gancho": "Otra letra, *otro color*.",
+    "pilar": "inspiration",
+    "serie": "diseno-que-funciona",
+    "tema": "combinaciones",
+    "concepto": "La identidad de un negocio en dos decisiones.",
+    "reel": {
+      "plantilla": "tipografia+color",
+      "negocio": "peluqueria",
+      "cantidad": 4
+    }
+  },
+  {
+    "id": "IR-07",
+    "formato": "reel",
+    "gancho": "Una clínica, *seis acabados*.",
+    "pilar": "inspiration",
+    "serie": "web-en-30-segundos",
+    "tema": "estilo",
+    "concepto": "Los seis estilos del configurador sobre una web sanitaria.",
+    "reel": {
+      "plantilla": "estilo",
+      "negocio": "dental",
+      "cantidad": 6
+    }
+  },
+  {
+    "id": "IR-08",
+    "formato": "reel",
+    "gancho": "Un despacho *no tiene por qué ser azul*.",
+    "pilar": "inspiration",
+    "serie": "diseno-que-funciona",
+    "tema": "color",
+    "concepto": "Colores poco habituales para un despacho, y cómo quedan.",
+    "reel": {
+      "plantilla": "color",
+      "negocio": "abogados",
+      "cantidad": 4
+    }
+  },
+  {
+    "id": "IR-09",
+    "formato": "reel",
+    "gancho": "Tres portadas para *tu taller*.",
+    "pilar": "inspiration",
+    "serie": "web-en-30-segundos",
+    "tema": "portada",
+    "concepto": "Dividida, centrada y con foto: la composición también se elige.",
+    "reel": {
+      "plantilla": "portada",
+      "negocio": "taller"
+    }
+  },
+  {
+    "id": "IR-10",
+    "formato": "reel",
+    "gancho": "La letra y el acabado *lo cambian todo*.",
+    "pilar": "inspiration",
+    "serie": "diseno-que-funciona",
+    "tema": "combinaciones",
+    "concepto": "Tipografía y estilo a la vez en un estudio de arquitectura.",
+    "reel": {
+      "plantilla": "tipografia+estilo",
+      "negocio": "arquitectura",
+      "cantidad": 4
+    }
+  },
+  {
+    "id": "IR-11",
+    "formato": "reel",
+    "gancho": "Serif o sin serif: *se nota*.",
+    "pilar": "education",
+    "serie": "diseno-que-funciona",
+    "tema": "tipografia",
+    "concepto": "Qué transmite cada familia tipográfica, visto sobre la misma web.",
+    "reel": {
+      "plantilla": "tipografia",
+      "negocio": "abogados",
+      "cantidad": 4
+    }
+  },
+  {
+    "id": "IR-12",
+    "formato": "reel",
+    "gancho": "Lo primero que *ve tu cliente*.",
+    "pilar": "education",
+    "serie": "diseno-que-funciona",
+    "tema": "portada",
+    "concepto": "Por qué la portada decide si alguien sigue leyendo.",
+    "reel": {
+      "plantilla": "portada",
+      "negocio": "fisio"
+    }
+  },
+  {
+    "id": "IR-13",
+    "formato": "reel",
+    "gancho": "¿Qué color *transmite confianza*?",
+    "pilar": "education",
+    "serie": "web-en-30-segundos",
+    "tema": "color",
+    "concepto": "Cinco colores de marca y lo que sugiere cada uno, sin reglas absolutas.",
+    "reel": {
+      "plantilla": "color",
+      "negocio": "taller"
+    }
+  },
+  {
+    "id": "IR-14",
+    "formato": "reel",
+    "gancho": "Así sería la web de *tu casa rural*.",
+    "pilar": "trust",
+    "serie": "web-en-30-segundos",
+    "tema": "web-completa",
+    "concepto": "Recorrido completo: qué secciones tiene una buena web de una página.",
+    "reel": {
+      "plantilla": "recorrido",
+      "negocio": "rural"
+    }
+  },
+  {
+    "id": "IR-15",
+    "formato": "reel",
+    "gancho": "Una web de una página, *entera*.",
+    "pilar": "trust",
+    "serie": "web-en-30-segundos",
+    "tema": "web-completa",
+    "concepto": "De la portada al contacto: todo lo que cabe en una sola página bien pensada.",
+    "reel": {
+      "plantilla": "recorrido",
+      "negocio": "obrador"
+    }
+  },
+  {
+    "id": "IR-16",
+    "formato": "reel",
+    "gancho": "Escribe tu frase. *Ya es tu web.*",
+    "pilar": "product",
+    "serie": "maketa",
+    "tema": "textos",
+    "concepto": "El titular se escribe y aparece en la web a la vez: los textos son del negocio.",
+    "reel": {
+      "plantilla": "titular",
+      "negocio": "peluqueria"
+    }
+  },
+  {
+    "id": "IR-17",
+    "formato": "reel",
+    "gancho": "Elige un punto de partida. *Ajusta el resto.*",
+    "pilar": "product",
+    "serie": "maketa",
+    "tema": "presets",
+    "concepto": "Cómo funcionan los presets del configurador de Maketa.",
+    "reel": {
+      "plantilla": "preset",
+      "negocio": "taller"
+    }
+  },
+  {
+    "id": "IR-18",
+    "formato": "reel",
+    "gancho": "Diseña tu web *viéndola en vivo*.",
+    "pilar": "product",
+    "serie": "maketa",
+    "tema": "configurador",
+    "concepto": "El configurador en acción: cada cambio se ve al momento.",
+    "reel": {
+      "plantilla": "estilo+color",
+      "negocio": "obrador",
+      "cantidad": 4
+    }
+  },
+  {
+    "id": "IR-19",
+    "formato": "reel",
+    "gancho": "Si tu web *cuesta de leer*, mira el contraste.",
+    "pilar": "problems",
+    "serie": "diseno-que-funciona",
+    "tema": "contraste",
+    "concepto": "El configurador ajusta el contraste de cada color: el texto siempre se lee.",
+    "reel": {
+      "plantilla": "color",
+      "negocio": "fisio",
+      "cantidad": 4
+    }
+  },
+  {
+    "id": "IR-20",
+    "formato": "reel",
+    "gancho": "¿Minimalista o *con personalidad*?",
+    "pilar": "decision",
+    "serie": "diseno-que-funciona",
+    "tema": "estilo",
+    "concepto": "Dos extremos de estilo sobre la misma web, para decidir hacia dónde ir.",
+    "reel": {
+      "plantilla": "estilo",
+      "negocio": "arquitectura",
+      "cantidad": 4
+    }
+  },
+  {
+    "id": "IR-21",
+    "formato": "reel",
+    "gancho": "La web de tu clínica, *en cinco colores*.",
+    "pilar": "inspiration",
+    "serie": "web-en-30-segundos",
+    "tema": "color",
+    "visual": {
+      "tema": "light",
+      "layout": "A"
+    },
+    "reel": {
+      "plantilla": "color",
+      "negocio": "dental",
+      "variantes": "auto",
+      "cantidad": 5
+    }
+  },
+  {
+    "id": "IR-22",
+    "formato": "reel",
+    "gancho": "El mismo obrador. *Cuatro colores.*",
+    "pilar": "inspiration",
+    "serie": "diseno-que-funciona",
+    "tema": "color",
+    "visual": {
+      "tema": "dark",
+      "layout": "B"
+    },
+    "reel": {
+      "plantilla": "color",
+      "negocio": "obrador",
+      "pregunta": "¿Cuál pega con tu pan?",
+      "variantes": [
+        {
+          "color": "#b45309"
+        },
+        {
+          "color": "#0f766e"
+        },
+        {
+          "color": "#be123c"
+        },
+        {
+          "color": "#1d4ed8"
+        }
+      ]
+    }
+  },
+  {
+    "id": "IR-23",
+    "formato": "reel",
+    "gancho": "Mismo diseño. *Otro estilo.*",
+    "pilar": "inspiration",
+    "serie": "web-en-30-segundos",
+    "tema": "estilo",
+    "visual": {
+      "tema": "light",
+      "layout": "C"
+    },
+    "reel": {
+      "plantilla": "estilo",
+      "negocio": "taller",
+      "variantes": "auto",
+      "cantidad": 5
+    }
+  },
+  {
+    "id": "IR-24",
+    "formato": "reel",
+    "gancho": "Otro estilo, *otro color*. La misma web.",
+    "pilar": "inspiration",
+    "serie": "diseno-que-funciona",
+    "tema": "combinaciones",
+    "visual": {
+      "tema": "dark",
+      "layout": "A"
+    },
+    "reel": {
+      "plantilla": "estilo+color",
+      "negocio": "fisio",
+      "variantes": "auto",
+      "cantidad": 4
+    }
+  },
+  {
+    "id": "IR-25",
+    "formato": "reel",
+    "gancho": "Cinco presets. *Una misma web.*",
+    "pilar": "product",
+    "serie": "maketa",
+    "tema": "presets",
+    "visual": {
+      "tema": "dark",
+      "layout": "A"
+    },
+    "reel": {
+      "plantilla": "preset",
+      "negocio": "peluqueria",
+      "variantes": "auto",
+      "cantidad": 5
+    }
+  },
+  {
+    "id": "IR-26",
+    "formato": "reel",
+    "gancho": "Mismo texto, *cuatro tipografías.*",
+    "pilar": "inspiration",
+    "serie": "diseno-que-funciona",
+    "tema": "tipografia",
+    "visual": {
+      "tema": "dark",
+      "layout": "A"
+    },
+    "reel": {
+      "plantilla": "tipografia",
+      "negocio": "abogados",
+      "variantes": "auto",
+      "cantidad": 4
+    }
+  },
+  {
+    "id": "IR-27",
+    "formato": "reel",
+    "gancho": "La letra y el acabado *lo cambian todo*.",
+    "pilar": "inspiration",
+    "serie": "web-en-30-segundos",
+    "tema": "combinaciones",
+    "visual": {
+      "tema": "light",
+      "layout": "A"
+    },
+    "reel": {
+      "plantilla": "tipografia+estilo",
+      "negocio": "arquitectura",
+      "variantes": "auto",
+      "cantidad": 4
+    }
+  },
+  {
+    "id": "IR-28",
+    "formato": "reel",
+    "gancho": "Tres portadas para *tu peluquería*.",
+    "pilar": "education",
+    "serie": "diseno-que-funciona",
+    "tema": "portada",
+    "reel": {
+      "plantilla": "portada",
+      "negocio": "peluqueria",
+      "cantidad": 3
+    }
+  },
+  {
+    "id": "IR-29",
+    "formato": "reel",
+    "gancho": "Escribe tu frase. *Ya es tu web.*",
+    "pilar": "product",
+    "serie": "maketa",
+    "tema": "textos",
+    "visual": {
+      "tema": "light",
+      "layout": "A"
+    },
+    "reel": {
+      "plantilla": "titular",
+      "negocio": "dental",
+      "cantidad": 3
+    }
+  },
+  {
+    "id": "IR-30",
+    "formato": "reel",
+    "gancho": "Así sería la web de *tu consulta*.",
+    "pilar": "trust",
+    "serie": "web-en-30-segundos",
+    "tema": "web-completa",
+    "visual": {
+      "tema": "light",
+      "layout": "B"
+    },
+    "reel": {
+      "plantilla": "recorrido",
+      "negocio": "fisio"
+    }
+  },
+  {
+    "id": "IC-01",
+    "formato": "carrusel",
+    "gancho": "Antes de pedir tu web, *ten a mano esto*",
+    "pilar": "education",
+    "serie": "antes-de-contratar",
+    "tema": "contratar-web",
+    "concepto": "Logo, textos, fotos, ejemplos y un objetivo claro para la primera conversación.",
+    "carrusel": {
+      "plantilla": "checklist",
+      "portada": {
+        "titulo": "Antes de pedir tu web, *ten a mano esto*",
+        "texto": "Cinco cosas que acortan mucho la primera conversación."
+      },
+      "items": [
+        {
+          "icono": "diseno",
+          "titulo": "Tu *logo*, en buena calidad",
+          "texto": "Mejor en vector (SVG o PDF) que una foto del cartel o una captura.",
+          "pregunta": "¿Lo tengo en archivo o hay que rehacerlo?",
+          "corto": "Tengo el logo en buena calidad"
+        },
+        {
+          "icono": "textos",
+          "titulo": "Qué haces, *en tres frases*",
+          "texto": "Qué ofreces, a quién y dónde. Si lo sabes contar tú, la web lo contará mejor.",
+          "pregunta": "¿Quién escribe los textos: yo o el proveedor?",
+          "corto": "Sé contar qué hago"
+        },
+        {
+          "icono": "imagenes",
+          "titulo": "Fotos *tuyas*",
+          "texto": "Del local, del equipo o del trabajo. Aunque sean del móvil, con buena luz.",
+          "pregunta": "¿Se pueden usar fotos libres donde falten?",
+          "corto": "Tengo fotos propias"
+        },
+        {
+          "icono": "idea",
+          "titulo": "Webs *que te gusten*",
+          "texto": "Dos o tres. No para copiarlas: para explicar el estilo sin describirlo.",
+          "pregunta": "¿Qué me gusta exactamente de cada una?",
+          "corto": "Tengo webs de referencia"
+        },
+        {
+          "icono": "conversion",
+          "titulo": "Qué tiene que *conseguir*",
+          "texto": "Que te llamen, que reserven, que te encuentren… Una cosa principal.",
+          "pregunta": "¿Qué debería hacer quien entra en mi web?",
+          "corto": "Sé qué debe conseguir"
+        }
+      ],
+      "cierre": {
+        "titulo": "Con esto, la mitad del trabajo *ya está hecha*.",
+        "texto": "En Maketa puedes diseñarla tú antes de hablar conmigo.",
+        "cta": "Guárdalo para cuando encargues tu web."
+      }
+    }
+  },
+  {
+    "id": "IC-02",
+    "formato": "carrusel",
+    "gancho": "¿Hacerla yo o *encargarla*?",
+    "pilar": "decision",
+    "serie": "antes-de-contratar",
+    "tema": "proveedor",
+    "concepto": "Tiempo, resultado y mantenimiento de cada camino, sin juzgar ninguno.",
+    "carrusel": {
+      "plantilla": "comparacion",
+      "portada": {
+        "titulo": "¿Hacerla yo o *encargarla*?",
+        "texto": "Los dos caminos son válidos. Cambia quién pone el tiempo y qué pasa después."
+      },
+      "lados": [
+        "Hacerla yo",
+        "Encargarla"
+      ],
+      "criterios": [
+        {
+          "icono": "tiempo",
+          "titulo": "El *tiempo*",
+          "texto": "Ninguno de los dos es gratis: cambia quién lo dedica.",
+          "a": "Lo pones tú: aprender la herramienta y montarla.",
+          "b": "Lo pone otra persona; tú das el contenido y revisas."
+        },
+        {
+          "icono": "diseno",
+          "titulo": "El *resultado*",
+          "texto": "Una buena herramienta no escribe los textos por ti.",
+          "a": "Depende de tu mano con el diseño y los textos.",
+          "b": "Depende de a quién elijas y de cómo se lo expliques."
+        },
+        {
+          "icono": "mantenimiento",
+          "titulo": "El *después*",
+          "texto": "Una web se toca: horarios, fotos, servicios nuevos.",
+          "a": "Actualizas y resuelves tú cuando algo falla.",
+          "b": "Acordáis quién la mantiene y cómo pides cambios."
+        }
+      ],
+      "resumen": {
+        "titulo": "Antes de decidir, *pregúntate*:",
+        "lista": [
+          "¿Cuánto tiempo puedo dedicarle?",
+          "¿Me veo escribiendo y diseñando?",
+          "¿Quién la cuidará dentro de un año?"
+        ]
+      },
+      "cierre": {
+        "titulo": "Las dos valen si *sabes lo que eliges*.",
+        "texto": "En Maketa hay un punto intermedio: la diseñas tú y la construyo yo.",
+        "cta": "Guárdalo para cuando tengas que decidir."
+      }
+    }
+  },
+  {
+    "id": "IC-03",
+    "formato": "carrusel",
+    "gancho": "4 errores con *las fotos* de tu web",
+    "pilar": "mistakes",
+    "serie": "errores-web",
+    "tema": "imagenes",
+    "concepto": "Derechos de uso, peso, texto alternativo y recortes en el móvil.",
+    "carrusel": {
+      "plantilla": "errores",
+      "portada": {
+        "titulo": "4 errores con *las fotos* de tu web",
+        "texto": "Son lo primero que se mira, y también lo que más se descuida."
+      },
+      "puntos": [
+        {
+          "icono": "propiedad",
+          "titulo": "Usar fotos *sin permiso*",
+          "texto": "Una imagen no es libre por aparecer en Google. Puede tener derechos.",
+          "mejor": "Fotos tuyas o de bancos con licencia libre, como Pexels."
+        },
+        {
+          "icono": "velocidad",
+          "titulo": "Fotos *demasiado pesadas*",
+          "texto": "Una foto recién sacada del móvil pesa mucho y hace la web más lenta.",
+          "mejor": "Redúcelas y comprímelas antes de subirlas."
+        },
+        {
+          "icono": "seo",
+          "titulo": "Sin *texto alternativo*",
+          "texto": "Es lo que leen los lectores de pantalla y los buscadores en lugar de la imagen.",
+          "mejor": "Describe cada foto en una frase corta."
+        },
+        {
+          "icono": "movil",
+          "titulo": "Recortes que *fallan en el móvil*",
+          "texto": "Una foto apaisada, en vertical, puede cortar justo lo importante.",
+          "mejor": "Revisa cada foto en el móvil antes de publicar."
+        }
+      ],
+      "cierre": {
+        "titulo": "Las fotos son lo primero que se ve. *Cuídalas.*",
+        "cta": "Compártelo con quien esté haciendo su web."
+      }
+    }
+  },
+  {
+    "id": "IC-04",
+    "formato": "carrusel",
+    "gancho": "7 detalles que hacen que una web *parezca a medio hacer*",
+    "pilar": "mistakes",
+    "serie": "errores-web",
+    "tema": "acabado",
+    "concepto": "Teléfono sin enlace, horario viejo, pie vacío, sin favicon…",
+    "carrusel": {
+      "plantilla": "errores",
+      "portada": {
+        "titulo": "7 detalles que hacen que una web *parezca a medio hacer*",
+        "texto": "Ninguno es grave. Juntos, hacen dudar de todo lo demás."
+      },
+      "puntos": [
+        {
+          "icono": "movil",
+          "titulo": "El teléfono *no se puede pulsar*",
+          "texto": "En el móvil, un número que no abre la llamada obliga a copiarlo a mano.",
+          "mejor": "Enlázalo para que se llame con un toque."
+        },
+        {
+          "icono": "tiempo",
+          "titulo": "Un horario *que ya no es*",
+          "texto": "Vacaciones, horario de verano… un dato viejo hace dudar de los demás.",
+          "mejor": "Revísalo cada vez que cambie, aunque sea un día."
+        },
+        {
+          "icono": "contrato",
+          "titulo": "El pie *vacío*",
+          "texto": "Es donde muchos buscan la dirección, el teléfono o el aviso legal.",
+          "mejor": "Pon ahí tus datos de contacto y los enlaces legales."
+        },
+        {
+          "icono": "diseno",
+          "titulo": "Sin *favicon*",
+          "texto": "El icono de la pestaña del navegador. Sin él, sale uno genérico.",
+          "mejor": "Usa una versión pequeña de tu logo."
+        },
+        {
+          "icono": "textos",
+          "titulo": "Textos *de ejemplo* olvidados",
+          "texto": "Un «Lorem ipsum» o un «Título aquí» delatan que nadie la ha revisado.",
+          "mejor": "Léela entera antes de publicarla, sección a sección."
+        },
+        {
+          "icono": "conversion",
+          "titulo": "Botones *que no llevan a nada*",
+          "texto": "Un botón que no responde, o que lleva a una página vacía, corta el paso.",
+          "mejor": "Pulsa cada enlace y cada botón antes de publicar."
+        },
+        {
+          "icono": "compartir",
+          "titulo": "Redes *abandonadas*",
+          "texto": "Enlazar un perfil que lleva años sin publicar resta más que suma.",
+          "mejor": "Enlaza solo las redes que mantienes al día."
+        }
+      ],
+      "cierre": {
+        "titulo": "Son detalles, pero *se notan*. Y se arreglan rápido.",
+        "cta": "Guárdalo y repasa tu web."
+      }
+    }
+  },
+  {
+    "id": "IC-05",
+    "formato": "carrusel",
+    "gancho": "Si tu web *cuesta de leer*, suele ser por esto",
+    "pilar": "problems",
+    "serie": "errores-web",
+    "tema": "legibilidad",
+    "concepto": "Contraste, tamaño de letra, líneas largas y demasiadas fuentes.",
+    "carrusel": {
+      "plantilla": "errores",
+      "portada": {
+        "titulo": "Si tu web *cuesta de leer*, suele ser por esto",
+        "texto": "No es cosa de gustos: hay cuatro motivos que se repiten mucho."
+      },
+      "puntos": [
+        {
+          "icono": "diseno",
+          "titulo": "Poco *contraste*",
+          "texto": "Gris claro sobre blanco queda elegante, pero cuesta leerlo, sobre todo al sol.",
+          "mejor": "Texto oscuro sobre fondo claro, o al revés, bien marcado."
+        },
+        {
+          "icono": "movil",
+          "titulo": "Letra *demasiado pequeña*",
+          "texto": "En el móvil, un texto pequeño obliga a acercarse. Y mucha gente no lo hace.",
+          "mejor": "Un tamaño cómodo para leer sin hacer zoom."
+        },
+        {
+          "icono": "textos",
+          "titulo": "Líneas *demasiado largas*",
+          "texto": "En pantallas anchas, una línea de lado a lado cansa: el ojo se pierde al volver.",
+          "mejor": "Limita el ancho del texto, como en un libro."
+        },
+        {
+          "icono": "capas",
+          "titulo": "Demasiadas *tipografías*",
+          "texto": "Cada sección con una letra distinta hace que nada parezca importante.",
+          "mejor": "Una o dos tipografías para toda la web."
+        }
+      ],
+      "cierre": {
+        "titulo": "Una web que se lee bien *se entiende antes*.",
+        "texto": "El configurador de Maketa comprueba el contraste de cada combinación.",
+        "cta": "Descúbrelo en maketa.es"
+      }
+    }
+  },
+  {
+    "id": "IC-06",
+    "formato": "carrusel",
+    "gancho": "¿Necesito SEO *desde el primer día*?",
+    "pilar": "education",
+    "serie": "antes-de-contratar",
+    "tema": "seo",
+    "concepto": "Lo básico sí; lo avanzado depende de la competencia y del objetivo.",
+    "carrusel": {
+      "plantilla": "pregunta",
+      "portada": {
+        "titulo": "¿Necesito SEO *desde el primer día*?",
+        "texto": "Depende de cómo te buscan tus clientes. Tres casos."
+      },
+      "respuesta": {
+        "titulo": "Lo básico, *sí*. Lo demás, depende.",
+        "texto": "Sobre todo, de cuál de estos es tu caso:"
+      },
+      "casos": [
+        {
+          "icono": "tienda",
+          "si": "Si te buscan *por tu zona*",
+          "resumen": "Te buscan por tu zona",
+          "entonces": "Cuida tu ficha de Google y pon tu ciudad en la web.",
+          "texto": "Para un negocio local, suele pesar más que cualquier otra cosa."
+        },
+        {
+          "icono": "rendimiento",
+          "si": "Si hay *mucha competencia*",
+          "resumen": "Hay mucha competencia",
+          "entonces": "Hará falta trabajo continuo: contenido y enlaces.",
+          "texto": "No es cosa de un día: se nota con los meses."
+        },
+        {
+          "icono": "persona",
+          "si": "Si te llegan clientes *por otro lado*",
+          "resumen": "Te llegan por otro lado",
+          "entonces": "Con lo básico basta: que la web te represente bien.",
+          "texto": "Si vienen por recomendación, la web confirma más que capta."
+        }
+      ],
+      "resumen": {
+        "titulo": "Lo básico, *desde el primer día*:",
+        "lista": [
+          "Un título y una descripción claros",
+          "Tu ciudad y tu servicio en los textos",
+          "Que funcione bien en el móvil"
+        ]
+      },
+      "cierre": {
+        "titulo": "El SEO empieza por *decir claro qué haces* y dónde.",
+        "cta": "Guárdalo para cuando encargues tu web."
+      }
+    }
+  },
+  {
+    "id": "IC-07",
+    "formato": "carrusel",
+    "gancho": "El SEO básico que *cualquier web* debería tener",
+    "pilar": "education",
+    "serie": "antes-de-contratar",
+    "tema": "seo",
+    "concepto": "Título y descripción, encabezados, texto alternativo, velocidad, móvil y ficha de Google.",
+    "carrusel": {
+      "plantilla": "checklist",
+      "portada": {
+        "titulo": "El SEO básico que *cualquier web* debería tener",
+        "texto": "No garantiza salir primero. Sin esto, cuesta bastante más."
+      },
+      "items": [
+        {
+          "icono": "seo",
+          "titulo": "Un *título* por página",
+          "texto": "Lo que sale en azul en Google. Que diga qué haces y dónde.",
+          "pregunta": "¿Puedo cambiar el título yo mismo?",
+          "corto": "Título claro"
+        },
+        {
+          "icono": "textos",
+          "titulo": "Una *descripción* que invite",
+          "texto": "El texto bajo el título en Google. Si falta, el buscador elige uno.",
+          "pregunta": "¿Cada página tiene su descripción?",
+          "corto": "Descripción escrita"
+        },
+        {
+          "icono": "lista",
+          "titulo": "*Encabezados* con orden",
+          "texto": "Un titular principal y subtítulos que resuman cada sección.",
+          "pregunta": "¿La web usa bien los encabezados?",
+          "corto": "Encabezados ordenados"
+        },
+        {
+          "icono": "imagenes",
+          "titulo": "*Texto alternativo* en las fotos",
+          "texto": "Una frase que describe cada imagen para quien no puede verla.",
+          "pregunta": "¿Dónde se escribe el texto de las fotos?",
+          "corto": "Fotos descritas"
+        },
+        {
+          "icono": "velocidad",
+          "titulo": "Que *cargue rápido*",
+          "texto": "Fotos comprimidas y nada que sobre. En el móvil se nota más.",
+          "pregunta": "¿Cómo de rápida es en el móvil?",
+          "corto": "Carga rápida"
+        },
+        {
+          "icono": "tienda",
+          "titulo": "Tu *ficha de Google*",
+          "texto": "Para un negocio local, suele ser lo primero que ven. Enlázala con la web.",
+          "pregunta": "¿Está la web enlazada desde la ficha?",
+          "corto": "Ficha de Google al día"
+        }
+      ],
+      "cierre": {
+        "titulo": "Lo básico bien hecho *ya te pone en el mapa*.",
+        "cta": "Guárdalo para cuando revises tu web."
+      }
+    }
+  },
+  {
+    "id": "IC-08",
+    "formato": "carrusel",
+    "gancho": "Qué debería incluir *un mantenimiento*",
+    "pilar": "education",
+    "serie": "antes-de-contratar",
+    "tema": "mantenimiento",
+    "concepto": "Actualizaciones, copias, revisar formularios, renovaciones y cambios pequeños.",
+    "carrusel": {
+      "plantilla": "checklist",
+      "portada": {
+        "titulo": "Qué debería incluir *un mantenimiento*",
+        "texto": "Cinco cosas que conviene que estén por escrito."
+      },
+      "items": [
+        {
+          "icono": "cambios",
+          "titulo": "Las *actualizaciones*",
+          "texto": "Del gestor, del tema y de los complementos, si la web los usa.",
+          "pregunta": "¿Quién actualiza y cada cuánto?",
+          "corto": "Actualizaciones"
+        },
+        {
+          "icono": "archivos",
+          "titulo": "Las *copias* de seguridad",
+          "texto": "Y saber recuperarlas: una copia que nadie ha probado es solo una esperanza.",
+          "pregunta": "¿Dónde se guardan y cómo se recuperan?",
+          "corto": "Copias probadas"
+        },
+        {
+          "icono": "correo",
+          "titulo": "Revisar los *formularios*",
+          "texto": "Que los mensajes sigan llegando. Uno roto puede pasar meses sin notarse.",
+          "pregunta": "¿Quién comprueba que llegan?",
+          "corto": "Formularios revisados"
+        },
+        {
+          "icono": "plazos",
+          "titulo": "Las *renovaciones*",
+          "texto": "Dominio y alojamiento caducan. Si nadie avisa, la web deja de verse.",
+          "pregunta": "¿A nombre de quién están y quién las renueva?",
+          "corto": "Renovaciones controladas"
+        },
+        {
+          "icono": "conversacion",
+          "titulo": "Los *cambios* pequeños",
+          "texto": "Un horario, un teléfono, una foto: qué entra y cómo se piden.",
+          "pregunta": "¿Cómo pido un cambio y cuánto tarda?",
+          "corto": "Cambios pequeños claros"
+        }
+      ],
+      "cierre": {
+        "titulo": "Pregunta qué incluye *antes de firmar*.",
+        "cta": "Guárdalo para cuando te lo ofrezcan."
+      }
+    }
+  },
+  {
+    "id": "IC-09",
+    "formato": "carrusel",
+    "gancho": "¿Qué es *eso de la UX*?",
+    "pilar": "education",
+    "serie": "diseno-que-funciona",
+    "tema": "ux",
+    "concepto": "\"Lo fácil que es usar tu web\", explicado con tres situaciones del día a día.",
+    "carrusel": {
+      "plantilla": "explicacion",
+      "portada": {
+        "titulo": "¿Qué es *eso de la UX*?",
+        "texto": "Es lo fácil que resulta usar tu web. Tres situaciones del día a día."
+      },
+      "partes": [
+        {
+          "icono": "movil",
+          "titulo": "Encontrar *el teléfono*",
+          "texto": "Si alguien quiere llamarte y tiene que buscarlo, ya hay un problema.",
+          "ejemplo": "El botón de llamar, siempre a la vista en el móvil."
+        },
+        {
+          "icono": "textos",
+          "titulo": "Entender *qué haces*",
+          "texto": "En unos segundos, quien entra debería saber qué ofreces y dónde.",
+          "ejemplo": "Un titular que lo diga, sin adornos."
+        },
+        {
+          "icono": "conversion",
+          "titulo": "Dar *el siguiente paso*",
+          "texto": "Pedir cita, reservar, escribir: que sea obvio qué hacer y cómo.",
+          "ejemplo": "Un botón claro al final de cada sección."
+        }
+      ],
+      "cierre": {
+        "titulo": "Buena UX es que *no tengan que pensar*.",
+        "cta": "Guárdalo para más adelante."
+      }
+    }
+  },
+  {
+    "id": "IC-10",
+    "formato": "carrusel",
+    "gancho": "Tengo visitas pero *nadie me escribe*",
+    "pilar": "problems",
+    "serie": "nadie-te-cuenta",
+    "tema": "conversion",
+    "concepto": "No entienden qué ofreces, no encuentran cómo contactar o no les da confianza.",
+    "carrusel": {
+      "plantilla": "pregunta",
+      "portada": {
+        "titulo": "Tengo visitas pero *nadie me escribe*",
+        "texto": "Si entran y se van, la web está fallando en uno de estos tres puntos."
+      },
+      "respuesta": {
+        "titulo": "Suele ser por *una de estas tres*."
+      },
+      "casos": [
+        {
+          "icono": "pregunta",
+          "si": "Si *no entienden* qué ofreces",
+          "resumen": "No entienden qué ofreces",
+          "entonces": "Di en el titular qué haces, para quién y dónde.",
+          "texto": "Si hay que leer tres párrafos para saberlo, muchos se van antes."
+        },
+        {
+          "icono": "conversion",
+          "si": "Si *no encuentran* cómo contactarte",
+          "resumen": "No encuentran cómo contactar",
+          "entonces": "Un botón de contacto visible en cada sección.",
+          "texto": "Y en el móvil, que llamar o escribir sea un toque."
+        },
+        {
+          "icono": "acuerdo",
+          "si": "Si *no les da confianza*",
+          "resumen": "No les da confianza",
+          "entonces": "Fotos reales, opiniones y datos de contacto completos.",
+          "texto": "Una web que parece abandonada hace dudar del negocio."
+        }
+      ],
+      "cierre": {
+        "titulo": "Cada visita trae *una pregunta*. Que la web la responda.",
+        "cta": "Compártelo con alguien que tenga web."
+      }
+    }
+  },
+  {
+    "id": "IC-11",
+    "formato": "carrusel",
+    "gancho": "Mitos sobre *WordPress*",
+    "pilar": "education",
+    "serie": "mitos-web",
+    "tema": "wordpress",
+    "concepto": "Ni es solo para blogs ni es inseguro por sí mismo: depende de cómo se mantiene.",
+    "carrusel": {
+      "plantilla": "mito",
+      "portada": {
+        "titulo": "Mitos sobre *WordPress*",
+        "texto": "Tres cosas que se oyen mucho y lo que hay detrás."
+      },
+      "mitos": [
+        {
+          "icono": "capas",
+          "mito": "Solo sirve para blogs",
+          "realidad": "Hoy se usa para webs de todo tipo, también tiendas.",
+          "texto": "Nació para blogs, pero ha crecido mucho desde entonces."
+        },
+        {
+          "icono": "seguridad",
+          "mito": "Es inseguro",
+          "realidad": "Lo inseguro es no mantenerlo al día.",
+          "texto": "Complementos viejos y contraseñas débiles están detrás de muchos problemas."
+        },
+        {
+          "icono": "mantenimiento",
+          "mito": "No necesitas a nadie",
+          "realidad": "Se puede, pero alguien tiene que cuidarlo.",
+          "texto": "Actualizaciones, copias y complementos no se cuidan solos."
+        }
+      ],
+      "cierre": {
+        "titulo": "La herramienta importa menos que *quién la cuida*.",
+        "cta": "Guárdalo para más adelante."
+      }
+    }
+  },
+  {
+    "id": "IC-12",
+    "formato": "carrusel",
+    "gancho": "¿Qué es el *hosting* y por qué importa?",
+    "pilar": "education",
+    "serie": "nadie-te-cuenta",
+    "tema": "hosting",
+    "concepto": "Dónde vive tu web, qué pasa si falla y qué preguntar al contratarlo.",
+    "carrusel": {
+      "plantilla": "explicacion",
+      "portada": {
+        "titulo": "¿Qué es el *hosting* y por qué importa?",
+        "texto": "Dónde vive tu web, qué pasa si falla y qué preguntar al contratarlo."
+      },
+      "partes": [
+        {
+          "icono": "hosting",
+          "titulo": "Dónde *vive* tu web",
+          "texto": "Un ordenador siempre encendido que guarda tu web y la enseña a quien entra.",
+          "ejemplo": "El dominio es la dirección; el hosting, la casa."
+        },
+        {
+          "icono": "velocidad",
+          "titulo": "Qué pasa *si falla*",
+          "texto": "Si el servidor se cae o va lento, tu web también, aunque esté bien hecha.",
+          "ejemplo": "Una web que tarda en abrir pierde visitas en el móvil."
+        },
+        {
+          "icono": "conversacion",
+          "titulo": "Qué *preguntar*",
+          "texto": "A nombre de quién está, si hace copias y qué pasa si quieres irte.",
+          "ejemplo": "Pide acceso al panel, aunque no lo vayas a usar."
+        }
+      ],
+      "cierre": {
+        "titulo": "No hace falta entenderlo todo: basta con *saber qué preguntar*.",
+        "cta": "Guárdalo para cuando contrates tu web."
+      }
+    }
+  },
+  {
+    "id": "IC-13",
+    "formato": "carrusel",
+    "gancho": "Los accesos que *tienen que ser tuyos*",
+    "pilar": "trust",
+    "serie": "nadie-te-cuenta",
+    "tema": "accesos",
+    "concepto": "Dominio, alojamiento, gestor, analítica y correo: a tu nombre y con tu contraseña.",
+    "carrusel": {
+      "plantilla": "checklist",
+      "portada": {
+        "titulo": "Los accesos que *tienen que ser tuyos*",
+        "texto": "Si mañana cambias de proveedor, esto es lo que necesitas tener."
+      },
+      "items": [
+        {
+          "icono": "dominio",
+          "titulo": "El *dominio*",
+          "texto": "Tu dirección en internet. Que el titular seas tú o tu empresa.",
+          "pregunta": "¿A nombre de quién se registra?",
+          "corto": "Dominio a mi nombre"
+        },
+        {
+          "icono": "hosting",
+          "titulo": "El *alojamiento*",
+          "texto": "Donde vive la web. Pide usuario propio, aunque lo gestione otra persona.",
+          "pregunta": "¿Tendré acceso al panel del hosting?",
+          "corto": "Acceso al alojamiento"
+        },
+        {
+          "icono": "accesos",
+          "titulo": "El *gestor* de la web",
+          "texto": "Si la web tiene un panel para editarla, tu usuario de administrador.",
+          "pregunta": "¿Tendré usuario de administrador?",
+          "corto": "Usuario en el gestor"
+        },
+        {
+          "icono": "rendimiento",
+          "titulo": "La *analítica*",
+          "texto": "Los datos de tus visitas son tuyos. Que la cuenta esté a tu nombre.",
+          "pregunta": "¿La cuenta de analítica es mía?",
+          "corto": "Analítica a mi nombre"
+        },
+        {
+          "icono": "correo",
+          "titulo": "El *correo*",
+          "texto": "Si usas un correo con tu dominio, que puedas entrar y cambiar contraseñas.",
+          "pregunta": "¿Puedo gestionar yo las cuentas de correo?",
+          "corto": "Acceso al correo"
+        }
+      ],
+      "cierre": {
+        "titulo": "Si cambias de proveedor, *te lo llevas todo*.",
+        "texto": "Las webs que construyo en Maketa se entregan para que queden tuyas.",
+        "cta": "Compártelo con alguien que tenga web."
+      }
+    }
+  },
+  {
+    "id": "IC-14",
+    "formato": "carrusel",
+    "gancho": "5 descuidos que *ponen en riesgo* tu web",
+    "pilar": "problems",
+    "serie": "errores-web",
+    "tema": "seguridad",
+    "concepto": "Contraseñas compartidas, sin copias, plugins viejos, formularios sin protección…",
+    "carrusel": {
+      "plantilla": "errores",
+      "portada": {
+        "titulo": "5 descuidos que *ponen en riesgo* tu web",
+        "texto": "Ninguno necesita saber de informática para evitarse."
+      },
+      "puntos": [
+        {
+          "icono": "privado",
+          "titulo": "*Contraseñas* compartidas",
+          "texto": "La misma para todo, o enviada por mensaje a varias personas.",
+          "mejor": "Una por servicio, guardadas en un gestor de contraseñas."
+        },
+        {
+          "icono": "archivos",
+          "titulo": "Sin *copias* de seguridad",
+          "texto": "Si algo falla y no hay copia, se pierde lo que haya en la web.",
+          "mejor": "Copias automáticas, y comprobar alguna vez que funcionan."
+        },
+        {
+          "icono": "cambios",
+          "titulo": "Complementos *sin actualizar*",
+          "texto": "Muchas webs usan piezas de terceros que también hay que actualizar.",
+          "mejor": "Actualízalos, y quita los que no uses."
+        },
+        {
+          "icono": "correo",
+          "titulo": "Formularios *sin protección*",
+          "texto": "Sin un filtro, llegan mensajes basura y, a veces, algo peor.",
+          "mejor": "Un filtro antispam en cada formulario."
+        },
+        {
+          "icono": "accesos",
+          "titulo": "Accesos de *quien ya no está*",
+          "texto": "Antiguos proveedores o empleados que todavía pueden entrar.",
+          "mejor": "Revisa quién tiene acceso y quita lo que sobre."
+        }
+      ],
+      "cierre": {
+        "titulo": "La seguridad son *hábitos*, no un programa.",
+        "cta": "Compártelo con alguien que tenga web."
+      }
+    }
+  },
+  {
+    "id": "IC-15",
+    "formato": "carrusel",
+    "gancho": "¿Tienda online o *web con pedidos*?",
+    "pilar": "decision",
+    "serie": "antes-de-contratar",
+    "tema": "ecommerce",
+    "concepto": "Cuándo necesitas una tienda de verdad y cuándo basta con un formulario o WhatsApp.",
+    "carrusel": {
+      "plantilla": "decision",
+      "portada": {
+        "titulo": "¿Tienda online o *web con pedidos*?",
+        "texto": "No todos los negocios que venden necesitan una tienda online."
+      },
+      "opciones": [
+        {
+          "icono": "conversacion",
+          "titulo": "Web *con pedidos*",
+          "cuando": "Vendes poco catálogo o por encargo, y hablas con cada cliente.",
+          "evita": "Montar una tienda completa para cinco productos."
+        },
+        {
+          "icono": "tienda",
+          "titulo": "Tienda *online*",
+          "cuando": "Tienes catálogo, stock y quieres vender sin intervenir en cada pedido.",
+          "evita": "Abrirla sin tiempo para gestionar pedidos y envíos."
+        }
+      ],
+      "resumen": {
+        "titulo": "Antes de decidir, *responde*:",
+        "lista": [
+          "¿Cuántos productos vendes?",
+          "¿Quieres cobrar en la propia web?",
+          "¿Quién preparará los pedidos?"
+        ]
+      },
+      "cierre": {
+        "titulo": "Empieza por lo que *puedes atender bien*.",
+        "texto": "Las webs de Maketa son de una página, con contacto por formulario o WhatsApp.",
+        "cta": "Guárdalo para cuando tengas que decidir."
+      }
+    }
+  },
+  {
+    "id": "IC-16",
+    "formato": "carrusel",
+    "gancho": "Mitos sobre el *diseño web*",
+    "pilar": "education",
+    "serie": "mitos-web",
+    "tema": "diseno",
+    "concepto": "\"Cuanto más cosas, mejor\", \"tiene que moverse todo\"… lo que de verdad ayuda.",
+    "carrusel": {
+      "plantilla": "mito",
+      "portada": {
+        "titulo": "Mitos sobre el *diseño web*",
+        "texto": "Tres ideas muy repetidas que no ayudan tanto como parece."
+      },
+      "mitos": [
+        {
+          "icono": "capas",
+          "mito": "Cuantas más cosas, mejor",
+          "realidad": "Cada elemento compite por la atención.",
+          "texto": "Menos secciones, mejor contadas, se leen más."
+        },
+        {
+          "icono": "diseno",
+          "mito": "Tiene que moverse todo",
+          "realidad": "El movimiento distrae si no guía.",
+          "texto": "Una animación sutil ayuda; diez a la vez marean, sobre todo en el móvil."
+        },
+        {
+          "icono": "idea",
+          "mito": "Lo importante es ser original",
+          "realidad": "Lo importante es que se entienda.",
+          "texto": "Un menú donde todo el mundo lo espera ahorra dudas a quien entra."
+        }
+      ],
+      "cierre": {
+        "titulo": "Un buen diseño *no se nota*: se usa.",
+        "cta": "Guárdalo para más adelante."
+      }
+    }
+  },
+  {
+    "id": "IC-17",
+    "formato": "carrusel",
+    "gancho": "Tres cambios en el *menú* que se notan",
+    "pilar": "inspiration",
+    "serie": "diseno-que-funciona",
+    "tema": "portada",
+    "concepto": "Menos enlaces, nombres claros y el botón de contacto a la vista.",
+    "carrusel": {
+      "plantilla": "antes-despues",
+      "portada": {
+        "titulo": "Tres cambios en el *menú* que se notan",
+        "texto": "El menú es un mapa. Tres cambios para que se lea de un vistazo."
+      },
+      "pares": [
+        {
+          "icono": "lista",
+          "titulo": "Cuántos *enlaces*",
+          "texto": "Lo que no cabe se esconde, y lo escondido no se ve.",
+          "antes": "Nueve enlaces que no caben en el móvil.",
+          "despues": "Cuatro o cinco: los importantes."
+        },
+        {
+          "icono": "textos",
+          "titulo": "Cómo se *llaman*",
+          "texto": "Que cada nombre diga qué hay detrás.",
+          "antes": "«Soluciones», «Qué ofrecemos»",
+          "despues": "«Tratamientos», «Horarios», «Dónde estamos»"
+        },
+        {
+          "icono": "conversion",
+          "titulo": "El botón de *contacto*",
+          "texto": "Es lo que quieres que hagan: que se vea.",
+          "antes": "Un enlace más entre los demás.",
+          "despues": "Un botón destacado, siempre a la vista."
+        }
+      ],
+      "cierre": {
+        "titulo": "El menú es *un mapa*. Que se lea de un vistazo.",
+        "texto": "En Maketa el menú baja a cada sección de tu web.",
+        "cta": "¿Cuál cambiarías en el tuyo?"
+      }
+    }
+  },
+  {
+    "id": "IC-18",
+    "formato": "carrusel",
+    "gancho": "Así se hace una web *con Maketa*",
+    "pilar": "product",
+    "serie": "maketa",
+    "tema": "proceso",
+    "concepto": "Diseñas en el configurador, me la pides, la construyo con tu contenido y queda tuya.",
+    "carrusel": {
+      "plantilla": "pasos",
+      "portada": {
+        "titulo": "Así se hace una web *con Maketa*",
+        "texto": "Cuatro pasos, y ninguno técnico."
+      },
+      "pasos": [
+        {
+          "icono": "diseno",
+          "titulo": "*Diseñas* tu web",
+          "texto": "En el configurador eliges estilo, colores, letra y secciones, y lo ves en vivo.",
+          "consejo": "Empieza por un preset de tu sector y ajústalo.",
+          "corto": "Diseño mi web"
+        },
+        {
+          "icono": "textos",
+          "titulo": "Pones *tu contenido*",
+          "texto": "Tus textos y tus fotos, tu forma de contar lo que haces.",
+          "consejo": "Si aún no tienes fotos, se usan libres mientras tanto.",
+          "corto": "Pongo mis textos"
+        },
+        {
+          "icono": "conversacion",
+          "titulo": "Me *la pides*",
+          "texto": "Me llega tu diseño tal cual lo has dejado, y lo hablamos.",
+          "corto": "La pido desde el configurador",
+          "consejo": "Si dudas entre dos versiones, guarda las dos y compáralas."
+        },
+        {
+          "icono": "propiedad",
+          "titulo": "*La construyo*, y queda tuya",
+          "texto": "Con tu contenido real, y entregada para que sea tuya.",
+          "corto": "Recibo mi web",
+          "consejo": "Cualquier duda del proceso, me la preguntas a mí directamente."
+        }
+      ],
+      "resumen": {
+        "titulo": "Guárdala y ve *marcando*."
+      },
+      "cierre": {
+        "titulo": "Diseñarla no pide registro *ni saber diseño*.",
+        "cta": "Descúbrelo en maketa.es"
+      }
+    }
+  },
+  {
+    "id": "IC-19",
+    "formato": "carrusel",
+    "gancho": "¿De qué depende *lo que cuesta* una web?",
+    "pilar": "decision",
+    "serie": "cuanto-cuesta",
+    "tema": "precio",
+    "bloqueo": "fase-0",
+    "concepto": "Contenido, funciones, diseño, renovaciones y mantenimiento, sin cifras.",
+    "carrusel": {
+      "plantilla": "costes",
+      "portada": {
+        "titulo": "¿De qué depende *lo que cuesta* una web?",
+        "texto": "No de las páginas: de estas cinco cosas."
+      },
+      "factores": [
+        {
+          "titulo": "El *contenido*",
+          "texto": "Si los textos y las fotos ya existen o hay que crearlos.",
+          "icono": "textos"
+        },
+        {
+          "titulo": "Las *funciones*",
+          "texto": "Reservas, tienda o formularios cambian mucho el trabajo.",
+          "icono": "conversion"
+        },
+        {
+          "titulo": "El *diseño*",
+          "texto": "Una plantilla ajustada no es lo mismo que un diseño a medida.",
+          "icono": "diseno"
+        },
+        {
+          "titulo": "Lo que se *renueva*",
+          "texto": "Dominio, alojamiento y licencias se pagan cada año.",
+          "icono": "plazos"
+        },
+        {
+          "titulo": "El *mantenimiento*",
+          "texto": "Quién la actualiza y la revisa después de publicarla.",
+          "icono": "mantenimiento"
+        }
+      ],
+      "cierre": {
+        "titulo": "Compara propuestas por *lo que incluyen*.",
+        "cta": "Guárdalo para cuando compares propuestas."
+      }
+    }
+  },
+  {
+    "id": "IC-20",
+    "formato": "carrusel",
+    "gancho": "Precio inicial *vs coste total*",
+    "pilar": "decision",
+    "serie": "cuanto-cuesta",
+    "tema": "precio",
+    "bloqueo": "fase-0",
+    "concepto": "Lo que se paga al principio frente a lo que se renueva cada año.",
+    "carrusel": {
+      "plantilla": "comparacion",
+      "portada": {
+        "titulo": "Precio inicial *vs coste total*",
+        "texto": "Lo que pagas al principio no es lo que pagas cada año."
+      },
+      "lados": [
+        "Al principio",
+        "Cada año"
+      ],
+      "criterios": [
+        {
+          "icono": "diseno",
+          "titulo": "El *diseño y la construcción*",
+          "a": "Se paga una vez, al hacer la web.",
+          "b": "Nada, salvo cambios grandes."
+        },
+        {
+          "icono": "dominio",
+          "titulo": "El *dominio*",
+          "a": "El primer año de registro.",
+          "b": "La renovación, cada año."
+        },
+        {
+          "icono": "hosting",
+          "titulo": "El *alojamiento*",
+          "a": "A veces va incluido el primer año.",
+          "b": "La renovación, que puede cambiar."
+        },
+        {
+          "icono": "mantenimiento",
+          "titulo": "El *mantenimiento*",
+          "a": "Normalmente, nada.",
+          "b": "Actualizaciones, copias y cambios, si lo contratas."
+        }
+      ],
+      "resumen": {
+        "titulo": "Pide que te lo *separen*:",
+        "lista": [
+          "Qué se paga una sola vez",
+          "Qué se renueva y cuándo",
+          "Qué pasa si no se renueva"
+        ]
+      },
+      "cierre": {
+        "titulo": "Compara propuestas por *lo que cuestan en total*.",
+        "cta": "Guárdalo para cuando compares."
+      }
+    }
+  },
+  {
+    "id": "IC-21",
+    "formato": "carrusel",
+    "gancho": "Comprueba *estas 7 cosas*",
+    "pilar": "education",
+    "serie": "antes-de-contratar",
+    "tema": "contratar-web",
+    "visual": {
+      "tema": "neutral",
+      "layout": "A"
+    },
+    "pie": "Siete cosas que conviene comprobar antes de contratar una web, cada una con la pregunta que hay que hacer. La última diapositiva es la lista entera: guárdala y márcala antes de firmar.",
+    "carrusel": {
+      "plantilla": "checklist",
+      "portada": {
+        "antetitulo": "Antes de contratar una web",
+        "titulo": "Comprueba *estas 7 cosas*",
+        "texto": "Una por diapositiva, con la pregunta que conviene hacer. Al final, la lista entera."
+      },
+      "items": [
+        {
+          "icono": "dominio",
+          "titulo": "El dominio, a tu nombre",
+          "corto": "El dominio está a mi nombre",
+          "texto": "Es tu dirección en internet. Quien lo tiene registrado decide qué se hace con él.",
+          "pregunta": "¿A nombre de quién se va a registrar el dominio?"
+        },
+        {
+          "icono": "hosting",
+          "titulo": "Dónde estará alojada",
+          "corto": "Sé dónde está alojada",
+          "texto": "El alojamiento (hosting) es el servidor donde vive tu web. Conviene saber cuál es y quién lo contrata.",
+          "pregunta": "¿Dónde se aloja y a nombre de quién está el servicio?"
+        },
+        {
+          "icono": "accesos",
+          "titulo": "Acceso a todo",
+          "corto": "Tengo todos los accesos",
+          "texto": "Dominio, alojamiento, panel, analítica. Si tú no puedes entrar, tampoco puedes decidir.",
+          "pregunta": "¿Me daréis todos los accesos al terminar?"
+        },
+        {
+          "icono": "propiedad",
+          "titulo": "Que la web sea tuya",
+          "corto": "La web es mía",
+          "texto": "Diseño, código y textos. Que quede por escrito qué te llevas si un día cambias de proveedor.",
+          "pregunta": "Si cambio de proveedor, ¿qué me puedo llevar?"
+        },
+        {
+          "icono": "movil",
+          "titulo": "Que funcione bien en el móvil",
+          "corto": "La he revisado en el móvil",
+          "texto": "No basta con que se adapte: menús, botones y formularios tienen que poder usarse con el dedo.",
+          "pregunta": "¿Podré probarla en mi móvil antes de publicarla?"
+        },
+        {
+          "icono": "seo",
+          "titulo": "Lo básico para aparecer en Google",
+          "corto": "Tiene el SEO básico",
+          "texto": "Un título y una descripción por página, textos que se entiendan y una web rápida. No garantiza posiciones, pero sin esto cuesta más.",
+          "pregunta": "¿Qué parte del SEO básico está incluida?"
+        },
+        {
+          "icono": "mantenimiento",
+          "titulo": "Qué pasa después de publicar",
+          "corto": "Sé quién hace los cambios",
+          "texto": "Actualizaciones, copias de seguridad y cambios de contenido. Alguien tiene que ocuparse.",
+          "pregunta": "¿Quién hará los cambios y cómo se piden?"
+        }
+      ],
+      "cierre": {
+        "titulo": "Siete preguntas. *Cinco minutos.*",
+        "texto": "Y sabrás exactamente qué estás contratando.",
+        "cta": "Compártelo con quien esté buscando web.",
+        "icono": "compartir"
+      }
+    }
+  },
+  {
+    "id": "IC-22",
+    "formato": "carrusel",
+    "gancho": "5 errores al encargar una web que *se notan después*",
+    "pilar": "mistakes",
+    "serie": "errores-web",
+    "tema": "contratar-web",
+    "visual": {
+      "tema": "neutral",
+      "layout": "C"
+    },
+    "pie": "Cinco errores al encargar una web que no se ven hasta que ya es tarde. Ninguno es técnico: todos se resuelven con una pregunta a tiempo. Guárdalo para cuando hables con proveedores.",
+    "carrusel": {
+      "plantilla": "errores",
+      "portada": {
+        "antetitulo": "Antes de encargar tu web",
+        "titulo": "5 errores al encargar una web que *se notan después*",
+        "texto": "Ninguno es técnico. Todos se evitan con una pregunta a tiempo."
+      },
+      "puntos": [
+        {
+          "icono": "dominio",
+          "titulo": "No saber a nombre de quién está el dominio",
+          "texto": "El dominio es la dirección de tu web. Si lo registra otra persona a su nombre, para llevártelo necesitarás que te lo transfiera.",
+          "mejor": "Pide que se registre a tu nombre y con un correo tuyo."
+        },
+        {
+          "icono": "accesos",
+          "titulo": "No pedir los accesos al terminar",
+          "texto": "Alojamiento, dominio, panel, analítica… Si solo los tiene quien hizo la web, cualquier cambio pasa por esa persona.",
+          "mejor": "Que la entrega incluya la lista de accesos y que puedas entrar en todos."
+        },
+        {
+          "icono": "textos",
+          "titulo": "Dejar los textos para el final",
+          "texto": "El diseño se construye alrededor del contenido. Si los textos llegan tarde, o se retrasa todo o se diseña con relleno que luego no encaja.",
+          "mejor": "Empieza a escribirlos mientras se diseña, aunque sea un borrador."
+        },
+        {
+          "icono": "movil",
+          "titulo": "Aprobarla sin mirarla en el móvil",
+          "texto": "Buena parte de tus visitas llegará desde el teléfono. Lo que se ve bien en una pantalla grande puede quedar apretado en una pequeña.",
+          "mejor": "Antes de dar el visto bueno, revísala en tu propio móvil, sección a sección."
+        },
+        {
+          "icono": "cambios",
+          "titulo": "No preguntar qué pasa después de publicar",
+          "texto": "Cambiar un horario, añadir una foto, actualizar lo que haga falta. Alguien tendrá que hacerlo.",
+          "mejor": "Pregunta quién hará los cambios, cómo se piden y cuánto tardan."
+        }
+      ],
+      "preguntas": {
+        "antetitulo": "Antes de empezar",
+        "titulo": "Pregunta *esto*:",
+        "lista": [
+          "¿A nombre de quién se registra el dominio?",
+          "¿Tendré acceso a todo cuando se entregue?",
+          "¿Quién escribe los textos, y para cuándo?",
+          "¿Podré revisarla en el móvil antes de publicar?",
+          "¿Quién hace los cambios después?"
+        ]
+      },
+      "cierre": {
+        "titulo": "Cinco preguntas que *te ahorran sustos*.",
+        "texto": "Mejor al principio que al final.",
+        "cta": "Guárdalo para cuando pidas tu web."
+      }
+    }
+  },
+  {
+    "id": "IC-23",
+    "formato": "carrusel",
+    "gancho": "¿De quién es *el dominio* de mi web?",
+    "pilar": "trust",
+    "serie": "nadie-te-cuenta",
+    "tema": "propiedad",
+    "visual": {
+      "tema": "accent",
+      "layout": "B"
+    },
+    "pie": "¿De quién es el dominio de tu web? De quien lo registró, que no siempre es quien la encarga. Tres situaciones y qué hacer en cada una.",
+    "carrusel": {
+      "plantilla": "pregunta",
+      "portada": {
+        "antetitulo": "Propiedad y accesos",
+        "titulo": "¿De quién es *el dominio* de mi web?",
+        "texto": "No siempre es de quien encarga la web. Depende de quién lo registró."
+      },
+      "respuesta": {
+        "titulo": "De quien *lo registró*.",
+        "texto": "Y eso te deja en una de estas tres situaciones:"
+      },
+      "casos": [
+        {
+          "icono": "persona",
+          "si": "Si está registrado *a tu nombre*",
+          "resumen": "Está a tu nombre",
+          "entonces": "Puedes cambiar de proveedor y llevarte el dominio contigo.",
+          "texto": "Guarda el acceso al registrador en un sitio seguro: es la llave de tu web."
+        },
+        {
+          "icono": "equipo",
+          "si": "Si está a nombre de *quien te hizo la web*",
+          "resumen": "Está a nombre de tu proveedor",
+          "entonces": "Para llevártelo, necesitas que te lo transfiera.",
+          "texto": "Es un trámite habitual. Mejor pedirlo con calma que el día que lo necesites."
+        },
+        {
+          "icono": "pregunta",
+          "si": "Si *no lo sabes*",
+          "resumen": "No lo sabes",
+          "entonces": "Pregunta en qué registrador está y a nombre de quién.",
+          "texto": "Es una pregunta rápida, y la respuesta te dice cuánto control tienes sobre tu web."
+        }
+      ],
+      "cierre": {
+        "titulo": "Tu dominio es *tu dirección*. Que esté a tu nombre.",
+        "texto": "Las webs que construyo en Maketa se entregan para que queden tuyas.",
+        "cta": "Guárdalo para cuando encargues tu web."
+      }
+    }
+  },
+  {
+    "id": "IC-24",
+    "formato": "carrusel",
+    "gancho": "¿Mi web necesita *mantenimiento* todos los meses?",
+    "pilar": "decision",
+    "serie": "antes-de-contratar",
+    "tema": "mantenimiento",
+    "visual": {
+      "tema": "neutral",
+      "layout": "B"
+    },
+    "pie": "¿Una web necesita mantenimiento todos los meses? Depende de cómo esté hecha y de para qué la uses. Tres casos y las preguntas que conviene hacer antes de contratarlo.",
+    "carrusel": {
+      "plantilla": "pregunta",
+      "portada": {
+        "antetitulo": "Una duda habitual",
+        "titulo": "¿Mi web necesita *mantenimiento* todos los meses?",
+        "texto": "La respuesta corta y los tres casos más comunes."
+      },
+      "respuesta": {
+        "titulo": "Depende.",
+        "texto": "Sobre todo, de cómo esté hecha y de para qué la uses:"
+      },
+      "casos": [
+        {
+          "icono": "capas",
+          "si": "Si tu web usa un gestor como *WordPress*, con plugins",
+          "resumen": "Si usa un gestor con plugins",
+          "entonces": "Necesita actualizaciones periódicas: del gestor, del tema y de cada plugin.",
+          "texto": "Muchas actualizaciones corrigen fallos de seguridad. Dejarlas pasar meses es arriesgado."
+        },
+        {
+          "icono": "archivos",
+          "si": "Si es una web sencilla, sin gestor ni base de datos",
+          "resumen": "Si es una web sencilla, sin gestor",
+          "entonces": "Hay mucho menos que actualizar. Suele bastar con revisarla de vez en cuando.",
+          "texto": "Aun así, el dominio y el alojamiento se renuevan, y alguien tiene que estar pendiente."
+        },
+        {
+          "icono": "tienda",
+          "si": "Si vendes online o recibes reservas desde la web",
+          "resumen": "Si vende o gestiona reservas",
+          "entonces": "Conviene un seguimiento continuo: pagos, formularios y avisos tienen que funcionar siempre.",
+          "texto": "Un fallo aquí no siempre se ve a simple vista, pero se nota en los pedidos."
+        }
+      ],
+      "resumen": {
+        "titulo": "Antes de contratarlo, *pregunta*:",
+        "lista": [
+          "¿Qué incluye exactamente?",
+          "¿Cada cuánto se actualiza y se hace copia de seguridad?",
+          "¿Qué pasa si un mes no lo contrato?"
+        ]
+      },
+      "cierre": {
+        "titulo": "No hay una respuesta única, *pero sí preguntas claras*.",
+        "cta": "Guárdalo para cuando te lo ofrezcan."
+      }
+    }
+  },
+  {
+    "id": "IC-25",
+    "formato": "carrusel",
+    "gancho": "Tres mitos del *SEO* que conviene olvidar",
+    "pilar": "education",
+    "serie": "mitos-web",
+    "tema": "seo",
+    "visual": {
+      "tema": "accent",
+      "layout": "B"
+    },
+    "pie": "Tres cosas que se oyen mucho sobre el SEO y lo que hay detrás de cada una.",
+    "carrusel": {
+      "plantilla": "mito",
+      "portada": {
+        "titulo": "Tres mitos del *SEO* que conviene olvidar",
+        "texto": "Lo que se dice mucho y lo que de verdad importa para que te encuentren."
+      },
+      "mitos": [
+        {
+          "mito": "Con salir en Google ya está",
+          "realidad": "Importa por qué búsquedas sales, no solo salir.",
+          "texto": "Una web de fisioterapia en Getafe gana más saliendo en \"fisio en Getafe\" que en \"fisioterapia\".",
+          "icono": "seo"
+        },
+        {
+          "mito": "El SEO se hace una vez",
+          "realidad": "Es cuidar textos y ficha de negocio con el tiempo.",
+          "texto": "Una web sin cambios en años va perdiendo terreno frente a las que se mueven.",
+          "icono": "cambios"
+        },
+        {
+          "mito": "Más palabras clave, mejor",
+          "realidad": "Escribe para personas: repetir palabras no ayuda.",
+          "texto": "Un texto claro que responde a lo que busca tu cliente funciona mejor.",
+          "icono": "textos"
+        }
+      ],
+      "cierre": {
+        "titulo": "Que te encuentren empieza por *explicar bien* qué haces.",
+        "cta": "Guárdalo para más adelante."
+      }
+    }
+  },
+  {
+    "id": "IC-26",
+    "formato": "carrusel",
+    "gancho": "¿Tu web necesita *una página* o varias?",
+    "pilar": "decision",
+    "serie": "antes-de-contratar",
+    "tema": "estructura",
+    "visual": {
+      "tema": "neutral",
+      "layout": "B"
+    },
+    "pie": "Una sola página o varias: cuándo conviene cada una, sin tecnicismos.",
+    "carrusel": {
+      "plantilla": "decision",
+      "portada": {
+        "titulo": "¿Tu web necesita *una página* o varias?",
+        "texto": "Depende de cuánto tienes que contar y de cómo te buscan."
+      },
+      "opciones": [
+        {
+          "titulo": "Una sola página",
+          "cuando": "Tienes un servicio principal y quieres que te contacten.",
+          "evita": "Meter en ella todo lo que harías en diez páginas.",
+          "icono": "movil"
+        },
+        {
+          "titulo": "Varias páginas",
+          "cuando": "Ofreces servicios muy distintos o quieres un blog.",
+          "evita": "Páginas casi vacías solo por tener menú largo.",
+          "icono": "capas"
+        }
+      ],
+      "resumen": {
+        "titulo": "Antes de decidir, *responde*:",
+        "lista": [
+          "¿Cuántos servicios distintos ofreces?",
+          "¿Qué tiene que hacer quien entra?",
+          "¿Vas a publicar novedades?"
+        ]
+      },
+      "cierre": {
+        "titulo": "Menos páginas, *bien hechas*, suelen convertir más.",
+        "texto": "En Maketa las webs son de una sola página: pensadas para que te contacten.",
+        "cta": "Guárdalo para cuando encargues tu web."
+      }
+    }
+  },
+  {
+    "id": "IC-27",
+    "formato": "carrusel",
+    "gancho": "¿A nombre de quién está *tu dominio*? Míralo así",
+    "pilar": "problems",
+    "serie": "nadie-te-cuenta",
+    "tema": "dominio",
+    "visual": {
+      "tema": "dark",
+      "layout": "B"
+    },
+    "pie": "Cómo saber, en cinco minutos, a nombre de quién está el dominio de tu web.",
+    "carrusel": {
+      "plantilla": "pasos",
+      "portada": {
+        "titulo": "¿A nombre de quién está *tu dominio*? Míralo así",
+        "texto": "Cinco minutos y sabrás si tu web es de verdad tuya."
+      },
+      "pasos": [
+        {
+          "titulo": "Busca tu dominio en un *whois*",
+          "texto": "Es una consulta pública y gratuita: escribe tu dominio y mira la ficha.",
+          "icono": "seo",
+          "corto": "Consultar el whois"
+        },
+        {
+          "titulo": "Mira el *registrador*",
+          "texto": "Es la empresa donde está registrado. Anótala.",
+          "icono": "dominio",
+          "corto": "Anotar el registrador"
+        },
+        {
+          "titulo": "Pide acceso a tu *cuenta*",
+          "texto": "Si no tienes usuario en ese registrador, pídeselo a quien hizo tu web.",
+          "icono": "accesos",
+          "corto": "Tener acceso a la cuenta"
+        },
+        {
+          "titulo": "Comprueba que el *titular* eres tú",
+          "texto": "En tu cuenta, el titular debería ser tu nombre o el de tu empresa.",
+          "icono": "persona",
+          "corto": "Titular a mi nombre"
+        }
+      ],
+      "cierre": {
+        "titulo": "Tu dominio es *tu dirección*. Que esté a tu nombre.",
+        "cta": "Compártelo con alguien que tenga web."
+      }
+    }
+  },
+  {
+    "id": "IC-28",
+    "formato": "carrusel",
+    "gancho": "¿Freelance o *agencia*?",
+    "pilar": "decision",
+    "serie": "antes-de-contratar",
+    "tema": "proveedor",
+    "visual": {
+      "tema": "dark",
+      "layout": "B"
+    },
+    "pie": "Freelance o agencia: en qué se diferencian de verdad, para elegir con calma.",
+    "carrusel": {
+      "plantilla": "comparacion",
+      "portada": {
+        "titulo": "¿Freelance o *agencia*?",
+        "texto": "Los dos pueden hacerte una buena web. Cambia cómo se trabaja."
+      },
+      "lados": [
+        "Freelance",
+        "Agencia"
+      ],
+      "criterios": [
+        {
+          "titulo": "Con quién *hablas*",
+          "a": "Con la persona que hace tu web.",
+          "b": "Con un gestor que coordina al equipo.",
+          "icono": "conversacion",
+          "texto": "De eso depende lo rápido que se entienden las dos partes."
+        },
+        {
+          "titulo": "Qué *abarcan*",
+          "a": "Lo que domina esa persona, y lo demás lo delega.",
+          "b": "Diseño, desarrollo y marketing bajo un mismo techo.",
+          "icono": "capas",
+          "texto": "Una web sencilla no necesita un equipo; una con tienda y campañas, quizá sí."
+        },
+        {
+          "titulo": "Cómo *se mueven*",
+          "a": "Más directo; depende de su agenda.",
+          "b": "Más procesos; el equipo cubre ausencias.",
+          "icono": "tiempo",
+          "texto": "Pregunta cómo te avisarán de los cambios y quién responde si hay un problema."
+        }
+      ],
+      "resumen": {
+        "titulo": "Elijas lo que elijas, *pregunta*:",
+        "lista": [
+          "¿Quién la mantiene después?",
+          "¿Qué incluye exactamente?",
+          "¿De quién son el dominio y los accesos?"
+        ]
+      },
+      "cierre": {
+        "titulo": "Lo importante es que *entiendas* qué te entregan.",
+        "texto": "En Maketa la diseñas tú y la construyo yo: hablas siempre con quien la hace.",
+        "cta": "Guárdalo para cuando elijas proveedor."
+      }
+    }
+  },
+  {
+    "id": "IC-29",
+    "formato": "carrusel",
+    "gancho": "Tres cambios que *transforman* una portada",
+    "pilar": "inspiration",
+    "serie": "diseno-que-funciona",
+    "tema": "portada",
+    "visual": {
+      "tema": "dark",
+      "layout": "A"
+    },
+    "pie": "Tres cambios pequeños en la portada de una web que se notan mucho.",
+    "carrusel": {
+      "plantilla": "antes-despues",
+      "portada": {
+        "titulo": "Tres cambios que *transforman* una portada",
+        "texto": "Sin rediseñar nada: solo decir mejor lo que ya hay."
+      },
+      "pares": [
+        {
+          "titulo": "El *titular*",
+          "antes": "«Bienvenidos a nuestra web»",
+          "despues": "«Fisioterapia en Getafe, con cita esta semana»",
+          "icono": "textos",
+          "texto": "Lo primero que se lee tiene que decir qué haces y dónde."
+        },
+        {
+          "titulo": "El *botón*",
+          "antes": "«Más información»",
+          "despues": "«Pedir cita»",
+          "icono": "conversion",
+          "texto": "Un botón que dice qué pasa al pulsarlo invita a pulsarlo."
+        },
+        {
+          "titulo": "La *foto*",
+          "antes": "Una imagen de archivo cualquiera.",
+          "despues": "Tu local, tu equipo, tu trabajo.",
+          "icono": "imagenes",
+          "texto": "Las fotos reales generan más confianza que cualquier imagen de archivo."
+        }
+      ],
+      "cierre": {
+        "titulo": "La portada es *lo primero* que ven. Que diga qué haces.",
+        "texto": "En Maketa pruebas portadas en vivo antes de decidir.",
+        "cta": "Descúbrelo en maketa.es"
+      }
+    }
+  }
+]

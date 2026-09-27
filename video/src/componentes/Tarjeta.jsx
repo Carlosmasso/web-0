@@ -1,13 +1,13 @@
 import { useCurrentFrame, useVideoConfig } from 'remotion'
-import { entrar, progreso } from '../animaciones'
-import { FONDO, LINEA, MUELLE } from '../marca'
+import { entrar, progreso } from '../diseno/animaciones'
+import { FONDO, LINEA, MUELLE } from '../diseno/marca'
 
 /**
  * La tarjeta del intro: esquinas de 44 px, borde fino y sombra suave, centrada
  * en el ancho del vídeo. Entra subiendo con un muelle vivo. Dentro va lo que
  * se quiera (la web real, una imagen, un vídeo).
  */
-export function Tarjeta({ arriba, ancho, alto, children }) {
+export function Tarjeta({ arriba, ancho, alto, estatica = false, style, children }) {
   const frame = useCurrentFrame()
   const { fps } = useVideoConfig()
   return (
@@ -23,7 +23,9 @@ export function Tarjeta({ arriba, ancho, alto, children }) {
         borderRadius: 44,
         border: `2px solid ${LINEA}`,
         boxShadow: '0 40px 90px -40px rgba(22,23,27,0.35)',
-        ...entrar(progreso(frame, fps, 4, MUELLE.vivo)),
+        // En una portada (imagen fija) no hay entrada: está puesta.
+        ...(estatica ? {} : entrar(progreso(frame, fps, 4, MUELLE.vivo))),
+        ...style,
       }}
     >
       {children}

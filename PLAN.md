@@ -194,15 +194,16 @@ para no desanimarse en la semana tres.
 
 ### El sistema que ya existe
 
-40 piezas, 3 por semana, 14 semanas sin que se repita ninguna combinación. Qué
-toca y en qué orden lo deciden los catálogos de
-[`video/datos/`](video/README.md) (negocios, formatos y la regla de la cola).
-El vídeo se produce con **Remotion** en [`video/`](video/README.md):
+Cada pieza es una idea de `video/contenido/ideas.json` (30 reels y 29
+carruseles, no todos con las diapositivas escritas). Qué se publica y cuándo
+lo decide Carlos; el vídeo se produce con **Remotion** en
+[`video/`](video/README.md):
 
 ```bash
 cd video
-pnpm reels        # ver el calendario
-pnpm reels 1      # renderizar la semana 1 (vídeos, pies y fichas en out/semana-01/)
+pnpm crear                 # las ideas y cuáles se pueden crear ya
+pnpm crear IR-19           # vídeo, portada, pies y ficha en out/IR-19/
+pnpm crear feed IR-03 IC-21 IR-19   # cómo quedan juntas en el perfil
 ```
 
 **Decidido (sept. 2026): todos los reels se hacen con Remotion, desde la primera
@@ -215,8 +216,7 @@ se transforma con la pastilla que dice qué cambia, y el cierre del intro. Se
 probó un estilo de subtítulos Hormozi en amarillo y se descartó: parecía un
 vídeo cualquiera. La web de la tarjeta son los **componentes reales** del
 sitio con un config por fotograma: es el producto de verdad, no una maqueta.
-Cada pieza de la cola es un reel del motor (`video/datos/formatos.mjs` dice
-con qué plantilla), así que las 40 están listas para renderizar.
+Un reel nuevo es una idea más en `ideas.json`, nunca una composición nueva.
 
 ### Reparto del esfuerzo
 
@@ -237,11 +237,10 @@ negocio. Un generador evita que las ideas se pisen; no las tiene por ti.
 El eje de "consejos para dueños de negocio" ya tiene sistema: **carruseles**
 para Instagram y LinkedIn sobre cómo encargar, tener y mejorar una web, con el
 mismo acabado que los reels y el mismo motor (Remotion renderiza también
-imágenes fijas). Un carrusel es un JSON; `pnpm carrusel` saca los PNG, el PDF
-de LinkedIn y una hoja de contactos. Hay tres plantillas (`pregunta`,
-`errores`, `checklist`), cuatro carruseles listos y 100 ideas en
-[`video/carruseles/IDEAS.md`](video/carruseles/IDEAS.md), las 20 primeras
-producibles hoy. Detalle en [`video/README.md`](video/README.md).
+imágenes fijas). Cada carrusel es una idea de `video/contenido/ideas.json`;
+`pnpm crear IC-xx` saca los PNG, el PDF de LinkedIn y una hoja de contactos.
+Hay diez plantillas y una decena de carruseles escritos. Detalle en
+[`video/README.md`](video/README.md).
 
 **Choque con la fase 0, sin resolver.** Los carruseles hablan de contratar una
 web, y la regla de difusión dice que no se habla de dinero ni de presupuesto.
@@ -322,3 +321,4 @@ correcto.
 | sept. 2026 | Un solo sistema de reels: la cola semanal pasa a producirse con el motor (plantillas nuevas `portada`, `titular` y `recorrido`), y `pnpm reel` también saca pies y ficha. Fuera la plantilla antigua de la cola y `scripts/social/` entero (los catálogos viven en `video/datos/`), y los vídeos grabados con Playwright. |
 | sept. 2026 | Carruseles educativos en Remotion (`video/src/carrusel/`): un JSON por carrusel, plantillas `pregunta`, `errores` y `checklist`, una diapositiva por fotograma exportada a PNG 1080x1350, PDF para LinkedIn y hoja de contactos. Tras la primera revisión, **una sola retícula** para todos: escala fija (96/72/40/36/26 px), icono, antetítulo y titular siempre en el mismo sitio; nada encoge y, si un texto no cabe, el render falla. Cuatro carruseles reales (dominio, mantenimiento, errores al encargar, checklist antes de contratar), cuatro de resistencia y 100 ideas. |
 | sept. 2026 | Barra de navegación del sitio en móvil: la hamburguesa ya no se aplasta con marcas largas (la marca baja a dos líneas y la hamburguesa es una zona táctil de 44 px), la barra "centrada" deja el botón y la hamburguesa a la derecha, los enlaces del menú se alinean con la marca, y el panel tiene sombra y se desplaza por dentro si no cabe. |
+| sept. 2026 | El contenido para redes se simplifica a un archivo y un comando: `video/contenido/ideas.json` (cada idea es la pieza entera) y `pnpm crear <id>`, más `pnpm crear feed <id…>` para ver el perfil antes de subir. Fuera el planificador, el calendario, los estados y la armonía automática: cuándo publicar lo decide Carlos. |

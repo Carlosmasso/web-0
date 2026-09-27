@@ -7,8 +7,8 @@ import {
   useVideoConfig,
 } from 'remotion'
 import { Etiqueta, Valor } from '../componentes/Etiqueta'
-import { MONO, SANS, SERIF } from '../fuentes'
-import { FONDO, FONDO_ALT, LINEA, MUELLE, PALETAS, TINTA, TINTA_TENUE } from '../marca'
+import { MONO, SANS, SERIF } from '../diseno/fuentes'
+import { FONDO, FONDO_ALT, LINEA, MUELLE, PALETAS, TINTA, TINTA_TENUE } from '../diseno/marca'
 
 // ============================================================
 // Escena 2 (4-11 s): una sola web simulada que se transforma delante de

@@ -80,7 +80,7 @@ guardarraíl recomienda, no bloquea ni cambia de estética.
 | `src/export/` | `scaffold.js` construye el `.zip` con los **mismos fuentes** del preview vía `?raw` (CSS resuelto con `?inline`); `contact.js` → `submitLead()` |
 | `api/lead.js` | Función serverless de Vercel: filtro anti-spam, fila en Google Sheet, aviso por Resend |
 | `apps-script/` | El script de la Sheet de leads |
-| `video/` | Subproyecto de Remotion con sus propias dependencias (`cd video && pnpm install`): todo el contenido para redes. El motor de reels (`src/motor/`, con la web real en una tarjeta), el vídeo de marca (`src/intro/`), los carruseles (`src/carrusel/`) y los catálogos de negocios y la cola semanal (`datos/`). Ver su README |
+| `video/` | Subproyecto de Remotion con sus propias dependencias (`cd video && pnpm install`): todo el contenido para redes: las ideas (`contenido/ideas.json`), el comando `pnpm crear`, reels (`src/motor/`), carruseles (`src/carrusel/`), portadas y el vídeo de marca. Ver su README |
 
 Si añades un componente al runtime del sitio, regístralo también en `scaffold.js`; el test
 `export-integrity` comprueba que cada import relativo del `.zip` cierra y que nada arrastra
@@ -118,31 +118,20 @@ suyo, el preset solo cambia el diseño.
 
 ## Reels, carruseles y vídeo
 
-Todos los reels de Instagram y TikTok salen de **una sola composición**, el motor de
-`video/src/motor/`, con el acabado del vídeo de marca `IntroMaketa`. Es una decisión tomada tras
-dos correcciones; antes de proponer otro estilo, lee `video/README.md` ("Reglas de acabado"):
+Todo el contenido para redes sale de `video/` (ver su README). **Un solo archivo y un solo
+comando**: cada idea de `video/contenido/ideas.json` es la pieza entera (IR-xx un reel, IC-xx un
+carrusel), y `cd video && pnpm crear <id>` la deja en `out/<id>/` lista para subir; `pnpm crear
+feed <id…>` pinta el borrador del perfil. Cuándo se publica cada cosa lo decide Carlos: no hay
+planificador, calendario ni estados, y no hay que volver a proponerlos.
 
-- Tres escenas: gancho sobre fondo tinta, la web **real** de un negocio en una tarjeta con la
-  pastilla que dice qué cambia, y el cierre del intro. El color se transforma en continuo; lo
-  demás, con un barrido. Nada salta.
-- Los muelles de `video/src/marca.js`, Inter 700 y el azul de la marca como único acento. Nada de
-  subtítulos en mayúsculas con contorno, amarillos ni rebotes.
-- Voz en primera persona: "Diséñala tú. Yo la construyo."
-- Un reel nuevo es **datos**, nunca una composición nueva: un JSON en `video/reels/` con
-  plantilla (`preset`, `estilo`, `color`, `tipografia`, `portada`, `titular`, `recorrido` o una
-  combinación), negocio y variantes o `"auto"`. `pnpm reel reels/x.json` lo deja con vídeo, pies y
-  ficha. Ideas en `video/reels/IDEAS.md`.
-- La cola semanal (`pnpm reels N`) no tiene vídeo propio: `video/datos/cola.mjs` decide qué
-  negocio y formato tocan, y cada pieza es un reel del motor.
-
-Los **carruseles** educativos (Instagram y LinkedIn, 1080x1350) salen del mismo subproyecto y
-con el mismo acabado: portada tinta con halo, contenido sobre fondo claro con la tarjeta y la
-pastilla, cierre de marca. Un carrusel es un JSON en `video/carruseles/` con plantilla
-(`pregunta`, `errores`, `checklist`) y contenido con sentido, no diapositivas
-(`pnpm carrusel carruseles/x.json` → PNG por diapositiva, PDF y hoja de contactos). Todas las
-diapositivas comparten **una sola retícula** con escala fija (mismas posiciones y tamaños): no se
-encoge nada, y si un texto no cabe, el render falla y se acorta el texto. Nada de cifras inventadas ni, en fase 0, de dinero.
-100 ideas en `video/carruseles/IDEAS.md`.
+- Los reels son **una sola composición** (`video/src/motor/`) con el acabado del vídeo de marca:
+  gancho, la web **real** de un negocio en una tarjeta que se transforma, y el cierre. El color
+  cambia en continuo; lo demás, con un barrido. Nada salta, nada de subtítulos en mayúsculas con
+  contorno ni amarillos. Voz en primera persona: "Diséñala tú. Yo la construyo."
+- Los carruseles (1080x1350) usan 10 plantillas con contenido con sentido, no diapositivas, y
+  **una sola retícula** de escala fija: si un texto no cabe, el render falla y se acorta el texto.
+- Reels, carruseles y portadas comparten el sistema de diseño de `video/src/diseno/` (4 temas,
+  3 layouts). Nada de cifras inventadas ni, en fase 0, de dinero (`"bloqueo": "fase-0"`).
 
 ## Tests
 

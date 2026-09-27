@@ -9,3 +9,6 @@ dist
 
 # render del vídeo de Remotion
 video/out
+
+# graphify output (generated knowledge graphs)
+graphify-out

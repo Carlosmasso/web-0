@@ -4,7 +4,7 @@ import { slide } from '@remotion/transitions/slide'
 import { Cierre } from '../componentes/Cierre'
 import { Demo } from './Demo'
 import { Problema } from './Problema'
-import { MUELLE } from '../marca'
+import { MUELLE } from '../diseno/marca'
 
 // Las transiciones se solapan con las escenas que unen, así que las duraciones
 // suman 480 y el vídeo dura 450 (dos cruces de 15). Cada cruce cae centrado en

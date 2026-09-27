@@ -1,5 +1,5 @@
 import { interpolate, useCurrentFrame, useVideoConfig } from 'remotion'
-import { ACENTO } from '../marca'
+import { ACENTO } from '../diseno/marca'
 
 /** Una línea fina arriba que se llena de forma lineal en todo el vídeo. */
 export function BarraProgreso() {

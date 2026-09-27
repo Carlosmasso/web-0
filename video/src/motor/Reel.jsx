@@ -3,7 +3,8 @@ import { springTiming, TransitionSeries } from '@remotion/transitions'
 import { fade } from '@remotion/transitions/fade'
 import { slide } from '@remotion/transitions/slide'
 import { Cierre } from '../componentes/Cierre'
-import { MUELLE } from '../marca'
+import { MUELLE } from '../diseno/marca'
+import { tema as temaDe } from '../diseno/temas'
 import { BarraProgreso } from '../componentes/BarraProgreso'
 import { EscenaGancho } from './EscenaGancho'
 import { EscenaVariantes } from './EscenaVariantes'
@@ -30,15 +31,16 @@ export const calcularReel = ({ props }) => {
 
 export function Reel({ resuelto }) {
   if (!resuelto) return null
+  const tema = temaDe(resuelto.visual.tema)
   return (
     <AbsoluteFill>
       <TransitionSeries>
         <TransitionSeries.Sequence durationInFrames={TIEMPOS.gancho}>
-          <EscenaGancho texto={resuelto.gancho} />
+          <EscenaGancho texto={resuelto.gancho} tema={tema} />
         </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={slide({ direction: 'from-bottom' })} timing={cruce} />
         <TransitionSeries.Sequence durationInFrames={resuelto.demo}>
-          <EscenaVariantes resuelto={resuelto} />
+          <EscenaVariantes resuelto={resuelto} tema={tema} layout={resuelto.visual.layout} />
         </TransitionSeries.Sequence>
         <TransitionSeries.Transition presentation={fade()} timing={cruce} />
         <TransitionSeries.Sequence durationInFrames={TIEMPOS.cierre}>

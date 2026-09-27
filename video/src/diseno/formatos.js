@@ -1,7 +1,31 @@
-import { ACENTO, PALETAS } from '../marca'
+import { ACENTO, PALETAS } from './marca'
 
 // ============================================================
-// FORMATO DE LOS CARRUSELES — una sola retícula para todos
+// LOS FORMATOS — reel, carrusel y la cuadrícula del perfil
+//
+// Lo propio de cada lienzo: tamaño, zonas seguras, escala tipográfica y
+// márgenes. Los colores no están aquí (`temas.js`), ni la letra (`texto.js`).
+// ============================================================
+
+/** Reel: 9:16. Instagram tapa arriba el nombre de la cuenta y abajo el pie y los botones. */
+export const REEL = { ancho: 1080, alto: 1920, seguro: { arriba: 250, abajo: 430 } }
+
+/** Los tamaños de letra de los reels. No hay más. */
+export const TIPO_REEL = {
+  gancho: 104, // la frase de la escena 1
+  nombre: 62, // el nombre de la variante bajo la tarjeta
+  frase: 54, // el titular que acompaña a la demo (layout "titular")
+  pastilla: 38, // la pastilla de arriba
+}
+
+/**
+ * La celda del perfil: Instagram enseña cada publicación en la cuadrícula
+ * recortada a 3:4 (1080x1440), centrada. Una portada tiene que funcionar ahí.
+ */
+export const CELDA = { ancho: 1080, alto: 1440 }
+
+// ------------------------------------------------------------
+// CARRUSELES — una sola retícula para todos
 //
 // 1080 x 1350 (4:5), el vertical que Instagram y LinkedIn enseñan sin
 // recortar. Los colores, la letra y los muelles son los de `marca.js`: aquí
@@ -15,6 +39,7 @@ import { ACENTO, PALETAS } from '../marca'
 
 export const ANCHO = 1080
 export const ALTO = 1350
+export const CARRUSEL = { ancho: ANCHO, alto: ALTO }
 
 /** Margen lateral y de arriba/abajo de todas las diapositivas. */
 export const MARGEN = { x: 88, y: 76 }
@@ -29,6 +54,14 @@ export const TIPO = {
   texto: 40, // el texto bajo el titular
   detalle: 36, // lo que va en tarjetas: resaltes, listas, llamada a la acción
   etiqueta: 26, // antetítulo en mayúsculas, cabecera
+}
+
+/** Los tamaños de las portadas (reel y carrusel), por layout. */
+export const TIPO_PORTADA = {
+  A: 96, // el titular junto a la pieza visual
+  B: 116, // tipográfica: el titular es la portada
+  C: 84, // bajo el número grande
+  numero: 340, // el número del layout C
 }
 
 /** El esqueleto de todas las diapositivas, de arriba abajo. */
