@@ -132,7 +132,7 @@ Nombre:   Maketa · Webs para negocios
 Usuario:  @maketa.es
 
 Diseña tu web tú mismo. Yo la construyo.
-Pruébala en vivo, gratis y sin registro.
+Con tus textos, en vivo, gratis y sin registro.
 Para negocios y profesionales · Madrid
 👇 Diseña la tuya
 maketa.es

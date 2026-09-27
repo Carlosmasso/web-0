@@ -20,7 +20,7 @@ export const tamanoPortada = (formato) => (formato === 'reel' ? REEL : CARRUSEL)
 
 const dos = (n) => String(n).padStart(2, '0')
 
-export function PortadaPieza({ formato, props, visual, serie, pilar }) {
+export function PortadaPieza({ formato, props, visual, serie, pilar, pastilla }) {
   if (formato === 'carrusel') {
     const diapositivas = resolverCarrusel(props.carrusel, { visual, serie })
     return <Diapositiva d={diapositivas[0]} indice={0} total={diapositivas.length} />
@@ -32,6 +32,7 @@ export function PortadaPieza({ formato, props, visual, serie, pilar }) {
       tema={temaDe(visual.tema)}
       serie={serie ? `${serie.nombre} · ${dos(serie.numero)}` : pilar}
       variante={visual.portada}
+      pastilla={pastilla}
     />
   )
 }

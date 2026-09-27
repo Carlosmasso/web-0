@@ -84,7 +84,16 @@ const versiones = (pasos, n) =>
   )
 
 /** La pastilla de los reels: qué cambia y cuántas opciones hay. */
-function Firma({ resuelto }) {
+function Firma({ resuelto, pastilla }) {
+  // Un texto propio (el vídeo de marca) sustituye a "qué cambia · N opciones".
+  if (pastilla) {
+    return (
+      <CajaPastilla>
+        <IconoPastilla tipo="estilo" muestras={[]} />
+        {pastilla}
+      </CajaPastilla>
+    )
+  }
   const muestras = [...new Set(resuelto.pasos.flatMap((p) => p.muestras))].slice(0, 3)
   const n = resuelto.pasos.length
   return (
@@ -100,7 +109,7 @@ function Firma({ resuelto }) {
 // LOS CUERPOS
 
 /** La web delante y sus versiones siguientes asomando detrás, con la pastilla encima. */
-function Pila({ resuelto }) {
+function Pila({ resuelto, pastilla }) {
   const [frente, ...detras] = versiones(resuelto.pasos, 3)
   const ancho = 860
   const asoma = 44
@@ -124,7 +133,7 @@ function Pila({ resuelto }) {
         style={{ ...centrada(ancho), top: asoma * 2, bottom: pie, boxShadow: '0 50px 100px -40px rgba(22,23,27,0.55)' }}
       />
       <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, display: 'flex', justifyContent: 'center' }}>
-        <Firma resuelto={resuelto} />
+        <Firma resuelto={resuelto} pastilla={pastilla} />
       </div>
     </>
   )
@@ -278,8 +287,9 @@ function Rejilla({ resuelto }) {
  * @param tema      objeto de diseno/temas.js
  * @param serie     "WEB EN 30 SEGUNDOS · 02", o el pilar si no hay serie
  * @param variante  una de PORTADAS_REEL
+ * @param pastilla  texto propio para la pastilla (si no, "qué cambia · N opciones")
  */
-export function PortadaReel({ resuelto, tema, serie, variante = 'pila' }) {
+export function PortadaReel({ resuelto, tema, serie, variante = 'pila', pastilla = null }) {
   const n = resuelto.pasos.length
   // Lo que cada variante necesita para tener sentido; si no, la más cercana.
   let v = PORTADAS_REEL.includes(variante) ? variante : 'pila'
@@ -327,7 +337,7 @@ export function PortadaReel({ resuelto, tema, serie, variante = 'pila' }) {
 
       {/* El cuerpo se estira hasta abajo: no quedan huecos tenga el gancho las líneas que tenga. */}
       <div style={{ position: 'relative', flex: 1, minHeight: 520, marginTop: Z.trasGancho, marginInline: -MARGEN.x }}>
-        <Cuerpo resuelto={resuelto} tema={tema} />
+        <Cuerpo resuelto={resuelto} tema={tema} pastilla={pastilla} />
       </div>
     </AbsoluteFill>
   )

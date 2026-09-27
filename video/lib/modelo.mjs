@@ -7,7 +7,11 @@
 //   id        IR-01 (reel) · IC-01 (carrusel)
 //   formato   reel | carrusel
 //   gancho    la frase de portada; *así* va en el acento
-//   pilar, serie, tema, visual, cta, pie, pieTikTok, bloqueo, concepto   (opcionales)
+//   pilar, serie, tema, visual, cta, pie, dolor, pieTikTok, bloqueo, concepto   (opcionales)
+//   video     solo reels: otra composición en lugar del motor ("IntroMaketa");
+//             entonces `reel` solo da la web de su portada, y el pie va escrito
+//   dolor     la primera línea del pie (si no, la de la plantilla del reel)
+//   pastilla  solo reels: texto propio para la pastilla de su portada
 //   reel      { plantilla, negocio, cantidad | variantes }   (src/motor/resolver.js)
 //   carrusel  { plantilla, portada, <lista>, resumen, cierre } (src/carrusel/plantillas.js)
 // ============================================================
@@ -32,6 +36,8 @@ export function problemasDe(p, sistema) {
   }
   if (p.formato === 'reel' && !(p.reel?.plantilla && p.reel?.negocio)) fallos.push('un reel necesita "reel.plantilla" y "reel.negocio"')
   if (p.formato === 'carrusel' && !p.carrusel?.plantilla) fallos.push('un carrusel necesita "carrusel.plantilla"')
+  if ((p.video || p.pastilla) && p.formato !== 'reel') fallos.push('"video" y "pastilla" son solo para reels')
+  if (p.video && !p.pie) fallos.push('un reel con "video" propio necesita su "pie" escrito')
   return fallos
 }
 

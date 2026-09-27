@@ -57,7 +57,9 @@ const primerCarrusel = listas.find((p) => p.formato === 'carrusel')
 
 export const RemotionRoot = () => (
   <>
-    {listas.map((p) => (p.formato === 'reel' ? reel(p.id, propsDe(p, ideas, sistema)) : carrusel(p.id, propsDe(p, ideas, sistema))))}
+    {listas
+      .filter((p) => !p.video)
+      .map((p) => (p.formato === 'reel' ? reel(p.id, propsDe(p, ideas, sistema)) : carrusel(p.id, propsDe(p, ideas, sistema))))}
     {listas.map(portada)}
 
     <Composition

@@ -45,6 +45,7 @@ export function propsPortada(p, ideas, sistema) {
     gancho: ganchoDe(p),
     numero: cuantosDe(p),
     pilar: sistema.PILARES[p.pilar]?.nombre ?? null,
+    pastilla: p.pastilla ?? null,
   }
 }
 

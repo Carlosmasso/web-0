@@ -61,11 +61,13 @@ async function still(ctx, id, inputProps, salida, frame = 0) {
  * trae (gancho, pregunta…) se heredaría del reel de ejemplo.
  */
 export async function renderReel(ctx, pieza, props, destino) {
-  const composition = await selectComposition({ serveUrl: ctx.serveUrl, id: pieza.id, inputProps: props, puppeteerInstance: ctx.navegador })
+  // Un reel con vídeo propio (el de marca) usa esa composición, tal cual.
+  const id = pieza.video ?? pieza.id
+  const composition = await selectComposition({ serveUrl: ctx.serveUrl, id, inputProps: pieza.video ? {} : props, puppeteerInstance: ctx.navegador })
   await renderMedia({
     serveUrl: ctx.serveUrl,
     composition,
-    inputProps: props,
+    inputProps: pieza.video ? {} : props,
     codec: 'h264',
     outputLocation: path.join(destino, 'video.mp4'),
     puppeteerInstance: ctx.navegador,

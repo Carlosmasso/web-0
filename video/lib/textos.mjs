@@ -1,13 +1,28 @@
 // ============================================================
 // LOS TEXTOS DE PUBLICACIÓN — lo que acompaña a cada pieza (solo Node)
 //
-//   instagram.txt   el pie, con la CTA y las etiquetas
-//   tiktok.txt      una frase (solo los reels)
-//   linkedin.txt    el pie, sin etiquetas de relleno (solo los carruseles)
-//   ficha.md        qué es, cómo se ve, dónde y cuándo sale
+//   instagram.txt   el pie
+//   tiktok.txt      la versión corta (solo los reels)
+//   linkedin.txt    el pie sin emojis ni hashtags (solo los carruseles)
+//   ficha.md        qué es, cómo se ve y cómo publicarlo
 //
-// El pie sale de la pieza (`pie`) o, en los reels, de su plantilla. La CTA,
-// de la pieza o de su pilar (contenido/sistema.mjs). Fase 0: nada de dinero.
+// El pie no se escribe entero: se COMPONE con piezas cortas, así una idea
+// nueva sale con el suyo sin escribir nada.
+//
+//   1  dolor     una pregunta con el problema del dueño del negocio. Es lo
+//                único que se ve antes del "más". La de la idea (`dolor`); si
+//                no, la de la plantilla del reel o el gancho del carrusel.
+//   2  cuerpo    una o dos frases: qué aporta. El `pie` de la idea; si no, el
+//                `cuerpo` de la plantilla del reel o el concepto del carrusel.
+//   3  maketa    una línea, solo en reels (es donde se ve el producto) y si
+//                el cuerpo no lo nombra ya.
+//   4  CTA       por reglas: portada rejilla → comentar el número; pilar
+//                producto → comentar WEB (se contesta con el enlace por
+//                privado); el resto, la de la idea o la de su pilar.
+//   5  hashtags  de 3 a 5, del sector del cliente, no del mundo del diseño.
+//
+// Fase 0 (DIFUSION.md): ni precios ni presupuestos. "Gratis y sin registro" sí:
+// dice que probar no cuesta nada, no pone precio a un servicio (como la landing).
 // ============================================================
 
 import fs from 'node:fs'
@@ -17,28 +32,51 @@ import { PLANTILLAS, enLetra } from '../src/motor/plantillas.js'
 import { ctaDe, cuantosDe, ganchoDe, serieDe, visualDe } from './modelo.mjs'
 
 const plano = (t) => String(t ?? '').replace(/\*/g, '')
+const bloques = (...partes) => partes.filter(Boolean).join('\n\n')
 
-function etiquetasDe(p) {
-  const negocio = NEGOCIOS[p.reel?.negocio]
-  const tema = (p.tema ?? 'web').replace(/[^a-záéíóúñ0-9]/gi, '')
-  return ['diseñoweb', ...(negocio?.etiquetas ?? [tema]), 'pequeñocomercio'].map((e) => `#${e}`).join(' ')
+const MAKETA = 'En maketa.es la diseñas tú: tu estilo, tus secciones y tus textos, en vivo, gratis y sin registro. Cuando te guste, yo la construyo.'
+const PIDE_WEB = '¿Quieres probarla? Comenta WEB y te mando el enlace por privado 👇'
+const PIDE_NUMERO = '¿Con cuál te quedas? Comenta el número 👇'
+
+/** La llamada a la acción del pie, por reglas. */
+function ctaPie(p, sistema) {
+  if (p.formato === 'reel' && visualDe(p, sistema).portada === 'rejilla') return PIDE_NUMERO
+  if (p.pilar === 'product') return PIDE_WEB
+  return ctaDe(p, sistema)
+}
+
+/** De 3 a 5 hashtags: los del sector del negocio (reels) o del tema (carruseles). */
+function hashtagsDe(p) {
+  // El vídeo de marca no es de un sector: sus hashtags, los generales.
+  const negocio = p.video ? null : NEGOCIOS[p.reel?.negocio]
+  const propios = negocio
+    ? negocio.etiquetas.slice(0, 2)
+    : p.video
+      ? ['emprendedores', 'webparanegocios']
+      : [(p.tema ?? 'web').replace(/[^a-záéíóúñ0-9]/gi, ''), 'webparanegocios']
+  return [...propios, 'pequeñocomercio', 'negociolocal', 'diseñoweb'].map((e) => `#${e}`).join(' ')
 }
 
 /** Los pies de Instagram, TikTok y LinkedIn de una pieza. */
 export function piesDe(p, sistema) {
-  const cta = ctaDe(p, sistema)
+  const cta = ctaPie(p, sistema)
   if (p.formato === 'reel') {
     const plantilla = PLANTILLAS[p.reel.plantilla]
     const datos = { n: enLetra(cuantosDe(p) ?? 1), negocio: NEGOCIOS[p.reel.negocio] }
+    const dolor = p.dolor ?? plantilla.dolor(datos)
+    const cuerpo = p.pie ?? plantilla.cuerpo(datos)
+    const maketa = /maketa/i.test(cuerpo) ? null : MAKETA
     return {
-      instagram: `${p.pie ?? plantilla.pie(datos)}\n\n${etiquetasDe(p)}`,
-      tiktok: `${p.pieTikTok ?? plantilla.pieTikTok(datos)}\n\n#diseñoweb #pequeñocomercio`,
+      instagram: bloques(dolor, cuerpo, maketa, cta, hashtagsDe(p)),
+      tiktok: bloques(p.pieTikTok ?? dolor, 'Diséñala tú: maketa.es', '#pequeñocomercio #negociolocal #diseñoweb'),
     }
   }
-  const cuerpo = p.pie ?? plano(ganchoDe(p))
+  // En un carrusel, la primera línea es su gancho (la frase de la portada).
+  const dolor = p.dolor ?? plano(ganchoDe(p))
+  const cuerpo = p.pie ?? p.concepto ?? null
   return {
-    instagram: `${cuerpo}\n\n${cta}\n\n${etiquetasDe(p)}`,
-    linkedin: `${cuerpo}\n\n${cta}`,
+    instagram: bloques(dolor, cuerpo, cta, hashtagsDe(p)),
+    linkedin: bloques(dolor, cuerpo, cta.replace(/\s*👇$/, '')),
   }
 }
 

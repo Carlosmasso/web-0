@@ -130,7 +130,7 @@ planificador, calendario ni estados, y no hay que volver a proponerlos.
   contorno ni amarillos. Voz en primera persona: "Diséñala tú. Yo la construyo."
 - Los carruseles (1080x1350) usan 10 plantillas con contenido con sentido, no diapositivas, y
   **una sola retícula** de escala fija: si un texto no cabe, el render falla y se acorta el texto.
-- Reels, carruseles y portadas comparten el sistema de diseño de `video/src/diseno/` (4 temas,
+- Reels, carruseles y portadas comparten el sistema de diseño de `video/src/diseno/` (3 temas,
   3 layouts). Nada de cifras inventadas ni, en fase 0, de dinero (`"bloqueo": "fase-0"`).
 
 ## Tests

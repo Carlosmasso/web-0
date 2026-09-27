@@ -1,5 +1,28 @@
 [
   {
+    "id": "IR-00",
+    "formato": "reel",
+    "gancho": "Crear una landing page *no debería tomar días*.",
+    "dolor": "¿Tienes un negocio y tu web lleva años pendiente (o ni existe)?",
+    "pilar": "product",
+    "serie": "maketa",
+    "tema": "marca",
+    "visual": {
+      "tema": "dark",
+      "layout": "A",
+      "portada": "pila"
+    },
+    "pie": "Con Maketa la diseñas tú: eliges el estilo, los colores y cómo es cada sección, y escribes tus propios textos. Lo ves todo en vivo, sin saber diseño y sin registrarte.\n\nCuando te guste cómo queda, yo la construyo con tu contenido. Y es tuya.",
+    "concepto": "El vídeo de marca: el primero que se publica.",
+    "video": "IntroMaketa",
+    "pastilla": "Diséñala tú. Yo la construyo.",
+    "reel": {
+      "plantilla": "preset",
+      "negocio": "peluqueria",
+      "cantidad": 3
+    }
+  },
+  {
     "id": "IR-01",
     "formato": "reel",
     "gancho": "La misma casa rural, *en seis estilos*.",
@@ -13,66 +36,9 @@
       "cantidad": 6
     },
     "visual": {
-      "portada": "pila",
       "tema": "light",
-      "layout": "B"
-    }
-  },
-    {
-    "id": "IR-011",
-    "formato": "reel",
-    "gancho": "La misma casa rural, *en seis estilos*.",
-    "pilar": "inspiration",
-    "serie": "web-en-30-segundos",
-    "tema": "estilo",
-    "concepto": "Seis estéticas sobre la web real de una casa rural: el contenido no se mueve.",
-    "reel": {
-      "plantilla": "estilo",
-      "negocio": "rural",
-      "cantidad": 6
-    },
-    "visual": {
-      "portada": "duelo",
-      "tema": "light",
-      "layout": "B"
-    }
-  },
-      {
-    "id": "IR-012",
-    "formato": "reel",
-    "gancho": "La misma casa rural, *en seis estilos*.",
-    "pilar": "inspiration",
-    "serie": "web-en-30-segundos",
-    "tema": "estilo",
-    "concepto": "Seis estéticas sobre la web real de una casa rural: el contenido no se mueve.",
-    "reel": {
-      "plantilla": "estilo",
-      "negocio": "rural",
-      "cantidad": 6
-    },
-    "visual": {
-      "portada": "rejilla",
-      "tema": "light",
-      "layout": "B"
-    }
-  },
-        {
-    "id": "IR-013",
-    "formato": "reel",
-    "gancho": "La misma casa rural, *en seis estilos*.",
-    "pilar": "inspiration",
-    "serie": "web-en-30-segundos",
-    "tema": "estilo",
-    "concepto": "Seis estéticas sobre la web real de una casa rural: el contenido no se mueve.",
-    "reel": {
-      "plantilla": "estilo",
-      "negocio": "rural",
-      "cantidad": 6
-    },
-    "visual": {
-      "portada": "numero",
-      "tema": "light",
-      "layout": "B"
+      "layout": "A",
+      "portada": "duelo"
     }
   },
   {
@@ -89,7 +55,8 @@
     },
     "visual": {
       "tema": "light",
-      "layout": "B"
+      "layout": "A",
+      "portada": "pila"
     }
   },
   {
@@ -121,6 +88,11 @@
       "plantilla": "tipografia",
       "negocio": "obrador",
       "cantidad": 4
+    },
+    "visual": {
+      "tema": "dark",
+      "layout": "C",
+      "portada": "numero"
     }
   },
   {
@@ -163,6 +135,11 @@
       "plantilla": "estilo",
       "negocio": "dental",
       "cantidad": 6
+    },
+    "visual": {
+      "tema": "light",
+      "layout": "B",
+      "portada": "rejilla"
     }
   },
   {
@@ -204,6 +181,11 @@
       "plantilla": "tipografia+estilo",
       "negocio": "arquitectura",
       "cantidad": 4
+    },
+    "visual": {
+      "tema": "dark",
+      "layout": "C",
+      "portada": "rejilla"
     }
   },
   {
@@ -231,6 +213,11 @@
     "reel": {
       "plantilla": "portada",
       "negocio": "fisio"
+    },
+    "visual": {
+      "tema": "dark",
+      "layout": "B",
+      "portada": "pila"
     }
   },
   {
@@ -296,6 +283,11 @@
     "reel": {
       "plantilla": "preset",
       "negocio": "taller"
+    },
+    "visual": {
+      "tema": "dark",
+      "layout": "A",
+      "portada": "duelo"
     }
   },
   {
@@ -324,6 +316,11 @@
       "plantilla": "color",
       "negocio": "fisio",
       "cantidad": 4
+    },
+    "visual": {
+      "tema": "light",
+      "layout": "B",
+      "portada": "pila"
     }
   },
   {
@@ -1010,6 +1007,10 @@
         "titulo": "Buena UX es que *no tengan que pensar*.",
         "cta": "Guárdalo para más adelante."
       }
+    },
+    "visual": {
+      "tema": "light",
+      "layout": "A"
     }
   },
   {
@@ -1393,7 +1394,7 @@
         {
           "icono": "diseno",
           "titulo": "*Diseñas* tu web",
-          "texto": "En el configurador eliges estilo, colores, letra y secciones, y lo ves en vivo.",
+          "texto": "En el configurador eliges estilo, colores, letra y cómo es cada sección, y lo ves en vivo.",
           "consejo": "Empieza por un preset de tu sector y ajústalo.",
           "corto": "Diseño mi web"
         },

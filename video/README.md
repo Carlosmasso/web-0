@@ -52,8 +52,10 @@ video/
   "serie": "errores-web",         // opcional: "ERRORES WEB · 05" en la portada
   "tema": "contratar-web",        // opcional: de qué va (sale en las etiquetas)
   "visual": { "tema": "light", "layout": "C" },   // opcional: si no, oscuro y el layout de la serie (o A)
-  "cta": "…", "pie": "…", "pieTikTok": "…",           // opcionales
+  "dolor": "¿…?", "pie": "…", "cta": "…", "pieTikTok": "…",   // opcionales: ver "Los pies"
   "bloqueo": "fase-0",            // opcional: se crea, pero no se publica
+  "video": "IntroMaketa",         // solo reels, opcional: otra composición en vez del motor (IR-00, el vídeo de marca)
+  "pastilla": "…",                // solo reels, opcional: texto propio en la pastilla de la portada
   "carrusel": { "plantilla": "errores", "portada": {…}, "puntos": […], "cierre": {…} },
   // o, en un reel:
   "reel": { "plantilla": "color", "negocio": "dental", "cantidad": 5 }
@@ -72,6 +74,27 @@ vuelves a crear, la versión anterior se conserva para compararlas.
 
 - **reel**: `video.mp4`, `portada.png`, `instagram.txt`, `tiktok.txt` y `ficha.md`
 - **carrusel**: `01.png`, `02.png`…, `carrusel.pdf` (LinkedIn), `hoja.png` (para revisar), `instagram.txt`, `linkedin.txt` y `ficha.md`; con `--video`, además `01.mp4`, `02.mp4`…
+
+### Los pies
+
+No se escriben enteros: `lib/textos.mjs` los compone con piezas cortas, así
+una idea nueva sale con el suyo sin escribir nada.
+
+1. **Dolor**: una pregunta con el problema del dueño del negocio. Es lo único
+   que se ve antes del "más". La de la idea (`dolor`) o, si no, la de la
+   plantilla del reel o el gancho del carrusel.
+2. **Cuerpo**: una o dos frases. El `pie` de la idea o, si no, el de la
+   plantilla del reel o el `concepto` del carrusel.
+3. **Maketa**: una línea, solo en reels y si el cuerpo no la nombra ya.
+4. **CTA**, por reglas: portada `rejilla` → "Comenta el número"; pilar
+   producto → "Comenta WEB y te mando el enlace por privado" (hay que
+   contestar rápido); el resto, la de la idea o la de su pilar (guardar o
+   compartir).
+5. **Hashtags**: de 3 a 5, del sector del cliente (no del mundo del diseño).
+
+TikTok lleva el dolor, "Diséñala tú: maketa.es" y tres hashtags; LinkedIn, lo
+mismo que Instagram sin hashtags. Fase 0: nada de precios ni presupuestos;
+"gratis y sin registro" sí, porque habla de probar, no de un servicio.
 
 ### Reglas de contenido
 
