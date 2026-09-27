@@ -32,7 +32,14 @@ export const SERIES = {
 }
 
 // "visual": { "tema", "layout" } de una idea (src/diseno/temas.js y layouts.js).
-//   tema    dark · light · neutral · accent
+//   tema    dark · light · accent
 //   layout  A la pieza visual manda · B tipográfica · C el número grande
-export const TEMAS = ['dark', 'light', 'neutral', 'accent']
+export const TEMAS = ['dark', 'light', 'accent']
 export const LAYOUTS = ['A', 'B', 'C']
+
+// "visual": { "portada" } de un reel (src/portadas/PortadaReel.jsx):
+//   pila     la web con sus versiones siguientes asomando detrás (la de siempre)
+//   duelo    la primera versión frente a la última: contraste
+//   rejilla  cuatro versiones numeradas y "¿Cuál eliges?": pide comentarios
+//   numero   "5 colores" en grande sobre la pila: se escanea de un vistazo
+export const PORTADAS_REEL = ['pila', 'duelo', 'rejilla', 'numero']

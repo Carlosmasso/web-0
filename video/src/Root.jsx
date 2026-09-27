@@ -3,7 +3,7 @@ import * as sistema from '../contenido/sistema.mjs'
 import ideasJson from '../contenido/ideas.json'
 import { listaParaCrear, validarTodas } from '../lib/modelo.mjs'
 import { celdasFeed, propsDe, propsPortada } from '../lib/props.mjs'
-import { Carrusel, HojaContactos, calcularCarrusel, calcularHoja } from './carrusel/Carrusel'
+import { Carrusel, CarruselVideo, DURACION_DIAPOSITIVA, HojaContactos, calcularCarrusel, calcularCarruselVideo, calcularHoja } from './carrusel/Carrusel'
 import { CARRUSEL, REEL } from './diseno/formatos'
 import { Feed, medidasFeed } from './feed/Feed'
 import { AvatarInstagram } from './intro/AvatarInstagram'
@@ -17,7 +17,7 @@ import { PortadaComposicion } from './portadas/PortadaPieza'
 //   IR-01, IC-21…   cada idea que se puede crear ya (reel o carrusel)
 //   Portada-<id>    su portada
 //   Feed            el borrador del feed: props { ids: [...] }
-//   Reel · Carrusel · CarruselHoja   las genéricas que usa `pnpm crear`
+//   Reel · Carrusel · CarruselHoja · CarruselVideo   las genéricas que usa `pnpm crear`
 //   IntroMaketa · AvatarInstagram     el vídeo de marca y la foto de perfil
 // ============================================================
 
@@ -79,6 +79,17 @@ export const RemotionRoot = () => (
       defaultProps={propsDe(primerCarrusel, ideas, sistema)}
       calculateMetadata={calcularHoja}
       {...FIJO}
+    />
+
+    <Composition
+      id="CarruselVideo"
+      component={CarruselVideo}
+      durationInFrames={DURACION_DIAPOSITIVA}
+      fps={30}
+      width={CARRUSEL.ancho}
+      height={CARRUSEL.alto}
+      defaultProps={{ ...propsDe(primerCarrusel, ideas, sistema), indice: 0 }}
+      calculateMetadata={calcularCarruselVideo}
     />
 
     <Composition id="IntroMaketa" component={IntroMaketa} durationInFrames={450} {...VERTICAL} />

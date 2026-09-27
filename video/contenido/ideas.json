@@ -11,6 +11,68 @@
       "plantilla": "estilo",
       "negocio": "rural",
       "cantidad": 6
+    },
+    "visual": {
+      "portada": "pila",
+      "tema": "light",
+      "layout": "B"
+    }
+  },
+    {
+    "id": "IR-011",
+    "formato": "reel",
+    "gancho": "La misma casa rural, *en seis estilos*.",
+    "pilar": "inspiration",
+    "serie": "web-en-30-segundos",
+    "tema": "estilo",
+    "concepto": "Seis estéticas sobre la web real de una casa rural: el contenido no se mueve.",
+    "reel": {
+      "plantilla": "estilo",
+      "negocio": "rural",
+      "cantidad": 6
+    },
+    "visual": {
+      "portada": "duelo",
+      "tema": "light",
+      "layout": "B"
+    }
+  },
+      {
+    "id": "IR-012",
+    "formato": "reel",
+    "gancho": "La misma casa rural, *en seis estilos*.",
+    "pilar": "inspiration",
+    "serie": "web-en-30-segundos",
+    "tema": "estilo",
+    "concepto": "Seis estéticas sobre la web real de una casa rural: el contenido no se mueve.",
+    "reel": {
+      "plantilla": "estilo",
+      "negocio": "rural",
+      "cantidad": 6
+    },
+    "visual": {
+      "portada": "rejilla",
+      "tema": "light",
+      "layout": "B"
+    }
+  },
+        {
+    "id": "IR-013",
+    "formato": "reel",
+    "gancho": "La misma casa rural, *en seis estilos*.",
+    "pilar": "inspiration",
+    "serie": "web-en-30-segundos",
+    "tema": "estilo",
+    "concepto": "Seis estéticas sobre la web real de una casa rural: el contenido no se mueve.",
+    "reel": {
+      "plantilla": "estilo",
+      "negocio": "rural",
+      "cantidad": 6
+    },
+    "visual": {
+      "portada": "numero",
+      "tema": "light",
+      "layout": "B"
     }
   },
   {
@@ -24,6 +86,10 @@
     "reel": {
       "plantilla": "color",
       "negocio": "peluqueria"
+    },
+    "visual": {
+      "tema": "light",
+      "layout": "B"
     }
   },
   {
@@ -34,7 +100,7 @@
     "serie": "diseno-que-funciona",
     "tema": "presets",
     "visual": {
-      "tema": "neutral",
+      "tema": "light",
       "layout": "B"
     },
     "concepto": "Cinco presets muy distintos sobre el mismo contenido.",
@@ -1472,20 +1538,20 @@
   {
     "id": "IC-21",
     "formato": "carrusel",
-    "gancho": "Comprueba *estas 7 cosas*",
+    "gancho": "Antes de firmar tu web, *comprueba estas 7 cosas*",
     "pilar": "education",
     "serie": "antes-de-contratar",
     "tema": "contratar-web",
     "visual": {
-      "tema": "neutral",
-      "layout": "A"
+      "tema": "accent",
+      "layout": "C"
     },
     "pie": "Siete cosas que conviene comprobar antes de contratar una web, cada una con la pregunta que hay que hacer. La última diapositiva es la lista entera: guárdala y márcala antes de firmar.",
     "carrusel": {
       "plantilla": "checklist",
       "portada": {
         "antetitulo": "Antes de contratar una web",
-        "titulo": "Comprueba *estas 7 cosas*",
+        "titulo": "Antes de firmar tu web, *comprueba estas 7 cosas*",
         "texto": "Una por diapositiva, con la pregunta que conviene hacer. Al final, la lista entera."
       },
       "items": [
@@ -1542,8 +1608,7 @@
       "cierre": {
         "titulo": "Siete preguntas. *Cinco minutos.*",
         "texto": "Y sabrás exactamente qué estás contratando.",
-        "cta": "Compártelo con quien esté buscando web.",
-        "icono": "compartir"
+        "guardar": "Guarda este post para consultarlo *antes de firmar* tu próximo proyecto."
       }
     }
   },
@@ -1555,7 +1620,7 @@
     "serie": "errores-web",
     "tema": "contratar-web",
     "visual": {
-      "tema": "neutral",
+      "tema": "light",
       "layout": "C"
     },
     "pie": "Cinco errores al encargar una web que no se ven hasta que ya es tarde. Ninguno es técnico: todos se resuelven con una pregunta a tiempo. Guárdalo para cuando hables con proveedores.",
@@ -1677,7 +1742,7 @@
     "serie": "antes-de-contratar",
     "tema": "mantenimiento",
     "visual": {
-      "tema": "neutral",
+      "tema": "light",
       "layout": "B"
     },
     "pie": "¿Una web necesita mantenimiento todos los meses? Depende de cómo esté hecha y de para qué la uses. Tres casos y las preguntas que conviene hacer antes de contratarlo.",
@@ -1781,7 +1846,7 @@
     "serie": "antes-de-contratar",
     "tema": "estructura",
     "visual": {
-      "tema": "neutral",
+      "tema": "light",
       "layout": "B"
     },
     "pie": "Una sola página o varias: cuándo conviene cada una, sin tecnicismos.",

@@ -1,7 +1,7 @@
 import { ACENTO, ACENTO_CLARO, FONDO, FONDO_ALT, LINEA, TINTA, TINTA_SUAVE, TINTA_TENUE } from './marca'
 
 // ============================================================
-// LOS CUATRO TEMAS — el único sitio donde se decide el color de una pieza
+// LOS TRES TEMAS — el único sitio donde se decide el color de una pieza
 //
 // Reels, carruseles y portadas no eligen colores: eligen un tema. Todos salen
 // de los tokens de la landing (`marca.js`), así que un reel oscuro y un
@@ -9,15 +9,16 @@ import { ACENTO, ACENTO_CLARO, FONDO, FONDO_ALT, LINEA, TINTA, TINTA_SUAVE, TINT
 //
 //   dark     tinta con el halo azul: el gancho de siempre, el que más pesa
 //   light    blanco: el cierre de siempre, limpio
-//   neutral  el gris cálido de la landing: el fondo de las demos
 //   accent   el azul de marca a sangre: la especia, con moderación
 //
 // Cada tema da los mismos huecos, así que un componente pinta cualquiera sin
-// preguntar cuál es.
+// preguntar cuál es. (Hubo un cuarto, `neutral`, el gris de la landing: se
+// quitó porque junto a `light` no se distinguía. Ese gris sigue siendo el
+// fondo de las diapositivas interiores: `INTERIOR`.)
 // ============================================================
 
 /**
- * @typedef {'dark'|'light'|'neutral'|'accent'} NombreTema
+ * @typedef {'dark'|'light'|'accent'} NombreTema
  * @typedef {{
  *   nombre: NombreTema,
  *   oscuro: boolean,    fondo oscuro: el logo y los iconos van en claro
@@ -55,17 +56,6 @@ export const TEMAS = {
     linea: LINEA,
     halo: null,
   },
-  neutral: {
-    nombre: 'neutral',
-    oscuro: false,
-    fondo: FONDO_ALT,
-    texto: TINTA,
-    suave: TINTA_SUAVE,
-    tenue: TINTA_TENUE,
-    acento: ACENTO,
-    linea: LINEA,
-    halo: null,
-  },
   // Sobre el azul, el resaltado va en tinta: un color de reclamo (amarillo)
   // se descartó por barato, y el azul claro no se distingue del blanco.
   accent: {
@@ -82,6 +72,9 @@ export const TEMAS = {
 }
 
 export const NOMBRES_TEMA = Object.keys(TEMAS)
+
+/** El fondo de las diapositivas interiores y de las demos: el gris cálido de la landing. */
+export const INTERIOR = { ...TEMAS.light, nombre: 'interior', fondo: FONDO_ALT }
 
 /** El tema por su nombre; si no existe, el error dice cuáles hay. */
 export function tema(nombre = 'dark') {

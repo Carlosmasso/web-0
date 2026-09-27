@@ -122,7 +122,7 @@ function checklist(c) {
       antetitulo: it.antetitulo ?? `Comprobación ${i + 1} de ${items.length}`,
       titulo: it.titulo,
       texto: it.texto,
-      resalte: it.pregunta ? { etiqueta: 'Pregunta', texto: it.pregunta, icono: 'conversacion' } : null,
+      resalte: it.pregunta ? { etiqueta: 'Pregunta', texto: it.pregunta, icono: 'conversacion', tono: 'acento' } : null,
     }
   })
   if (c.resumen !== false) {
@@ -267,7 +267,7 @@ function costes(c) {
         antetitulo: f.antetitulo ?? `Factor ${i + 1} de ${factores.length}`,
         titulo: f.titulo,
         texto: f.texto,
-        resalte: f.pregunta ? { etiqueta: 'Pregunta', texto: f.pregunta, icono: 'conversacion' } : null,
+        resalte: f.pregunta ? { etiqueta: 'Pregunta', texto: f.pregunta, icono: 'conversacion', tono: 'acento' } : null,
       }
     }),
     ...resumenDe(c.resumen, 'costes'),

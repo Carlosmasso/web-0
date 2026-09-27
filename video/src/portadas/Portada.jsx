@@ -1,32 +1,28 @@
 import { AbsoluteFill } from 'remotion'
+import { Aparece, ENTRADA } from '../componentes/Aparece'
 import { Cabe } from '../componentes/Cabe'
 import { Cabecera } from '../componentes/Marco'
 import { Antetitulo, CajaIcono, ConAcento } from '../componentes/piezas'
-import { CARRUSEL, MARGEN, REEL, RETICULA, TIPO, TIPO_PORTADA } from '../diseno/formatos'
+import { CARRUSEL, MARGEN, RETICULA, TIPO, TIPO_PORTADA } from '../diseno/formatos'
 import { SANS } from '../diseno/fuentes'
 import { fondoDe } from '../diseno/temas'
 import { cuerpo, titular } from '../diseno/texto'
 
 // ============================================================
-// LA PORTADA — un sistema cerrado: 3 layouts × 4 temas
+// LA PORTADA DE UN CARRUSEL — un sistema cerrado: 3 layouts × 3 temas
 //
-// La misma pieza hace la primera diapositiva de un carrusel, la portada de un
-// reel y cada celda del feed. Todas comparten márgenes, marca arriba, letra y
-// jerarquía; el layout cambia la composición y el tema, el color:
+// Es la primera diapositiva y su celda en el feed. Todas comparten márgenes,
+// marca arriba, letra y jerarquía; el layout cambia la composición y el tema,
+// el color:
 //
-//   A  la pieza visual manda: el icono (carrusel) o la web en su tarjeta (reel)
+//   A  el icono y, debajo, el titular
 //   B  tipográfica: el titular, grande y abajo; la serie arriba
 //   C  el número: "5", "7", enorme en el acento, y el titular debajo
 //
-// En un reel, todo cae en la franja 3:4 del centro: es lo que Instagram enseña
-// en la cuadrícula del perfil.
+// Las portadas de los reels son otra pieza: PortadaReel.jsx.
 // ============================================================
 
-const ZONA = {
-  carrusel: { ...CARRUSEL, arriba: MARGEN.y, abajo: MARGEN.y },
-  // 1920 de alto; la cuadrícula enseña los 1440 del centro (240 por arriba y abajo).
-  reel: { ...REEL, arriba: 240 + 64, abajo: 240 + 64 },
-}
+const ZONA = { ...CARRUSEL, arriba: MARGEN.y, abajo: MARGEN.y }
 
 function Numero({ n, tema }) {
   return (
@@ -47,7 +43,6 @@ function Numero({ n, tema }) {
 }
 
 /**
- * @param formato    'reel' | 'carrusel'
  * @param tema       objeto de diseno/temas.js
  * @param layout     'A' | 'B' | 'C'
  * @param antetitulo la serie ("ERRORES WEB · 03") o la categoría
@@ -55,29 +50,35 @@ function Numero({ n, tema }) {
  * @param texto      opcional, debajo del titular (A y C)
  * @param icono      concepto del icono (A en carrusel)
  * @param numero     el número del layout C
- * @param visual     nodo que sustituye al icono en A (la web en su tarjeta, en los reels)
  * @param derecha    lo que va arriba a la derecha (el contador del carrusel)
  * @param pie        nodo pegado abajo (en el carrusel: "Desliza" y el progreso)
  */
-export function Portada({ formato, tema, layout = 'A', antetitulo, titulo, texto, icono, numero, visual, derecha, pie, nombre = 'la portada' }) {
-  const zona = ZONA[formato]
+export function Portada({ tema, layout = 'A', antetitulo, titulo, texto, icono, numero, derecha, pie, nombre = 'la portada' }) {
+  const zona = ZONA
   const colorTexto = tema.suave
   const tamano = TIPO_PORTADA[layout]
 
   const bloqueTitular = (
     <>
       {antetitulo ? (
-        <Antetitulo color={tema.acento} style={{ marginTop: layout === 'B' ? 0 : RETICULA.trasIcono }}>
-          {antetitulo}
-        </Antetitulo>
+        <Aparece desde={ENTRADA.antetitulo}>
+          {/* Tras el icono o el número, su separación; si no hay nada encima, ninguna. */}
+          <Antetitulo color={tema.acento} style={{ marginTop: layout === 'B' ? 0 : RETICULA.trasIcono }}>
+            {antetitulo}
+          </Antetitulo>
+        </Aparece>
       ) : null}
-      <h1 style={{ ...titular(tamano, tema.texto), marginTop: antetitulo ? RETICULA.trasEtiqueta : 0 }}>
-        <ConAcento texto={titulo} acento={tema.acento} />
-      </h1>
+      <Aparece desde={ENTRADA.titular} dy={110}>
+        <h1 style={{ ...titular(tamano, tema.texto), marginTop: antetitulo ? RETICULA.trasEtiqueta : 0 }}>
+          <ConAcento texto={titulo} acento={tema.acento} />
+        </h1>
+      </Aparece>
       {texto && layout !== 'B' ? (
-        <p style={{ ...cuerpo(colorTexto, TIPO.texto), marginTop: RETICULA.trasTitular }}>
-          <ConAcento texto={texto} acento={tema.acento} />
-        </p>
+        <Aparece desde={ENTRADA.texto}>
+          <p style={{ ...cuerpo(colorTexto, TIPO.texto), marginTop: RETICULA.trasTitular }}>
+            <ConAcento texto={texto} acento={tema.acento} />
+          </p>
+        </Aparece>
       ) : null}
     </>
   )
@@ -86,26 +87,35 @@ export function Portada({ formato, tema, layout = 'A', antetitulo, titulo, texto
   if (layout === 'A') {
     contenido = (
       <>
-        {visual ? null : <CajaIcono nombre={icono ?? 'idea'} oscuro={tema.oscuro} />}
+        <Aparece desde={ENTRADA.icono} flotar={5}>
+          <CajaIcono nombre={icono ?? 'idea'} oscuro={tema.oscuro} />
+        </Aparece>
         {bloqueTitular}
-        {visual ? <div style={{ marginTop: RETICULA.bloque }}>{visual}</div> : null}
       </>
     )
   } else if (layout === 'B') {
     // La serie arriba y el titular abajo: la portada es la frase.
     contenido = (
       <>
-        {antetitulo ? <Antetitulo color={tema.acento}>{antetitulo}</Antetitulo> : null}
+        {antetitulo ? (
+          <Aparece desde={ENTRADA.antetitulo}>
+            <Antetitulo color={tema.acento}>{antetitulo}</Antetitulo>
+          </Aparece>
+        ) : null}
         {/* Pegado abajo, la caja de la letra (más alta que su interlineado de
             1,06) sobresaldría; el margen interior la deja dentro. */}
         <div style={{ marginTop: 'auto', paddingBottom: Math.ceil(tamano * 0.1) }}>
-          <h1 style={titular(tamano, tema.texto)}>
-            <ConAcento texto={titulo} acento={tema.acento} />
-          </h1>
+          <Aparece desde={ENTRADA.titular} dy={110}>
+            <h1 style={titular(tamano, tema.texto)}>
+              <ConAcento texto={titulo} acento={tema.acento} />
+            </h1>
+          </Aparece>
           {texto ? (
-            <p style={{ ...cuerpo(colorTexto, TIPO.texto), marginTop: RETICULA.trasTitular }}>
-              <ConAcento texto={texto} acento={tema.acento} />
-            </p>
+            <Aparece desde={ENTRADA.texto}>
+              <p style={{ ...cuerpo(colorTexto, TIPO.texto), marginTop: RETICULA.trasTitular }}>
+                <ConAcento texto={texto} acento={tema.acento} />
+              </p>
+            </Aparece>
           ) : null}
         </div>
       </>
@@ -113,7 +123,9 @@ export function Portada({ formato, tema, layout = 'A', antetitulo, titulo, texto
   } else {
     contenido = (
       <>
-        <Numero n={numero ?? ''} tema={tema} />
+        <Aparece desde={ENTRADA.icono} dy={140}>
+          <Numero n={numero ?? ''} tema={tema} />
+        </Aparece>
         {bloqueTitular}
       </>
     )

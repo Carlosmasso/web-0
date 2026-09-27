@@ -1,5 +1,6 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useContext, useLayoutEffect, useRef, useState } from 'react'
 import { cancelRender, continueRender, delayRender } from 'remotion'
+import { Tiempo } from './Aparece'
 
 // ============================================================
 // QUE EL TEXTO QUEPA — sin cambiar de tamaño
@@ -20,9 +21,14 @@ const desborda = (zona, contenido) =>
 export function Cabe({ children, nombre = 'diapositiva' }) {
   const zona = useRef(null)
   const contenido = useRef(null)
-  const [espera] = useState(() => delayRender(`Comprobando el texto de ${nombre}`))
+  // En vídeo (carrusel animado) no se mide: los bloques entran desplazados y
+  // se contarían como desbordamiento. El texto es el mismo que en la imagen
+  // fija, que se renderiza antes y sí se comprueba.
+  const enVideo = useContext(Tiempo) != null
+  const [espera] = useState(() => (enVideo ? null : delayRender(`Comprobando el texto de ${nombre}`)))
 
   useLayoutEffect(() => {
+    if (espera == null) return undefined
     let vivo = true
     let hecho = false
     document.fonts.ready.then(() => {

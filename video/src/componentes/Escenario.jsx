@@ -42,6 +42,13 @@ function imagenesDe(valor, salida = new Set()) {
   return salida
 }
 
+// Nada de lo que se precarga puede colgar el render: cada fuente o imagen
+// espera como mucho esto y, si no llega, se sigue (se verá la de reserva).
+// Con varias pestañas renderizando a la vez, la red va cargada y una imagen
+// lenta bastaba para agotar el delayRender.
+const LIMITE = 10000
+const conLimite = (promesa) => Promise.race([promesa.catch(() => {}), new Promise((ok) => setTimeout(ok, LIMITE))])
+
 const hojaCargada = (link) =>
   link.sheet
     ? Promise.resolve()
@@ -64,8 +71,22 @@ export function Escenario({ config, contenido, todos, scroll = 0, ancho = 430, a
   const [doc, setDoc] = useState(null)
   const [espera] = useState(() => delayRender('Preparando la web del reel'))
 
+  const empezado = useRef(false)
+
   const alCargar = async () => {
+    if (empezado.current) return
+    empezado.current = true
     const d = iframe.current.contentDocument
+    try {
+      await prepararDocumento(d)
+    } finally {
+      // Pase lo que pase, la web se pinta y el render sigue.
+      setDoc(d)
+      continueRender(espera)
+    }
+  }
+
+  const prepararDocumento = async (d) => {
     // El CSS del sitio lo inyecta webpack en el documento principal; se copia
     // al del iframe, que es donde vive la web.
     for (const nodo of document.head.querySelectorAll('style, link[rel="stylesheet"]')) {
@@ -81,24 +102,23 @@ export function Escenario({ config, contenido, todos, scroll = 0, ancho = 430, a
       familias.add(c.typography.bodyFamily)
     }
     ensureFonts([...familias], d)
-    await Promise.all([...d.head.querySelectorAll('link[data-google-font]')].map(hojaCargada))
+    await Promise.all([...d.head.querySelectorAll('link[data-google-font]')].map((l) => conLimite(hojaCargada(l))))
     const cargas = []
     for (const stack of familias) {
       const familia = familyOf(stack)
-      if (familia) for (const p of PESOS) cargas.push(d.fonts.load(`${p} 32px "${familia}"`))
+      if (familia) for (const p of PESOS) cargas.push(conLimite(d.fonts.load(`${p} 32px "${familia}"`)))
     }
     const urls = new Set()
     for (const c of todos.contenidos) imagenesDe(c, urls)
     for (const url of urls) {
       const img = new d.defaultView.Image()
       img.src = url
-      cargas.push(img.decode().catch(() => {}))
+      cargas.push(conLimite(img.decode()))
     }
 
     await Promise.all(cargas)
-    setDoc(d)
-    continueRender(espera)
   }
+
 
   useLayoutEffect(() => {
     if (!doc) return

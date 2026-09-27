@@ -8,8 +8,10 @@ entra en el bundle de la app); `out/` está en `.gitignore`.
 cd video
 pnpm install
 pnpm crear                          # lista las ideas y cuáles se pueden crear ya
-pnpm crear IR-19                    # → out/IR-19/  (vídeo o imágenes, portada, pies y ficha)
+pnpm crear IR-19                    # → out/IR-19-dark-A/  (vídeo, portada, pies y ficha)
+pnpm crear IC-21                    # → out/IC-21-light-A/  (el carrusel, con su tema y layout en la carpeta)
 pnpm crear IR-19 IC-07 IR-03        # varias a la vez
+pnpm crear IC-21 --video            # el carrusel, además, animado: un MP4 por diapositiva
 pnpm crear feed IR-03 IC-07 IR-19   # borrador del feed con esas, en orden de publicación → out/feed.png
 pnpm studio                         # el editor de Remotion: cada idea, su portada y el feed
 pnpm test                           # valida ideas.json y comprueba que los textos caben
@@ -49,7 +51,7 @@ video/
   "pilar": "mistakes",            // opcional: da la CTA por defecto
   "serie": "errores-web",         // opcional: "ERRORES WEB · 05" en la portada
   "tema": "contratar-web",        // opcional: de qué va (sale en las etiquetas)
-  "visual": { "tema": "neutral", "layout": "C" },   // opcional: si no, oscuro y el layout de la serie (o A)
+  "visual": { "tema": "light", "layout": "C" },   // opcional: si no, oscuro y el layout de la serie (o A)
   "cta": "…", "pie": "…", "pieTikTok": "…",           // opcionales
   "bloqueo": "fase-0",            // opcional: se crea, pero no se publica
   "carrusel": { "plantilla": "errores", "portada": {…}, "puntos": […], "cierre": {…} },
@@ -64,10 +66,12 @@ entonces `pnpm crear` lo marca con `·`. La serie se numera por el orden del
 archivo. Todo se valida al leer: si algo está mal escrito, el comando para y
 dice qué.
 
-`out/<id>/` queda listo para subir:
+`out/<id>-<tema>-<layout>/` (por ejemplo `out/IR-19-dark-A/`) queda listo
+para subir. La carpeta lleva el tema y el layout: si cambias el `visual` y lo
+vuelves a crear, la versión anterior se conserva para compararlas.
 
 - **reel**: `video.mp4`, `portada.png`, `instagram.txt`, `tiktok.txt` y `ficha.md`
-- **carrusel**: `01.png`, `02.png`…, `carrusel.pdf` (LinkedIn), `hoja.png` (para revisar), `instagram.txt`, `linkedin.txt` y `ficha.md`
+- **carrusel**: `01.png`, `02.png`…, `carrusel.pdf` (LinkedIn), `hoja.png` (para revisar), `instagram.txt`, `linkedin.txt` y `ficha.md`; con `--video`, además `01.mp4`, `02.mp4`…
 
 ### Reglas de contenido
 
@@ -85,7 +89,7 @@ Un solo sistema de diseño (`src/diseno/`) para reels, carruseles y portadas:
 
 | Pieza | Qué centraliza |
 | --- | --- |
-| `temas.js` | Los cuatro temas: **dark** (tinta con halo), **light** (blanco), **neutral** (el gris de la landing) y **accent** (el azul a sangre, con moderación). Ningún componente elige colores: elige un tema |
+| `temas.js` | Los tres temas: **dark** (tinta con halo), **light** (blanco) y **accent** (el azul a sangre, con moderación). Ningún componente elige colores: elige un tema |
 | `texto.js` | El titular (Inter 700, el interletraje del intro), el texto corrido, el antetítulo y el resaltado con `*asteriscos*` |
 | `formatos.js` | Tamaños, zonas seguras y escalas tipográficas de reel, carrusel, portada y celda del perfil (3:4) |
 | `layouts.js` | La geometría de los tres layouts de reel |
@@ -95,9 +99,32 @@ Un solo sistema de diseño (`src/diseno/`) para reels, carruseles y portadas:
 
 | | Reel (vídeo) | Portada |
 | --- | --- | --- |
-| **A** | La web en su tarjeta con la pastilla encima | La pieza visual manda: la web (reel) o el icono (carrusel) |
+| **A** | La web en su tarjeta | El titular arriba y el icono debajo |
 | **B** | La web casi a pantalla completa | Tipográfica: el titular grande, abajo |
 | **C** | El gancho se queda arriba mientras la web cambia | El número enorme ("5") y el titular |
+
+La portada de un reel no usa el layout: tiene sus propias variantes
+(`src/portadas/PortadaReel.jsx`), que se eligen con `"visual": { "portada": … }`.
+Todas comparten el marco (la marca y la serie arriba, el gancho al mismo
+tamaño que en el vídeo, el tema) y cambian el cuerpo, que se estira hasta
+abajo: no quedan huecos, y todo cae en la franja 3:4 que enseña el perfil.
+
+| Portada | Qué enseña | Su trabajo en el feed |
+| --- | --- | --- |
+| `pila` (por defecto) | La web y, asomando detrás, sus versiones siguientes, con la pastilla "Color principal · 5 opciones" | La firma: reconocimiento |
+| `duelo` | La primera versión frente a la última, con su nombre | Contraste: el antes y el después sin reproducir el vídeo |
+| `rejilla` | Cuatro versiones numeradas y "¿Cuál eliges? 1 · 2 · 3 · 4" | Comentarios: se contesta con un número |
+| `numero` | "5 colores" en grande y la pila debajo | Escaneo rápido; rima con las portadas C de los carruseles |
+
+Si una variante no tiene sentido para ese reel, se usa la más cercana: la
+rejilla necesita cuatro versiones (si no, duelo) y el número, al menos dos (si
+no, pila). En `out/` la carpeta lo lleva en el nombre si no es la pila:
+`out/IR-07-dark-A-rejilla/`.
+
+En los tres layouts de reel va la **pastilla** que dice qué cambia, con el
+mismo icono para cada tipo de cambio: las muestras de color (color, preset),
+la rejilla (estilo, portada) o la letra (tipografía, titular). Es la firma de
+todos los reels.
 
 ### Reglas de acabado
 
@@ -173,6 +200,18 @@ Todas aceptan `resumen` (una lista final) y un `cierre` con CTA. La portada es
 la del sistema de portadas, con el tema y el layout de la pieza; las
 diapositivas interiores van en claro, que se leen mejor.
 
+**En vídeo** (`--video`), cada diapositiva es un MP4 de 5 s, 1080x1350: la
+misma diapositiva que la imagen, con los bloques entrando escalonados (icono,
+antetítulo, titular, texto y, el último, lo de abajo) con los muelles de la
+marca, y el icono meciéndose en un bucle que cierra justo a los 5 s. Lo
+decide `src/componentes/Aparece.jsx`; sin él, todo está quieto, así que no hay
+dos versiones de ninguna diapositiva.
+
+Dos piezas pensadas para guardar: la **pregunta** de los checklists va en el
+azul de marca con letra blanca, y el cierre admite `"guardar": "…"` en vez de
+`"cta"`, una tarjeta azul con el marcador y una flecha hacia el botón de
+guardar de Instagram (IC-21 la usa).
+
 **Una plantilla nueva** es una función más en `carrusel/plantillas.js` que
 devuelva diapositivas con las variantes que ya hay (`portada`, `respuesta`,
 `punto`, `caso`, `item`, `lista`, `comparativa`, `cierre`). Solo si ninguna
@@ -181,10 +220,11 @@ mismo esqueleto: nunca con tamaños ni posiciones propios.
 
 ## Portadas
 
-`src/portadas/Portada.jsx`: un sistema cerrado de **3 layouts × 4 temas**.
+`src/portadas/Portada.jsx`: un sistema cerrado de **3 layouts × 3 temas**.
 Hace la primera diapositiva de un carrusel, la portada de un reel (en 9:16,
 con todo dentro de la franja 3:4 que enseña el perfil) y cada celda del feed.
-Comparten márgenes, marca, letra y jerarquía; varían composición y color.
+Comparten márgenes, marca, letra y jerarquía; varían composición y color. Las
+de los reels son otra pieza, siempre igual: ver arriba.
 
 ## El borrador del feed
 

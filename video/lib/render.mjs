@@ -47,13 +47,21 @@ async function still(ctx, id, inputProps, salida, frame = 0) {
     output: salida,
     imageFormat: 'png',
     puppeteerInstance: ctx.navegador,
+    timeoutInMilliseconds: 60000,
   })
   return composition
 }
 
-/** Un reel: el vídeo y su portada. Devuelve la duración en segundos. */
+/**
+ * Un reel: el vídeo y su portada. Devuelve la duración en segundos.
+ *
+ * Se renderiza con la composición de la propia idea (src/Root.jsx registra
+ * una por idea), no con la genérica "Reel": Remotion mezcla las props de
+ * entrada con las de ejemplo de la composición, y un campo que la idea no
+ * trae (gancho, pregunta…) se heredaría del reel de ejemplo.
+ */
 export async function renderReel(ctx, pieza, props, destino) {
-  const composition = await selectComposition({ serveUrl: ctx.serveUrl, id: 'Reel', inputProps: props, puppeteerInstance: ctx.navegador })
+  const composition = await selectComposition({ serveUrl: ctx.serveUrl, id: pieza.id, inputProps: props, puppeteerInstance: ctx.navegador })
   await renderMedia({
     serveUrl: ctx.serveUrl,
     composition,
@@ -61,6 +69,7 @@ export async function renderReel(ctx, pieza, props, destino) {
     codec: 'h264',
     outputLocation: path.join(destino, 'video.mp4'),
     puppeteerInstance: ctx.navegador,
+    timeoutInMilliseconds: 60000,
     onProgress: progreso(pieza.id),
   })
   await still(ctx, `Portada-${pieza.id}`, undefined, path.join(destino, 'portada.png'))
@@ -96,6 +105,24 @@ export async function renderCarrusel(ctx, pieza, props, destino, titulo) {
   }
   fs.writeFileSync(path.join(destino, 'carrusel.pdf'), await pdf.save())
   return composition.durationInFrames
+}
+
+/** El carrusel en vídeo: un MP4 animado por diapositiva (01.mp4, 02.mp4…). */
+export async function renderCarruselVideo(ctx, pieza, props, destino, total) {
+  for (let indice = 0; indice < total; indice++) {
+    const inputProps = { ...props, indice }
+    const composition = await selectComposition({ serveUrl: ctx.serveUrl, id: 'CarruselVideo', inputProps, puppeteerInstance: ctx.navegador })
+    await renderMedia({
+      serveUrl: ctx.serveUrl,
+      composition,
+      inputProps,
+      codec: 'h264',
+      outputLocation: path.join(destino, `${String(indice + 1).padStart(2, '0')}.mp4`),
+      puppeteerInstance: ctx.navegador,
+      timeoutInMilliseconds: 60000,
+      onProgress: progreso(`${pieza.id} vídeo ${indice + 1}/${total}`),
+    })
+  }
 }
 
 /** El borrador del feed con esas ideas, en orden de publicación. */

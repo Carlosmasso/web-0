@@ -30,7 +30,7 @@ test('los errores se explican', () => {
 })
 
 test('visual por defecto: oscuro, el layout de la serie, y sin número no hay C', () => {
-  assert.deepEqual(visualDe({ formato: 'reel', reel: {} }, sistema), { tema: 'dark', layout: 'A' })
+  assert.deepEqual(visualDe({ formato: 'reel', reel: {} }, sistema), { tema: 'dark', layout: 'A', portada: 'pila' })
   assert.equal(visualDe({ formato: 'carrusel', serie: 'mitos-web', carrusel: {} }, sistema).layout, 'B')
   assert.equal(visualDe({ formato: 'reel', visual: { layout: 'C' }, reel: { plantilla: 'recorrido' } }, sistema).layout, 'A')
   assert.equal(cuantosDe({ formato: 'carrusel', carrusel: { puntos: [1, 2, 3] } }), 3)

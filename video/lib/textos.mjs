@@ -73,8 +73,9 @@ ${
 audio se elige en la propia aplicación. El mismo vídeo vale para Instagram y
 TikTok, pero cada uno con su texto (\`instagram.txt\`, \`tiktok.txt\`).`
     : `En Instagram, las imágenes \`01.png\`, \`02.png\`… en ese orden, con
-\`instagram.txt\`. En LinkedIn, \`carrusel.pdf\` como documento, con
-\`linkedin.txt\`.`
+\`instagram.txt\`; si lo creaste con \`--video\`, sube en su lugar
+\`01.mp4\`, \`02.mp4\`… (Instagram admite carruseles de vídeos). En
+LinkedIn, \`carrusel.pdf\` como documento, con \`linkedin.txt\`.`
 }
 
 El enlace va en la biografía (maketa.es): en el pie no se puede pulsar. El

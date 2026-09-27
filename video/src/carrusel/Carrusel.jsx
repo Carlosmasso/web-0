@@ -1,4 +1,5 @@
 import { AbsoluteFill, useCurrentFrame } from 'remotion'
+import { Tiempo } from '../componentes/Aparece'
 import { Diapositiva } from './Diapositiva'
 import { ALTO, ANCHO } from '../diseno/formatos'
 import { resolverCarrusel } from './plantillas'
@@ -87,5 +88,28 @@ export function HojaContactos({ diapositivas }) {
         </div>
       ))}
     </AbsoluteFill>
+  )
+}
+
+// ------------------------------------------------------------
+// CARRUSEL EN VÍDEO: una diapositiva, `indice`, animada. Instagram acepta
+// carruseles de vídeos; `pnpm crear IC-xx --video` saca un MP4 por diapositiva.
+// Es la misma diapositiva que la imagen fija: con `Tiempo` cada bloque entra
+// escalonado y el icono se mece (componentes/Aparece.jsx).
+
+/** 5 s por diapositiva: el tiempo de leerla; el vaivén cierra el bucle justo aquí. */
+export const DURACION_DIAPOSITIVA = 150
+
+export const calcularCarruselVideo = ({ props }) => ({
+  props: { ...props, diapositivas: resolverCarrusel(props.carrusel, { visual: props.visual, serie: props.serie }) },
+})
+
+export function CarruselVideo({ diapositivas, indice = 0 }) {
+  const frame = useCurrentFrame()
+  if (!diapositivas) return null
+  return (
+    <Tiempo.Provider value={frame}>
+      <Diapositiva d={diapositivas[indice]} indice={indice} total={diapositivas.length} />
+    </Tiempo.Provider>
   )
 }

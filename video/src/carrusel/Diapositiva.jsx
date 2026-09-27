@@ -2,10 +2,11 @@ import { AbsoluteFill } from 'remotion'
 import { SANS } from '../diseno/fuentes'
 import { Marca } from '../componentes/Logo'
 import { Cabecera, Progreso, contador } from '../componentes/Marco'
-import { ACENTO, LINEA, TINTA, TINTA_SUAVE } from '../diseno/marca'
+import { ACENTO, ACENTO_CLARO, LINEA, MUELLE, TINTA, TINTA_SUAVE } from '../diseno/marca'
 import { Cabe } from '../componentes/Cabe'
+import { Aparece, ENTRADA, useFlotar } from '../componentes/Aparece'
 import { ALTO, ANCHO, MARGEN, RETICULA, TIPO } from '../diseno/formatos'
-import { TEMAS, fondoDe, tema as temaDe } from '../diseno/temas'
+import { INTERIOR, TEMAS, fondoDe, tema as temaDe } from '../diseno/temas'
 import { Portada } from '../portadas/Portada'
 import { Antetitulo, CajaIcono, Casilla, ConAcento, Icono, Numero, Pastilla, Tarjeta, cuerpo, titular } from '../componentes/piezas'
 
@@ -37,7 +38,7 @@ import { Antetitulo, CajaIcono, Casilla, ConAcento, Icono, Numero, Pastilla, Tar
 
 // Los fondos de las diapositivas interiores son siempre claros (se leen mejor
 // con texto); el tema de la pieza manda en la portada.
-const FONDOS = { tinta: TEMAS.dark, claro: TEMAS.neutral, blanco: TEMAS.light }
+const FONDOS = { tinta: TEMAS.dark, claro: INTERIOR, blanco: TEMAS.light }
 
 /**
  * El esqueleto. `abajo` se pega al pie de la zona de contenido; lo demás
@@ -64,20 +65,38 @@ function Esqueleto({ d, indice, total, fondo, tamanoTitular = TIPO.titular, extr
         <Cabecera tema={t} derecha={contador(indice, total)} />
         <div style={{ flex: 1, minHeight: 0, display: 'flex', margin: `${RETICULA.cabecera}px 0` }}>
           <Cabe nombre={`la diapositiva ${indice + 1}`}>
-            <CajaIcono nombre={d.icono} oscuro={oscuro} />
-            <Antetitulo oscuro={oscuro} style={{ marginTop: RETICULA.trasIcono }}>
-              {d.antetitulo}
-            </Antetitulo>
-            <h1 style={{ ...titular(tamanoTitular, t.texto), marginTop: RETICULA.trasEtiqueta }}>
-              <ConAcento texto={d.titulo} acento={acento} />
-            </h1>
+            {/* En vídeo, cada bloque entra a su tiempo (componentes/Aparece.jsx) y
+                el icono se mece; en imagen fija, todo está quieto en su sitio. */}
+            <Aparece desde={ENTRADA.icono} flotar={5}>
+              <CajaIcono nombre={d.icono} oscuro={oscuro} />
+            </Aparece>
+            <Aparece desde={ENTRADA.antetitulo}>
+              <Antetitulo oscuro={oscuro} style={{ marginTop: RETICULA.trasIcono }}>
+                {d.antetitulo}
+              </Antetitulo>
+            </Aparece>
+            <Aparece desde={ENTRADA.titular}>
+              <h1 style={{ ...titular(tamanoTitular, t.texto), marginTop: RETICULA.trasEtiqueta }}>
+                <ConAcento texto={d.titulo} acento={acento} />
+              </h1>
+            </Aparece>
             {d.texto ? (
-              <p style={{ ...cuerpo(t.suave), marginTop: RETICULA.trasTitular }}>
-                <ConAcento texto={d.texto} acento={acento} />
-              </p>
+              <Aparece desde={ENTRADA.texto}>
+                <p style={{ ...cuerpo(t.suave), marginTop: RETICULA.trasTitular }}>
+                  <ConAcento texto={d.texto} acento={acento} />
+                </p>
+              </Aparece>
             ) : null}
-            {extra}
-            {abajo ? <div style={{ marginTop: 'auto', paddingTop: RETICULA.bloque }}>{abajo}</div> : null}
+            {extra ? <Aparece desde={ENTRADA.extra}>{extra}</Aparece> : null}
+            {abajo ? (
+              <div style={{ marginTop: 'auto', paddingTop: RETICULA.bloque }}>
+                {/* Lo de abajo (la pregunta, "mejor así") llega el último y más
+                    suave: cuando ya se ha leído el titular. */}
+                <Aparece desde={ENTRADA.abajo} dy={50} config={MUELLE.suave}>
+                  {abajo}
+                </Aparece>
+              </div>
+            ) : null}
           </Cabe>
         </div>
         <Progreso indice={indice} total={total} tema={t} />
@@ -91,19 +110,31 @@ function Esqueleto({ d, indice, total, fondo, tamanoTitular = TIPO.titular, extr
 
 const detalle = (color = TINTA) => cuerpo(color, TIPO.detalle)
 
-/** Un icono, una etiqueta y una frase (y una nota opcional): "mejor así", "pregunta", "entonces". */
+/**
+ * Un icono, una etiqueta y una frase (y una nota opcional): "mejor así",
+ * "pregunta", "entonces". Con `tono: 'acento'` va en el azul de marca con la
+ * letra en blanco: lo que hay que hacer (la pregunta) destaca sobre todo lo demás.
+ */
 function Resalte({ resalte }) {
+  const acento = resalte.tono === 'acento'
   return (
-    <Tarjeta style={{ display: 'flex', gap: 30, alignItems: 'flex-start' }}>
-      <CajaIcono nombre={resalte.icono} tamano={80} />
+    <Tarjeta
+      style={{
+        display: 'flex',
+        gap: 30,
+        alignItems: 'flex-start',
+        ...(acento ? { background: ACENTO, border: 'none', boxShadow: '0 24px 50px -30px rgba(59,83,214,0.7)' } : {}),
+      }}
+    >
+      <CajaIcono nombre={resalte.icono} tamano={80} oscuro={acento} />
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10, paddingTop: 4 }}>
-        <Antetitulo>{resalte.etiqueta}</Antetitulo>
-        <p style={{ ...detalle(), fontWeight: 600 }}>
-          <ConAcento texto={resalte.texto} />
+        <Antetitulo color={acento ? 'rgba(255,255,255,0.72)' : undefined}>{resalte.etiqueta}</Antetitulo>
+        <p style={{ ...detalle(acento ? '#fff' : TINTA), fontWeight: 600 }}>
+          <ConAcento texto={resalte.texto} acento={acento ? '#fff' : undefined} />
         </p>
         {resalte.nota ? (
-          <p style={{ ...detalle(TINTA_SUAVE), marginTop: 6 }}>
-            <ConAcento texto={resalte.nota} />
+          <p style={{ ...detalle(acento ? 'rgba(255,255,255,0.8)' : TINTA_SUAVE), marginTop: 6 }}>
+            <ConAcento texto={resalte.nota} acento={acento ? '#fff' : undefined} />
           </p>
         ) : null}
       </div>
@@ -169,6 +200,35 @@ const Desliza = ({ tema }) => (
   </div>
 )
 
+/**
+ * La llamada a guardar: una tarjeta en el azul de marca con el marcador y una
+ * flecha que apunta abajo a la derecha, donde Instagram pone el botón de
+ * guardar. En vídeo, la flecha se mece hacia él.
+ */
+function Guardar({ texto }) {
+  const vaiven = useFlotar(8)
+  return (
+    <Tarjeta
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 30,
+        background: ACENTO,
+        border: 'none',
+        boxShadow: '0 24px 50px -30px rgba(59,83,214,0.7)',
+      }}
+    >
+      <CajaIcono nombre="guardar" tamano={88} oscuro />
+      <p style={{ ...detalle('#fff'), fontWeight: 600, flex: 1 }}>
+        <ConAcento texto={texto} acento="#fff" />
+      </p>
+      <div style={{ transform: `translate(${vaiven}px, ${vaiven}px) rotate(45deg)` }}>
+        <Icono nombre="flecha" tamano={52} color={ACENTO_CLARO} />
+      </div>
+    </Tarjeta>
+  )
+}
+
 const FirmaMarca = () => (
   <div style={{ borderTop: `2px solid ${LINEA}`, padding: '40px 0 12px', display: 'flex', flexDirection: 'column', gap: 24 }}>
     <Marca tamano={56} />
@@ -193,7 +253,6 @@ const VARIANTES = {
     const tema = temaDe(d.tema ?? 'dark')
     return (
       <Portada
-        formato="carrusel"
         tema={tema}
         layout={d.layout ?? 'A'}
         antetitulo={d.antetitulo}
@@ -225,7 +284,11 @@ const VARIANTES = {
       {...p}
       fondo="blanco"
       extra={
-        p.d.cta ? (
+        p.d.guardar ? (
+          <div style={{ marginTop: RETICULA.bloque }}>
+            <Guardar texto={p.d.guardar} />
+          </div>
+        ) : p.d.cta ? (
           <div style={{ marginTop: RETICULA.bloque, display: 'flex' }}>
             <Pastilla icono={p.d.icono}>{p.d.cta}</Pastilla>
           </div>

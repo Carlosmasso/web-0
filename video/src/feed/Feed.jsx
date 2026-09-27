@@ -61,7 +61,7 @@ function Leyenda({ celda }) {
         <span style={antetitulo(12, ACENTO)}>{celda.orden}ª en publicarse</span>
       </div>
       <div style={{ ...cuerpo(TINTA_SUAVE, 15), marginTop: 4 }}>
-        {celda.formato === 'reel' ? 'Reel' : 'Carrusel'} · {celda.portada.serie?.nombre ?? celda.portada.pilar ?? 'sin serie'} · {v.tema} · {v.layout}
+        {celda.formato === 'reel' ? 'Reel' : 'Carrusel'} · {celda.portada.serie?.nombre ?? celda.portada.pilar ?? 'sin serie'} · {v.tema} · {v.layout}{v.portada && v.portada !== 'pila' ? ` · ${v.portada}` : ''}
       </div>
     </div>
   )

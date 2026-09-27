@@ -18,7 +18,7 @@ import { PLANTILLAS, enLetra } from './plantillas'
 //     "gancho": "…",                   // opcional: si no, lo genera la plantilla
 //     "base": { "ruta.del.config": v } // opcional: ajustes antes de las variantes
 //     "pregunta": "…",                 // opcional: la línea del cierre
-//     "visual": { "tema", "layout" }   // opcional: dark|light|neutral|accent · A|B|C
+//     "visual": { "tema", "layout" }   // opcional: dark|light|accent · A|B|C
 //   }
 //
 // Salida: todo lo que la composición necesita, ya calculado, y la duración.
@@ -49,7 +49,9 @@ function variantesDe(reel, plantilla, raw) {
   const n = reel.cantidad ?? 5
   // Cada eje elige sus N valores más distintos y se emparejan en orden.
   const porEje = Object.fromEntries(plantilla.ejes.map((eje) => [eje, elegir(eje, n, valorInicial(eje, raw))]))
-  return Array.from({ length: n }, (_, i) => Object.fromEntries(plantilla.ejes.map((eje) => [eje, porEje[eje][i]])))
+  // No más versiones de las que existen: hay 3 portadas aunque se pidan 5.
+  const cuantas = Math.min(n, ...plantilla.ejes.map((eje) => porEje[eje].length))
+  return Array.from({ length: cuantas }, (_, i) => Object.fromEntries(plantilla.ejes.map((eje) => [eje, porEje[eje][i]])))
 }
 
 export function resolverReel(reel) {
@@ -110,6 +112,8 @@ export function resolverReel(reel) {
     gancho: reel.gancho ?? plantilla.gancho({ n: enLetra(variantes.length), quien: negocio.quien }),
     pregunta: reel.pregunta ?? plantilla.pregunta,
     nombreEje: plantilla.etiqueta ?? plantilla.ejes.map((e) => EJES[e].nombre).join(' + '),
+    // Qué icono lleva la pastilla: el del movimiento, o el del primer eje.
+    tipo: plantilla.movimiento ?? plantilla.ejes[0],
     // Cómo se ve: tema y layout los decide el planificador (lib/planificar.mjs)
     // mirando el feed; sin él, el tema oscuro y la tarjeta de siempre.
     visual: { tema: reel.visual?.tema ?? 'dark', layout: reel.visual?.layout ?? 'A' },

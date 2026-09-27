@@ -27,6 +27,9 @@ export function problemasDe(p, sistema) {
   if (p.serie && !sistema.SERIES[p.serie]) fallos.push(`serie "${p.serie}" (hay: ${Object.keys(sistema.SERIES).join(', ')})`)
   if (p.visual?.tema && !sistema.TEMAS.includes(p.visual.tema)) fallos.push(`visual.tema "${p.visual.tema}" (hay: ${sistema.TEMAS.join(', ')})`)
   if (p.visual?.layout && !sistema.LAYOUTS.includes(p.visual.layout)) fallos.push(`visual.layout "${p.visual.layout}" (hay: A, B, C)`)
+  if (p.visual?.portada && (p.formato !== 'reel' || !sistema.PORTADAS_REEL.includes(p.visual.portada))) {
+    fallos.push(`visual.portada es solo para reels (hay: ${sistema.PORTADAS_REEL.join(', ')})`)
+  }
   if (p.formato === 'reel' && !(p.reel?.plantilla && p.reel?.negocio)) fallos.push('un reel necesita "reel.plantilla" y "reel.negocio"')
   if (p.formato === 'carrusel' && !p.carrusel?.plantilla) fallos.push('un carrusel necesita "carrusel.plantilla"')
   return fallos
@@ -78,5 +81,7 @@ export function serieDe(p, ideas, sistema) {
  */
 export function visualDe(p, sistema) {
   const layout = p.visual?.layout ?? sistema.SERIES[p.serie]?.layout ?? 'A'
-  return { tema: p.visual?.tema ?? 'dark', layout: layout === 'C' && cuantosDe(p) == null ? 'A' : layout }
+  const visual = { tema: p.visual?.tema ?? 'dark', layout: layout === 'C' && cuantosDe(p) == null ? 'A' : layout }
+  // En los reels, además, la variante de portada.
+  return p.formato === 'reel' ? { ...visual, portada: p.visual?.portada ?? 'pila' } : visual
 }

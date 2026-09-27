@@ -1,11 +1,10 @@
 import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from 'remotion'
 import { clamp, progreso } from '../diseno/animaciones'
-import { Etiqueta, Valor } from '../componentes/Etiqueta'
+import { Etiqueta, IconoPastilla, Valor } from '../componentes/Etiqueta'
 import { SANS } from '../diseno/fuentes'
 import { TIPO_REEL } from '../diseno/formatos'
 import { layoutReel } from '../diseno/layouts'
 import { ACENTO, LINEA, MUELLE } from '../diseno/marca'
-import { antetitulo } from '../diseno/texto'
 import { fondoDe } from '../diseno/temas'
 import { Palabras } from '../componentes/Palabras'
 import { Tarjeta } from '../componentes/Tarjeta'
@@ -27,27 +26,6 @@ import { WebEnCambio } from './WebEnCambio'
 // · Space Grotesk") a 62 px no cabe y la segunda línea pisaría los puntos.
 const ANCHO_NOMBRE = 960
 const tamanoNombre = (titulo) => Math.min(TIPO_REEL.nombre, Math.floor(ANCHO_NOMBRE / (titulo.length * 0.56)))
-
-function Muestras({ colores }) {
-  return (
-    <div style={{ display: 'flex' }}>
-      {colores.slice(0, 3).map((c, i) => (
-        <div
-          key={i}
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: 20,
-            background: c,
-            border: '3px solid #fff',
-            marginLeft: i ? -12 : 0,
-            boxShadow: `0 0 0 1px ${LINEA}`,
-          }}
-        />
-      ))}
-    </div>
-  )
-}
 
 function Puntos({ pasos, k, tema }) {
   const frame = useCurrentFrame()
@@ -86,23 +64,13 @@ export function EscenaVariantes({ resuelto, tema, layout }) {
 
   return (
     <AbsoluteFill style={{ background: fondoDe(tema, '50% 30%'), fontFamily: SANS }}>
-      {L.pastilla ? (
-        <Etiqueta desde={6}>
-          {paso.muestras.length ? <Muestras colores={paso.muestras} /> : null}
-          {nombreEje}
-          <Valor key={k} desde={paso.frame}>
-            {paso.valor ?? contador}
-          </Valor>
-        </Etiqueta>
-      ) : (
-        // Sin pastilla, la variable va como antetítulo: "COLOR PRINCIPAL · 02 / 05".
-        <div style={{ position: 'absolute', top: L.antetitulo, left: 0, right: 0, textAlign: 'center' }}>
-          <span style={antetitulo(28, tema.acento)}>
-            {nombreEje}
-            {paso.valor ?? contador ? ` · ${paso.valor ?? contador}` : ''}
-          </span>
-        </div>
-      )}
+      <Etiqueta desde={6} arriba={L.pastilla}>
+        <IconoPastilla tipo={resuelto.tipo} muestras={paso.muestras} />
+        {nombreEje}
+        <Valor key={k} desde={paso.frame}>
+          {paso.valor ?? contador}
+        </Valor>
+      </Etiqueta>
 
       {L.titular != null ? (
         <div style={{ position: 'absolute', top: L.titular, left: 0, right: 0, display: 'flex', justifyContent: 'center' }}>
