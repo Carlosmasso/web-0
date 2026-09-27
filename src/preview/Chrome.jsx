@@ -47,10 +47,8 @@ export function Nav() {
   // Cuatro barras que se distinguen de un vistazo: la completa (todo), la
   // centrada (enlaces en el eje), la compacta (todo a la derecha) y la isla
   // flotante. El reparto lo hace el CSS a partir de [data-nav]; aquí solo se
-  // decide QUÉ va dentro. El "Entrar" es de la completa: en las demás la
-  // derecha se queda con el botón solo, que es lo que las hace respirar.
+  // decide QUÉ va dentro.
   const variant = components.nav?.variant ?? 'standard'
-  const withLogin = variant === 'standard'
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const navRef = useRef(null)
@@ -109,11 +107,6 @@ export function Nav() {
           ))}
         </nav>
         <div className="db-nav__actions">
-          {withLogin && (
-            <a className="db-nav__login" href="#">
-              {brand.login}
-            </a>
-          )}
           <Button onClick={(e) => go(e, ctaTarget)}>{brand.navCta}</Button>
           <button
             className="db-nav__burger"
@@ -142,11 +135,6 @@ export function Nav() {
               {link}
             </a>
           ))}
-          {withLogin && (
-            <a className="db-nav__mobile-login" href="#" onClick={() => setOpen(false)}>
-              {brand.login}
-            </a>
-          )}
         </div>
       </nav>
     </header>

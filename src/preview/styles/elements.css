@@ -281,7 +281,6 @@
     padding-inline: clamp(14px, 2vw, 22px);
   }
 }
-.db-nav__login { font-size: 0.9rem; color: var(--theme-text-muted); }
 .db-nav__burger {
   display: none;
   flex-shrink: 0;
@@ -347,9 +346,6 @@
     font-size: 0.98rem;
     color: var(--theme-text);
     border-bottom: 1px solid var(--theme-border-color);
-  }
-  .db-nav__mobile-login {
-    color: var(--theme-text-muted) !important;
   }
   .db-nav__mobile-inner a:last-child {
     border-bottom: none;

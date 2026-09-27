@@ -6,7 +6,6 @@ export const DEFAULT_CONTENT = {
   brand: {
     name: 'Cartograma',
     navLinks: ['Producto', 'Precios', 'Clientes', 'Recursos'],
-    login: 'Entrar',
     navCta: 'Probar gratis',
     // Número de EJEMPLO (el 600 000 000 de toda la vida, que no existe), no el de
     // nadie. Va puesto para que el botón flotante de WhatsApp se vea desde el

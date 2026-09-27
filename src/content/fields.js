@@ -27,7 +27,6 @@ export function buildForm(config) {
     fields: [
       f('brand.name', 'Nombre de la marca', 'text', { max: 40 }),
       f('brand.navLinks', 'Enlaces del menú', 'list', { hint: '3 a 5, uno por línea' }),
-      f('brand.login', 'Enlace de acceso', 'text', { max: 24 }),
       f('brand.navCta', 'Botón del menú', 'text', { hint: '1 a 2 palabras', max: 24 }),
       f('brand.whatsapp', 'WhatsApp', 'text', {
         hint: 'el número de ejemplo no existe: pon el tuyo, o vacíalo para quitar el botón',

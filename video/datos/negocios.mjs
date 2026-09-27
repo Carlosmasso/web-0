@@ -34,7 +34,6 @@ export const NEGOCIOS = {
       'brand.name': 'El Robledal',
       'brand.navLinks': 'La casa\nHabitaciones\nEl entorno\nReservar',
       'brand.navCta': 'Reservar',
-      'brand.login': '',
       'hero.eyebrow': 'Casa rural · Sierra de Francia',
       'hero.title': 'Dormir donde solo se oye el bosque',
       'hero.subtitle':
@@ -54,7 +53,6 @@ export const NEGOCIOS = {
       'brand.name': 'Clínica Ordóñez',
       'brand.navLinks': 'Tratamientos\nEl equipo\nPrimera visita\nPedir cita',
       'brand.navCta': 'Pedir cita',
-      'brand.login': '',
       'hero.eyebrow': 'Odontología familiar · Valladolid',
       'hero.title': 'Ir al dentista sin que se te haga un nudo',
       'hero.subtitle':
@@ -74,7 +72,6 @@ export const NEGOCIOS = {
       'brand.name': 'Ferrer & Nieto',
       'brand.navLinks': 'Áreas\nEl despacho\nCasos\nContacto',
       'brand.navCta': 'Consulta inicial',
-      'brand.login': '',
       'hero.eyebrow': 'Laboral y mercantil · Zaragoza',
       'hero.title': 'Que el papeleo no decida por ti',
       'hero.subtitle':
@@ -94,7 +91,6 @@ export const NEGOCIOS = {
       'brand.name': 'Obrador Mendieta',
       'brand.navLinks': 'El pan\nDulces\nEncargos\nDónde estamos',
       'brand.navCta': 'Hacer un encargo',
-      'brand.login': '',
       'hero.eyebrow': 'Masa madre desde 1998',
       'hero.title': 'Pan que huele a las siete de la mañana',
       'hero.subtitle':
@@ -114,7 +110,6 @@ export const NEGOCIOS = {
       'brand.name': 'Aravaca Fisio',
       'brand.navLinks': 'Tratamientos\nEl equipo\nTarifas\nPedir cita',
       'brand.navCta': 'Pedir cita',
-      'brand.login': '',
       'hero.eyebrow': 'Fisioterapia y readaptación',
       'hero.title': 'Que volver a moverte no duela',
       'hero.subtitle':
@@ -134,7 +129,6 @@ export const NEGOCIOS = {
       'brand.name': 'Estudio Lomas',
       'brand.navLinks': 'Proyectos\nEl estudio\nProceso\nHablemos',
       'brand.navCta': 'Hablemos',
-      'brand.login': '',
       'hero.eyebrow': 'Vivienda unifamiliar · Asturias',
       'hero.title': 'Casas que se parecen a quien vive en ellas',
       'hero.subtitle':
@@ -154,7 +148,6 @@ export const NEGOCIOS = {
       'brand.name': 'Estudio Vera',
       'brand.navLinks': 'Servicios\nEl equipo\nPrecios\nReservar',
       'brand.navCta': 'Reservar',
-      'brand.login': '',
       'hero.eyebrow': 'Color y corte · Málaga',
       'hero.title': 'Sales con el pelo que pediste',
       'hero.subtitle':
@@ -174,7 +167,6 @@ export const NEGOCIOS = {
       'brand.name': 'Talleres Sanz',
       'brand.navLinks': 'Servicios\nRevisiones\nPresupuesto\nDónde estamos',
       'brand.navCta': 'Pedir cita',
-      'brand.login': '',
       'hero.eyebrow': 'Multimarca · Getafe',
       'hero.title': 'Te llamamos antes de tocar nada',
       'hero.subtitle':

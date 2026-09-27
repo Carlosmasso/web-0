@@ -4,7 +4,7 @@
 /* ---------- responsive ---------- */
 
 @media (max-width: 860px) {
-  .db-nav__links, .db-nav__login { display: none; }
+  .db-nav__links { display: none; }
   .db-nav__burger { display: inline-flex; }
   /* Sin enlaces en medio, la rejilla de tres columnas de la centrada dejaba el
      botón y la hamburguesa en el centro de la barra. En móvil es una fila más. */

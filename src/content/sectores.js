@@ -37,7 +37,6 @@ export const CONTENIDO_POR_SECTOR = {
     brand: {
       name: 'Clínica Ordóñez',
       navLinks: ['Tratamientos', 'El equipo', 'Primera visita', 'Pedir cita'],
-      login: '',
       navCta: 'Pedir cita',
       whatsapp: '+34 600 000 000',
     },
@@ -186,7 +185,6 @@ export const CONTENIDO_POR_SECTOR = {
     brand: {
       name: 'Obrador Mendieta',
       navLinks: ['El pan', 'Dulces', 'Encargos', 'Dónde estamos'],
-      login: '',
       navCta: 'Hacer un encargo',
       whatsapp: '+34 600 000 000',
     },
@@ -335,7 +333,6 @@ export const CONTENIDO_POR_SECTOR = {
     brand: {
       name: 'Ferrer & Nieto',
       navLinks: ['Áreas', 'El despacho', 'Casos', 'Contacto'],
-      login: '',
       navCta: 'Consulta inicial',
       whatsapp: '+34 600 000 000',
     },
@@ -485,7 +482,6 @@ CONTENIDO_POR_SECTOR['real-estate'] = {
   brand: {
     name: 'Estudio Lomas',
     navLinks: ['Proyectos', 'El estudio', 'Proceso', 'Hablemos'],
-    login: '',
     navCta: 'Hablemos',
     whatsapp: '+34 600 000 000',
   },
@@ -634,7 +630,6 @@ CONTENIDO_POR_SECTOR['kids-care'] = {
   brand: {
     name: 'Escuela Altamira',
     navLinks: ['El proyecto', 'Las aulas', 'El día a día', 'Visítanos'],
-    login: '',
     navCta: 'Pedir visita',
     whatsapp: '+34 600 000 000',
   },
@@ -783,7 +778,6 @@ CONTENIDO_POR_SECTOR['fine-dining'] = {
   brand: {
     name: 'Casa Mendaro',
     navLinks: ['La carta', 'El menú', 'La bodega', 'Reservar'],
-    login: '',
     navCta: 'Reservar mesa',
     whatsapp: '+34 600 000 000',
   },
