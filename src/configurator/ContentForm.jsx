@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { IconArrowDown, IconArrowUp, IconX } from '@tabler/icons-react'
 import { isStudio } from '../config/mode'
 import { buildForm, getPath, setPath, blankItem } from '../content/fields'
 import { checklistToText } from '../content/checklist'
@@ -261,7 +262,7 @@ function Repeater({ field, content, set }) {
             <strong>{item[field.labelKey] || `Elemento ${i + 1}`}</strong>
             <span className="rep__item-actions">
               <button type="button" onClick={() => move(i, -1)} disabled={i === 0} aria-label="Subir">
-                ↑
+                <IconArrowUp size={14} stroke={1.8} aria-hidden />
               </button>
               <button
                 type="button"
@@ -269,7 +270,7 @@ function Repeater({ field, content, set }) {
                 disabled={i === arr.length - 1}
                 aria-label="Bajar"
               >
-                ↓
+                <IconArrowDown size={14} stroke={1.8} aria-hidden />
               </button>
               <button
                 type="button"
@@ -277,7 +278,7 @@ function Repeater({ field, content, set }) {
                 disabled={!canRemove}
                 aria-label="Quitar"
               >
-                ✕
+                <IconX size={14} stroke={1.8} aria-hidden />
               </button>
             </span>
           </div>

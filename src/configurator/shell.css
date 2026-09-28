@@ -27,6 +27,7 @@
   --c-pending: #d5a54e;
   --c-pending-soft: rgba(213, 165, 78, 0.14);
   --c-ok: #58b98a;
+  --c-error: #f28b82; /* errores de formulario: ≥ 6:1 sobre --c-card */
 
   --c-radius: 10px;
   --c-radius-lg: 14px;
@@ -788,8 +789,25 @@ body {
   background: var(--c-accent-soft);
   border-style: solid;
 }
+.surprise__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+/* El dado da media vuelta al pasar por encima: dice "aleatorio" sin palabras. */
+.surprise__dado {
+  color: var(--c-accent);
+  transition: rotate 320ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.surprise:hover .surprise__dado {
+  rotate: 90deg;
+}
+.surprise:active .surprise__dado {
+  rotate: 180deg;
+}
 .surprise em {
   font-style: normal;
+  text-wrap: balance;
   font-weight: 400;
   font-size: 0.75rem;
   color: var(--c-muted);
@@ -1317,6 +1335,15 @@ body {
 .field select:focus {
   outline: none;
   border-color: var(--c-accent);
+}
+.field--invalid input,
+.field--invalid input:focus {
+  border-color: var(--c-error);
+}
+.field__error {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--c-error);
 }
 .field--empty input,
 .field--empty textarea {
@@ -1967,6 +1994,14 @@ body {
   height: 15px;
   accent-color: var(--c-accent-strong);
 }
+.modal__consent--invalid input {
+  outline: 1px solid var(--c-error);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+.modal__consent-error {
+  margin: -8px 0 14px 24px;
+}
 .modal__consent a {
   color: var(--c-accent);
   text-decoration: underline;
@@ -2228,6 +2263,9 @@ body {
   .shell__actions button:active,
   .modal__submit:active {
     scale: none;
+  }
+  .surprise__dado {
+    rotate: none !important;
   }
 }
 

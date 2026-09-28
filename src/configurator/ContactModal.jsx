@@ -1,9 +1,21 @@
 import { useEffect, useRef, useState } from 'react'
+import { IconCheck, IconX } from '@tabler/icons-react'
 import { submitLead, summariseImages, CONTACT_EMAIL } from '../export/contact'
 import { track } from '../config/analytics'
 import { isStudio } from '../config/mode'
 
 const EMPTY = { name: '', email: '', phone: '', note: '', company: '' }
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+/** Lo que falta para poder enviar, campo a campo. Vacío = se puede enviar. */
+function validate(lead, consent) {
+  const errors = {}
+  if (!lead.name.trim()) errors.name = 'Dime cómo te llamas.'
+  if (!lead.email.trim()) errors.email = 'Necesito un email para mandarte el presupuesto.'
+  else if (!EMAIL_RE.test(lead.email.trim())) errors.email = 'Revisa el email: parece que le falta algo.'
+  if (!consent) errors.consent = 'Marca la casilla para que pueda usar tus datos.'
+  return errors
+}
 
 // Lo único que ve el cliente al pulsar "Pedir presupuesto": sus datos + el
 // consentimiento. Al enviar, todo va por fetch a /api/lead — nada se abre en
@@ -19,7 +31,12 @@ export function ContactModal({
   const [lead, setLead] = useState(EMPTY)
   const [consent, setConsent] = useState(false)
   const [status, setStatus] = useState('idle') // idle | sending | sent | error
+  // Los errores se enseñan solo tras el primer intento de envío; desde ahí se
+  // recalculan en vivo, así que desaparecen en cuanto el campo se arregla.
+  const [tried, setTried] = useState(false)
   const firstFieldRef = useRef(null)
+  const emailRef = useRef(null)
+  const consentRef = useRef(null)
   const modalRef = useRef(null)
   const openedAt = useRef(0)
   const hadImages = useRef(false)
@@ -38,6 +55,7 @@ export function ContactModal({
     setLead(EMPTY)
     setConsent(false)
     setStatus('idle')
+    setTried(false)
     openedAt.current = Date.now()
     hadImages.current = Boolean(summariseImages(contentRef.current))
     const raf = requestAnimationFrame(() => firstFieldRef.current?.focus())
@@ -68,12 +86,29 @@ export function ContactModal({
 
   if (!open) return null
 
-  const canSubmit = lead.name.trim() && lead.email.trim() && consent && status !== 'sending'
+  const errors = tried ? validate(lead, consent) : {}
   const set = (key) => (e) => setLead((prev) => ({ ...prev, [key]: e.target.value }))
+  // Props de accesibilidad de un campo con posible error.
+  const invalid = (key) =>
+    errors[key] ? { 'aria-invalid': true, 'aria-describedby': `contact-${key}-error` } : {}
+  const fieldError = (key) =>
+    errors[key] ? (
+      <span className="field__error" id={`contact-${key}-error`}>
+        {errors[key]}
+      </span>
+    ) : null
 
   const submit = async (e) => {
     e.preventDefault()
-    if (!canSubmit) return
+    if (status === 'sending') return
+    const found = validate(lead, consent)
+    if (Object.keys(found).length) {
+      setTried(true)
+      // Al primero que falla, en el orden en que se leen.
+      const ref = found.name ? firstFieldRef : found.email ? emailRef : consentRef
+      ref.current?.focus()
+      return
+    }
     setStatus('sending')
     try {
       await submitLead({
@@ -112,7 +147,7 @@ export function ContactModal({
         {status === 'sent' ? (
           <div className="modal__done">
             <span className="modal__done-mark" aria-hidden="true">
-              ✓
+              <IconCheck size={22} stroke={2.2} />
             </span>
             <h2 id="contact-title">¡Recibido!</h2>
             <p>
@@ -152,11 +187,11 @@ export function ContactModal({
                 disabled={status === 'sending'}
                 aria-label="Cerrar"
               >
-                ✕
+                <IconX size={16} stroke={1.8} aria-hidden />
               </button>
             </div>
 
-            <form onSubmit={submit}>
+            <form onSubmit={submit} noValidate aria-busy={status === 'sending'}>
               {/* Honeypot: fuera de pantalla y del recorrido de tab. Un humano
                   no lo ve; un bot lo rellena y el servidor lo descarta. */}
               <div className="modal__hp" aria-hidden="true">
@@ -172,34 +207,48 @@ export function ContactModal({
                 </label>
               </div>
 
-              <label className="field">
+              <label className={`field${errors.name ? ' field--invalid' : ''}`}>
                 <span className="field__label">Nombre</span>
                 <input
                   ref={firstFieldRef}
                   type="text"
                   required
+                  autoComplete="name"
                   value={lead.name}
                   onChange={set('name')}
                   placeholder="Tu nombre"
+                  {...invalid('name')}
                 />
+                {fieldError('name')}
               </label>
 
-              <label className="field">
+              <label className={`field${errors.email ? ' field--invalid' : ''}`}>
                 <span className="field__label">Email</span>
                 <input
+                  ref={emailRef}
                   type="email"
                   required
+                  autoComplete="email"
+                  inputMode="email"
                   value={lead.email}
                   onChange={set('email')}
                   placeholder="tu@correo.com"
+                  {...invalid('email')}
                 />
+                {fieldError('email')}
               </label>
 
               <label className="field">
                 <span className="field__label">
                   Teléfono<em>opcional</em>
                 </span>
-                <input type="tel" value={lead.phone} onChange={set('phone')} placeholder="600 000 000" />
+                <input
+                  type="tel"
+                  autoComplete="tel"
+                  value={lead.phone}
+                  onChange={set('phone')}
+                  placeholder="600 000 000"
+                />
               </label>
 
               <label className="field">
@@ -214,12 +263,14 @@ export function ContactModal({
                 />
               </label>
 
-              <label className="modal__consent">
+              <label className={`modal__consent${errors.consent ? ' modal__consent--invalid' : ''}`}>
                 <input
+                  ref={consentRef}
                   type="checkbox"
                   checked={consent}
                   onChange={(e) => setConsent(e.target.checked)}
                   required
+                  {...invalid('consent')}
                 />
                 <span>
                   He leído y acepto la{' '}
@@ -229,16 +280,21 @@ export function ContactModal({
                   . Usaré tus datos solo para enviarte el presupuesto y responderte.
                 </span>
               </label>
+              {errors.consent && (
+                <p className="field__error modal__consent-error" id="contact-consent-error">
+                  {errors.consent}
+                </p>
+              )}
 
               {status === 'error' && (
-                <p className="modal__error">
+                <p className="modal__error" role="alert">
                   No se pudo enviar. Vuelve a intentarlo o escríbeme a{' '}
                   <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
                 </p>
               )}
 
-              <button type="submit" className="modal__submit" disabled={!canSubmit}>
-                {status === 'sending' ? 'Enviando…' : 'Enviar'}
+              <button type="submit" className="modal__submit" disabled={status === 'sending'}>
+                {status === 'sending' ? 'Enviando…' : 'Pedir presupuesto'}
               </button>
             </form>
           </>

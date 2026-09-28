@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react'
+import { IconDice5 } from '@tabler/icons-react'
 import { PRESET_GROUPS, PRESETS, presetsByGroup } from '../registry/presets'
 import { AESTHETIC_OPTIONS } from '../registry/aesthetics'
 import { TYPE_PAIRINGS } from '../registry/fonts'
@@ -456,7 +457,9 @@ export function Sidebar({
                 </Group>
 
                 <button type="button" className="surprise" onClick={onSurprise}>
-                  <span aria-hidden="true">🎲</span> Sorpréndeme
+                  <span className="surprise__title">
+                    <IconDice5 className="surprise__dado" size={17} stroke={1.6} aria-hidden /> Sorpréndeme
+                  </span>
                   <em>Combina color, tipo y estructura sin romper nada</em>
                 </button>
               </>

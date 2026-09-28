@@ -159,6 +159,64 @@ h3 {
   max-width: 34ch;
 }
 
+/* La captura del configurador: más ancha que la columna de texto, centrada
+   en la ventana. Aparece una vez al cargar y sube un poco al pasar por encima. */
+.shot {
+  position: relative;
+  left: 50%;
+  width: min(1040px, 100vw - 32px);
+  translate: -50% 0;
+  margin-top: 56px;
+  animation: shot-in 700ms cubic-bezier(0.16, 1, 0.3, 1) 150ms both;
+}
+.shot a {
+  display: block;
+  border-radius: 14px;
+}
+.shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: #131418;
+  box-shadow:
+    0 40px 80px -40px rgba(22, 23, 27, 0.45),
+    0 10px 24px -14px rgba(22, 23, 27, 0.25);
+  transition:
+    transform 400ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.shot a:hover img {
+  transform: translateY(-3px);
+  box-shadow:
+    0 48px 90px -40px rgba(22, 23, 27, 0.5),
+    0 14px 28px -14px rgba(22, 23, 27, 0.28);
+}
+.shot figcaption {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+  text-wrap: balance;
+}
+@keyframes shot-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .shot {
+    animation: none;
+  }
+  .shot img,
+  .shot a:hover img {
+    transition: none;
+    transform: none;
+  }
+}
+
 /* pasos */
 
 .steps ol {
@@ -274,6 +332,13 @@ h3 {
   }
   .hero {
     padding-top: 28px;
+  }
+  .shot {
+    margin-top: 40px;
+  }
+  .shot a,
+  .shot img {
+    border-radius: 10px;
   }
   .foot {
     justify-content: center;
