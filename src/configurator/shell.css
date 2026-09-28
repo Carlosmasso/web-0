@@ -424,7 +424,8 @@ body {
   border-radius: 8px;
   transition:
     background 140ms ease,
-    color 140ms ease;
+    color 140ms ease,
+    scale 140ms ease-out;
 }
 
 .shell__tabs button:hover {
@@ -508,7 +509,8 @@ body {
   transition:
     background 140ms ease,
     color 140ms ease,
-    border-color 140ms ease;
+    border-color 140ms ease,
+    scale 140ms ease-out;
 }
 .steps__item:hover {
   color: var(--c-text);
@@ -634,6 +636,7 @@ body {
   font-size: 0.77rem;
   line-height: 1.5;
   color: var(--c-muted);
+  transition: scale 140ms ease-out;
 }
 .stepfoot__back {
   padding: 9px 12px;
@@ -643,7 +646,8 @@ body {
   border-radius: 9px;
   transition:
     background 140ms ease,
-    color 140ms ease;
+    color 140ms ease,
+    scale 140ms ease-out;
 }
 .stepfoot__back:hover {
   color: var(--c-text);
@@ -716,7 +720,8 @@ body {
   color: var(--c-text);
   transition:
     border-color 150ms ease,
-    background 150ms ease;
+    background 150ms ease,
+    scale 140ms ease-out;
 }
 .preset:hover {
   border-color: var(--c-accent-line);
@@ -775,7 +780,8 @@ body {
   font-weight: 600;
   transition:
     border-color 150ms ease,
-    background 150ms ease;
+    background 150ms ease,
+    scale 140ms ease-out;
 }
 .surprise:hover {
   border-color: var(--c-accent);
@@ -1026,7 +1032,8 @@ body {
   border-radius: 8px;
   transition:
     background 140ms ease,
-    color 140ms ease;
+    color 140ms ease,
+    scale 140ms ease-out;
 }
 .seg button:hover {
   color: var(--c-text);
@@ -1052,7 +1059,8 @@ body {
   background: var(--c-field);
   transition:
     border-color 140ms ease,
-    background 140ms ease;
+    background 140ms ease,
+    scale 140ms ease-out;
 }
 .opt:hover {
   border-color: var(--c-line);
@@ -1108,7 +1116,8 @@ body {
   transition:
     border-color 140ms ease,
     background 140ms ease,
-    color 140ms ease;
+    color 140ms ease,
+    scale 140ms ease-out;
 }
 .chip:hover {
   color: var(--c-text);
@@ -1505,7 +1514,8 @@ body {
   border-radius: 7px;
   transition:
     background 140ms ease,
-    color 140ms ease;
+    color 140ms ease,
+    scale 140ms ease-out;
 }
 .shell__devices button.is-active {
   background: var(--c-field);
@@ -1536,7 +1546,8 @@ body {
   border-radius: 9px;
   transition:
     border-color 140ms ease,
-    background 140ms ease;
+    background 140ms ease,
+    scale 140ms ease-out;
 }
 .shell__actions button:hover {
   border-color: var(--c-accent);
@@ -1972,7 +1983,8 @@ body {
   border-radius: 10px;
   transition:
     filter 140ms ease,
-    opacity 140ms ease;
+    opacity 140ms ease,
+    scale 140ms ease-out;
 }
 .modal__submit:hover:not(:disabled) {
   filter: brightness(1.08);
@@ -2160,5 +2172,69 @@ body {
   }
   .tour__card {
     animation: none;
+  }
+}
+
+/* ============================================================
+   RESPUESTA AL PULSAR
+   Todo lo que se toca se hunde un poco en el mismo instante del toque, no al
+   soltar: en el móvil no hay :hover, y sin esto un preset no respondía hasta
+   que cambiaba la web. Las superficies grandes se hunden menos que los
+   botones pequeños. Se usa `scale` (no `transform`) para no pisar nada.
+   ============================================================ */
+.shell__tabs button,
+.steps__item,
+.stepfoot__done,
+.stepfoot__back,
+.preset,
+.surprise,
+.seg button,
+.opt,
+.chip,
+.shell__devices button,
+.shell__actions button,
+.modal__submit {
+  -webkit-tap-highlight-color: transparent;
+}
+.preset:active:not(:disabled),
+.surprise:active:not(:disabled),
+.opt:active:not(:disabled) {
+  scale: 0.985;
+  transition-duration: 80ms;
+}
+.shell__tabs button:active:not(:disabled),
+.steps__item:active:not(:disabled),
+.stepfoot__done:active:not(:disabled),
+.stepfoot__back:active:not(:disabled),
+.seg button:active:not(:disabled),
+.chip:active:not(:disabled),
+.shell__devices button:active:not(:disabled),
+.shell__actions button:active:not(:disabled),
+.modal__submit:active:not(:disabled) {
+  scale: 0.96;
+  transition-duration: 80ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  .shell__tabs button:active,
+  .steps__item:active,
+  .stepfoot__done:active,
+  .stepfoot__back:active,
+  .preset:active,
+  .surprise:active,
+  .seg button:active,
+  .opt:active,
+  .chip:active,
+  .shell__devices button:active,
+  .shell__actions button:active,
+  .modal__submit:active {
+    scale: none;
+  }
+}
+
+/* Quien pide menos transparencia recibe el velo del modal sólido. */
+@media (prefers-reduced-transparency: reduce) {
+  .modal-veil {
+    background: rgba(8, 9, 12, 0.85);
+    backdrop-filter: none;
   }
 }

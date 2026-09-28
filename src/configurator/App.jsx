@@ -93,6 +93,7 @@ export function App() {
   // llegaba a ver cambiar nada, que es lo único que vende el producto.
   const [hoja, setHoja] = useState("peek");
   const hojaRef = useRef(null);
+  const arrastradoRef = useRef(false);
   const [copied, setCopied] = useState(null);
   // El guardado puede fallar de verdad: `localStorage` tiene cuota y las fotos
   // subidas van dentro del contenido. Callarlo dejaría al usuario tocando cosas
@@ -421,28 +422,86 @@ export function App() {
     const hojaEl = hojaRef.current;
     if (!hojaEl || e.pointerType === "mouse") return; // en escritorio no hay hoja
     const y0 = e.clientY;
-    const abierta = hoja === "full";
+    arrastradoRef.current = false;
     const alto = hojaEl.getBoundingClientRect().height;
-    let dy = 0;
+    const posicion = () => new DOMMatrixReadOnly(getComputedStyle(hojaEl).transform).m42;
 
+    // Se agarra desde donde está AHORA, aunque siga moviéndose: leer la
+    // posición en pantalla antes de cortar la transición evita el salto a su
+    // reposo. Al cortarla, el valor calculado pasa a ser ese reposo.
+    const actual = posicion();
     hojaEl.style.transition = "none";
+    hojaEl.style.removeProperty("--hoja-arrastre");
+    const reposo = posicion();
+    // Y se queda ahí, sin esperar al primer movimiento del dedo.
+    hojaEl.style.setProperty("--hoja-arrastre", `${actual - reposo}px`);
+    // Los dos reposos: abierta (0) y asomada (44dvh, lo que baja en "peek").
+    const asomada = hoja === "full" ? window.innerHeight * 0.44 : reposo;
+
+    // Pasado un borde, la hoja sigue al dedo cada vez menos (como en iOS): se
+    // nota que no hay más recorrido sin que se quede clavada.
+    const goma = (exceso) => (exceso * alto * 0.55) / (alto + 0.55 * Math.abs(exceso));
+    const acotar = (y) => (y < 0 ? -goma(-y) : y > asomada ? asomada + goma(y - asomada) : y);
+
+    let y = actual;
+    let movido = false;
+    // Las últimas posiciones, para saber a qué velocidad iba el dedo al soltar.
+    const huella = [{ y: e.clientY, t: e.timeStamp }];
+
     const mover = (ev) => {
-      dy = ev.clientY - y0;
-      // Resistencia al tirar en la dirección donde ya no hay recorrido.
-      const libre = abierta ? Math.max(0, dy) : Math.min(0, dy);
-      const preso = (abierta ? Math.min(0, dy) : Math.max(0, dy)) * 0.18;
-      hojaEl.style.setProperty("--hoja-arrastre", `${libre + preso}px`);
+      if (Math.abs(ev.clientY - y0) > 8) movido = true;
+      y = acotar(actual + ev.clientY - y0);
+      hojaEl.style.setProperty("--hoja-arrastre", `${y - reposo}px`);
+      huella.push({ y: ev.clientY, t: ev.timeStamp });
+      while (huella.length > 2 && ev.timeStamp - huella[0].t > 100) huella.shift();
     };
-    const soltar = () => {
-      hojaEl.style.transition = "";
-      hojaEl.style.removeProperty("--hoja-arrastre");
+
+    const terminar = (ev, cancelado) => {
       window.removeEventListener("pointermove", mover);
       window.removeEventListener("pointerup", soltar);
-      // Un cuarto de la hoja, o un gesto claro, bastan para cambiar de altura.
-      if (Math.abs(dy) > alto * 0.25) setHoja(dy > 0 ? "peek" : "full");
+      window.removeEventListener("pointercancel", cancelar);
+      if (movido) {
+        arrastradoRef.current = true;
+        // Si el navegador no manda ese "click", que no se coma el siguiente toque.
+        setTimeout(() => (arrastradoRef.current = false), 400);
+      }
+
+      // Velocidad al soltar (px/s) y dónde acabaría la hoja por inercia, con la
+      // misma proyección que usa iOS: se decide por el gesto, no solo por la
+      // distancia, así que un deslizamiento rápido y corto basta.
+      const a = huella[0];
+      const b = ev ? { y: ev.clientY, t: ev.timeStamp } : huella.at(-1);
+      const v = b.t > a.t ? ((b.y - a.y) / (b.t - a.t)) * 1000 : 0;
+      const d = 0.998;
+      const proyectada = y + ((v / 1000) * d) / (1 - d);
+      const destino = cancelado ? reposo : Math.abs(proyectada) < Math.abs(proyectada - asomada) ? 0 : asomada;
+
+      // Cuanto más rápido iba el dedo, antes llega: la animación continúa el
+      // gesto en vez de frenarlo. Después vuelve la transición del CSS.
+      const ms = Math.round(Math.min(380, Math.max(220, 380 - Math.abs(v) * 0.08)));
+      hojaEl.style.transition = `transform ${ms}ms cubic-bezier(0.32, 0.72, 0, 1)`;
+      hojaEl.addEventListener("transitionend", () => (hojaEl.style.transition = ""), { once: true });
+      hojaEl.style.removeProperty("--hoja-arrastre");
+      if (!cancelado) setHoja(destino === 0 ? "full" : "peek");
     };
+    const soltar = (ev) => terminar(ev, false);
+    // El sistema puede interrumpir el gesto (una llamada, el gesto de volver):
+    // la hoja vuelve a su sitio en vez de quedarse a medias.
+    const cancelar = (ev) => terminar(ev, true);
+
     window.addEventListener("pointermove", mover);
     window.addEventListener("pointerup", soltar, { once: true });
+    window.addEventListener("pointercancel", cancelar, { once: true });
+  };
+
+  // Un arrastre termina con un "click" en el propio tirador en algunos
+  // navegadores; sin esto, la hoja se abriría y volvería a cerrarse sola.
+  const alternarHoja = () => {
+    if (arrastradoRef.current) {
+      arrastradoRef.current = false;
+      return;
+    }
+    setHoja((v) => (v === "full" ? "peek" : "full"));
   };
 
   /**
@@ -481,7 +540,7 @@ export function App() {
           type="button"
           className="hoja__tirador"
           onPointerDown={arrastrarHoja}
-          onClick={() => setHoja((v) => (v === "full" ? "peek" : "full"))}
+          onClick={alternarHoja}
           aria-expanded={hoja === "full"}
         >
           <span className="hoja__asa" aria-hidden="true" />
