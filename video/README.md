@@ -53,6 +53,7 @@ video/
   "tema": "contratar-web",        // opcional: de qué va (sale en las etiquetas)
   "visual": { "tema": "light", "layout": "C" },   // opcional: si no, oscuro y el layout de la serie (o A)
   "dolor": "¿…?", "pie": "…", "cta": "…", "pieTikTok": "…",   // opcionales: ver "Los pies"
+  "linkedin": "…",                // opcional: texto propio para LinkedIn (en un reel, sin él no hay linkedin.txt)
   "bloqueo": "fase-0",            // opcional: se crea, pero no se publica
   "video": "IntroMaketa",         // solo reels, opcional: otra composición en vez del motor (IR-00, el vídeo de marca)
   "pastilla": "…",                // solo reels, opcional: texto propio en la pastilla de la portada
@@ -85,11 +86,15 @@ una idea nueva sale con el suyo sin escribir nada.
    plantilla del reel o el gancho del carrusel.
 2. **Cuerpo**: una o dos frases. El `pie` de la idea o, si no, el de la
    plantilla del reel o el `concepto` del carrusel.
-3. **Maketa**: una línea, solo en reels y si el cuerpo no la nombra ya.
+3. **Maketa**: el bloque "En maketa.es diseñas tú: → Tu estilo → Tus
+   secciones → Tus textos", "gratis y sin registro (enlace en la bio)" y
+   "yo te la construyo". Solo en reels y si el cuerpo no nombra ya Maketa.
 4. **CTA**, por reglas: portada `rejilla` → "Comenta el número"; pilar
    producto → "Comenta WEB y te mando el enlace por privado" (hay que
-   contestar rápido); el resto, la de la idea o la de su pilar (guardar o
-   compartir).
+   contestar rápido); en los demás reels, la pregunta de su plantilla,
+   ligada a lo que enseña y que se conteste en una palabra ("¿De qué color
+   sería la web de tu negocio?"); en los carruseles, la de la idea o la de su
+   pilar (guardar o compartir).
 5. **Hashtags**: de 3 a 5, del sector del cliente (no del mundo del diseño).
 
 TikTok lleva el dolor, "Diséñala tú: maketa.es" y tres hashtags; LinkedIn, lo

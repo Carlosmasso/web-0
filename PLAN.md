@@ -286,6 +286,9 @@ correcto.
 
 ## Pendiente largo
 
+- **Ideas de producto a medio plazo:** están en [`MEJORAS.md`](MEJORAS.md),
+  ordenadas por fase (ahora, tras el alta, con clientes). Se pasan aquí cuando
+  se prioricen.
 - ~~**Fotos en los reels.**~~ Resuelto: los reels montan el contenido por
   sector del producto, y los cuatro negocios cuyo preset no es de su sector
   llevan secciones propias con fotos temáticas (`video/datos/secciones.mjs`).
@@ -322,3 +325,4 @@ correcto.
 | sept. 2026 | Carruseles educativos en Remotion (`video/src/carrusel/`): un JSON por carrusel, plantillas `pregunta`, `errores` y `checklist`, una diapositiva por fotograma exportada a PNG 1080x1350, PDF para LinkedIn y hoja de contactos. Tras la primera revisión, **una sola retícula** para todos: escala fija (96/72/40/36/26 px), icono, antetítulo y titular siempre en el mismo sitio; nada encoge y, si un texto no cabe, el render falla. Cuatro carruseles reales (dominio, mantenimiento, errores al encargar, checklist antes de contratar), cuatro de resistencia y 100 ideas. |
 | sept. 2026 | Barra de navegación del sitio en móvil: la hamburguesa ya no se aplasta con marcas largas (la marca baja a dos líneas y la hamburguesa es una zona táctil de 44 px), la barra "centrada" deja el botón y la hamburguesa a la derecha, los enlaces del menú se alinean con la marca, y el panel tiene sombra y se desplaza por dentro si no cabe. |
 | sept. 2026 | El contenido para redes se simplifica a un archivo y un comando: `video/contenido/ideas.json` (cada idea es la pieza entera) y `pnpm crear <id>`, más `pnpm crear feed <id…>` para ver el perfil antes de subir. Fuera el planificador, el calendario, los estados y la armonía automática: cuándo publicar lo decide Carlos. |
+| sept. 2026 | Fuera el "Enlace de acceso" ("Entrar") del menú: venía del contenido de ejemplo de tipo software, no tiene sentido para un negocio local, apuntaba a `#` (enlace muerto) y en el formulario aparecía como "pendiente" aunque los sectores lo dejan vacío a propósito. |

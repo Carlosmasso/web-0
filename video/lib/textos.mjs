@@ -3,7 +3,8 @@
 //
 //   instagram.txt   el pie
 //   tiktok.txt      la versión corta (solo los reels)
-//   linkedin.txt    el pie sin emojis ni hashtags (solo los carruseles)
+//   linkedin.txt    en los carruseles, el pie sin hashtags; en cualquier pieza,
+//                   el texto propio de la idea (`linkedin`), si lo trae
 //   ficha.md        qué es, cómo se ve y cómo publicarlo
 //
 // El pie no se escribe entero: se COMPONE con piezas cortas, así una idea
@@ -14,8 +15,9 @@
 //                no, la de la plantilla del reel o el gancho del carrusel.
 //   2  cuerpo    una o dos frases: qué aporta. El `pie` de la idea; si no, el
 //                `cuerpo` de la plantilla del reel o el concepto del carrusel.
-//   3  maketa    una línea, solo en reels (es donde se ve el producto) y si
-//                el cuerpo no lo nombra ya.
+//   3  maketa    el bloque de Maketa (lista con flechas, enlace en la bio y
+//                "yo te la construyo"), solo en reels y si el cuerpo no lo
+//                nombra ya.
 //   4  CTA       por reglas: portada rejilla → comentar el número; pilar
 //                producto → comentar WEB (se contesta con el enlace por
 //                privado); el resto, la de la idea o la de su pilar.
@@ -34,14 +36,23 @@ import { ctaDe, cuantosDe, ganchoDe, serieDe, visualDe } from './modelo.mjs'
 const plano = (t) => String(t ?? '').replace(/\*/g, '')
 const bloques = (...partes) => partes.filter(Boolean).join('\n\n')
 
-const MAKETA = 'En maketa.es la diseñas tú: tu estilo, tus secciones y tus textos, en vivo, gratis y sin registro. Cuando te guste, yo la construyo.'
+const MAKETA = [
+  'En maketa.es diseñas tú:\n→ Tu estilo\n→ Tus secciones\n→ Tus textos',
+  'Todo en directo, gratis y sin registro (enlace en la bio).',
+  'Y cuando tengas claro cómo la quieres, yo te la construyo.',
+].join('\n\n')
 const PIDE_WEB = '¿Quieres probarla? Comenta WEB y te mando el enlace por privado 👇'
 const PIDE_NUMERO = '¿Con cuál te quedas? Comenta el número 👇'
 
-/** La llamada a la acción del pie, por reglas. */
+/**
+ * La llamada a la acción del pie, por reglas: rejilla → el número; producto →
+ * WEB; si no, la de la idea, la pregunta de la plantilla del reel (ligada a lo
+ * que enseña) o la del pilar.
+ */
 function ctaPie(p, sistema) {
   if (p.formato === 'reel' && visualDe(p, sistema).portada === 'rejilla') return PIDE_NUMERO
   if (p.pilar === 'product') return PIDE_WEB
+  if (p.formato === 'reel' && !p.cta) return PLANTILLAS[p.reel.plantilla].comenta ?? ctaDe(p, sistema)
   return ctaDe(p, sistema)
 }
 
@@ -69,6 +80,9 @@ export function piesDe(p, sistema) {
     return {
       instagram: bloques(dolor, cuerpo, maketa, cta, hashtagsDe(p)),
       tiktok: bloques(p.pieTikTok ?? dolor, 'Diséñala tú: maketa.es', '#pequeñocomercio #negociolocal #diseñoweb'),
+      // Los reels no van a LinkedIn salvo que la idea traiga su propio texto:
+      // allí funciona una historia en primera persona, no el pie de Instagram.
+      ...(p.linkedin ? { linkedin: p.linkedin } : {}),
     }
   }
   // En un carrusel, la primera línea es su gancho (la frase de la portada).
@@ -76,7 +90,7 @@ export function piesDe(p, sistema) {
   const cuerpo = p.pie ?? p.concepto ?? null
   return {
     instagram: bloques(dolor, cuerpo, cta, hashtagsDe(p)),
-    linkedin: bloques(dolor, cuerpo, cta.replace(/\s*👇$/, '')),
+    linkedin: p.linkedin ?? bloques(dolor, cuerpo, cta.replace(/\s*👇$/, '')),
   }
 }
 
