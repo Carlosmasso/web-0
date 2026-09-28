@@ -59,7 +59,7 @@ function ctaPie(p, sistema) {
 /** De 3 a 5 hashtags: los del sector del negocio (reels) o del tema (carruseles). */
 function hashtagsDe(p) {
   // El vídeo de marca no es de un sector: sus hashtags, los generales.
-  const negocio = p.video ? null : NEGOCIOS[p.reel?.negocio]
+  const negocio = p.video ? null : NEGOCIOS[p.reel?.negocio ?? p.carrusel?.negocio]
   const propios = negocio
     ? negocio.etiquetas.slice(0, 2)
     : p.video

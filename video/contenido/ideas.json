@@ -2044,5 +2044,99 @@
         "cta": "Descúbrelo en maketa.es"
       }
     }
+  },
+  {
+    "id": "IC-30",
+    "formato": "carrusel",
+    "gancho": "Así queda la web de *una peluquería*",
+    "pilar": "inspiration",
+    "serie": "diseno-que-funciona",
+    "tema": "escaparate",
+    "visual": {
+      "tema": "dark",
+      "layout": "A"
+    },
+    "pie": "Una web de una sola página para una peluquería, sección a sección, y por qué funciona cada una.",
+    "carrusel": {
+      "plantilla": "escaparate",
+      "negocio": "peluqueria",
+      "portada": {
+        "titulo": "Así queda la web de *una peluquería*"
+      },
+      "secciones": [
+        {
+          "seccion": "hero",
+          "nota": "Qué haces y dónde, en una frase, y el botón de reservar a la vista desde el primer segundo."
+        },
+        {
+          "seccion": "features",
+          "nota": "Cada servicio con una línea que lo explica: se entiende sin leer párrafos."
+        },
+        {
+          "seccion": "testimonial",
+          "nota": "Opiniones con nombre y cara: la confianza llega antes de escribir."
+        },
+        {
+          "seccion": "faq",
+          "nota": "Las dudas de siempre, resueltas antes de que te llamen para preguntarlas."
+        },
+        {
+          "seccion": "cta",
+          "nota": "Un solo paso para pedir cita, al final y sin distracciones."
+        }
+      ],
+      "cierre": {
+        "titulo": "¿Te imaginas la de *tu negocio*?",
+        "texto": "La diseñas tú en maketa.es, gratis y sin registro, y yo la construyo.",
+        "cta": "Diséñala tú en maketa.es"
+      }
+    }
+  },
+  {
+    "id": "IC-31",
+    "formato": "carrusel",
+    "gancho": "Así queda la web de *una clínica dental*",
+    "pilar": "inspiration",
+    "serie": "diseno-que-funciona",
+    "tema": "escaparate",
+    "visual": {
+      "tema": "light",
+      "layout": "A"
+    },
+    "pie": "Una web de una sola página para una clínica dental, sección a sección, y por qué funciona cada una.",
+    "carrusel": {
+      "plantilla": "escaparate",
+      "negocio": "dental",
+      "portada": {
+        "titulo": "Así queda la web de *una clínica dental*"
+      },
+      "secciones": [
+        {
+          "seccion": "hero",
+          "nota": "Un titular que quita el miedo y el botón de pedir cita, sin tener que buscarlo."
+        },
+        {
+          "seccion": "features",
+          "nota": "Los tratamientos explicados en cristiano: qué es cada uno y para quién."
+        },
+        {
+          "seccion": "carousel",
+          "nota": "La clínica y el equipo en fotos: el paciente sabe a dónde va antes de ir."
+        },
+        {
+          "seccion": "faq",
+          "nota": "Las preguntas que da apuro hacer por teléfono, respondidas con calma."
+        },
+        {
+          "seccion": "cta",
+          "nota": "Pedir cita en dos campos. Lo demás, cuando llames."
+        }
+      ],
+      "cierre": {
+        "titulo": "¿Te imaginas la de *tu negocio*?",
+        "texto": "La diseñas tú en maketa.es, gratis y sin registro, y yo la construyo.",
+        "cta": "Diséñala tú en maketa.es"
+      }
+    }
   }
 ]

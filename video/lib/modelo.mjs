@@ -19,7 +19,7 @@
 const ID = { reel: /^IR-\d{2,}$/, carrusel: /^IC-\d{2,}$/ }
 
 // Las listas que puede traer un carrusel, sea cual sea su plantilla.
-const LISTAS = ['puntos', 'items', 'casos', 'criterios', 'mitos', 'partes', 'opciones', 'factores', 'pares', 'pasos']
+const LISTAS = ['puntos', 'items', 'casos', 'criterios', 'mitos', 'partes', 'opciones', 'factores', 'pares', 'pasos', 'secciones']
 
 /** Los problemas de una idea, dichos en claro (vacío si está bien). */
 export function problemasDe(p, sistema) {

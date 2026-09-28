@@ -8,6 +8,7 @@ import { Aparece, ENTRADA, useFlotar } from '../componentes/Aparece'
 import { ALTO, ANCHO, MARGEN, RETICULA, TIPO } from '../diseno/formatos'
 import { INTERIOR, TEMAS, fondoDe, tema as temaDe } from '../diseno/temas'
 import { Portada } from '../portadas/Portada'
+import { Pareja, PortadaEscaparate } from './Escaparate'
 import { Antetitulo, CajaIcono, Casilla, ConAcento, Icono, Numero, Pastilla, Tarjeta, cuerpo, titular } from '../componentes/piezas'
 
 // ============================================================
@@ -32,6 +33,8 @@ import { Antetitulo, CajaIcono, Casilla, ConAcento, Icono, Numero, Pastilla, Tar
 //   item       una comprobación y, abajo, la pregunta que hay que hacer
 //   lista      varias líneas con casilla o número, para guardar
 //   comparativa dos columnas: A frente a B, antes frente a después
+//   escaparate la portada del escaparate: la web real en ordenador y móvil
+//   pantalla   una sección de esa web en ordenador y móvil, con su nota de UX
 //   cierre     fondo blanco, la llamada a la acción y la marca, como el
 //              cierre del intro
 // ============================================================
@@ -279,6 +282,24 @@ const VARIANTES = {
   item: (p) => <Esqueleto {...p} fondo="claro" abajo={resalteDe(p.d)} />,
   lista: (p) => <Esqueleto {...p} fondo="claro" abajo={<Filas lista={p.d.lista} marcador={p.d.marcador} />} />,
   comparativa: (p) => <Esqueleto {...p} fondo="claro" abajo={<Columnas columnas={p.d.columnas} />} />,
+  escaparate: ({ d, indice, total }) => {
+    const tema = temaDe(d.tema ?? 'dark')
+    return (
+      <PortadaEscaparate
+        d={d}
+        indice={indice}
+        total={total}
+        tema={tema}
+        pie={
+          <div style={{ display: 'flex', flexDirection: 'column', gap: RETICULA.cabecera }}>
+            {total > 1 ? <Desliza tema={tema} /> : null}
+            <Progreso indice={indice} total={total} tema={tema} />
+          </div>
+        }
+      />
+    )
+  },
+  pantalla: (p) => <Esqueleto {...p} fondo="claro" abajo={<Pareja negocio={p.d.negocio} seccion={p.d.seccion} />} />,
   cierre: (p) => (
     <Esqueleto
       {...p}

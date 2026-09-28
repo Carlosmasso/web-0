@@ -223,6 +223,7 @@ narrativa y todas las diapositivas comparten esqueleto.
 | `costes` | `factores` | De qué depende (sin cifras; serie bloqueada en fase 0) |
 | `antes-despues` | `pares` | Antes y después en columnas |
 | `pasos` | `pasos` | Un paso por diapositiva y la lista para marcar |
+| `escaparate` | `negocio`, `secciones` | La web real del negocio en un ordenador y un móvil: la portada, y una sección por diapositiva con su nota de UX (`{ seccion: 'hero', nota }`; hay hero, logos, features, carousel, testimonial, faq y cta) |
 
 Todas aceptan `resumen` (una lista final) y un `cierre` con CTA. La portada es
 la del sistema de portadas, con el tema y el layout de la pieza; las

@@ -327,6 +327,42 @@ function pasos(c) {
   ]
 }
 
+// Las secciones que puede enseñar un escaparate: su nombre y su icono.
+const SECCIONES = {
+  hero: { titulo: 'La *portada*', icono: 'diseno' },
+  logos: { titulo: 'Quién *confía*', icono: 'acuerdo' },
+  features: { titulo: 'Los *servicios*', icono: 'lista' },
+  carousel: { titulo: 'El *día a día*', icono: 'imagenes' },
+  testimonial: { titulo: 'Las *opiniones*', icono: 'conversacion' },
+  faq: { titulo: 'Las *preguntas*', icono: 'pregunta' },
+  cta: { titulo: 'El *contacto*', icono: 'correo' },
+}
+
+/**
+ * ESCAPARATE — "Así queda la web de una peluquería".
+ * portada (la web en ordenador y móvil) → una sección por diapositiva, con la
+ * web ahí mismo y la nota de UX de por qué funciona → cierre.
+ * { negocio: 'peluqueria', secciones: [{ seccion: 'hero', nota, titulo? }] }
+ */
+function escaparate(c) {
+  exigir(c.negocio, 'la plantilla "escaparate" necesita "negocio" (ver video/datos/negocios.mjs)')
+  const secciones = lista(c.secciones, 'secciones', 'escaparate')
+  return secciones.map((s, i) => {
+    const base = SECCIONES[s.seccion]
+    exigir(base, `la sección ${i + 1} "${s.seccion}" no existe. Hay: ${Object.keys(SECCIONES).join(', ')}`)
+    exigir(s.nota, `la sección ${i + 1} necesita "nota" (por qué funciona)`)
+    return {
+      variante: 'pantalla',
+      negocio: c.negocio,
+      seccion: s.seccion,
+      icono: s.icono ?? base.icono,
+      antetitulo: s.antetitulo ?? `Sección ${i + 1} de ${secciones.length}`,
+      titulo: s.titulo ?? base.titulo,
+      texto: s.nota,
+    }
+  })
+}
+
 export const PLANTILLAS = {
   errores,
   pregunta,
@@ -338,6 +374,7 @@ export const PLANTILLAS = {
   costes,
   'antes-despues': antesDespues,
   pasos,
+  escaparate,
 }
 
 // Lo que lleva la portada si el JSON no lo dice.
@@ -352,10 +389,11 @@ const PORTADA = {
   costes: { icono: 'capas', antetitulo: 'De qué depende' },
   'antes-despues': { icono: 'cambios', antetitulo: 'Antes y después' },
   pasos: { icono: 'lista', antetitulo: 'Paso a paso' },
+  escaparate: { icono: 'diseno', antetitulo: 'Escaparate' },
 }
 
 // Las listas que traen las plantillas: su longitud es el número del layout C.
-const LISTAS = ['puntos', 'items', 'casos', 'criterios', 'mitos', 'partes', 'opciones', 'factores', 'pares', 'pasos']
+const LISTAS = ['puntos', 'items', 'casos', 'criterios', 'mitos', 'partes', 'opciones', 'factores', 'pares', 'pasos', 'secciones']
 const numeroDe = (c) => LISTAS.map((k) => c[k]).find(Array.isArray)?.length ?? null
 
 const CIERRE = {
@@ -383,7 +421,9 @@ export function resolverCarrusel(contenido, { visual = {}, serie = null } = {}) 
   exigir(contenido.portada?.titulo, 'falta "portada.titulo"')
   const diapositivas = [
     {
-      variante: 'portada',
+      // El escaparate tiene su propia portada, con la web en los dispositivos.
+      variante: contenido.plantilla === 'escaparate' ? 'escaparate' : 'portada',
+      negocio: contenido.negocio,
       ...PORTADA[contenido.plantilla],
       ...contenido.portada,
       // La serie manda sobre el antetítulo: es lo que hace que se reconozca.

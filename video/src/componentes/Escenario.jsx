@@ -63,10 +63,12 @@ const hojaCargada = (link) =>
  * @param todos      { configs, contenidos } de todo el reel: fuentes e imágenes
  *                   se precargan de una vez, antes del primer fotograma
  * @param scroll     0 = arriba del todo, 1 = abajo del todo
+ * @param seccion    si se da ("features", "faq"…), se desplaza hasta esa sección
+ *                   en vez de usar `scroll`
  * @param ancho/alto tamaño de la ventana del sitio, en px CSS
  * @param escala     cuánto se amplía esa ventana en el vídeo
  */
-export function Escenario({ config, contenido, todos, scroll = 0, ancho = 430, alto = 580, escala = 2 }) {
+export function Escenario({ config, contenido, todos, scroll = 0, seccion = null, ancho = 430, alto = 580, escala = 2 }) {
   const iframe = useRef(null)
   const [doc, setDoc] = useState(null)
   const [espera] = useState(() => delayRender('Preparando la web del reel'))
@@ -122,6 +124,13 @@ export function Escenario({ config, contenido, todos, scroll = 0, ancho = 430, a
 
   useLayoutEffect(() => {
     if (!doc) return
+    const objetivo = seccion ? doc.querySelector(`[data-section="${seccion}"]`) : null
+    if (objetivo) {
+      // El menú es fijo arriba: la sección empieza justo debajo de él.
+      const menu = doc.querySelector('.db-nav')?.offsetHeight ?? 0
+      doc.defaultView.scrollTo(0, Math.max(0, objetivo.offsetTop - menu))
+      return
+    }
     const recorrido = doc.documentElement.scrollHeight - doc.defaultView.innerHeight
     doc.defaultView.scrollTo(0, Math.max(0, recorrido) * scroll)
   })
