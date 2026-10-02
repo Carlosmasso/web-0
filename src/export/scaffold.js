@@ -39,6 +39,7 @@ import pricingSrc from '../preview/sections/Pricing.jsx?raw'
 import testimonialSrc from '../preview/sections/Testimonial.jsx?raw'
 import faqSrc from '../preview/sections/Faq.jsx?raw'
 import ctaSrc from '../preview/sections/Cta.jsx?raw'
+import locationSrc from '../preview/sections/Location.jsx?raw'
 
 import { familyOf } from '../theme/fonts'
 import pkgJson from '../../package.json?raw'
@@ -61,6 +62,7 @@ const RUNTIME_FILES = {
   'src/preview/sections/Testimonial.jsx': testimonialSrc,
   'src/preview/sections/Faq.jsx': faqSrc,
   'src/preview/sections/Cta.jsx': ctaSrc,
+  'src/preview/sections/Location.jsx': locationSrc,
   'src/styles/reset.css': resetCss,
   'src/config/schema.js': schema,
   'src/registry/sections.js': sectionsRegistry,

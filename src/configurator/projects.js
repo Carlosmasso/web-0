@@ -59,7 +59,11 @@ export function readProject(id) {
   const d = read(dataKey(id), null)
   return {
     config: d?.config ?? structuredClone(DEFAULT_CONFIG),
-    content: d?.content ?? structuredClone(DEFAULT_CONTENT),
+    // Las secciones que no existían cuando se guardó (p. ej. "Dónde estamos")
+    // llegan con su contenido de ejemplo; lo guardado manda en todo lo demás.
+    content: d?.content
+      ? { ...structuredClone(DEFAULT_CONTENT), ...d.content }
+      : structuredClone(DEFAULT_CONTENT),
   }
 }
 

@@ -24,6 +24,8 @@
   .db-plan-row { flex-direction: column; align-items: stretch; }
   .db-plan-row__price { align-items: flex-start; text-align: left; }
   .db-faq__grid { grid-template-columns: 1fr; }
+  .db-location { grid-template-columns: 1fr; }
+  .db-location__map { min-height: 300px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

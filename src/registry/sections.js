@@ -6,6 +6,7 @@ import { PricingCards, PricingRows } from '../preview/sections/Pricing'
 import { TestimonialQuote, TestimonialGrid } from '../preview/sections/Testimonial'
 import { FaqAccordion, FaqGrid } from '../preview/sections/Faq'
 import { CtaBoxed, CtaBanner } from '../preview/sections/Cta'
+import { LocationCard } from '../preview/sections/Location'
 
 // Maps a section type + variant id to its component. The keys here must match
 // SECTION_META in options.js and the DEFAULT_CONFIG variants.
@@ -17,6 +18,7 @@ export const SECTION_REGISTRY = {
   pricing: { cards: PricingCards, rows: PricingRows },
   testimonial: { quote: TestimonialQuote, grid: TestimonialGrid },
   faq: { accordion: FaqAccordion, grid: FaqGrid },
+  location: { card: LocationCard },
   cta: { boxed: CtaBoxed, banner: CtaBanner },
 }
 

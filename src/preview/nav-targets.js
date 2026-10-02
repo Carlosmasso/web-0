@@ -23,6 +23,9 @@ const LINK_HINTS = [
   [/opinion|testimoni|resena|review|clientes|casos|experiencia/, 'testimonial'],
   [/galeria|trabajo|proyecto|portfolio|obra|catalogo|carta|menu|carrusel/, 'carousel'],
   [/servicio|producto|caracteristica|feature|solucion|ventaja|funciona|hacemos|tratamiento/, 'features'],
+  // Antes que contacto: "Visítanos" y "Cómo llegar" son la dirección, no el
+  // formulario. "Primera visita" (una cita) no entra: se exige "visitanos".
+  [/donde|ubicacion|llegar|direccion|horario|mapa|encuentranos|visitanos/, 'location'],
   [/contact|cita|reserva|presupuest|escrib|llam|hablar|empez|prueba|demo|visita/, 'cta'],
   [/marca|logo|partner|colabora|confian/, 'logos'],
 ]
@@ -71,4 +74,17 @@ export function navTargets(links, order) {
     taken.add(pool[i])
     return pool[i]
   })
+}
+
+/**
+ * Destino de un enlace del pie. A diferencia del menú, aquí no hay reparto:
+ * varios enlaces pueden ir al mismo sitio ("Dónde estamos" y "Horarios" bajan
+ * los dos a la dirección), y lo que no nombra ninguna sección visible va al
+ * contacto —donde se actúa— o, sin él, a la portada. Nunca un `href="#"`.
+ */
+export function footerTarget(label, order) {
+  const sections = order?.length ? order : SECTION_ORDER
+  const type = hintedSection(label)
+  if (type && sections.includes(type)) return type
+  return sections.includes('cta') ? 'cta' : 'hero'
 }

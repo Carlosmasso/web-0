@@ -161,6 +161,19 @@ export const CONTENIDO_POR_SECTOR = {
         { q: '¿Atendéis a niños?', a: 'Sí. La primera visita infantil es de reconocimiento: se sientan, miran y no se toca nada.' },
       ],
     },
+    location: {
+      title: 'Dónde estamos',
+      intro:
+        'En pleno centro, a dos calles de la Plaza Mayor. Si es tu primera visita, ven diez minutos antes.',
+      address: 'Calle de Santiago, 21, 1.º\n47001 Valladolid',
+      phone: '+34 600 000 000',
+      hours: [
+        { days: 'Lunes a jueves', time: '9:30 – 14:00 y 16:00 – 20:30' },
+        { days: 'Viernes', time: '9:30 – 15:00' },
+        { days: 'Urgencias', time: 'Llamando antes de las 11:00' },
+      ],
+      note: 'Parking público en la Plaza Mayor, a tres minutos andando.',
+    },
     cta: {
       title: 'Pide tu primera visita',
       body: 'Revisión, radiografía si hace falta y presupuesto por escrito. Sin coste y sin compromiso.',
@@ -309,6 +322,18 @@ export const CONTENIDO_POR_SECTOR = {
         { q: '¿Abrís los domingos?', a: 'Domingos de ocho a dos. Los lunes cerramos.' },
       ],
     },
+    location: {
+      title: 'Dónde estamos',
+      intro:
+        'El obrador de la esquina de siempre. Si quieres pan de la primera hornada, ven antes de las ocho.',
+      address: 'Calle de la Cuchillería, 34\n01001 Vitoria-Gasteiz',
+      phone: '+34 600 000 000',
+      hours: [
+        { days: 'Lunes a sábado', time: '7:00 – 14:30 y 17:00 – 20:00' },
+        { days: 'Domingo', time: '8:00 – 14:00' },
+      ],
+      note: 'En el Casco Viejo, entre el Cantón de San Francisco Javier y la plaza del Machete.',
+    },
     cta: {
       title: 'Haz tu encargo',
       body: 'Dinos qué necesitas y para cuándo. Para tartas y pan de eventos, dos días de aviso.',
@@ -456,6 +481,18 @@ export const CONTENIDO_POR_SECTOR = {
         { q: '¿Cuánto tarda un procedimiento laboral?', a: 'Entre ocho meses y dos años según el juzgado. En la primera reunión te damos el plazo real, no el optimista.' },
         { q: '¿Cobráis cuota de éxito?', a: 'Solo si se pacta por escrito antes de empezar. Nunca aparece a posteriori.' },
       ],
+    },
+    location: {
+      title: 'Dónde estamos',
+      intro:
+        'La primera consulta es siempre en persona, en el despacho. Pide cita y te esperamos sin colas.',
+      address: 'Paseo de la Independencia, 8, 3.º izda.\n50004 Zaragoza',
+      phone: '+34 600 000 000',
+      hours: [
+        { days: 'Lunes a jueves', time: '9:00 – 14:00 y 16:30 – 19:30' },
+        { days: 'Viernes', time: '9:00 – 14:00' },
+      ],
+      note: 'Solo con cita previa. Parking de la plaza de Aragón, a cien metros.',
     },
     cta: {
       title: 'Cuéntanos tu caso',
@@ -606,6 +643,18 @@ CONTENIDO_POR_SECTOR['real-estate'] = {
       { q: '¿Qué pasa si el presupuesto se dispara en obra?', a: 'Para eso vamos cada semana. Las desviaciones se ven en el mes uno, no en la certificación final.' },
     ],
   },
+  location: {
+    title: 'Dónde estamos',
+    intro:
+      'El estudio está en Oviedo, pero la primera reunión la hacemos en tu parcela.',
+    address: 'Calle Cimadevilla, 6, 2.º\n33003 Oviedo',
+    phone: '+34 600 000 000',
+    hours: [
+      { days: 'Lunes a viernes', time: '9:00 – 14:00 y 16:00 – 19:00' },
+      { days: 'Visitas a parcela', time: 'Con cita, también sábados' },
+    ],
+    note: 'En el casco antiguo, junto a la plaza de la Constitución.',
+  },
   cta: {
     title: 'Cuéntanos qué quieres construir',
     body: 'Una primera conversación sin coste para ver si el proyecto y nosotros encajamos.',
@@ -754,6 +803,19 @@ CONTENIDO_POR_SECTOR['kids-care'] = {
       { q: '¿Se puede visitar antes de decidir?', a: 'Sí, y sin niños por medio: te enseñamos las aulas por la tarde, cuando está vacía y se puede hablar.' },
     ],
   },
+  location: {
+    title: 'Ven a conocernos',
+    intro:
+      'Antes de matricular, visita las aulas con tu hijo un día normal. Sin cita, de 16:00 a 17:00.',
+    address: 'Calle de la Peña Herbosa, 14\n39003 Santander',
+    phone: '+34 600 000 000',
+    hours: [
+      { days: 'Lunes a viernes', time: '7:30 – 17:30' },
+      { days: 'Visitas de familias', time: '16:00 – 17:00' },
+      { days: 'Julio', time: '7:30 – 15:00' },
+    ],
+    note: 'Hay una zona de parada corta en la puerta para dejar y recoger.',
+  },
   cta: {
     title: 'Ven a conocer la escuela',
     body: 'Te enseñamos las aulas por la tarde, con calma y sin compromiso. Quedan plazas para este curso.',
@@ -901,6 +963,19 @@ CONTENIDO_POR_SECTOR['fine-dining'] = {
       { q: '¿Tenéis opciones vegetarianas?', a: 'Sí, y sin previo aviso. Con alergias o celiaquía, dínoslo al reservar y ajustamos el menú.' },
       { q: '¿Hay aparcamiento?', a: 'No propio. El parking de la plaza está a tres minutos andando y es gratuito a partir de las ocho.' },
     ],
+  },
+  location: {
+    title: 'Dónde estamos',
+    intro:
+      'En la Parte Vieja, a un paseo de la Concha. Mejor reservar: son doce mesas.',
+    address: 'Calle 31 de Agosto, 19\n20003 San Sebastián',
+    phone: '+34 600 000 000',
+    hours: [
+      { days: 'Martes a jueves', time: '13:30 – 15:30' },
+      { days: 'Viernes y sábado', time: '13:30 – 15:30 y 20:30 – 23:00' },
+      { days: 'Domingo y lunes', time: 'Cerrado' },
+    ],
+    note: 'Parking de la Bretxa, a cinco minutos andando.',
   },
   cta: {
     title: 'Reserva tu mesa',

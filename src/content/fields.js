@@ -185,6 +185,34 @@ export function buildForm(config) {
       ],
     }),
 
+    location: () => ({
+      key: 'location',
+      label: 'Dónde estamos',
+      // Sin `variant`: con una sola no hay nada que distinguir en el formulario.
+      fields: [
+        f('location.title', 'Título de sección', 'text', { max: 40 }),
+        f('location.intro', 'Entradilla', 'textarea', { hint: 'opcional, máx. 20 palabras', max: 160 }),
+        f('location.address', 'Dirección', 'textarea', {
+          hint: 'calle en una línea, código postal y ciudad en otra: "Cómo llegar" la abre en Google Maps',
+          max: 140,
+        }),
+        f('location.phone', 'Teléfono', 'text', { hint: 'vacío para no mostrarlo', max: 20 }),
+        f('location.hours', 'Horario', 'repeater', {
+          min: 1,
+          max: 7,
+          labelKey: 'days',
+          fields: [
+            sub('days', 'Días', 'text', { hint: 'ej. Lunes a viernes', max: 30 }),
+            sub('time', 'Horas', 'text', { hint: 'ej. 9:00 – 14:00 y 17:00 – 20:00', max: 40 }),
+          ],
+        }),
+        f('location.note', 'Cómo llegar', 'text', {
+          hint: 'opcional: aparcamiento, metro, una referencia',
+          max: 120,
+        }),
+      ],
+    }),
+
     cta: () => ({
       key: 'cta',
       label: 'Llamada a la acción',

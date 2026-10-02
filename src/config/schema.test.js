@@ -20,9 +20,19 @@ describe('normalizeConfig (endurece config de fuera)', () => {
     expect(c.sectionOrder).toEqual(['hero', 'faq', 'pricing'])
   })
 
-  it('sectionOrder vacío o inválido -> orden completo por defecto', () => {
+  it('sectionOrder vacío o inválido -> orden por defecto', () => {
     expect(normalizeConfig({ sectionOrder: [] }).sectionOrder).toEqual([...SECTION_ORDER])
     expect(normalizeConfig({ sectionOrder: 'nope' }).sectionOrder).toEqual([...SECTION_ORDER])
+  })
+
+  it('"Dónde estamos" va visible de partida, antes de la llamada a la acción', () => {
+    const order = normalizeConfig({}).sectionOrder
+    expect(order.indexOf('location')).toBe(order.indexOf('cta') - 1)
+    expect(normalizeConfig({}).sections.location).toBe('card')
+    expect(normalizeConfig({ sectionOrder: ['hero', 'location'] }).sectionOrder).toEqual([
+      'hero',
+      'location',
+    ])
   })
 
   it("migra borders.radius 'pill' -> 'round'", () => {

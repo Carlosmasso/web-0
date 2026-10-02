@@ -261,9 +261,18 @@ export function App() {
       const order = prev.sectionOrder?.length
         ? prev.sectionOrder
         : SECTION_ORDER;
+      // Al volver, cada sección entra en su sitio natural (el de SECTION_ORDER)
+      // y no al final: "Dónde estamos" debajo de la llamada a la acción
+      // quedaría colgando junto al pie.
+      const natural = SECTION_ORDER.indexOf(type);
+      const before = order.findIndex(
+        (t) => SECTION_ORDER.indexOf(t) > natural,
+      );
       const next = order.includes(type)
         ? order.filter((t) => t !== type)
-        : [...order, type];
+        : before === -1
+          ? [...order, type]
+          : [...order.slice(0, before), type, ...order.slice(before)];
       return setIn(prev, "sectionOrder", next);
     });
   }, []);

@@ -5,6 +5,9 @@ import { Icon } from './Icon'
 /**
  * El componente es idéntico en las seis estéticas. Lo que cambia es qué
  * significa :active, y eso vive en CSS bajo [data-aesthetic].
+ *
+ * Con `href` es un enlace con aspecto de botón (sale fuera del sitio, en otra
+ * pestaña): lo que se pulsa para ir a otro lado tiene que ser un `<a>`.
  */
 export function Button({
   children,
@@ -12,9 +15,31 @@ export function Button({
   withArrow = false,
   type = 'button',
   onClick,
+  href,
 }) {
   const { components, iconSet } = useStructure()
   const { shape, fill } = components.button
+  const inner = (
+    <>
+      <span>{children}</span>
+      {withArrow && <Icon set={iconSet} name="arrow" size={18} />}
+    </>
+  )
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`db-btn db-btn--${variant}`}
+        data-shape={shape}
+        data-fill={fill}
+      >
+        {inner}
+      </a>
+    )
+  }
 
   return (
     <button
@@ -24,8 +49,7 @@ export function Button({
       data-fill={fill}
       onClick={onClick}
     >
-      <span>{children}</span>
-      {withArrow && <Icon set={iconSet} name="arrow" size={18} />}
+      {inner}
     </button>
   )
 }

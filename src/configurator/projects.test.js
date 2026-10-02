@@ -42,6 +42,13 @@ describe('registro de trabajos guardados', () => {
     expect(p.content.brand.name).toBe('X')
   })
 
+  it('lo guardado antes de "Dónde estamos" la recibe con su ejemplo, sin perder nada suyo', () => {
+    const id = createProject('Vieja', { config: {}, content: { brand: { name: 'Mía' } } })
+    const { content } = readProject(id)
+    expect(content.brand.name).toBe('Mía')
+    expect(content.location.title).toBe('Dónde estamos')
+  })
+
   it('ensureSeeded nombra el primero según quién mire', () => {
     ensureSeeded('Mi web')
     expect(listProjects().map((p) => p.name)).toEqual(['Mi web'])

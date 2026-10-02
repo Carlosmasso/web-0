@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { navTargets } from './nav-targets'
+import { footerTarget, navTargets } from './nav-targets'
 import { SECTION_ORDER } from '../config/schema'
 
 // El menú de una landing tiene que bajar a algún sitio SIEMPRE: el cliente
@@ -12,6 +12,24 @@ describe('destinos del menú', () => {
       'pricing',
       'faq',
     ])
+  })
+
+  it('dirección y horario bajan a "Dónde estamos"; una cita sigue yendo al contacto', () => {
+    expect(
+      navTargets(['Dónde estamos', 'Primera visita'], SECTION_ORDER),
+    ).toEqual(['location', 'cta'])
+    for (const label of ['Visítanos', 'Cómo llegar', 'Horarios', 'Ubicación']) {
+      expect(navTargets([label], SECTION_ORDER)).toEqual(['location'])
+    }
+  })
+
+  it('el pie: cada enlace a lo que nombra (se puede repetir); lo demás, al contacto', () => {
+    expect(footerTarget('Dónde estamos', SECTION_ORDER)).toBe('location')
+    expect(footerTarget('Horarios', SECTION_ORDER)).toBe('location')
+    expect(footerTarget('Servicios', SECTION_ORDER)).toBe('features')
+    expect(footerTarget('Empleo', SECTION_ORDER)).toBe('cta')
+    expect(footerTarget('Empleo', ['hero', 'faq'])).toBe('hero')
+    expect(footerTarget('Horarios', ['hero', 'faq', 'cta'])).toBe('cta')
   })
 
   it('ignora acentos y mayúsculas', () => {

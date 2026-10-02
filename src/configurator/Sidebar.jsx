@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react'
-import { IconDice5 } from '@tabler/icons-react'
+import { IconArrowDown, IconArrowUp, IconDice5 } from '@tabler/icons-react'
 import { PRESET_GROUPS, PRESETS, presetsByGroup } from '../registry/presets'
 import { AESTHETIC_OPTIONS } from '../registry/aesthetics'
 import { TYPE_PAIRINGS } from '../registry/fonts'
@@ -572,7 +572,7 @@ export function Sidebar({
                                 disabled={idx <= 1}
                                 onClick={() => onMoveSection(type, -1)}
                               >
-                                ↑
+                                <IconArrowUp size={14} stroke={1.8} aria-hidden />
                               </button>
                               <button
                                 type="button"
@@ -580,7 +580,7 @@ export function Sidebar({
                                 disabled={idx >= config.sectionOrder.length - 1}
                                 onClick={() => onMoveSection(type, 1)}
                               >
-                                ↓
+                                <IconArrowDown size={14} stroke={1.8} aria-hidden />
                               </button>
                             </span>
                           )}
@@ -596,6 +596,8 @@ export function Sidebar({
                           )}
                         </div>
                         <Affects affects={sec.affects} onReveal={onReveal} />
+                        {/* Con una sola variante no hay nada que elegir. */}
+                        {sec.variants.length > 1 && (
                         <div className="optlist">
                           {sec.variants.map((v) => (
                             <button
@@ -609,6 +611,7 @@ export function Sidebar({
                             </button>
                           ))}
                         </div>
+                        )}
                       </div>
                     )
                   })}

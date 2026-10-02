@@ -83,3 +83,27 @@ describe('mezclarContenido', () => {
     expect(r.brand.navLinks).toEqual(['Uno', 'Dos'])
   })
 })
+
+describe('"Dónde estamos" en los presets de sector', () => {
+  it('cada sector la trae visible, antes del cierre, con dirección y horario', async () => {
+    const { PRESETS } = await import('../registry/presets')
+    const { CONTENIDO_POR_SECTOR } = await import('./sectores')
+    const { normalizeConfig } = await import('../config/schema')
+    for (const p of PRESETS.filter((x) => x.category === 'commercial')) {
+      const order = normalizeConfig(p.config).sectionOrder
+      expect(order, p.id).toContain('location')
+      expect(order.indexOf('location'), p.id).toBe(order.indexOf('cta') - 1)
+      const loc = CONTENIDO_POR_SECTOR[p.id].location
+      expect(loc.address, p.id).toMatch(/\n\d{5} /)
+      expect(loc.hours.length, p.id).toBeGreaterThan(0)
+    }
+  })
+
+  it('los presets de estilo también la traen (con el orden por defecto)', async () => {
+    const { PRESETS } = await import('../registry/presets')
+    const { normalizeConfig } = await import('../config/schema')
+    for (const p of PRESETS.filter((x) => x.category === 'trend')) {
+      expect(normalizeConfig(p.config).sectionOrder, p.id).toContain('location')
+    }
+  })
+})

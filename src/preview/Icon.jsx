@@ -12,6 +12,9 @@ import {
   ArrowUUpRight,
   ArrowClockwise,
   WhatsappLogo,
+  MapPin,
+  Phone,
+  Clock,
   // iconos de las secciones de contenido (características de cada sector)
   Bed,
   BowlSteam,
@@ -57,6 +60,9 @@ import {
   IconArrowForwardUp,
   IconRefresh,
   IconBrandWhatsappFilled,
+  IconMapPin,
+  IconPhone,
+  IconClock,
   IconBed,
   IconSoup,
   IconBread,
@@ -105,6 +111,9 @@ export const SETS = {
     redo: ArrowUUpRight,
     refresh: ArrowClockwise,
     whatsapp: WhatsappLogo,
+    pin: MapPin,
+    phone: Phone,
+    clock: Clock,
 
     // Contenido: los que piden las características de cada sector. El
     // cruasán no existe en ninguna de las dos familias: va la galleta.
@@ -152,6 +161,9 @@ export const SETS = {
     redo: IconArrowForwardUp,
     refresh: IconRefresh,
     whatsapp: IconBrandWhatsappFilled, // Tabler: la versión rellena es un componente aparte
+    pin: IconMapPin,
+    phone: IconPhone,
+    clock: IconClock,
 
     bed: IconBed,
     bowl: IconSoup,

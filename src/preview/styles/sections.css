@@ -481,6 +481,8 @@
 }
 .db-footer__legal-links { display: flex; flex-wrap: wrap; gap: 20px; }
 .db-footer__legal-links a { color: inherit; }
+/* En la vista previa los legales son texto: sus páginas llegan con la entrega. */
+.db-footer__legal-links span { color: inherit; }
 .db-footer__legal-links a:hover { color: var(--theme-text); }
 
 /* ---------- pie sobrio: una sola fila ---------- */
@@ -511,4 +513,105 @@
   gap: 8px 22px;
   font-size: 0.82rem;
   color: var(--theme-text-muted);
+}
+
+/* ---------- dónde estamos ---------- */
+
+/* Información y horario a un lado; el mapa al otro, a toda la altura. */
+.db-location {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: calc(var(--gap) * 1.6);
+  align-items: stretch;
+}
+.db-location[data-map='off'] { grid-template-columns: minmax(0, 1fr); }
+.db-location__side {
+  display: grid;
+  align-content: start;
+  gap: calc(var(--gap) * 1.2);
+}
+
+.db-location__map {
+  position: relative;
+  min-height: 440px;
+  overflow: hidden;
+  background: var(--theme-surface-2);
+  border: var(--theme-border-w) var(--theme-border-style) var(--theme-border-color);
+  border-radius: var(--theme-radius);
+  box-shadow: var(--card-shadow);
+}
+.db-location__map iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+/* Google no tiene mapa oscuro sin clave: en los temas oscuros se invierte y
+   se apaga, para que no sea un foco blanco en mitad de la página. */
+.pv-canvas[data-scheme='dark'] .db-location__map iframe {
+  filter: invert(0.92) hue-rotate(180deg) saturate(0.55) brightness(0.95);
+}
+.db-location h2 { font-size: clamp(1.9rem, 1.2rem + 2.2vw, var(--step-4)); }
+.db-location .db-lead { margin-top: 12px; }
+
+.db-location__facts {
+  list-style: none;
+  padding: 0;
+  margin: calc(var(--gap) * 1.1) 0 0;
+  display: grid;
+  gap: 14px;
+}
+.db-location__facts li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: var(--step-1);
+  line-height: 1.45;
+}
+.db-location__facts svg { flex: none; margin-top: 0.15em; color: var(--theme-accent); }
+/* La dirección se escribe en dos líneas (calle / código postal y ciudad). */
+.db-location__address { white-space: pre-line; }
+.db-location__facts a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+  text-underline-offset: 0.2em;
+}
+.db-location__note {
+  margin-top: 14px;
+  color: var(--theme-text-muted);
+  line-height: 1.55;
+  max-width: 48ch;
+}
+.db-location__actions { margin-top: calc(var(--gap) * 1.1); }
+
+.db-location__hours h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--step-1);
+  margin-bottom: 14px;
+}
+.db-location__hours h3 svg { color: var(--theme-accent); }
+.db-location__hours dl { margin: 0; }
+.db-location__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 12px 0;
+  border-top: var(--theme-border-w) var(--theme-border-style) var(--theme-border-color);
+}
+.db-location__row dt { color: var(--theme-text); }
+/* Un tramo nunca se parte por la mitad ("20:30 / – 23:00"). */
+.db-location__row dd span { white-space: nowrap; }
+.db-location__row dd {
+  margin: 0;
+  display: grid;
+  justify-items: end;
+  gap: 2px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
 }

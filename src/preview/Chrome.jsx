@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { SECTION_ORDER } from '../config/schema'
-import { navTargets } from './nav-targets'
+import { footerTarget, navTargets } from './nav-targets'
 import { useContent } from '../content/context'
 import { useStructure } from './PreviewCanvas'
 import { Icon } from './Icon'
@@ -98,7 +98,9 @@ export function Nav() {
       ref={navRef}
     >
       <div className="db-container db-nav__inner">
-        <a className="db-wordmark" href="#">{brand.name}</a>
+        <a className="db-wordmark" href="#hero" onClick={(e) => go(e, 'hero')}>
+          {brand.name}
+        </a>
         <nav className="db-nav__links">
           {brand.navLinks.map((link, i) => (
             <a key={link} href={`#${targets[i]}`} onClick={(e) => go(e, targets[i])}>
@@ -146,9 +148,25 @@ export function Footer() {
   return components.footer?.variant === 'slim' ? <FooterSlim /> : <FooterFull />
 }
 
+/**
+ * Los legales, como texto: sus páginas (aviso legal, privacidad, cookies) se
+ * hacen con la entrega y en la vista previa no existen. Un enlace que no lleva
+ * a nada es peor que no tener enlace.
+ */
+function LegalItems({ legal }) {
+  return (
+    <span className="db-footer__legal-links">
+      {legalItems(legal).map((item) => (
+        <span key={item}>{item}</span>
+      ))}
+    </span>
+  )
+}
+
 /** Pie completo: marca + tagline + tres columnas de enlaces + línea legal. */
 function FooterFull() {
   const { brand, footer } = useContent()
+  const { sectionOrder, motion: motionLevel } = useStructure()
 
   return (
     <footer className="db-footer" id="db-footer">
@@ -162,11 +180,19 @@ function FooterFull() {
             <div key={group.title}>
               <h4>{group.title}</h4>
               <ul>
-                {group.links.map((link) => (
-                  <li key={link}>
-                    <a href="#">{link}</a>
-                  </li>
-                ))}
+                {group.links.map((link) => {
+                  const target = footerTarget(link, sectionOrder)
+                  return (
+                    <li key={link}>
+                      <a
+                        href={`#${target}`}
+                        onClick={(e) => goToSection(e, target, motionLevel)}
+                      >
+                        {link}
+                      </a>
+                    </li>
+                  )
+                })}
               </ul>
             </div>
           ))}
@@ -174,13 +200,7 @@ function FooterFull() {
       </div>
       <div className="db-container db-footer__legal">
         <span>© 2026 {brand.name}</span>
-        <span className="db-footer__legal-links">
-          {legalItems(footer.legal).map((item) => (
-            <a href="#" key={item}>
-              {item}
-            </a>
-          ))}
-        </span>
+        <LegalItems legal={footer.legal} />
       </div>
     </footer>
   )
@@ -199,13 +219,7 @@ function FooterSlim() {
         {/* </div> */}
           <p>{footer.tagline}</p>
         <div className="db-footer__slim-end">
-          <span className="db-footer__legal-links">
-            {legalItems(footer.legal).map((item) => (
-              <a href="#" key={item}>
-                {item}
-              </a>
-            ))}
-          </span>
+          <LegalItems legal={footer.legal} />
           <span className="db-footer__copy">© 2026 {brand.name}</span>
         </div>
       </div>

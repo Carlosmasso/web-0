@@ -183,6 +183,19 @@ export const DEFAULT_CONTENT = {
     ],
   },
 
+  // Teléfono de EJEMPLO, el mismo 600 000 000 que no existe del WhatsApp.
+  location: {
+    title: 'Dónde estamos',
+    intro: 'Pásate por la oficina y te enseñamos el planificador con las rutas de tu zona.',
+    address: 'Calle de Alfonso I, 17, 2.º\n50003 Zaragoza',
+    phone: '+34 600 000 000',
+    hours: [
+      { days: 'Lunes a jueves', time: '9:00 – 18:00' },
+      { days: 'Viernes', time: '9:00 – 15:00' },
+    ],
+    note: 'A cinco minutos andando de la plaza del Pilar.',
+  },
+
   cta: {
     title: 'Prepara la ruta de mañana esta noche',
     body: 'Catorce días de prueba con tus paradas reales. Sin tarjeta y sin permanencia.',

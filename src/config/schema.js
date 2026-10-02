@@ -44,6 +44,7 @@ export const SECTION_ORDER = [
   'pricing',
   'testimonial',
   'faq',
+  'location',
   'cta',
 ]
 
@@ -63,6 +64,7 @@ export const DEFAULT_CONFIG = {
     pricing: 'cards', // cards | rows
     testimonial: 'quote', // quote | grid
     faq: 'accordion', // accordion | grid
+    location: 'card', // card
     cta: 'boxed', // boxed | banner
   },
 

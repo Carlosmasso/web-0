@@ -62,6 +62,13 @@ export const SECTION_META = {
       { id: 'grid', label: 'Rejilla', note: 'Todas las respuestas visibles, en dos columnas' },
     ],
   },
+  location: {
+    label: 'Dónde estamos',
+    affects: { selector: '[data-section="location"]', label: 'Dirección, teléfono y horario' },
+    variants: [
+      { id: 'card', label: 'Con horario', note: 'Dirección, teléfono y horario, con botón para llegar' },
+    ],
+  },
   cta: {
     label: 'Llamada a la acción',
     affects: { selector: '[data-section="cta"]', label: 'La llamada a la acción' },

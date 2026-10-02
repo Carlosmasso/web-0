@@ -189,7 +189,7 @@ export const PRESETS = [
       effects: { blur: 0, noise: false, aurora: false, mesh: false },
       layout: { containerWidth: 1200 },
       // Una inmobiliaria no vende planes: la sección de precios se oculta.
-      sectionOrder: ['hero', 'logos', 'features', 'carousel', 'testimonial', 'faq', 'cta'],
+      sectionOrder: ['hero', 'logos', 'features', 'carousel', 'testimonial', 'faq', 'location', 'cta'],
       sections: {
         hero: 'image', logos: 'headline', features: 'rows', carousel: 'full',
         pricing: 'rows', testimonial: 'quote', faq: 'grid', cta: 'banner',
@@ -279,7 +279,7 @@ export const PRESETS = [
       effects: { blur: 0, noise: true, aurora: false, mesh: false },
       layout: { containerWidth: 1160 },
       // Un restaurante no tiene planes ni muro de logos.
-      sectionOrder: ['hero', 'features', 'carousel', 'testimonial', 'faq', 'cta'],
+      sectionOrder: ['hero', 'features', 'carousel', 'testimonial', 'faq', 'location', 'cta'],
       sections: {
         hero: 'image', logos: 'plain', features: 'rows', carousel: 'full',
         pricing: 'rows', testimonial: 'quote', faq: 'grid', cta: 'banner',
