@@ -4,7 +4,7 @@
 // Un mismo almacén para dos lecturas del mismo dato:
 //   - ESTUDIO: tus proyectos, uno por cliente, sin límite.
 //   - CLIENTE: las VERSIONES de su web ("Mi web", "Versión 2"), para poder
-//     comparar dos rumbos antes de pedir presupuesto. Máximo tres.
+//     comparar dos rumbos antes de pedirme la web. Máximo tres.
 //
 // Cada entrada guarda su config y su contenido bajo su propia clave, y un
 // índice aparte lista los nombres. Nunca se pisan entre sí.

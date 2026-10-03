@@ -1,6 +1,6 @@
 # Puesta en marcha para producción
 
-Lo que hay que montar una vez para que el botón "Pedir presupuesto" funcione y los
+Lo que hay que montar una vez para que el botón "Quiero esta web" funcione y los
 leads no se pierdan. Todo es gratis para empezar.
 
 ---
@@ -59,7 +59,7 @@ Con eso ves en qué paso se cae la gente. En Analytics aparecen bajo **Events**.
 
 ## 5. Comprobar (hazlo ANTES de compartir el enlace)
 
-1. Abre la web desplegada, diseña algo, pulsa **Pedir presupuesto**, marca el
+1. Abre la web desplegada, diseña algo, pulsa **Quiero esta web**, marca el
    consentimiento y envía.
 2. Debe aparecer una **fila en la Sheet** (canal fiable: fecha, contacto, si
    subió imágenes, enlace del diseño, enlace para regenerar, contenido) y

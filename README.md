@@ -149,7 +149,7 @@ desplazarse y solo se pinta el paso activo, así que cada uno cabe en una o dos
 pantallas. Eran tres acordeones apilados y los pasos 2 y 3 quedaban a cientos de
 píxeles de scroll: nadie llegaba. La barra deja saltar libremente; el pie de
 cada paso ofrece además el camino guiado ("Siguiente: Tu identidad") y, al final
-del 3, el botón de pedir presupuesto. Cambiar de paso devuelve el panel arriba,
+del 3, el botón "Quiero esta web". Cambiar de paso devuelve el panel arriba,
 y los pasos 2 y 3 recuerdan sobre qué base se está trabajando, con un atajo para
 volver al 1.
 
@@ -334,7 +334,7 @@ ya se haya visto.
 | **Guardar otra versión** de su web (copia de la actual) o **empezar otra en blanco** (diseño por defecto, sus textos intactos), y saltar entre ellas | Dos botones de texto bajo las pestañas; el selector de versiones aparece en la cabecera en cuanto hay más de una. Máximo tres (ver más abajo). |
 | Guardar una versión para volver luego desde otro sitio | **Copiar enlace** — el `?c=` lleva toda la config en la URL |
 | Probar el formulario del sitio | El CTA responde con su mensaje de confirmación (envío de maqueta) |
-| **Pedir presupuesto** | **"Pedir presupuesto"** — el único botón destacado |
+| **Pedir la web** | **"Quiero esta web"** — el único botón destacado |
 
 Lo que **no** ve: el botón **Descargar .zip**, el chip de "ajustes automáticos",
 ni los botones internos de Contenido ("Copiar lista para el cliente",
@@ -366,7 +366,7 @@ el mismo que el de tus proyectos (`projects.js`), leído de otra manera:
   Si `localStorage` se queda sin espacio, `writeProject` devuelve `false` y el
   panel saca un aviso con el botón de copiar enlace: perder trabajo en silencio
   no es una opción.
-- **Al pedir presupuesto**, el modal dice de qué versión se trata — la de la
+- **Al pedir la web**, el modal dice de qué versión se trata — la de la
   pantalla, que es la que viaja en el enlace del lead.
 
 #### La regla del enlace entrante
@@ -400,8 +400,9 @@ entra como "Diseño recibido" sin tocar lo demás.
 
 ### El cliente pide, tú entregas
 
-1. El cliente pulsa **"Pedir presupuesto"**. Un modal (`ContactModal.jsx`) le pide
-   sus datos (nombre, email, teléfono, nota) y **la casilla de consentimiento**
+1. El cliente pulsa **"Quiero esta web"**. Un modal (`ContactModal.jsx`, "Cuéntame y
+   te escribo yo") le pide sus datos (nombre, email, teléfono, extras opcionales,
+   nota) y **la casilla de consentimiento**
    con enlace a `/privacidad.html`. Nada de jerga a la vista.
 2. Al enviar, `submitLead()` (`src/export/contact.js`) hace un `POST` a la
    función serverless **`/api/lead`** (Vercel), sin abrir nada en su pantalla,

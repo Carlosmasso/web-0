@@ -742,7 +742,7 @@ export function App() {
               </button>
             )}
             <button onClick={openContact} type="button" className="shell__cta">
-              Pedir presupuesto
+              Quiero esta web
             </button>
           </div>
         </div>

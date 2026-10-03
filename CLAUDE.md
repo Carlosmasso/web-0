@@ -105,8 +105,9 @@ suyo, el preset solo cambia el diseño.
 
 ## Reglas de producto que condicionan el código
 
-- La web **no vende ni cobra**: el contacto es una petición de lead. Nada de precios,
-  pagos ni `LocalBusiness` en el JSON-LD.
+- La web **no cobra**: el contacto es una petición de lead. La landing enseña un precio
+  orientativo ("desde 249 €", sección `#precio`), pero nada de pagos, checkout ni
+  `LocalBusiness` o precios en el JSON-LD.
 - Las webs generadas son **una sola página**: el menú baja a secciones (`navTargets()` +
   `goToSection`, por JS porque un ancla nativa borraría el diseño del hash). Ningún enlace
   puede quedarse muerto.

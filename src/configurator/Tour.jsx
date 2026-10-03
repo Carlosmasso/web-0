@@ -39,7 +39,7 @@ export const markTourDone = () => {
 export const TOUR_STEPS = [
   {
     title: 'Esta herramienta es para ti',
-    body: 'Aquí diseñas tu propia web: eliges cómo se ve. Cuando te guste, pides un presupuesto sin compromiso y yo la construyo con tu contenido y te la entrego.',
+    body: 'Aquí diseñas tu propia web: eliges cómo se ve. Cuando te guste, me escribes y yo la construyo contigo, con tus textos y tus fotos, hasta que estés contento con ella.',
   },
   {
     target: '[data-tour="steps"]',
@@ -90,8 +90,8 @@ export const TOUR_STEPS = [
   },
   {
     target: '.shell__cta',
-    title: 'Pide presupuesto cuando quieras',
-    body: 'Pulsa "Pedir presupuesto", déjame tus datos y te paso un precio sin compromiso para esta web. No hay ningún pago por aquí.',
+    title: 'Cuando te guste, aquí me tienes',
+    body: 'Pulsa "Quiero esta web", déjame tus datos y te escribo yo para verla juntos. Sin compromiso: aquí no pagas nada.',
   },
 ]
 

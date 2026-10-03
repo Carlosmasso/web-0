@@ -13,7 +13,7 @@
 | Regla | Qué implica en redes |
 | --- | --- |
 | **El cliente diseña, yo la construyo.** No hay autoservicio (PLAN, "Lo que NO hacemos"). | Nunca "hazte tu web en 5 minutos" ni "publícala hoy". La promesa es *verla en vivo antes de comprometerte*. |
-| **Fase 0: no se habla de dinero.** | Ni "presupuesto", ni precios, ni "oferta" en vídeos, pies ni bio. El gancho es probar y trastear, no contratar. |
+| **Fase 0: no se habla de dinero.** | Ni "presupuesto", ni precios, ni "oferta" en vídeos, pies ni bio. El gancho es probar y trastear, no contratar. Si alguien pregunta el precio, se contesta **en privado** (ver "Cuando preguntan cuánto cuesta"). |
 | **Nada de audios de moda ni bailes.** | El activo es un producto que se transforma en directo. Los vídeos salen mudos y el sonido se elige en la app, al ritmo de 120 bpm. |
 | **El primer cliente no va a venir de Instagram.** | Las redes montan el escaparate. En este mes pesan más las dos o tres webs reales (PLAN, Bloqueos) que el número de seguidores. |
 
@@ -208,6 +208,32 @@ sobre quién es el público.
 (Instagram: tasa de omisión; TikTok: gráfica de retención), los guardados, los
 compartidos y los toques en el enlace. El gancho se juzga por la retención; el
 contenido, por los guardados.
+
+### Cuando preguntan cuánto cuesta
+
+El precio está en la web (`#precio`), no en redes. Si alguien lo pregunta, se
+contesta siempre, con calma y **en privado**: primero el interés por su
+negocio, después cómo funciona, y el precio al final, sin protagonismo.
+
+**En el comentario** (público, sin cifra):
+
+> ¡Gracias por preguntar! Te escribo por privado y te lo cuento con calma.
+
+**Por mensaje privado:**
+
+> ¡Hola, [nombre]! Gracias por escribirme. ¿Para qué negocio sería?
+>
+> Te cuento cómo funciona: en maketa.es diseñas tú la web, gratis y sin
+> registro, y la ves tal cual quedará. Cuando te guste, me la mandas desde ahí,
+> la vemos juntos y yo la construyo con tus textos y tus fotos.
+>
+> Una web de una página como las que ves en mis vídeos empieza en 249 €, con un
+> mes de cambios incluido. Si necesitas algo más (más páginas, reservas…), lo
+> vemos sobre lo que has diseñado y te digo el precio antes de empezar. Sin
+> compromiso.
+
+Las cifras salen de [`TARIFAS.md`](TARIFAS.md): si cambian allí, se cambian
+aquí.
 
 ### Crecimiento: cada web entregada, un escaparate
 

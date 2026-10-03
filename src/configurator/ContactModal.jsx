@@ -1,25 +1,28 @@
 import { useEffect, useRef, useState } from 'react'
 import { IconCheck, IconX } from '@tabler/icons-react'
-import { submitLead, summariseImages, CONTACT_EMAIL } from '../export/contact'
+import { submitLead, summariseImages, noteWithExtras, CONTACT_EMAIL } from '../export/contact'
 import { track } from '../config/analytics'
 import { isStudio } from '../config/mode'
 
 const EMPTY = { name: '', email: '', phone: '', note: '', company: '' }
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+// Lo que puede necesitar además de la página que ha diseñado (TARIFAS.md).
+const EXTRAS = ['Más páginas', 'Reservas o citas', 'Vender online', 'Cambios después de publicar']
+
 /** Lo que falta para poder enviar, campo a campo. Vacío = se puede enviar. */
 function validate(lead, consent) {
   const errors = {}
   if (!lead.name.trim()) errors.name = 'Dime cómo te llamas.'
-  if (!lead.email.trim()) errors.email = 'Necesito un email para mandarte el presupuesto.'
+  if (!lead.email.trim()) errors.email = 'Necesito un email para poder escribirte.'
   else if (!EMAIL_RE.test(lead.email.trim())) errors.email = 'Revisa el email: parece que le falta algo.'
   if (!consent) errors.consent = 'Marca la casilla para que pueda usar tus datos.'
   return errors
 }
 
-// Lo único que ve el cliente al pulsar "Pedir presupuesto": sus datos + el
+// Lo único que ve el cliente al pulsar "Quiero esta web": sus datos + el
 // consentimiento. Al enviar, todo va por fetch a /api/lead — nada se abre en
-// su pantalla. No hay pago ni venta aquí, solo una petición de presupuesto.
+// su pantalla. No hay pago ni venta aquí: me escribe para que la veamos juntos.
 export function ContactModal({
   open,
   onClose,
@@ -30,6 +33,7 @@ export function ContactModal({
 }) {
   const [lead, setLead] = useState(EMPTY)
   const [consent, setConsent] = useState(false)
+  const [extras, setExtras] = useState([])
   const [status, setStatus] = useState('idle') // idle | sending | sent | error
   // Los errores se enseñan solo tras el primer intento de envío; desde ahí se
   // recalculan en vivo, así que desaparecen en cuanto el campo se arregla.
@@ -54,6 +58,7 @@ export function ContactModal({
     if (!open) return undefined
     setLead(EMPTY)
     setConsent(false)
+    setExtras([])
     setStatus('idle')
     setTried(false)
     openedAt.current = Date.now()
@@ -120,12 +125,12 @@ export function ContactModal({
           name: lead.name.trim(),
           email: lead.email.trim(),
           phone: lead.phone.trim(),
-          note: lead.note.trim(),
+          note: noteWithExtras(lead.note, extras),
           company: lead.company, // honeypot: un humano lo deja vacío
         },
       })
       setStatus('sent')
-      if (!isStudio) track('lead_submitted')
+      if (!isStudio) track('lead_submitted', { extras: extras.join(', ') || 'ninguno' })
     } catch {
       setStatus('error')
     }
@@ -151,9 +156,8 @@ export function ContactModal({
             </span>
             <h2 id="contact-title">¡Recibido!</h2>
             <p>
-              Te escribo desde <strong>{CONTACT_EMAIL}</strong> con el presupuesto
-              en menos de un día laborable. Sin compromiso. (Si no lo ves, mira en
-              spam.)
+              Te escribo desde <strong>{CONTACT_EMAIL}</strong> en menos de un día
+              laborable para verla juntos. (Si no lo ves, mira en spam.)
             </p>
             {hadImages.current && (
               <p className="modal__done-note">
@@ -169,14 +173,14 @@ export function ContactModal({
           <>
             <div className="modal__head">
               <div>
-                <h2 id="contact-title">Presupuesto sin compromiso</h2>
-                <p>Déjame tus datos y te paso un presupuesto de esta web. No hay ningún pago ni obligación ahora.</p>
+                <h2 id="contact-title">Cuéntame y te escribo yo</h2>
+                <p>Déjame tus datos y te escribo en persona para verla juntos. Sin compromiso: aquí no pagas nada.</p>
                 {/* Con varias versiones guardadas hay que decir cuál se está
                     pidiendo: el enlace que viaja es el del diseño en pantalla. */}
                 {versionName && (
                   <p className="modal__version">
-                    Pides presupuesto de <strong>{versionName}</strong>, la versión que tienes
-                    en pantalla.
+                    Me llega <strong>{versionName}</strong>, la versión que tienes en
+                    pantalla.
                   </p>
                 )}
               </div>
@@ -251,6 +255,28 @@ export function ContactModal({
                 />
               </label>
 
+              <fieldset className="field modal__extras">
+                <legend className="field__label">
+                  ¿Te hace falta algo más?<em>opcional</em>
+                </legend>
+                <div className="modal__extras-list">
+                  {EXTRAS.map((x) => (
+                    <label key={x} className="modal__extra">
+                      <input
+                        type="checkbox"
+                        checked={extras.includes(x)}
+                        onChange={(e) =>
+                          setExtras((prev) =>
+                            e.target.checked ? [...prev, x] : prev.filter((y) => y !== x),
+                          )
+                        }
+                      />
+                      <span>{x}</span>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+
               <label className="field">
                 <span className="field__label">
                   Algo que deba saber<em>opcional</em>
@@ -277,7 +303,7 @@ export function ContactModal({
                   <a href="/privacidad.html" target="_blank" rel="noopener noreferrer">
                     política de privacidad
                   </a>
-                  . Usaré tus datos solo para enviarte el presupuesto y responderte.
+                  . Usaré tus datos solo para escribirte sobre tu web.
                 </span>
               </label>
               {errors.consent && (
@@ -294,7 +320,7 @@ export function ContactModal({
               )}
 
               <button type="submit" className="modal__submit" disabled={status === 'sending'}>
-                {status === 'sending' ? 'Enviando…' : 'Pedir presupuesto'}
+                {status === 'sending' ? 'Enviando…' : 'Escríbeme'}
               </button>
             </form>
           </>

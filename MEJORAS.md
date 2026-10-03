@@ -31,7 +31,7 @@ propio teléfono. Es el "wow" más barato: ver tu web en tu móvil. Reutiliza el
 enlace que ya existe (`src/config/encode.js`).
 
 **3. "Háblalo conmigo por WhatsApp"** · S · fase 0
-Junto a "Pedir presupuesto", un enlace `wa.me` con el enlace del diseño ya
+Junto a "Quiero esta web", un enlace `wa.me` con el enlace del diseño ya
 escrito en el mensaje. El dueño de un negocio local escribe antes por WhatsApp
 que por un formulario. Se registra como un lead más.
 

@@ -110,7 +110,7 @@ function StepFoot({ step, onStep, onContact }) {
     <div className="stepfoot">
       {!next && (
         <p className="stepfoot__done">
-          Ya está. Cuando te guste cómo se ve, pídeme precio: sin compromiso y sin pagar nada aquí.
+          Ya está. Cuando te guste cómo se ve, pulsa «Quiero esta web» y lo vemos juntos, sin compromiso.
         </p>
       )}
       {prev ? (
@@ -126,7 +126,7 @@ function StepFoot({ step, onStep, onContact }) {
         </button>
       ) : (
         <button type="button" className="stepfoot__next" onClick={onContact}>
-          Pedir presupuesto
+          Quiero esta web
         </button>
       )}
     </div>

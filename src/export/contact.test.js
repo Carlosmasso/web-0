@@ -19,3 +19,14 @@ describe('summariseImages', () => {
     expect(summariseImages(content)).toBe('hero, features (2)')
   })
 })
+
+describe('extras en la nota', () => {
+  it('van delante de la nota, y sin extras la nota queda igual', async () => {
+    const { noteWithExtras } = await import('./contact')
+    expect(noteWithExtras('  Para mayo  ', ['Más páginas', 'Reservas o citas'])).toBe(
+      'También necesita: Más páginas, Reservas o citas.\n\nPara mayo',
+    )
+    expect(noteWithExtras('Hola', [])).toBe('Hola')
+    expect(noteWithExtras('', ['Vender online'])).toBe('También necesita: Vender online.')
+  })
+})

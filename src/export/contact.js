@@ -39,6 +39,16 @@ export function summariseImages(content) {
 }
 
 /**
+ * Los extras que marca el cliente ("¿Te hace falta algo más?") viajan dentro de
+ * la nota, delante de lo que haya escrito: así ni `/api/lead` ni la hoja de
+ * leads cambian, y en el correo se lee de un vistazo.
+ */
+export const noteWithExtras = (note, extras = []) =>
+  [extras.length ? `También necesita: ${extras.join(', ')}.` : '', String(note || '').trim()]
+    .filter(Boolean)
+    .join('\n\n')
+
+/**
  * @param {{ content: object, previewLink: string, editLink: string,
  *           lead: { name: string, email: string, phone?: string, note?: string, company?: string },
  *           elapsedMs?: number }} args

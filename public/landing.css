@@ -7,7 +7,8 @@
   --line: #e6e6e2;
   --accent: #3b53d6;
   --accent-ink: #ffffff;
-  --max: 720px;
+  /* Texto e imagen comparten ancho: 1040 px de contenido + 20 px de margen. */
+  --max: 1080px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -60,11 +61,11 @@ a {
   align-items: center;
   gap: 18px;
 }
-.nav nav > a:first-child {
+.nav nav > a:not(.btn) {
   color: var(--ink-soft);
   font-size: 0.9rem;
 }
-.nav nav > a:first-child:hover {
+.nav nav > a:not(.btn):hover {
   color: var(--ink);
 }
 
@@ -156,16 +157,11 @@ h3 {
 .hero__note {
   font-size: 0.85rem;
   color: var(--ink-faint);
-  max-width: 34ch;
 }
 
-/* La captura del configurador: más ancha que la columna de texto, centrada
-   en la ventana. Aparece una vez al cargar y sube un poco al pasar por encima. */
+/* La captura del configurador, al mismo ancho que el texto. Aparece una vez al
+   cargar y sube un poco al pasar por encima. */
 .shot {
-  position: relative;
-  left: 50%;
-  width: min(1040px, 100vw - 32px);
-  translate: -50% 0;
   margin-top: 56px;
   animation: shot-in 700ms cubic-bezier(0.16, 1, 0.3, 1) 150ms both;
 }
@@ -247,9 +243,18 @@ h3 {
   color: var(--ink-soft);
 }
 
+/* Con el ancho de la imagen, los tres pasos caben uno al lado del otro. */
+@media (min-width: 860px) {
+  .steps ol {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 40px;
+  }
+}
+
 .audience p {
   color: var(--ink-soft);
   font-size: 1.05rem;
+  max-width: 62ch;
 }
 
 .what__grid {
@@ -270,6 +275,125 @@ h3 {
   letter-spacing: 0.1em;
 }
 
+/* cómo trabajo: tres compromisos, en columnas con una línea encima (como los
+   extras del precio). */
+.trust__list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 24px 40px;
+}
+@media (min-width: 860px) {
+  .trust__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.trust__list li {
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.trust__list p {
+  margin-top: 6px;
+  color: var(--ink-soft);
+}
+
+/* precio: una sola tarjeta, la web que se diseña en el configurador. Lo que
+   no cabe en una página (más páginas, reservas, pagos) se habla por correo. */
+
+.price {
+  display: grid;
+  gap: 28px 56px;
+}
+@media (min-width: 860px) {
+  .price {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    align-items: start;
+  }
+}
+.price__intro p {
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+  max-width: 46ch;
+}
+
+.price__card {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--bg-alt);
+  padding: 28px;
+}
+.price__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 20px;
+  margin-bottom: 18px;
+}
+.price__head h3 {
+  margin: 0;
+}
+.price__amount {
+  /* El precio se ve, pero no manda: el protagonismo es de lo que incluye. */
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+.price__amount span {
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--ink-faint);
+}
+.price__card ul {
+  padding-left: 18px;
+  color: var(--ink-soft);
+  display: grid;
+  gap: 6px;
+}
+.price__note {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+}
+/* Los extras: debajo de las dos columnas, a todo el ancho. Texto con una línea
+   encima, no tarjetas: son caminos, no productos que comparar. */
+.price__extra {
+  grid-column: 1 / -1;
+  margin-top: 12px;
+}
+.price__extra h3 {
+  font-size: 1.05rem;
+  margin-bottom: 18px;
+}
+.price__extra ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 24px 40px;
+}
+@media (min-width: 860px) {
+  .price__extra ul {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.price__extra li {
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.price__extra li p {
+  margin-top: 6px;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+.price__extra-note {
+  margin-top: 24px;
+  color: var(--ink-soft);
+}
+
 .cta-final {
   text-align: center;
 }
@@ -280,10 +404,12 @@ h3 {
 
 /* ---------- pie ---------- */
 
+/* La línea del pie, al ancho del contenido como las de las secciones. */
 .foot {
-  max-width: var(--max);
+  max-width: calc(var(--max) - 40px);
+  width: calc(100% - 40px);
   margin: 0 auto;
-  padding: 40px 20px 64px;
+  padding: 40px 0 64px;
   border-top: 1px solid var(--line);
   display: flex;
   flex-wrap: wrap;
@@ -308,13 +434,16 @@ h3 {
   .what__grid {
     grid-template-columns: 1fr;
   }
+  .price__card {
+    padding: 22px 18px;
+  }
   section {
     padding: 48px 0;
   }
   .nav {
     padding: 18px 16px;
   }
-  /* El ancla "Cómo funciona" cabe con el scroll; en móvil solo el botón. */
+  /* "Cómo funciona" se ve bajando; en móvil queda solo el botón. */
   .nav nav > a:first-child {
     display: none;
   }
@@ -341,6 +470,7 @@ h3 {
     border-radius: 10px;
   }
   .foot {
+    width: calc(100% - 32px);
     justify-content: center;
   }
 }

@@ -17,8 +17,8 @@ construido —separación de canal cosmético y estructural, guardarraíles de
 contraste, panel podado a conciencia— y por encima de lo que se ve en el
 sector. El problema no está ahí.
 
-Lo que falta es evidencia de demanda: **cero clientes, cero precio definido,
-sin alta de autónomo**. Y el plan de difusión que hay montado apunta a móvil,
+Lo que falta es evidencia de demanda: **cero clientes, sin alta de autónomo**
+(el precio ya está decidido y la landing enseña el "desde 249 €"). Y el plan de difusión que hay montado apunta a móvil,
 que es justo donde el producto flojea.
 
 ### El dato que ordena las prioridades
@@ -121,7 +121,7 @@ un marcador honesto.
 
 ### 3. Capturar el correo antes del final
 
-**Por qué.** Hoy el único punto de captura es "Pedir presupuesto", el último
+**Por qué.** Hoy el único punto de captura es "Quiero esta web", el último
 paso. Quien juega diez minutos, le gusta y no está listo para escribir, **se
 pierde para siempre**. Existe "Copiar enlace para seguir", pero obliga a que el
 usuario se auto-gestione el enlace.
@@ -139,7 +139,7 @@ email con el enlace, y el registro queda separado de las solicitudes.
 
 ---
 
-### 4. Un precio orientativo en la landing
+### 4. ~~Un precio orientativo en la landing~~ HECHO
 
 **Por qué.** El dueño de un bar no sabe si le vas a pedir 300 € o 3.000. Ante
 esa duda, la mayoría no escribe. Un rango filtra y tranquiliza.
@@ -150,6 +150,17 @@ responder por teléfono.
 
 **Cuidado.** Choca con la fase 0 (ver Bloqueos). Un rango orientativo no es una
 oferta vinculante, pero conviene revisarlo cuando se resuelva el alta.
+
+**Hecho (oct. 2026).** Carlos decide publicarlo sin alta, sabiendo el riesgo:
+el precio quita el paso de preguntar. Sección `#precio` antes de `cta-final`
+(enlazada en el menú) con **una sola tarjeta**: la web de una página, desde
+249 €, y una línea para más páginas, reservas o pagos. La oferta completa
+está en [`TARIFAS.md`](TARIFAS.md): la base (con un mes de cambios incluido) y
+tres extras sencillos —páginas extra, reservas o venta de pocos productos
+conectando herramientas que ya existen, y cambios sueltos—, más lo que no se
+hace. En la landing los extras salen **sin precio** ("¿Te hace falta más?"); el
+precio va por correo. El JSON-LD sigue sin precio. Pendiente de mirar
+en analítica si suben las solicitudes.
 
 ---
 
@@ -166,12 +177,17 @@ social que más decide, y no se puede fabricar: depende de tener clientes.
 
 Estos condicionan todo lo demás y no se resuelven programando:
 
-- [ ] **Decidir el precio**, aunque no se publique. Hoy no hay respuesta si
-      alguien pregunta por teléfono.
-- [ ] **Alta de autónomo, o un plan B para facturar.** Si mañana escribe una
-      clínica dispuesta a pagar 1.200 €, hoy no hay forma de cobrarlos. Mientras
-      siga así, todo el sitio es "carácter informativo" (ver
-      `public/aviso-legal.html`).
+- [x] ~~**Decidir el precio**.~~ Hecho: la landing enseña el "desde" y la
+      tarifa completa va por correo (ver punto 4).
+- [ ] **Alta de autónomo.** Si mañana escribe una clínica dispuesta a pagar
+      1.200 €, hoy no hay forma de cobrarlos. Mientras siga así, todo el sitio es
+      "carácter informativo" (ver `public/aviso-legal.html`).
+      **Decidido (oct. 2026):** el alta se tramita, con tarifa plana, la misma
+      semana en que el primer cliente diga que sí, y se le ofrecen la web y el plan
+      mensual desde el principio (`TARIFAS.md`). Descartado cobrar como trabajo
+      esporádico (el plan mensual es recurrente por definición) y por cooperativa
+      de facturación. Confirmar los detalles con un gestor antes de la primera
+      factura.
 - [ ] **Conseguir dos o tres webs reales**, aunque sean gratis o a precio
       simbólico: un amigo con negocio, la peluquería del barrio, el fisio.
       No es caridad, es el inventario de prueba social y de contenido.
@@ -328,3 +344,10 @@ correcto.
 | sept. 2026 | Fuera el "Enlace de acceso" ("Entrar") del menú: venía del contenido de ejemplo de tipo software, no tiene sentido para un negocio local, apuntaba a `#` (enlace muerto) y en el formulario aparecía como "pendiente" aunque los sectores lo dejan vacío a propósito. |
 | sept. 2026 | Pulido de interacción del configurador: la hoja de móvil se lanza con la inercia del dedo (proyección de velocidad, resistencia elástica en los bordes, se puede agarrar a medio camino) y los botones se hunden al pulsarlos. El formulario de contacto ya no tiene el botón apagado sin explicación: valida al enviar, dice qué falta debajo de cada campo, lleva el foco al primero y el botón dice "Pedir presupuesto". Emoji y glifos del panel (🎲, ✕, ✓, ↑↓) pasan a iconos Tabler. |
 | sept. 2026 | La landing enseña el producto: captura real del configurador en modo cliente (preset de obrador) bajo el hero, más ancha que el texto y enlazada a `/app.html` (`public/configurador-{720,1440,2160}.webp`, 47–233 KB). Si el panel cambia mucho, se recaptura `/app.html` a 1440×900 desde una dirección que no sea `localhost` (p. ej. `[::1]`) para que salga el modo cliente. |
+| oct. 2026 | Sección nueva **"Dónde estamos"** (`location`): dirección, teléfono, horario por tramos, botón "Cómo llegar" (Google Maps con la dirección) y **mapa de Google incrustado** a partir de la propia dirección (sin clave de API, carga diferida, invertido en los temas oscuros). Visible de partida en todos los presets, de sector y de estilo, antes de la llamada a la acción. "Dónde estamos", "Visítanos", "Cómo llegar" y "Horarios" bajan a ella. Lo guardado antes la recibe con su ejemplo sin perder nada. **Al entregar:** el mapa de Google pone cookies de terceros, así que en la web publicada va detrás del aviso de cookies. |
+| oct. 2026 | Fuera los enlaces muertos del sitio: los del pie bajan a la sección que nombran (o al contacto si no nombran ninguna), la marca sube a la portada y los legales son texto hasta la entrega. Antes eran `href="#"`: no llevaban a nada y vaciaban el diseño de la URL. |
+| oct. 2026 | Landing: el texto se alinea con la captura del configurador (mismo ancho, 1040 px; los párrafos conservan su medida de lectura) y los pasos y el precio pasan a columnas en escritorio. Tono del precio: primero el resultado ("que acabes con una web de la que estés orgulloso"), el precio como "la parte fácil", y la entrega no se publica hasta que el cliente está contento. |
+| oct. 2026 | Oferta simplificada a lo que Carlos puede entregar solo ([`TARIFAS.md`](TARIFAS.md)): base de una página + un mes de cambios, y tres extras (páginas, reservas/venta con herramientas existentes, cambios sueltos); fuera tiendas completas, paneles, usuarios, idiomas y SEO mensual. Landing: bloque "¿Te hace falta más?" sin precios. Pedido: casillas opcionales de extras que llegan dentro de la nota (sin tocar `/api/lead` ni la hoja) y se miden en `lead_submitted`. |
+| oct. 2026 | Tono de la landing: el dinero pasa a segundo plano. Fuera "Precio" del menú y la cifra de la frase del botón principal; el precio solo sale en su tarjeta, más discreto, bajo "Lo que te llevas". Paso 2 pasa a "Hablamos", sección nueva "Cómo trabajo" (hablas conmigo, hasta que te guste, que me recomiendes) y cierre "¿Le damos forma a tu web?". Criterio: Maketa crece por recomendación, y se recomienda a quien te trató bien. |
+| oct. 2026 | El configurador habla como la landing: el botón principal pasa de "Pedir presupuesto" a **"Quiero esta web"**, el formulario a "Cuéntame y te escribo yo" (botón "Escríbeme"), y la confirmación, el recorrido guiado y el final del panel dejan de hablar de presupuesto y precio. `og.png` regenerada: "Gratis y sin registro · Hecha contigo, a tu medida" (antes "Presupuesto sin compromiso", que chocaba con la fase 0 al compartir el enlace). Los eventos de analítica no cambian de nombre. |
+| oct. 2026 | `TARIFAS.md`: el margen pasa a los extras que dan dinero o ahorran trabajo (precios de lanzamiento: página extra 99 €, reservas 129 €, vender online 179 €; se suben hacia 120/180/240 € con cinco webs entregadas) y a un plan mensual "Web tranquila" de 25 €/mes (hosting, dominio y hasta 3 cambios), que requiere el alta. La base sigue en 249 € y los cambios sueltos se quedan baratos (30 €) para que el cliente no deje de escribir. |
