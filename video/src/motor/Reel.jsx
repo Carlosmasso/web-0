@@ -8,6 +8,7 @@ import { tema as temaDe } from '../diseno/temas'
 import { BarraProgreso } from '../componentes/BarraProgreso'
 import { EscenaGancho } from './EscenaGancho'
 import { EscenaVariantes } from './EscenaVariantes'
+import { ReelHistoria } from './ReelHistoria'
 import { TIEMPOS, resolverReel } from './resolver'
 
 // ============================================================
@@ -31,6 +32,7 @@ export const calcularReel = ({ props }) => {
 
 export function Reel({ resuelto }) {
   if (!resuelto) return null
+  if (resuelto.historia) return <ReelHistoria resuelto={resuelto} />
   const tema = temaDe(resuelto.visual.tema)
   return (
     <AbsoluteFill>

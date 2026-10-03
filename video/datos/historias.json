@@ -1,0 +1,14 @@
+{
+  "_nota": "Lo propio de cada negocio en la plantilla 'historia' (motor/historia.js): el gancho, las dos frases sobre los planos reales y los clips de Pexels (licencia libre, uso comercial sin atribución). Se enlazan por URL, en vertical y en 1080p (los 4K pesan 20-80 MB y no aportan nada a 1080x1920). `desde`: segundo del clip en el que empieza. Para cambiar uno: en pexels.com, la URL de descarga del vídeo (/download/video/<id>/) redirige al archivo; se pega aquí su versión hd_1080_1920.",
+  "obrador": {
+    "gancho": "Tu pan es de verdad. *¿Tu web también?*",
+    "frases": ["Lo que haces cada mañana…", "*…merece una web a su altura.*"],
+    "clips": {
+      "gancho": { "url": "https://videos.pexels.com/video-files/30557962/13087993_1080_1920_25fps.mp4", "desde": 1 },
+      "planos": [
+        { "url": "https://videos.pexels.com/video-files/5757796/5757796-hd_1080_1920_30fps.mp4", "desde": 0 },
+        { "url": "https://videos.pexels.com/video-files/7965418/7965418-hd_1080_1920_30fps.mp4", "desde": 0 }
+      ]
+    }
+  }
+}

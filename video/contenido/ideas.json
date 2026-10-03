@@ -524,6 +524,24 @@
     }
   },
   {
+    "id": "IR-31",
+    "formato": "reel",
+    "gancho": "Tu pan es de verdad. *¿Tu web también?*",
+    "pilar": "product",
+    "serie": "maketa",
+    "tema": "historia",
+    "concepto": "Una panadería de verdad (vídeo de Pexels) y su web de antes en un móvil; Maketa en uso: tres toques y la web cambia. Planos del oficio y la web terminada. Se cuenta como \"así quedaría\": el negocio es de ejemplo.",
+    "reel": {
+      "plantilla": "historia",
+      "negocio": "obrador"
+    },
+    "visual": {
+      "tema": "dark",
+      "layout": "A",
+      "portada": "duelo"
+    }
+  },
+  {
     "id": "IC-01",
     "formato": "carrusel",
     "gancho": "Antes de pedir tu web, *ten a mano esto*",

@@ -129,6 +129,8 @@ planificador, calendario ni estados, y no hay que volver a proponerlos.
   gancho, la web **real** de un negocio en una tarjeta que se transforma, y el cierre. El color
   cambia en continuo; lo demás, con un barrido. Nada salta, nada de subtítulos en mayúsculas con
   contorno ni amarillos. Voz en primera persona: "Diséñala tú. Yo la construyo."
+  La plantilla `historia` añade vídeo real del oficio (clips de Pexels en `video/datos/historias.json`)
+  y Maketa usada desde un móvil; el negocio de ejemplo se cuenta como "así quedaría", nunca como cliente.
 - Los carruseles (1080x1350) usan 11 plantillas (entre ellas el escaparate: la web real de un negocio en maquetas de ordenador y móvil) con contenido con sentido, no diapositivas, y
   **una sola retícula** de escala fija: si un texto no cabe, el render falla y se acorta el texto.
 - Reels, carruseles y portadas comparten el sistema de diseño de `video/src/diseno/` (3 temas,

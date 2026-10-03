@@ -64,7 +64,7 @@ export function cuantosDe(p) {
   if (p.formato === 'carrusel') return LISTAS.map((k) => p.carrusel?.[k]).find(Array.isArray)?.length ?? null
   const r = p.reel ?? {}
   if (Array.isArray(r.variantes)) return r.variantes.length
-  if (r.plantilla === 'recorrido') return null
+  if (r.plantilla === 'recorrido' || r.plantilla === 'historia') return null
   return r.cantidad ?? 5
 }
 

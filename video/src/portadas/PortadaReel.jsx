@@ -94,8 +94,8 @@ function Firma({ resuelto, pastilla }) {
       </CajaPastilla>
     )
   }
-  const muestras = [...new Set(resuelto.pasos.flatMap((p) => p.muestras))].slice(0, 3)
-  const n = resuelto.pasos.length
+  const muestras = [...new Set((resuelto.portada ?? resuelto.pasos).flatMap((p) => p.muestras))].slice(0, 3)
+  const n = (resuelto.portada ?? resuelto.pasos).length
   return (
     <CajaPastilla>
       <IconoPastilla tipo={resuelto.tipo} muestras={muestras} />
@@ -110,7 +110,7 @@ function Firma({ resuelto, pastilla }) {
 
 /** La web delante y sus versiones siguientes asomando detrás, con la pastilla encima. */
 function Pila({ resuelto, pastilla }) {
-  const [frente, ...detras] = versiones(resuelto.pasos, 3)
+  const [frente, ...detras] = versiones((resuelto.portada ?? resuelto.pasos), 3)
   const ancho = 860
   const asoma = 44
   const pie = 40 // lo que la pastilla sobresale por debajo de la tarjeta
@@ -141,7 +141,7 @@ function Pila({ resuelto, pastilla }) {
 
 /** La primera versión frente a la última, inclinadas hacia el centro, con su nombre debajo. */
 function Duelo({ resuelto, tema }) {
-  const pasos = resuelto.pasos
+  const pasos = (resuelto.portada ?? resuelto.pasos)
   const [a, b] = pasos.length > 1 ? [versiones(pasos, 1)[0], { ...versiones(pasos, pasos.length).at(-1) }] : versiones(pasos, 2)
   const ancho = 440
   const hueco = 24
@@ -222,7 +222,7 @@ function Duelo({ resuelto, tema }) {
 
 /** Cuatro versiones numeradas y la pregunta: se contesta con un número. */
 function Rejilla({ resuelto }) {
-  const tiles = versiones(resuelto.pasos, 4)
+  const tiles = versiones((resuelto.portada ?? resuelto.pasos), 4)
   const ancho = 440
   const hueco = 24
   const pregunta = 110 // el hueco para la pastilla de abajo
@@ -290,7 +290,7 @@ function Rejilla({ resuelto }) {
  * @param pastilla  texto propio para la pastilla (si no, "qué cambia · N opciones")
  */
 export function PortadaReel({ resuelto, tema, serie, variante = 'pila', pastilla = null }) {
-  const n = resuelto.pasos.length
+  const n = (resuelto.portada ?? resuelto.pasos).length
   // Lo que cada variante necesita para tener sentido; si no, la más cercana.
   let v = PORTADAS_REEL.includes(variante) ? variante : 'pila'
   if (v === 'rejilla' && n < 4) v = n > 1 ? 'duelo' : 'pila'

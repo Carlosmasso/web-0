@@ -4,6 +4,7 @@ import { alLienzo, partida } from './web'
 import { EJES, ORDEN_EJES } from './ejes'
 import { elegir, valorInicial } from './elegir'
 import { PLANTILLAS, enLetra } from './plantillas'
+import { resolverHistoria } from './historia'
 
 // ============================================================
 // DE UN REEL EN DATOS A SU LÍNEA DE ESTADOS
@@ -61,6 +62,8 @@ export function resolverReel(reel) {
   }
   const negocio = NEGOCIOS[reel.negocio]
   if (!negocio) throw new Error(`negocio desconocido: "${reel.negocio}"`)
+  // La historia (antes y ahora, con vídeo real) tiene sus propias escenas.
+  if (plantilla.historia) return resolverHistoria(reel, plantilla)
 
   const { raw: inicial, contenido } = partida(reel.negocio)
   const ajustes = { ...plantilla.base, ...reel.base }

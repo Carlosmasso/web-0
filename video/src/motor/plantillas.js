@@ -118,6 +118,23 @@ export const PLANTILLAS = {
     cuerpo: () => 'Así, de arriba abajo: una sola página con lo que tu cliente necesita saber para escribirte.',
   },
 
+  // Un negocio de verdad, antes y ahora: vídeo real del oficio, su web en un
+  // móvil y Maketa en uso (motor/historia.js). Lo propio de cada negocio
+  // (gancho, frases, clips) vive en datos/historias.json.
+  historia: {
+    ejes: [],
+    historia: true,
+    etiqueta: 'Antes y ahora',
+    gancho: ({ quien }) => `Así cambiaría la web de *${quien}*.`,
+    pregunta: '¿Le damos forma a la tuya?',
+    comenta: '¿Qué es lo primero que cambiarías de tu web? 👇',
+    queSeVe:
+      'Vídeo real del oficio; su web de antes en un móvil y Maketa en uso: un toque al punto de partida, otro al color y otro a la portada con su foto. Planos reales y la web terminada.',
+    dolor: () => '¿Tu web está a la altura de lo que haces cada día?',
+    cuerpo: () =>
+      'Desde el móvil: eliges un punto de partida, tu color y tu foto, y lo ves cambiar al momento. Cuando te guste, la construimos juntos.',
+  },
+
   // ---------- combinaciones ----------
   // Solo las que producen un cambio que merece un reel. Quedan fuera
   // preset+estilo y preset+tipografía: el preset ya fija su estilo y su letra,

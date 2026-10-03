@@ -189,6 +189,26 @@ modifico X?".
 | `titular` | El titular tecleándose, y luego otra letra |
 | `recorrido` | La web entera de arriba abajo |
 | `preset+color` · `estilo+color` · `tipografia+estilo` · `tipografia+color` | Las combinaciones con sentido |
+| `historia` | Un negocio de verdad, antes y ahora: vídeo real del oficio, su web en un móvil y Maketa en uso (tres toques), planos reales y la web terminada |
+
+### La plantilla `historia`: vídeo real
+
+La única con escenas propias (`motor/historia.js` + `motor/ReelHistoria.jsx`),
+dentro de la misma composición `Reel`: gancho sobre un clip del oficio → la
+web de antes en un móvil y la hoja de Maketa con un dedo que toca el punto de
+partida, el color y la portada → dos planos reales con dos frases → la web
+terminada bajando en el móvil ("Así quedaría la tuya") → cierre.
+
+- **Un negocio nuevo es datos**: su entrada en `datos/historias.json` (gancho,
+  las dos frases y los clips). Clips de Pexels, verticales y en 1080p
+  (`…-hd_1080_1920_…mp4`; la URL `pexels.com/download/video/<id>/` redirige al
+  archivo). Se enlazan, no se guardan en el repo.
+- **Mientras no haya clientes, el negocio es de ejemplo**: se cuenta como "así
+  quedaría", nunca como un caso real. Cuando lo haya, se cambian los clips por
+  los suyos (o por los que grabe Carlos) y la misma plantilla es el caso.
+- El primer render descarga los clips (~1 min); si Remotion se queda
+  esperando un fotograma, `pnpm crear` lo reintenta una vez.
+- Su portada usa la variante `duelo` con dos estados: Antes y Ahora.
 
 - **La web es la real**: `componentes/Escenario.jsx` pinta los componentes de
   `../src/preview/` en un iframe de móvil, con los mismos guardarraíles que el

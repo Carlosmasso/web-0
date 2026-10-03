@@ -64,16 +64,28 @@ export async function renderReel(ctx, pieza, props, destino) {
   // Un reel con vídeo propio (el de marca) usa esa composición, tal cual.
   const id = pieza.video ?? pieza.id
   const composition = await selectComposition({ serveUrl: ctx.serveUrl, id, inputProps: pieza.video ? {} : props, puppeteerInstance: ctx.navegador })
-  await renderMedia({
+  // Con vídeo remoto (plantilla "historia"), Remotion a veces se queda
+  // esperando un fotograma que ya ha descargado: un segundo intento lo resuelve.
+  const intentar = (n) => renderar().catch((error) => {
+    if (n > 1 && /delayRender\(\) "Fetching/.test(error.message)) {
+      process.stdout.write(`\r${pieza.id}  reintentando (descarga de vídeo)…   `)
+      return intentar(n - 1)
+    }
+    throw error
+  })
+  const renderar = () => renderMedia({
     serveUrl: ctx.serveUrl,
     composition,
     inputProps: pieza.video ? {} : props,
     codec: 'h264',
     outputLocation: path.join(destino, 'video.mp4'),
     puppeteerInstance: ctx.navegador,
-    timeoutInMilliseconds: 60000,
+    // Los reels con vídeo real (plantilla "historia") descargan los clips de
+    // Pexels la primera vez: un clip de 30 MB puede tardar más de un minuto.
+    timeoutInMilliseconds: 180000,
     onProgress: progreso(pieza.id),
   })
+  await intentar(2)
   await still(ctx, `Portada-${pieza.id}`, undefined, path.join(destino, 'portada.png'))
   return composition.durationInFrames / composition.fps
 }
