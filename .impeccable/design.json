@@ -1,0 +1,192 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-05T22:20:55.197098",
+  "title": "Design System: Maketa",
+  "extensions": {
+    "colorMeta": {
+      "azul-tinta": {
+        "role": "primary",
+        "displayName": "Azul tinta",
+        "tonalRamp": [
+          "#141d4f",
+          "#1f2d78",
+          "#2c3fa6",
+          "#3b53d6",
+          "#5c71e0",
+          "#8ba0ff",
+          "#c3cdff",
+          "#eef1ff"
+        ]
+      },
+      "tinta": {
+        "role": "neutral",
+        "displayName": "Tinta",
+        "tonalRamp": [
+          "#0b0c0e",
+          "#16171b",
+          "#2c2e34",
+          "#55575e",
+          "#8b8d95",
+          "#b9bbc1",
+          "#e6e6e2",
+          "#f6f6f4"
+        ]
+      },
+      "noche-panel": {
+        "role": "neutral",
+        "displayName": "Noche",
+        "tonalRamp": [
+          "#131418",
+          "#17181c",
+          "#23242a",
+          "#292b33",
+          "#2e3038",
+          "#34363f",
+          "#3b3d47",
+          "#6f737e"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "El titular del hero, uno por página."
+      },
+      "panel": {
+        "displayName": "Panel",
+        "purpose": "Inter, solo dentro del configurador."
+      }
+    },
+    "shadows": [
+      {
+        "name": "captura",
+        "value": "0 40px 80px -40px rgba(22,23,27,0.45), 0 10px 24px -14px rgba(22,23,27,0.25)",
+        "purpose": "La captura del configurador en la landing."
+      },
+      {
+        "name": "elevacion-panel",
+        "value": "0 1px 2px rgba(0,0,0,0.25), 0 1px 1px rgba(0,0,0,0.16)",
+        "purpose": "Tarjetas y botones del configurador."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Entrada y elevación de la captura (400–700 ms)."
+      },
+      {
+        "name": "pulsar",
+        "value": "transform 120ms ease",
+        "purpose": "Botón que baja 1 px al pulsar."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "columnas",
+        "value": "860px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botón principal",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "La acción principal: Diseñar mi web.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\">Diseñar mi web</a>",
+      "css": ".ds-btn-primary{display:inline-block;padding:12px 22px;border-radius:10px;font:600 0.95rem system-ui,sans-serif;background:#3b53d6;color:#fff;text-decoration:none;transition:transform 120ms ease,filter 140ms ease}.ds-btn-primary:hover{filter:brightness(1.07)}.ds-btn-primary:active{transform:translateY(1px)}.ds-btn-primary:focus-visible{outline:2px solid #8ba0ff;outline-offset:2px}"
+    },
+    {
+      "name": "Botón fantasma",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Acción secundaria en la navegación.",
+      "html": "<a class=\"ds-btn-ghost\" href=\"#\">Abrir el configurador</a>",
+      "css": ".ds-btn-ghost{display:inline-block;padding:9px 16px;border-radius:10px;border:1px solid #e6e6e2;font:600 0.9rem system-ui,sans-serif;color:#16171b;text-decoration:none;transition:border-color 140ms ease}.ds-btn-ghost:hover{border-color:#3b53d6}.ds-btn-ghost:focus-visible{outline:2px solid #3b53d6;outline-offset:2px}"
+    },
+    {
+      "name": "Navegación",
+      "kind": "nav",
+      "description": "Palabra Maketa, un enlace y el botón fantasma.",
+      "html": "<header class=\"ds-nav\"><span class=\"ds-word\">Maketa</span><nav><a href=\"#\">Cómo funciona</a><a class=\"ds-ghost\" href=\"#\">Abrir el configurador</a></nav></header>",
+      "css": ".ds-nav{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px 20px;font-family:system-ui,sans-serif}.ds-word{font-weight:700;font-size:1.15rem;letter-spacing:-0.02em;color:#16171b}.ds-nav nav{display:flex;gap:18px;align-items:center}.ds-nav nav a{color:#55575e;font-size:.9rem;text-decoration:none}.ds-nav nav a:hover{color:#16171b}.ds-nav .ds-ghost{padding:9px 16px;border:1px solid #e6e6e2;border-radius:10px;color:#16171b;font-weight:600}"
+    },
+    {
+      "name": "Tarjeta de la landing",
+      "kind": "card",
+      "refersTo": "card-landing",
+      "description": "Papel alternativo, sin sombra.",
+      "html": "<div class=\"ds-card\"><h3>Tu web de una página</h3><p>El diseño que has hecho en Maketa, construido a medida.</p></div>",
+      "css": ".ds-card{background:#f6f6f4;border:1px solid #e6e6e2;border-radius:14px;padding:28px;font-family:system-ui,sans-serif;color:#16171b}.ds-card h3{font-size:1.05rem;margin:0 0 6px}.ds-card p{color:#55575e;margin:0;line-height:1.65}"
+    },
+    {
+      "name": "Campo del panel",
+      "kind": "input",
+      "refersTo": "field-panel",
+      "description": "Campo de texto en el configurador oscuro.",
+      "html": "<label class=\"ds-field\"><span>Titular</span><input value=\"Pan que huele a las siete de la mañana\"></label>",
+      "css": ".ds-field{display:grid;gap:6px;padding:16px;background:#23242a;border-radius:14px;font-family:Inter,system-ui,sans-serif}.ds-field span{font-size:12px;color:#989ca7}.ds-field input{background:#2e3038;border:1px solid #3b3d47;border-radius:10px;padding:10px 12px;color:#eaebef;font:inherit;font-size:14px}.ds-field input:focus-visible{outline:none;border-color:#829dff;box-shadow:0 0 0 3px rgba(130,157,255,.15)}"
+    },
+    {
+      "name": "Número de paso",
+      "kind": "custom",
+      "description": "La única forma circular de la landing.",
+      "html": "<span class=\"ds-step\">1</span>",
+      "css": ".ds-step{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:999px;background:#f6f6f4;border:1px solid #e6e6e2;font:700 .85rem system-ui,sans-serif;color:#16171b}"
+    }
+  ],
+  "narrative": {
+    "northStar": "La carta escrita a mano",
+    "overview": "Maketa se presenta como una carta de alguien que te conoce: papel limpio, tinta azul, una sola voz en primera persona. La landing es papel claro donde se lee y se decide; el configurador, una mesa oscura y callada donde la web del cliente es lo único que importa.",
+    "keyCharacteristics": [
+      "Un solo color de marca, el azul tinta; el resto es tinta sobre papel.",
+      "Letra del sistema en la landing; Inter solo dentro del configurador.",
+      "Una columna de 1080 px que alinea texto e imagen.",
+      "Superficies planas; la sombra solo cuando algo flota de verdad.",
+      "La obra del cliente siempre manda sobre la interfaz."
+    ],
+    "rules": [
+      {
+        "name": "The One Ink Rule",
+        "body": "El azul tinta es el único color con intención en la interfaz de Maketa. Si una pantalla necesita un segundo color para destacar algo, el problema es de jerarquía, no de paleta.",
+        "section": "colors"
+      },
+      {
+        "name": "The Client's Colour Rule",
+        "body": "El color de la web del cliente nunca se mezcla con el de Maketa: el panel es neutro para que su elección se lea sin interferencias.",
+        "section": "colors"
+      },
+      {
+        "name": "The Letter Voice Rule",
+        "body": "Los titulares se escriben como frases de una persona, en caja de oración, nunca en mayúsculas de cartel.",
+        "section": "typography"
+      },
+      {
+        "name": "The Shared Width Rule",
+        "body": "Si un bloque de texto es más estrecho o más ancho que la imagen que lo acompaña, está mal. Texto e imagen caen a la misma anchura.",
+        "section": "layout"
+      },
+      {
+        "name": "The Flat Paper Rule",
+        "body": "El papel no tiene sombra. Si una tarjeta de la landing necesita sombra para distinguirse, cambia su fondo a papel alternativo.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do usar el azul tinta (#3b53d6) solo en la acción principal, los enlaces y la marca.",
+      "Do alinear texto e imagen al mismo ancho de 1080 px.",
+      "Do escribir titulares en caja de oración y en primera persona.",
+      "Do separar secciones con 64 px y una línea fina, no con fondos de colores.",
+      "Do respetar prefers-reduced-motion: la captura no entra ni sube.",
+      "Do mantener el panel del configurador neutro para que el color del cliente se lea limpio."
+    ],
+    "donts": [
+      "Don't introducir un segundo color de marca ni degradados de acento.",
+      "Don't poner sombra al papel de la landing.",
+      "Don't usar mayúsculas de cartel en titulares; solo en rótulos pequeños.",
+      "Don't enseñar precios fuera de la tarjeta \"desde 249 €\" de la landing.",
+      "Don't aplicar este sistema a las webs generadas: tienen el suyo en src/theme/."
+    ]
+  }
+}
