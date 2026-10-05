@@ -196,9 +196,10 @@ h3 {
   color: var(--ink-faint);
   text-wrap: balance;
 }
+/* Solo sube: la imagen es visible desde el primer fotograma, así nunca se ve
+   un hueco aunque la animación no llegue a correr. */
 @keyframes shot-in {
   from {
-    opacity: 0;
     transform: translateY(16px);
   }
 }
@@ -251,30 +252,24 @@ h3 {
   }
 }
 
-.audience p {
+
+.audience__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 40px;
+}
+.audience__grid > div {
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.audience__grid p,
+.audience__note {
   color: var(--ink-soft);
-  font-size: 1.05rem;
+}
+.audience__note {
+  margin-top: 28px;
   max-width: 62ch;
 }
-
-.what__grid {
-  display: grid;
-  gap: 28px 40px;
-  grid-template-columns: 1fr 1fr;
-}
-.what__grid ul {
-  padding-left: 18px;
-  color: var(--ink-soft);
-  display: grid;
-  gap: 8px;
-}
-.what__grid h3 {
-  color: var(--ink-faint);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
 /* cómo trabajo: tres compromisos, en columnas con una línea encima (como los
    extras del precio). */
 .trust__list {
@@ -401,6 +396,136 @@ h3 {
   color: var(--ink-soft);
   margin: 6px 0 24px;
 }
+.cta-final .cta-final__sign {
+  margin: 20px 0 0;
+  font-size: 0.9rem;
+  color: var(--ink-faint);
+}
+
+/* ---------- así quedaría: webs de ejemplo en un móvil ---------- */
+
+.examples__lead {
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+  max-width: 60ch;
+}
+.examples__list {
+  list-style: none;
+  padding: 0;
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px 20px;
+}
+@media (min-width: 860px) {
+  .examples__list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 32px;
+  }
+}
+/* La portada de cada web: su foto a sangre y su titular encima. La foto
+   manda; el degradado solo existe para que el titular se lea. */
+.example {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #16171b;
+  isolation: isolate;
+}
+.example img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.example::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(22, 23, 27, 0.78) 0%, rgba(22, 23, 27, 0.25) 45%, rgba(22, 23, 27, 0) 70%);
+}
+.example__title {
+  position: absolute;
+  z-index: 1;
+  left: 18px;
+  right: 18px;
+  bottom: 18px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.05rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.example:hover img {
+  transform: scale(1.04);
+}
+.example:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+.examples__name {
+  display: block;
+  margin-top: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+@media (max-width: 560px) {
+  .example__title {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    font-size: 0.92rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .example img {
+    transition: none;
+  }
+  .example:hover img {
+    transform: none;
+  }
+}
+
+/* ---------- soy Carlos ---------- */
+
+.me__intro {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 24px;
+  align-items: center;
+  margin-bottom: 28px;
+}
+@media (min-width: 860px) {
+  .me__intro {
+    grid-template-columns: 180px minmax(0, 1fr);
+    gap: 40px;
+  }
+}
+.me__photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  background: var(--bg-alt);
+}
+.me__intro h2 {
+  margin-bottom: 12px;
+}
+.me__lead {
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+  max-width: 60ch;
+}
+.me__lead a {
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 
 /* ---------- pie ---------- */
 
@@ -430,8 +555,29 @@ h3 {
   color: var(--ink-soft);
 }
 
+/* En pantallas táctiles, todo lo que se pulsa mide al menos 44 px de alto. */
+@media (pointer: coarse) {
+  .btn--ghost {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .foot nav {
+    gap: 4px;
+  }
+  .foot a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 8px;
+  }
+  .foot nav a:first-child {
+    padding-left: 0;
+  }
+}
+
 @media (max-width: 560px) {
-  .what__grid {
+  .audience__grid {
     grid-template-columns: 1fr;
   }
   .price__card {

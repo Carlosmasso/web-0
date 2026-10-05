@@ -19,7 +19,7 @@
     <meta property="og:title" content="Maketa · Diseña tu web y yo la construyo" />
     <meta
       property="og:description"
-      content="Elige el diseño en un configurador visual, míralo en vivo y, cuando te guste, la construimos juntos."
+      content="Elige el diseño en un configurador visual, míralo en vivo y, cuando te guste, yo la construyo."
     />
     <meta property="og:image" content="https://maketa.es/og.png" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -84,7 +84,7 @@
       <span class="wordmark">Maketa</span>
       <nav>
         <a href="#como-funciona">Cómo funciona</a>
-        <a class="btn btn--ghost" href="/app.html">Abrir el configurador</a>
+        <a class="btn btn--ghost" href="/app.html">Diseñar mi web</a>
       </nav>
     </header>
 
@@ -116,6 +116,47 @@
           </a>
           <figcaption>Eliges a la izquierda y tu web cambia a la derecha, al momento.</figcaption>
         </figure>
+      </section>
+
+      <!-- El resultado, no la herramienta: la portada de cada web de ejemplo
+           (foto y titular del contenido por sector, src/content/sectores.js). Son de ejemplo y así se dice: no hay clientes
+           todavía. Cada una abre el configurador en su sector (`?sector=`). -->
+      <section class="examples">
+        <h2>Así quedaría la tuya</h2>
+        <p class="examples__lead">
+          Cuatro webs de ejemplo hechas en Maketa, cada una con su sector. Toca una y
+          ábrela en el configurador; la tuya lleva tus textos, tus fotos y tu color.
+        </p>
+        <ul class="examples__list">
+          <li>
+            <a class="example" href="/app.html?sector=local-food">
+              <img src="https://images.pexels.com/photos/8633662/pexels-photo-8633662.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=720&amp;h=900&amp;fit=crop" width="720" height="900" loading="lazy" alt="Pan de masa madre recién horneado" />
+              <span class="example__title">Pan que huele a las siete de la mañana</span>
+            </a>
+            <span class="examples__name">Obrador</span>
+          </li>
+          <li>
+            <a class="example" href="/app.html?sector=medical-wellness">
+              <img src="https://images.pexels.com/photos/3946835/pexels-photo-3946835.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=720&amp;h=900&amp;fit=crop" width="720" height="900" loading="lazy" alt="Consulta de una clínica dental" />
+              <span class="example__title">Ir al dentista sin que se te haga un nudo</span>
+            </a>
+            <span class="examples__name">Clínica dental</span>
+          </li>
+          <li>
+            <a class="example" href="/app.html?sector=corporate-legal">
+              <img src="https://images.pexels.com/photos/3927126/pexels-photo-3927126.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=720&amp;h=900&amp;fit=crop" width="720" height="900" loading="lazy" alt="Estantería de libros de derecho" />
+              <span class="example__title">Que el papeleo no decida por ti</span>
+            </a>
+            <span class="examples__name">Despacho de abogados</span>
+          </li>
+          <li>
+            <a class="example" href="/app.html?sector=real-estate">
+              <img src="https://images.pexels.com/photos/16631149/pexels-photo-16631149.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=720&amp;h=900&amp;fit=crop" width="720" height="900" loading="lazy" alt="Vivienda unifamiliar de arquitectura contemporánea" />
+              <span class="example__title">Casas que se parecen a quien vive en ellas</span>
+            </a>
+            <span class="examples__name">Estudio de arquitectura</span>
+          </li>
+        </ul>
       </section>
 
       <section id="como-funciona" class="steps">
@@ -152,40 +193,37 @@
 
       <section class="audience">
         <h2>Para quién es</h2>
-        <p>
-          Para negocios que quieren una web que transmita confianza sin complicarse la vida:
-          clínicas y consultas, despachos, cafeterías y obradores, tiendas, inmobiliarias,
-          autónomos y profesionales. Si no sabes nada de webs, no pasa nada: de eso me
-          encargo yo.
+        <div class="audience__grid">
+          <div>
+            <h3>Comercio de barrio</h3>
+            <p>Obradores y cafeterías, peluquerías, talleres, casas rurales.</p>
+          </div>
+          <div>
+            <h3>Profesionales</h3>
+            <p>Clínicas y consultas, fisios, despachos, estudios de arquitectura.</p>
+          </div>
+        </div>
+        <p class="audience__note">
+          No es un creador de webs que acabas manteniendo tú: te llevas la web terminada. Si
+          no sabes nada de webs, no pasa nada; de eso me encargo yo.
         </p>
       </section>
 
-      <section class="what">
-        <h2>Qué es, y qué no</h2>
-        <div class="what__grid">
+      <!-- La firma de la carta: quién está detrás y cómo trabaja, con su foto
+           a la izquierda de la entradilla. Maketa
+           crece por recomendación: el trato va antes que el dinero. -->
+      <section class="me">
+        <div class="me__intro">
+          <img class="me__photo" src="/carlos.jpg" width="640" height="800" loading="lazy" alt="Carlos, sonriendo, junto a una ría en un día nublado." />
           <div>
-            <h3>Sí</h3>
-            <ul>
-              <li>Eliges de verdad cómo se ve, con vista previa en vivo.</li>
-              <li>El resultado es una web a medida, y es tuya.</li>
-              <li>Yo me encargo del montaje, el contenido y la publicación.</li>
-            </ul>
-          </div>
-          <div>
-            <h3>No</h3>
-            <ul>
-              <li>No es un creador de webs de arrastrar y soltar que acabas manteniendo tú.</li>
-              <li>No tienes que pagar nada para probarlo: diseñar es gratis y sin registro.</li>
-              <li>No te llevas un editor ni un panel: te llevas la web terminada.</li>
-            </ul>
+            <h2>Soy Carlos</h2>
+            <p class="me__lead">
+              Diseño y construyo cada web yo mismo, desde Madrid. Si prefieres contármelo
+              antes de diseñar nada, escríbeme a
+              <a href="mailto:hola@maketa.es">hola@maketa.es</a>.
+            </p>
           </div>
         </div>
-      </section>
-
-      <!-- Lo que se quiere transmitir: el trato y el resultado van antes que el
-           dinero. Maketa crece por recomendación. -->
-      <section class="trust">
-        <h2>Cómo trabajo</h2>
         <ul class="trust__list">
           <li>
             <strong>Hablas conmigo</strong>
@@ -275,6 +313,7 @@
         <h2>¿Le damos forma a tu web?</h2>
         <p>Empieza por el diseño, a tu ritmo. Cuando te guste, aquí estaré.</p>
         <a class="btn btn--primary" href="/app.html">Diseñar mi web</a>
+        <p class="cta-final__sign">Carlos · <a href="mailto:hola@maketa.es">hola@maketa.es</a></p>
       </section>
     </main>
 
