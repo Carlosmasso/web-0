@@ -42,4 +42,4 @@ export const LAYOUTS = ['A', 'B', 'C']
 //   duelo    la primera versión frente a la última: contraste
 //   rejilla  cuatro versiones numeradas y "¿Cuál eliges?": pide comentarios
 //   numero   "5 colores" en grande sobre la pila: se escanea de un vistazo
-export const PORTADAS_REEL = ['pila', 'duelo', 'rejilla', 'numero']
+export const PORTADAS_REEL = ['pila', 'duelo', 'rejilla', 'numero', 'foto', 'titular']

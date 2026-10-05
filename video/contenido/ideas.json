@@ -286,7 +286,7 @@
       "negocio": "taller"
     },
     "visual": {
-      "tema": "dark",
+      "tema": "light",
       "layout": "A",
       "portada": "duelo"
     }
@@ -530,7 +530,7 @@
     "pilar": "product",
     "serie": "maketa",
     "tema": "historia",
-    "concepto": "Una panadería de verdad (vídeo de Pexels) y su web de antes en un móvil; Maketa en uso: tres toques y la web cambia. Planos del oficio y la web terminada. Se cuenta como \"así quedaría\": el negocio es de ejemplo.",
+    "concepto": "Historia con vídeo real de Pexels, en forma de pantalla partida (oficio arriba, su web abajo). Negocio de ejemplo: se cuenta como \"así quedaría\".",
     "reel": {
       "plantilla": "historia",
       "negocio": "obrador"
@@ -538,8 +538,142 @@
     "visual": {
       "tema": "dark",
       "layout": "A",
+      "portada": "foto"
+    },
+    "pie": "Arriba, tu oficio. Abajo, tu web contándolo: lo que haces, tu local y lo que dicen de ti. Una sola página con lo que tu cliente necesita para escribirte."
+  },
+  {
+    "id": "IR-32",
+    "formato": "reel",
+    "gancho": "Tu casa enamora en persona. *¿Y en tu web?*",
+    "pilar": "product",
+    "serie": "maketa",
+    "tema": "historia",
+    "concepto": "Historia con vídeo real de Pexels, en forma de pantalla partida (oficio arriba, su web abajo). Negocio de ejemplo: se cuenta como \"así quedaría\".",
+    "reel": {
+      "plantilla": "historia",
+      "negocio": "rural"
+    },
+    "visual": {
+      "tema": "dark",
+      "layout": "A",
+      "portada": "foto"
+    },
+    "pie": "Arriba, tu oficio. Abajo, tu web contándolo: lo que haces, tu local y lo que dicen de ti. Una sola página con lo que tu cliente necesita para escribirte."
+  },
+  {
+    "id": "IR-33",
+    "formato": "reel",
+    "gancho": "Tus pacientes confían en ti. *¿Y en tu web?*",
+    "pilar": "product",
+    "serie": "maketa",
+    "tema": "historia",
+    "concepto": "Historia con vídeo real de Pexels, en forma de \"Antes y ahora\" (toques: estilo, color, portada). Negocio de ejemplo: se cuenta como \"así quedaría\".",
+    "reel": {
+      "plantilla": "historia",
+      "negocio": "dental"
+    },
+    "visual": {
+      "tema": "dark",
+      "layout": "A",
       "portada": "duelo"
-    }
+    },
+    "pie": "Tres toques desde el móvil: el estilo, tu color y tu foto. La misma información, y otra confianza."
+  },
+  {
+    "id": "IR-34",
+    "formato": "reel",
+    "gancho": "Tu trabajo da confianza. *¿Tu web también?*",
+    "pilar": "product",
+    "serie": "maketa",
+    "tema": "historia",
+    "concepto": "Historia con vídeo real de Pexels, en forma de \"Antes y ahora\" (toques: portada, tipografia, color). Negocio de ejemplo: se cuenta como \"así quedaría\".",
+    "reel": {
+      "plantilla": "historia",
+      "negocio": "abogados"
+    },
+    "visual": {
+      "tema": "dark",
+      "layout": "A",
+      "portada": "duelo"
+    },
+    "pie": "Tu foto, una letra con autoridad y tu color: tres toques y tu despacho se presenta como trabaja."
+  },
+  {
+    "id": "IR-35",
+    "formato": "reel",
+    "gancho": "Tus pacientes salen mejor. *¿Y tu web?*",
+    "pilar": "product",
+    "serie": "maketa",
+    "tema": "historia",
+    "concepto": "Historia con vídeo real de Pexels, en forma de \"Lo escribes tú\" (teclea el titular y elige su foto). Negocio de ejemplo: se cuenta como \"así quedaría\".",
+    "reel": {
+      "plantilla": "historia",
+      "negocio": "fisio"
+    },
+    "visual": {
+      "tema": "dark",
+      "layout": "A",
+      "portada": "titular"
+    },
+    "pie": "Escribes tu titular y la web se escribe contigo. Eliges tu foto y ya es tuya. Así de sencillo es diseñarla en Maketa."
+  },
+  {
+    "id": "IR-36",
+    "formato": "reel",
+    "gancho": "Diseñas casas preciosas. *¿Y tu web?*",
+    "pilar": "product",
+    "serie": "maketa",
+    "tema": "historia",
+    "concepto": "Historia con vídeo real de Pexels, en forma de \"Lo escribes tú\" (teclea el titular y elige su foto). Negocio de ejemplo: se cuenta como \"así quedaría\".",
+    "reel": {
+      "plantilla": "historia",
+      "negocio": "arquitectura"
+    },
+    "visual": {
+      "tema": "dark",
+      "layout": "A",
+      "portada": "titular"
+    },
+    "pie": "Escribes tu titular y la web se escribe contigo. Eliges tu foto y ya es tuya. Así de sencillo es diseñarla en Maketa."
+  },
+  {
+    "id": "IR-37",
+    "formato": "reel",
+    "gancho": "Dejas a todo el mundo guapo. *¿Y a tu web?*",
+    "pilar": "product",
+    "serie": "maketa",
+    "tema": "historia",
+    "concepto": "Historia con vídeo real de Pexels, en forma de \"Lo escribes tú\" (teclea el titular y elige su foto). Negocio de ejemplo: se cuenta como \"así quedaría\".",
+    "reel": {
+      "plantilla": "historia",
+      "negocio": "peluqueria"
+    },
+    "visual": {
+      "tema": "dark",
+      "layout": "A",
+      "portada": "titular"
+    },
+    "pie": "Escribes tu titular y la web se escribe contigo. Eliges tu foto y ya es tuya. Así de sencillo es diseñarla en Maketa."
+  },
+  {
+    "id": "IR-38",
+    "formato": "reel",
+    "gancho": "Tu taller lo arregla todo. *¿Y tu web?*",
+    "pilar": "product",
+    "serie": "maketa",
+    "tema": "historia",
+    "concepto": "Historia con vídeo real de Pexels, en forma de pantalla partida (oficio arriba, su web abajo). Negocio de ejemplo: se cuenta como \"así quedaría\".",
+    "reel": {
+      "plantilla": "historia",
+      "negocio": "taller"
+    },
+    "visual": {
+      "tema": "dark",
+      "layout": "A",
+      "portada": "foto"
+    },
+    "pie": "Arriba, tu oficio. Abajo, tu web contándolo: lo que haces, tu local y lo que dicen de ti. Una sola página con lo que tu cliente necesita para escribirte."
   },
   {
     "id": "IC-01",

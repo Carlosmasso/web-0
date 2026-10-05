@@ -1,14 +1,283 @@
 {
-  "_nota": "Lo propio de cada negocio en la plantilla 'historia' (motor/historia.js): el gancho, las dos frases sobre los planos reales y los clips de Pexels (licencia libre, uso comercial sin atribución). Se enlazan por URL, en vertical y en 1080p (los 4K pesan 20-80 MB y no aportan nada a 1080x1920). `desde`: segundo del clip en el que empieza. Para cambiar uno: en pexels.com, la URL de descarga del vídeo (/download/video/<id>/) redirige al archivo; se pega aquí su versión hd_1080_1920.",
+  "_nota": "Lo propio de cada negocio en la plantilla 'historia' (motor/historia.js): el gancho, las dos frases sobre los planos reales y los clips de Pexels (licencia libre, uso comercial sin atribución). Se enlazan por URL, en vertical y en 1080p (los 4K pesan 20-80 MB y no aportan nada a 1080x1920). `desde`: segundo del clip en el que empieza. Para cambiar uno: en pexels.com, la URL de descarga del vídeo (/download/video/<id>/) redirige al archivo; se pega aquí su versión hd_1080_1920. `forma`: antes (toques en la hoja; `toques`: tres de preset, estilo, color, tipografia, portada) · escribe (teclea el titular y elige su foto) · partida (pantalla partida; `pares`: tres de clip, sección de la web y texto de la pastilla).",
   "obrador": {
     "gancho": "Tu pan es de verdad. *¿Tu web también?*",
-    "frases": ["Lo que haces cada mañana…", "*…merece una web a su altura.*"],
+    "frases": [
+      "Lo que haces cada mañana…",
+      "*…merece una web a su altura.*"
+    ],
     "clips": {
-      "gancho": { "url": "https://videos.pexels.com/video-files/30557962/13087993_1080_1920_25fps.mp4", "desde": 1 },
+      "gancho": {
+        "url": "https://videos.pexels.com/video-files/30557962/13087993_1080_1920_25fps.mp4",
+        "desde": 1
+      },
       "planos": [
-        { "url": "https://videos.pexels.com/video-files/5757796/5757796-hd_1080_1920_30fps.mp4", "desde": 0 },
-        { "url": "https://videos.pexels.com/video-files/7965418/7965418-hd_1080_1920_30fps.mp4", "desde": 0 }
+        {
+          "url": "https://videos.pexels.com/video-files/5757796/5757796-hd_1080_1920_30fps.mp4",
+          "desde": 0
+        },
+        {
+          "url": "https://videos.pexels.com/video-files/7965418/7965418-hd_1080_1920_30fps.mp4",
+          "desde": 0
+        }
       ]
-    }
+    },
+    "forma": "partida",
+    "pares": [
+      {
+        "seccion": "features",
+        "texto": "Lo que haces",
+        "clip": {
+          "url": "https://videos.pexels.com/video-files/5757796/5757796-hd_1080_1920_30fps.mp4",
+          "desde": 0
+        }
+      },
+      {
+        "seccion": "carousel",
+        "texto": "Tu obrador",
+        "clip": {
+          "url": "https://videos.pexels.com/video-files/30557962/13087993_1080_1920_25fps.mp4",
+          "desde": 6
+        }
+      },
+      {
+        "seccion": "testimonial",
+        "texto": "Lo que dicen de ti",
+        "clip": {
+          "url": "https://videos.pexels.com/video-files/7965418/7965418-hd_1080_1920_30fps.mp4",
+          "desde": 0
+        }
+      }
+    ]
+  },
+  "rural": {
+    "gancho": "Tu casa enamora en persona. *¿Y en tu web?*",
+    "frases": [
+      "La chimenea, el silencio, el campo…",
+      "*…que se vean antes de reservar.*"
+    ],
+    "clips": {
+      "gancho": {
+        "url": "https://videos.pexels.com/video-files/38180018/16208897_1080_1920_30fps.mp4",
+        "desde": 1
+      },
+      "planos": [
+        {
+          "url": "https://videos.pexels.com/video-files/7331776/7331776-hd_1080_1920_25fps.mp4",
+          "desde": 0
+        },
+        {
+          "url": "https://videos.pexels.com/video-files/39559635/16858057_1080_1920_60fps.mp4",
+          "desde": 0
+        }
+      ]
+    },
+    "forma": "partida",
+    "pares": [
+      {
+        "seccion": "features",
+        "texto": "Lo que ofreces",
+        "clip": {
+          "url": "https://videos.pexels.com/video-files/7331776/7331776-hd_1080_1920_25fps.mp4",
+          "desde": 2
+        }
+      },
+      {
+        "seccion": "carousel",
+        "texto": "Tu rincón",
+        "clip": {
+          "url": "https://videos.pexels.com/video-files/38180018/16208897_1080_1920_30fps.mp4",
+          "desde": 3
+        }
+      },
+      {
+        "seccion": "testimonial",
+        "texto": "Lo que dicen tus huéspedes",
+        "clip": {
+          "url": "https://videos.pexels.com/video-files/39559635/16858057_1080_1920_60fps.mp4",
+          "desde": 0
+        }
+      }
+    ]
+  },
+  "dental": {
+    "gancho": "Tus pacientes confían en ti. *¿Y en tu web?*",
+    "frases": [
+      "El trato que das en la consulta…",
+      "*…empieza en tu web.*"
+    ],
+    "clips": {
+      "gancho": {
+        "url": "https://videos.pexels.com/video-files/7803460/7803460-hd_1080_1920_30fps.mp4",
+        "desde": 1
+      },
+      "planos": [
+        {
+          "url": "https://videos.pexels.com/video-files/6755011/6755011-hd_1080_1920_25fps.mp4",
+          "desde": 0
+        },
+        {
+          "url": "https://videos.pexels.com/video-files/7803463/7803463-hd_1080_1920_30fps.mp4",
+          "desde": 2
+        }
+      ]
+    },
+    "forma": "antes",
+    "toques": [
+      "estilo",
+      "color",
+      "portada"
+    ]
+  },
+  "abogados": {
+    "gancho": "Tu trabajo da confianza. *¿Tu web también?*",
+    "frases": [
+      "Cada caso, con cuidado y por escrito…",
+      "*…y tu web, igual de seria.*"
+    ],
+    "clips": {
+      "gancho": {
+        "url": "https://videos.pexels.com/video-files/8061754/8061754-hd_1080_1920_25fps.mp4",
+        "desde": 1
+      },
+      "planos": [
+        {
+          "url": "https://videos.pexels.com/video-files/8731553/8731553-hd_1080_1920_25fps.mp4",
+          "desde": 0
+        },
+        {
+          "url": "https://videos.pexels.com/video-files/8061743/8061743-hd_1080_1920_25fps.mp4",
+          "desde": 0
+        }
+      ]
+    },
+    "forma": "antes",
+    "toques": [
+      "portada",
+      "tipografia",
+      "color"
+    ]
+  },
+  "fisio": {
+    "gancho": "Tus pacientes salen mejor. *¿Y tu web?*",
+    "frases": [
+      "Cada sesión, pensada para cada persona…",
+      "*…y tu web, igual de cuidada.*"
+    ],
+    "clips": {
+      "gancho": {
+        "url": "https://videos.pexels.com/video-files/30352920/13010424_1080_1920_50fps.mp4",
+        "desde": 1
+      },
+      "planos": [
+        {
+          "url": "https://videos.pexels.com/video-files/6933220/6933220-hd_1080_1920_25fps.mp4",
+          "desde": 2
+        },
+        {
+          "url": "https://videos.pexels.com/video-files/30352913/13010407_1080_1920_50fps.mp4",
+          "desde": 0
+        }
+      ]
+    },
+    "forma": "escribe"
+  },
+  "arquitectura": {
+    "gancho": "Diseñas casas preciosas. *¿Y tu web?*",
+    "frases": [
+      "Cada detalle, medido al milímetro…",
+      "*…también en tu web.*"
+    ],
+    "clips": {
+      "gancho": {
+        "url": "https://videos.pexels.com/video-files/9618378/9618378-hd_1080_2048_25fps.mp4",
+        "desde": 2
+      },
+      "planos": [
+        {
+          "url": "https://videos.pexels.com/video-files/7646449/7646449-hd_1080_1920_25fps.mp4",
+          "desde": 0
+        },
+        {
+          "url": "https://videos.pexels.com/video-files/10375455/10375455-hd_1080_1920_30fps.mp4",
+          "desde": 0
+        }
+      ]
+    },
+    "forma": "escribe"
+  },
+  "peluqueria": {
+    "gancho": "Dejas a todo el mundo guapo. *¿Y a tu web?*",
+    "frases": [
+      "Lo que haces con unas tijeras…",
+      "*…también se puede ver en tu web.*"
+    ],
+    "clips": {
+      "gancho": {
+        "url": "https://videos.pexels.com/video-files/7440184/7440184-hd_1080_2048_25fps.mp4",
+        "desde": 1
+      },
+      "planos": [
+        {
+          "url": "https://videos.pexels.com/video-files/7575561/7575561-hd_1080_1920_24fps.mp4",
+          "desde": 1
+        },
+        {
+          "url": "https://videos.pexels.com/video-files/8225731/8225731-hd_1080_1920_25fps.mp4",
+          "desde": 0
+        }
+      ]
+    },
+    "forma": "escribe"
+  },
+  "taller": {
+    "gancho": "Tu taller lo arregla todo. *¿Y tu web?*",
+    "frases": [
+      "El trabajo bien hecho, de toda la vida…",
+      "*…merece una web que lo cuente.*"
+    ],
+    "clips": {
+      "gancho": {
+        "url": "https://videos.pexels.com/video-files/8987292/8987292-hd_1080_1920_30fps.mp4",
+        "desde": 1
+      },
+      "planos": [
+        {
+          "url": "https://videos.pexels.com/video-files/8987411/8987411-hd_1080_1920_30fps.mp4",
+          "desde": 0
+        },
+        {
+          "url": "https://videos.pexels.com/video-files/8987284/8987284-hd_1080_1920_30fps.mp4",
+          "desde": 1
+        }
+      ]
+    },
+    "forma": "partida",
+    "pares": [
+      {
+        "seccion": "features",
+        "texto": "Lo que arreglas",
+        "clip": {
+          "url": "https://videos.pexels.com/video-files/8987292/8987292-hd_1080_1920_30fps.mp4",
+          "desde": 4
+        }
+      },
+      {
+        "seccion": "carousel",
+        "texto": "Tu taller",
+        "clip": {
+          "url": "https://videos.pexels.com/video-files/8987411/8987411-hd_1080_1920_30fps.mp4",
+          "desde": 0
+        }
+      },
+      {
+        "seccion": "testimonial",
+        "texto": "Lo que dicen de ti",
+        "clip": {
+          "url": "https://videos.pexels.com/video-files/8987284/8987284-hd_1080_1920_30fps.mp4",
+          "desde": 1
+        }
+      }
+    ]
   }
 }

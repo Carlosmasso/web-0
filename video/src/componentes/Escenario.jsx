@@ -126,9 +126,13 @@ export function Escenario({ config, contenido, todos, scroll = 0, seccion = null
     if (!doc) return
     const objetivo = seccion ? doc.querySelector(`[data-section="${seccion}"]`) : null
     if (objetivo) {
-      // El menú es fijo arriba: la sección empieza justo debajo de él.
-      const menu = doc.querySelector('.db-nav')?.offsetHeight ?? 0
+      // Si el menú se queda fijo arriba, la sección empieza justo debajo de
+      // él. Si no (su contenedor acaba antes que la página y se va al bajar),
+      // restarlo dejaría asomar una franja de la sección anterior.
+      const nav = doc.querySelector('.db-nav')
+      const menu = nav?.offsetHeight ?? 0
       doc.defaultView.scrollTo(0, Math.max(0, objetivo.offsetTop - menu))
+      if (nav && nav.getBoundingClientRect().bottom <= 0) doc.defaultView.scrollTo(0, objetivo.offsetTop)
       return
     }
     const recorrido = doc.documentElement.scrollHeight - doc.defaultView.innerHeight

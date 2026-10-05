@@ -1,32 +1,33 @@
-import { AbsoluteFill, OffthreadVideo, interpolate, spring, useCurrentFrame, useVideoConfig } from 'remotion'
+import { AbsoluteFill, Img, OffthreadVideo, Sequence, interpolate, useCurrentFrame, useVideoConfig } from 'remotion'
 import { springTiming, TransitionSeries } from '@remotion/transitions'
 import { fade } from '@remotion/transitions/fade'
-import { PRESETS } from '../../../src/registry/presets'
 import { BarraProgreso } from '../componentes/BarraProgreso'
 import { Cierre } from '../componentes/Cierre'
+import { Escenario } from '../componentes/Escenario'
 import { Etiqueta, IconoPastilla, Valor } from '../componentes/Etiqueta'
 import { Palabras } from '../componentes/Palabras'
-import { clamp, entrar, progreso } from '../diseno/animaciones'
+import { Tarjeta } from '../componentes/Tarjeta'
+import { barrido, clamp, entrar, progreso } from '../diseno/animaciones'
 import { TIPO_REEL } from '../diseno/formatos'
 import { SANS } from '../diseno/fuentes'
 import { ACENTO_CLARO, MUELLE, TINTA } from '../diseno/marca'
-import { TIEMPOS_HISTORIA as T, TOQUES } from './historia'
+import { ESCRIBE, PAR, TIEMPOS_HISTORIA as T, TOQUES } from './historia'
 import { WebEnCambio } from './WebEnCambio'
 
 // ============================================================
-// LA HISTORIA — un negocio real, antes y ahora (ver motor/historia.js)
+// LA HISTORIA — un negocio real, en tres formas (ver motor/historia.js)
 //
 // Mismo acabado que el resto del motor: Inter 700 palabra a palabra, la
 // pastilla blanca, muelles suaves y fundidos. Lo nuevo es lo de fuera de la
-// pantalla: vídeo real del oficio de fondo, y Maketa usada desde un móvil.
+// pantalla: vídeo real del oficio, y Maketa usada desde un móvil.
 // ============================================================
 
 const cruce = springTiming({ config: MUELLE.suave, durationInFrames: T.cruce })
 
-// ---------- vídeo real ----------
+// ---------- vídeo y foto reales ----------
 
 /** Un clip de Pexels a sangre, con un acercamiento lento (nada salta). */
-function Clip({ clip, duracion, zoom = [1, 1.08], oscurecer = 0, desenfoque = 0 }) {
+function Clip({ clip, duracion, zoom = [1, 1.08] }) {
   const frame = useCurrentFrame()
   const { fps } = useVideoConfig()
   const escala = interpolate(frame, [0, duracion], zoom, clamp)
@@ -36,15 +37,20 @@ function Clip({ clip, duracion, zoom = [1, 1.08], oscurecer = 0, desenfoque = 0 
         src={clip.url}
         muted
         trimBefore={Math.round((clip.desde ?? 0) * fps)}
-        style={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          transform: `scale(${escala})`,
-          filter: desenfoque ? `blur(${desenfoque}px)` : undefined,
-        }}
+        style={{ width: '100%', height: '100%', objectFit: 'cover', transform: `scale(${escala})` }}
       />
-      {oscurecer ? <AbsoluteFill style={{ background: `rgba(22,23,27,${oscurecer})` }} /> : null}
+    </AbsoluteFill>
+  )
+}
+
+/** La foto del negocio, desenfocada y oscurecida: el fondo del móvil. */
+function FondoFoto({ src, duracion }) {
+  const frame = useCurrentFrame()
+  const escala = interpolate(frame, [0, duracion], [1.15, 1.22], clamp)
+  return (
+    <AbsoluteFill style={{ overflow: 'hidden', background: TINTA }}>
+      <Img src={src} style={{ width: '100%', height: '100%', objectFit: 'cover', transform: `scale(${escala})`, filter: 'blur(26px)' }} />
+      <AbsoluteFill style={{ background: 'rgba(22,23,27,0.55)' }} />
     </AbsoluteFill>
   )
 }
@@ -66,7 +72,19 @@ const FraseSobrePlano = ({ texto, desde = 6, hasta }) => (
   </div>
 )
 
-// ---------- el móvil ----------
+/** La pastilla de arriba: cambia de texto con un golpe en cada momento. */
+function Pastilla({ k, desde, tipo, muestras = [], children }) {
+  return (
+    <Etiqueta desde={10} arriba={250}>
+      <IconoPastilla tipo={tipo} muestras={muestras} />
+      <Valor key={k} desde={desde}>
+        <span style={{ fontFamily: SANS, fontSize: 38, fontWeight: 600, letterSpacing: '-0.02em', color: TINTA }}>{children}</span>
+      </Valor>
+    </Etiqueta>
+  )
+}
+
+// ---------- el móvil y la hoja de Maketa ----------
 
 const MOVIL = { ancho: 620, alto: 1120, arriba: 380, marco: 12 }
 const PANTALLA = { ancho: MOVIL.ancho - MOVIL.marco * 2, alto: MOVIL.alto - MOVIL.marco * 2 }
@@ -99,27 +117,50 @@ function Movil({ children }) {
   )
 }
 
-// ---------- la hoja de Maketa, como en el configurador en móvil ----------
+/** La web en la mitad de arriba del móvil (la de abajo es la hoja). */
+const WebArriba = ({ pasos, contenido, movimiento = null }) => (
+  <div style={{ position: 'absolute', left: 0, right: 0, top: 0, height: ALTO_WEB, overflow: 'hidden' }}>
+    <WebEnCambio pasos={pasos} contenido={contenido} movimiento={movimiento} ancho={390} alto={ALTO_WEB / ESCALA_WEB} escala={ESCALA_WEB} />
+  </div>
+)
 
 const PANEL = { fondo: '#17181c', tarjeta: '#23242a', campo: '#2e3038', linea: '#3b3d47', texto: '#eaebef', suave: '#989ca7', acento: '#829dff', acentoSuave: 'rgba(130,157,255,0.15)' }
-const HOJA = { arriba: ALTO_WEB - 24, contenido: 112, fila: 112, alto: 100 }
+const HOJA = { arriba: ALTO_WEB - 24, contenido: 112, fila: 112, alto: 100, margen: 24 }
 
-// Dónde cae cada toque, en coordenadas de la pantalla: [x, y].
-const COLORES_X = (i) => 46 + 32 + i * 88
-const OBJETIVO = [
-  [PANTALLA.ancho / 2, HOJA.arriba + HOJA.contenido + 1 * HOJA.fila + HOJA.alto / 2],
-  [COLORES_X(2), HOJA.arriba + HOJA.contenido + 76],
-  [PANTALLA.ancho / 2, HOJA.arriba + HOJA.contenido + 2 * HOJA.fila + HOJA.alto / 2],
-]
+/** El panel oscuro de abajo, con su tirador, como en el configurador en móvil. */
+const Hoja = ({ children }) => (
+  <div
+    style={{
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      top: HOJA.arriba,
+      bottom: 0,
+      background: PANEL.fondo,
+      borderRadius: '28px 28px 0 0',
+      boxShadow: '0 -20px 40px -20px rgba(0,0,0,0.5)',
+      fontFamily: SANS,
+    }}
+  >
+    <div style={{ position: 'absolute', top: 14, left: '50%', width: 60, height: 6, marginLeft: -30, borderRadius: 3, background: PANEL.linea }} />
+    {children}
+  </div>
+)
 
-/** Qué grupo de la hoja se ve: el de cada toque, hasta poco después de darlo. */
-function useGrupo() {
+/** Un bloque de la hoja que entra con un fundido corto desde `desde`. */
+function Bloque({ desde = 0, titulo, children }) {
   const frame = useCurrentFrame()
-  const g = TOQUES.findIndex((t) => frame < t + 16)
-  return g === -1 ? TOQUES.length - 1 : g
+  const { fps } = useVideoConfig()
+  const p = desde === 0 ? 1 : progreso(frame, fps, desde, MUELLE.suave, 12)
+  return (
+    <div style={{ position: 'absolute', inset: 0, opacity: p, transform: `translateY(${(1 - p) * 16}px)` }}>
+      <div style={{ position: 'absolute', top: 44, left: 26, fontSize: 30, fontWeight: 650, color: PANEL.texto }}>{titulo}</div>
+      <div style={{ position: 'absolute', top: HOJA.contenido, left: HOJA.margen, right: HOJA.margen }}>{children}</div>
+    </div>
+  )
 }
 
-function Opcion({ activo, children, style }) {
+function Opcion({ activo, children }) {
   return (
     <div
       style={{
@@ -128,11 +169,11 @@ function Opcion({ activo, children, style }) {
         display: 'flex',
         alignItems: 'center',
         gap: 18,
+        minWidth: 0,
         padding: '0 22px',
         borderRadius: 16,
         background: activo ? PANEL.acentoSuave : PANEL.tarjeta,
         border: `2px solid ${activo ? PANEL.acento : PANEL.linea}`,
-        ...style,
       }}
     >
       {children}
@@ -140,123 +181,79 @@ function Opcion({ activo, children, style }) {
   )
 }
 
-function Grupo({ indice, titulo, children }) {
-  const frame = useCurrentFrame()
-  const { fps } = useVideoConfig()
-  const visible = useGrupo() === indice
-  const desde = indice === 0 ? 0 : TOQUES[indice - 1] + 16
-  const p = indice === 0 ? 1 : progreso(frame, fps, desde, MUELLE.suave, 12)
-  if (!visible) return null
-  return (
-    <div style={{ position: 'absolute', inset: 0, opacity: p, transform: `translateY(${(1 - p) * 16}px)` }}>
-      <div style={{ position: 'absolute', top: 44, left: 26, fontSize: 30, fontWeight: 650, color: PANEL.texto }}>{titulo}</div>
-      <div style={{ position: 'absolute', top: HOJA.contenido, left: 24, right: 24 }}>{children}</div>
-    </div>
-  )
-}
+const COLOR_X = (i) => 46 + 32 + i * 88
 
-function Hoja({ resuelto }) {
-  const frame = useCurrentFrame()
-  const elegido = (i) => frame >= TOQUES[i]
-  const comerciales = PRESETS.filter((p) => p.category === 'commercial' && p.label !== resuelto.preset.label).slice(0, 2)
-  const presets = [comerciales[0], resuelto.preset, comerciales[1]]
-  const colores = ['#3d7a6a', '#3b53d6', resuelto.marca, '#7c3aed', '#1f2937', '#be185d']
-  const portadas = [
-    ['Dividida', 'Texto + panel visual'],
-    ['Centrada', 'Manifiesto tipográfico'],
-    ['Imagen de fondo', 'Tu foto a sangre'],
-  ]
+/** Dónde cae el toque de un grupo, en coordenadas de la pantalla. */
+const objetivoDe = (g) =>
+  g.grupo === 'muestras'
+    ? [COLOR_X(g.objetivo), HOJA.arriba + HOJA.contenido + 76]
+    : [PANTALLA.ancho / 2, HOJA.arriba + HOJA.contenido + g.objetivo * HOJA.fila + HOJA.alto / 2]
 
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: HOJA.arriba,
-        bottom: 0,
-        background: PANEL.fondo,
-        borderRadius: '28px 28px 0 0',
-        boxShadow: '0 -20px 40px -20px rgba(0,0,0,0.5)',
-        fontFamily: SANS,
-      }}
-    >
-      <div style={{ position: 'absolute', top: 14, left: '50%', width: 60, height: 6, marginLeft: -30, borderRadius: 3, background: PANEL.linea }} />
-
-      <Grupo indice={0} titulo="Punto de partida">
-        <div style={{ display: 'grid', gap: HOJA.fila - HOJA.alto }}>
-          {presets.map((p, i) => (
-            <Opcion key={p.label} activo={i === 1 && elegido(0)}>
-              <div style={{ width: 52, height: 52, borderRadius: 12, overflow: 'hidden', display: 'grid', gridTemplateRows: '1fr 1fr 1fr', flex: 'none' }}>
-                {p.swatch.map((c) => (
-                  <div key={c} style={{ background: c }} />
-                ))}
-              </div>
-              <div style={{ minWidth: 0 }}>
-                <div style={{ fontSize: 26, fontWeight: 650, color: PANEL.texto }}>{p.label}</div>
-                <div style={{ fontSize: 20, color: PANEL.suave, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.audience}</div>
-              </div>
-            </Opcion>
-          ))}
-        </div>
-      </Grupo>
-
-      <Grupo indice={1} titulo="Tu color de marca">
+/** Un grupo de la hoja ("Antes y ahora"): tarjetas, lista o muestras de color. */
+function GrupoToque({ g, elegido }) {
+  const marcado = (i) => (elegido ? i === g.objetivo : i === g.inicial)
+  if (g.grupo === 'muestras') {
+    return (
+      <>
         <div style={{ fontSize: 21, color: PANEL.suave }}>El resto de la paleta se ajusta solo</div>
-        <div style={{ position: 'absolute', top: 44, left: 46 - 24, display: 'flex', gap: 24 }}>
-          {colores.map((c, i) => {
-            const activo = elegido(1) ? i === 2 : i === 0
-            return (
-              <div
-                key={c}
-                style={{
-                  width: 64,
-                  height: 64,
-                  borderRadius: 32,
-                  background: c,
-                  boxShadow: activo ? `0 0 0 4px ${PANEL.fondo}, 0 0 0 7px ${PANEL.acento}` : `0 0 0 2px ${PANEL.linea}`,
-                }}
-              />
-            )
-          })}
-        </div>
-      </Grupo>
-
-      <Grupo indice={2} titulo="Portada">
-        <div style={{ display: 'grid', gap: HOJA.fila - HOJA.alto }}>
-          {portadas.map(([nombre, nota], i) => (
-            <Opcion key={nombre} activo={elegido(2) ? i === 2 : i === 1}>
-              <div>
-                <div style={{ fontSize: 26, fontWeight: 650, color: PANEL.texto }}>{nombre}</div>
-                <div style={{ fontSize: 20, color: PANEL.suave }}>{nota}</div>
-              </div>
-            </Opcion>
+        <div style={{ position: 'absolute', top: 44, left: 46 - HOJA.margen, display: 'flex', gap: 24 }}>
+          {g.opciones.map((o, i) => (
+            <div
+              key={o.color + i}
+              style={{
+                width: 64,
+                height: 64,
+                borderRadius: 32,
+                background: o.color,
+                boxShadow: marcado(i) ? `0 0 0 4px ${PANEL.fondo}, 0 0 0 7px ${PANEL.acento}` : `0 0 0 2px ${PANEL.linea}`,
+              }}
+            />
           ))}
         </div>
-      </Grupo>
+      </>
+    )
+  }
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: HOJA.fila - HOJA.alto }}>
+      {g.opciones.map((o, i) => (
+        <Opcion key={o.label} activo={marcado(i)}>
+          {o.swatch ? (
+            <div style={{ width: 52, height: 52, borderRadius: 12, overflow: 'hidden', display: 'grid', gridTemplateRows: '1fr 1fr 1fr', flex: 'none' }}>
+              {o.swatch.map((c) => (
+                <div key={c} style={{ background: c }} />
+              ))}
+            </div>
+          ) : null}
+          <div style={{ minWidth: 0 }}>
+            <div style={{ fontSize: 26, fontWeight: 650, color: PANEL.texto }}>{o.label}</div>
+            <div style={{ fontSize: 20, color: PANEL.suave, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{o.nota}</div>
+          </div>
+        </Opcion>
+      ))}
     </div>
   )
 }
 
 /** El dedo: va de un objetivo al siguiente, se hunde al tocar y deja una onda. */
-function Toque() {
+function Toque({ toques }) {
   const frame = useCurrentFrame()
   const { fps } = useVideoConfig()
-  const aparece = progreso(frame, fps, TOQUES[0] - 44, MUELLE.suave, 14)
-  const vase = progreso(frame, fps, TOQUES.at(-1) + 26, MUELLE.suave, 12)
-  if (frame < TOQUES[0] - 44 || vase > 0.99) return null
+  const primero = toques[0].frame
+  const ultimo = toques.at(-1).frame
+  const aparece = progreso(frame, fps, primero - 44, MUELLE.suave, 14)
+  const vase = progreso(frame, fps, ultimo + 26, MUELLE.suave, 12)
+  if (frame < primero - 44 || vase > 0.99) return null
 
-  // Posición: se desliza hacia cada objetivo en los 26 fotogramas antes del toque.
-  let [x, y] = [OBJETIVO[0][0] + 120, OBJETIVO[0][1] + 160]
-  TOQUES.forEach((t, i) => {
-    const p = progreso(frame, fps, t - 30, MUELLE.suave, 22)
-    x += (OBJETIVO[i][0] - x) * p
-    y += (OBJETIVO[i][1] - y) * p
-  })
-  const actual = TOQUES.findLastIndex((t) => frame >= t - 6)
-  const t = actual >= 0 ? TOQUES[actual] : null
-  const presion = t == null ? 0 : interpolate(frame, [t - 6, t, t + 8], [0, 1, 0], clamp)
-  const onda = t == null ? 0 : interpolate(frame, [t, t + 18], [0, 1], clamp)
+  // Se desliza hacia cada objetivo en los fotogramas antes de tocarlo.
+  let [x, y] = [toques[0].x + 120, toques[0].y + 160]
+  for (const t of toques) {
+    const p = progreso(frame, fps, t.frame - 30, MUELLE.suave, 22)
+    x += (t.x - x) * p
+    y += (t.y - y) * p
+  }
+  const actual = toques.findLast((t) => frame >= t.frame - 6)
+  const presion = actual ? interpolate(frame, [actual.frame - 6, actual.frame, actual.frame + 8], [0, 1, 0], clamp) : 0
+  const onda = actual ? interpolate(frame, [actual.frame, actual.frame + 18], [0, 1], clamp) : 0
 
   return (
     <div style={{ position: 'absolute', left: x, top: y, opacity: aparece * (1 - vase), pointerEvents: 'none' }}>
@@ -264,37 +261,155 @@ function Toque() {
         <div
           style={{
             position: 'absolute',
-            width: 90,
-            height: 90,
-            left: -45,
-            top: -45,
-            borderRadius: 45,
-            border: '4px solid rgba(255,255,255,0.9)',
-            transform: `scale(${0.6 + onda * 1.4})`,
-            opacity: 1 - onda,
+            width: 52,
+            height: 52,
+            left: -26,
+            top: -26,
+            borderRadius: 26,
+            border: '2px solid rgba(255,255,255,0.8)',
+            transform: `scale(${0.7 + onda * 1.1})`,
+            opacity: (1 - onda) * 0.8,
           }}
         />
       ) : null}
       <div
         style={{
           position: 'absolute',
-          width: 72,
-          height: 72,
-          left: -36,
-          top: -36,
-          borderRadius: 36,
-          background: 'rgba(255,255,255,0.88)',
-          boxShadow: '0 10px 26px rgba(0,0,0,0.35), inset 0 0 0 2px rgba(22,23,27,0.08)',
-          transform: `scale(${1 - presion * 0.18})`,
+          width: 40,
+          height: 40,
+          left: -20,
+          top: -20,
+          borderRadius: 20,
+          background: 'rgba(255,255,255,0.72)',
+          boxShadow: '0 6px 16px rgba(0,0,0,0.3), inset 0 0 0 1.5px rgba(22,23,27,0.1)',
+          transform: `scale(${1 - presion * 0.15})`,
         }}
       />
     </div>
   )
 }
 
+// ---------- "Lo escribes tú": el campo, el teclado y la galería ----------
+
+const FILAS_TECLADO = ['qwertyuiop', 'asdfghjklñ', 'zxcvbnm']
+const plano = (c) => c.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+
+function Teclado({ tecla }) {
+  const ancho = (PANTALLA.ancho - HOJA.margen * 2 - 9 * 6) / 10
+  const fila = (letras, i) => (
+    <div key={i} style={{ display: 'flex', justifyContent: 'center', gap: 6 }}>
+      {[...letras].map((l) => {
+        const pulsada = l === tecla
+        return (
+          <div
+            key={l}
+            style={{
+              width: ancho,
+              height: 50,
+              borderRadius: 9,
+              display: 'grid',
+              placeItems: 'center',
+              fontSize: 26,
+              color: PANEL.texto,
+              background: pulsada ? PANEL.acento : '#3a3b41',
+              transform: pulsada ? 'translateY(-6px) scale(1.12)' : 'none',
+              boxShadow: '0 2px 0 rgba(0,0,0,0.35)',
+            }}
+          >
+            {l}
+          </div>
+        )
+      })}
+    </div>
+  )
+  return (
+    <div style={{ position: 'absolute', left: HOJA.margen, right: HOJA.margen, bottom: 20, display: 'grid', gap: 8 }}>
+      {FILAS_TECLADO.map(fila)}
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div style={{ width: '56%', height: 50, borderRadius: 9, background: tecla === ' ' ? PANEL.acento : '#3a3b41', boxShadow: '0 2px 0 rgba(0,0,0,0.35)' }} />
+      </div>
+    </div>
+  )
+}
+
+function CampoTitular({ texto }) {
+  const frame = useCurrentFrame()
+  const letras = Math.round(interpolate(frame, [ESCRIBE.desde, ESCRIBE.hasta], [0, texto.length], clamp))
+  const cursor = Math.floor(frame / 15) % 2 === 0 || (frame > ESCRIBE.desde && frame < ESCRIBE.hasta)
+  const tecla = frame >= ESCRIBE.desde && frame <= ESCRIBE.hasta + 2 && letras > 0 ? plano(texto[letras - 1]) : null
+  return (
+    <>
+      <Bloque titulo="Cabecera">
+        <div style={{ fontSize: 22, fontWeight: 600, color: PANEL.suave, marginBottom: 10 }}>Titular</div>
+        <div
+          style={{
+            minHeight: 96,
+            boxSizing: 'border-box',
+            padding: '14px 18px',
+            borderRadius: 14,
+            background: PANEL.campo,
+            border: `2px solid ${PANEL.acento}`,
+            fontSize: 28,
+            lineHeight: 1.3,
+            color: PANEL.texto,
+          }}
+        >
+          {texto.slice(0, letras)}
+          <span style={{ display: 'inline-block', width: 3, height: 32, marginLeft: 2, verticalAlign: -6, background: PANEL.acento, opacity: cursor ? 1 : 0 }} />
+        </div>
+      </Bloque>
+      <Teclado tecla={tecla} />
+    </>
+  )
+}
+
+/** La galería del móvil: fotos y vídeos del propio negocio. */
+function Galeria({ resuelto }) {
+  const frame = useCurrentFrame()
+  const elegida = frame >= ESCRIBE.foto
+  const { clips } = resuelto
+  const piezas = [
+    { video: clips.planos[0] },
+    { foto: resuelto.fondo, objetivo: true },
+    { video: clips.gancho },
+    { foto: resuelto.fotoApaisada },
+    { video: clips.planos[1] },
+    { foto: resuelto.fotoApaisada, encuadre: '80% 50%' },
+  ]
+  return (
+    <Bloque desde={ESCRIBE.galeria} titulo="Foto de portada">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+        {piezas.map((p, i) => (
+          <div
+            key={i}
+            style={{
+              position: 'relative',
+              aspectRatio: '1',
+              borderRadius: 12,
+              overflow: 'hidden',
+              background: PANEL.tarjeta,
+              boxShadow: p.objetivo && elegida ? `0 0 0 4px ${PANEL.fondo}, 0 0 0 7px ${PANEL.acento}` : 'none',
+            }}
+          >
+            {p.foto ? (
+              <Img src={p.foto} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: p.encuadre ?? '50% 50%' }} />
+            ) : (
+              <OffthreadVideo src={p.video.url} muted trimBefore={Math.round((p.video.desde ?? 0) * 30)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            )}
+          </div>
+        ))}
+      </div>
+    </Bloque>
+  )
+}
+
+// Dónde está la foto que se elige: segunda celda de la primera fila.
+const CELDA = (PANTALLA.ancho - HOJA.margen * 2 - 24) / 3
+const OBJETIVO_FOTO = { x: HOJA.margen + CELDA * 1.5 + 12, y: HOJA.arriba + HOJA.contenido + CELDA / 2 }
+
 // ---------- escenas ----------
 
-function EscenaGanchoReal({ resuelto }) {
+function EscenaGancho({ resuelto }) {
   return (
     <AbsoluteFill>
       <Clip clip={resuelto.clips.gancho} duracion={T.gancho} zoom={[1.02, 1.1]} />
@@ -304,33 +419,52 @@ function EscenaGanchoReal({ resuelto }) {
   )
 }
 
+/** "Antes y ahora": la web de antes y tres toques en la hoja. */
 function EscenaMovil({ resuelto }) {
   const frame = useCurrentFrame()
-  const { pasos } = resuelto
+  const { pasos, grupos } = resuelto
   const k = pasos.findLastIndex((p) => p.frame <= frame)
   const paso = pasos[k]
+  // Cada grupo se ve hasta poco después de su toque; luego entra el siguiente.
+  const siguiente = TOQUES.findIndex((t) => frame < t + 16)
+  const visible = siguiente === -1 ? grupos.length - 1 : siguiente
+  const toques = grupos.map((gr, i) => {
+    const [x, y] = objetivoDe(gr)
+    return { frame: TOQUES[i], x, y }
+  })
   return (
     <AbsoluteFill style={{ fontFamily: SANS }}>
-      <Clip clip={{ ...resuelto.clips.gancho, desde: (resuelto.clips.gancho.desde ?? 0) + 3 }} duracion={T.movil} zoom={[1.15, 1.2]} desenfoque={26} oscurecer={0.55} />
-      <Etiqueta desde={10} arriba={250}>
-        <IconoPastilla tipo={k === 0 ? 'estilo' : 'preset'} muestras={paso.muestras} />
-        <Valor key={k} desde={k === 0 ? 10 : paso.frame}>
-          <span style={{ fontFamily: SANS, fontSize: 38, fontWeight: 600, letterSpacing: '-0.02em', color: TINTA }}>{paso.titulo}</span>
-        </Valor>
-      </Etiqueta>
+      <FondoFoto src={resuelto.fondo} duracion={T.movil} />
+      <Pastilla k={k} desde={k === 0 ? 10 : paso.frame} tipo={k === 0 ? 'estilo' : grupos[k - 1].tipo} muestras={paso.muestras}>
+        {paso.titulo}
+      </Pastilla>
       <Movil>
-        <div style={{ position: 'absolute', left: 0, right: 0, top: 0, height: ALTO_WEB, overflow: 'hidden' }}>
-          <WebEnCambio
-            pasos={pasos}
-            contenido={resuelto.contenido}
-            movimiento={null}
-            ancho={390}
-            alto={ALTO_WEB / ESCALA_WEB}
-            escala={ESCALA_WEB}
-          />
-        </div>
-        <Hoja resuelto={resuelto} />
-        <Toque />
+        <WebArriba pasos={pasos} contenido={resuelto.contenido} />
+        <Hoja>
+          <Bloque key={visible} desde={visible === 0 ? 0 : TOQUES[visible - 1] + 16} titulo={grupos[visible].titulo}>
+            <GrupoToque g={grupos[visible]} elegido={frame >= TOQUES[visible]} />
+          </Bloque>
+        </Hoja>
+        <Toque toques={toques} />
+      </Movil>
+    </AbsoluteFill>
+  )
+}
+
+/** "Lo escribes tú": el titular tecleado y la foto de la galería. */
+function EscenaEscribe({ resuelto }) {
+  const frame = useCurrentFrame()
+  const foto = frame >= ESCRIBE.foto
+  return (
+    <AbsoluteFill style={{ fontFamily: SANS }}>
+      <FondoFoto src={resuelto.fondo} duracion={T.escribe} />
+      <Pastilla k={foto ? 1 : 0} desde={foto ? ESCRIBE.foto : 10} tipo={foto ? 'portada' : 'titular'}>
+        {foto ? 'Tu foto' : 'Tu titular'}
+      </Pastilla>
+      <Movil>
+        <WebArriba pasos={resuelto.pasos} contenido={resuelto.contenido} movimiento={resuelto.movimiento} />
+        <Hoja>{frame < ESCRIBE.galeria ? <CampoTitular texto={resuelto.texto} /> : <Galeria resuelto={resuelto} />}</Hoja>
+        <Toque toques={[{ frame: ESCRIBE.foto, ...OBJETIVO_FOTO }]} />
       </Movil>
     </AbsoluteFill>
   )
@@ -359,7 +493,7 @@ function EscenaResultado({ resuelto }) {
   const pasos = [{ frame: 0, config: resuelto.final, transicion: 'barrido', titulo: '', muestras: [] }]
   return (
     <AbsoluteFill style={{ fontFamily: SANS }}>
-      <Clip clip={resuelto.clips.planos[1]} duracion={T.resultado} zoom={[1.15, 1.2]} desenfoque={26} oscurecer={0.55} />
+      <FondoFoto src={resuelto.fondo} duracion={T.resultado} />
       <Etiqueta desde={8} arriba={250}>
         <IconoPastilla tipo="recorrido" muestras={[resuelto.marca]} />
         Así quedaría la tuya
@@ -378,30 +512,81 @@ function EscenaResultado({ resuelto }) {
   )
 }
 
+// La pantalla partida: el oficio arriba, la tarjeta con la web abajo, montada
+// un poco sobre el vídeo para que se lean como una sola cosa.
+const PARTIDA = { altoClip: 1010, tarjeta: { arriba: 880, ancho: 900, alto: 640 }, anchoWeb: 430 }
+
+/** Pantalla partida: cada plano real con la sección de la web que lo cuenta. */
+function EscenaPartida({ resuelto }) {
+  const frame = useCurrentFrame()
+  const { fps } = useVideoConfig()
+  const { pares, final, contenido } = resuelto
+  const k = Math.min(pares.length - 1, Math.floor(frame / PAR))
+  const { tarjeta: C, anchoWeb } = PARTIDA
+  const escala = C.ancho / anchoWeb
+  const todos = { configs: [final], contenidos: [contenido] }
+  return (
+    <AbsoluteFill style={{ background: TINTA, fontFamily: SANS }}>
+      <div style={{ position: 'absolute', left: 0, right: 0, top: 0, height: PARTIDA.altoClip, overflow: 'hidden' }}>
+        {pares.map((par, i) => {
+          // Cada plano empieza un poco antes de su turno y entra con un fundido.
+          const desde = Math.max(0, i * PAR - 12)
+          const opacidad = i === 0 ? 1 : interpolate(frame, [i * PAR - 12, i * PAR + 4], [0, 1], clamp)
+          return (
+            <Sequence key={i} from={desde} durationInFrames={PAR + 24} layout="none">
+              <AbsoluteFill style={{ opacity: opacidad }}>
+                <Clip clip={par.clip} duracion={PAR + 24} zoom={[1.02, 1.08]} />
+              </AbsoluteFill>
+            </Sequence>
+          )
+        })}
+        <AbsoluteFill style={{ background: 'linear-gradient(to bottom, rgba(22,23,27,0.55) 0%, rgba(22,23,27,0) 30%, rgba(22,23,27,0) 70%, rgba(22,23,27,0.85) 100%)' }} />
+      </div>
+
+      <Pastilla k={k} desde={k === 0 ? 10 : k * PAR} tipo="recorrido" muestras={[resuelto.marca]}>
+        {pares[k].texto}
+      </Pastilla>
+
+      <Tarjeta arriba={C.arriba} ancho={C.ancho} alto={C.alto}>
+        {pares.map((par, i) => {
+          const p = i === 0 ? 1 : progreso(frame, fps, i * PAR, undefined, 18)
+          return (
+            <AbsoluteFill key={i} style={i === 0 ? undefined : barrido(p)}>
+              <Escenario config={final} contenido={contenido} todos={todos} seccion={par.seccion} ancho={anchoWeb} alto={C.alto / escala} escala={escala} />
+            </AbsoluteFill>
+          )
+        })}
+      </Tarjeta>
+    </AbsoluteFill>
+  )
+}
+
+const ESCENA = {
+  gancho: EscenaGancho,
+  movil: EscenaMovil,
+  escribe: EscenaEscribe,
+  planos: EscenaPlanos,
+  resultado: EscenaResultado,
+  partida: EscenaPartida,
+}
+
 export function ReelHistoria({ resuelto }) {
+  const piezas = resuelto.escenas.flatMap((e, i) => {
+    const contenido =
+      e === 'cierre' ? <Cierre linea1={resuelto.pregunta} linea2="Diséñala tú. Yo la construyo." /> : (() => {
+        const Escena = ESCENA[e]
+        return <Escena resuelto={resuelto} />
+      })()
+    const secuencia = (
+      <TransitionSeries.Sequence key={e} durationInFrames={T[e]}>
+        {contenido}
+      </TransitionSeries.Sequence>
+    )
+    return i === 0 ? [secuencia] : [<TransitionSeries.Transition key={`${e}-cruce`} presentation={fade()} timing={cruce} />, secuencia]
+  })
   return (
     <AbsoluteFill style={{ background: TINTA }}>
-      <TransitionSeries>
-        <TransitionSeries.Sequence durationInFrames={T.gancho}>
-          <EscenaGanchoReal resuelto={resuelto} />
-        </TransitionSeries.Sequence>
-        <TransitionSeries.Transition presentation={fade()} timing={cruce} />
-        <TransitionSeries.Sequence durationInFrames={T.movil}>
-          <EscenaMovil resuelto={resuelto} />
-        </TransitionSeries.Sequence>
-        <TransitionSeries.Transition presentation={fade()} timing={cruce} />
-        <TransitionSeries.Sequence durationInFrames={T.planos}>
-          <EscenaPlanos resuelto={resuelto} />
-        </TransitionSeries.Sequence>
-        <TransitionSeries.Transition presentation={fade()} timing={cruce} />
-        <TransitionSeries.Sequence durationInFrames={T.resultado}>
-          <EscenaResultado resuelto={resuelto} />
-        </TransitionSeries.Sequence>
-        <TransitionSeries.Transition presentation={fade()} timing={cruce} />
-        <TransitionSeries.Sequence durationInFrames={T.cierre}>
-          <Cierre linea1={resuelto.pregunta} linea2="Diséñala tú. Yo la construyo." />
-        </TransitionSeries.Sequence>
-      </TransitionSeries>
+      <TransitionSeries>{piezas}</TransitionSeries>
       <BarraProgreso />
     </AbsoluteFill>
   )

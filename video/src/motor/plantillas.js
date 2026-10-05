@@ -129,7 +129,7 @@ export const PLANTILLAS = {
     pregunta: '¿Le damos forma a la tuya?',
     comenta: '¿Qué es lo primero que cambiarías de tu web? 👇',
     queSeVe:
-      'Vídeo real del oficio; su web de antes en un móvil y Maketa en uso: un toque al punto de partida, otro al color y otro a la portada con su foto. Planos reales y la web terminada.',
+      'Vídeo real del oficio y su web, en una de tres formas (datos/historias.json): antes y ahora con toques en Maketa, el titular tecleado y la foto elegida, o pantalla partida con cada plano junto a su sección.',
     dolor: () => '¿Tu web está a la altura de lo que haces cada día?',
     cuerpo: () =>
       'Desde el móvil: eliges un punto de partida, tu color y tu foto, y lo ves cambiar al momento. Cuando te guste, la construimos juntos.',

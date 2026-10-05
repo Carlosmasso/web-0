@@ -1,11 +1,11 @@
-import { AbsoluteFill } from 'remotion'
+import { AbsoluteFill, Img } from 'remotion'
 import { Escenario } from '../componentes/Escenario'
 import { CajaPastilla, IconoPastilla } from '../componentes/Etiqueta'
 import { Marca } from '../componentes/Logo'
 import { ConAcento, Icono } from '../componentes/piezas'
 import { MARGEN, REEL, TIPO_REEL } from '../diseno/formatos'
 import { MONO, SANS } from '../diseno/fuentes'
-import { ACENTO, FONDO, LINEA, TINTA_TENUE } from '../diseno/marca'
+import { ACENTO, ACENTO_CLARO, FONDO, LINEA, TINTA, TINTA_TENUE } from '../diseno/marca'
 import { fondoDe } from '../diseno/temas'
 import { antetitulo, cuerpo, titular } from '../diseno/texto'
 
@@ -23,12 +23,16 @@ import { antetitulo, cuerpo, titular } from '../diseno/texto'
 //            (se contesta con un número), lo que más empuja un reel.
 //   numero   el número enorme ("5 colores") sobre la pila. Se escanea de un
 //            vistazo y rima con las portadas de carrusel del layout C.
+//   foto     (historias) la foto real del negocio a sangre y su web delante,
+//            en un móvil. Rompe la fila de fondos lisos del perfil.
+//   titular  (historias que se escriben) el campo "Titular" con la frase ya
+//            escrita y el cursor, sobre la web.
 //
 // Se elige con "visual": { "portada": "…" } en la idea. Todo cae entre y=300
 // e y=1640, dentro de la franja 3:4 que enseña el perfil.
 // ============================================================
 
-export const PORTADAS_REEL = ['pila', 'duelo', 'rejilla', 'numero']
+export const PORTADAS_REEL = ['pila', 'duelo', 'rejilla', 'numero', 'foto', 'titular']
 
 const Z = {
   arriba: 300,
@@ -220,6 +224,67 @@ function Duelo({ resuelto, tema }) {
   )
 }
 
+/** La web terminada en un móvil, sobre la foto real del negocio (el fondo lo pone PortadaReel). */
+function Foto({ resuelto }) {
+  const config = (resuelto.portada ?? resuelto.pasos).at(-1).config
+  const ancho = 540
+  return (
+    <>
+      <Web
+        config={config}
+        resuelto={resuelto}
+        ancho={ancho}
+        radio={56}
+        style={{ left: '50%', marginLeft: -ancho / 2, top: 0, bottom: 40, border: `12px solid ${TINTA}`, boxShadow: '0 60px 120px -40px rgba(0,0,0,0.85)' }}
+      />
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, display: 'flex', justifyContent: 'center' }}>
+        <CajaPastilla>
+          <IconoPastilla tipo="recorrido" muestras={[resuelto.marca]} />
+          Así quedaría la tuya
+        </CajaPastilla>
+      </div>
+    </>
+  )
+}
+
+/** El campo "Titular" de Maketa con la frase escrita, montado sobre la web. */
+function Titular({ resuelto }) {
+  const config = (resuelto.portada ?? resuelto.pasos).at(-1).config
+  const ancho = 820
+  // En columna: la web empieza donde acaba el campo, ocupe una línea o dos.
+  return (
+    <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column' }}>
+      <div
+        style={{
+          position: 'relative',
+          zIndex: 1,
+          marginInline: MARGEN.x,
+          padding: '28px 34px 32px',
+          borderRadius: 28,
+          background: '#17181c',
+          border: '2px solid #3b3d47',
+          boxShadow: '0 40px 80px -30px rgba(0,0,0,0.6)',
+          fontFamily: SANS,
+        }}
+      >
+        <div style={{ fontSize: 26, fontWeight: 600, color: '#989ca7', marginBottom: 14 }}>Titular</div>
+        <div style={{ fontSize: 52, fontWeight: 650, lineHeight: 1.15, letterSpacing: '-0.02em', color: '#eaebef' }}>
+          {resuelto.texto}
+          <span style={{ display: 'inline-block', width: 5, height: 54, marginLeft: 6, verticalAlign: -8, background: ACENTO_CLARO }} />
+        </div>
+      </div>
+      <div style={{ position: 'relative', flex: 1, marginTop: 24 }}>
+        <Web
+          config={config}
+          resuelto={resuelto}
+          ancho={ancho}
+          style={{ left: '50%', marginLeft: -ancho / 2, top: 0, bottom: 0, boxShadow: '0 50px 100px -40px rgba(22,23,27,0.55)' }}
+        />
+      </div>
+    </div>
+  )
+}
+
 /** Cuatro versiones numeradas y la pregunta: se contesta con un número. */
 function Rejilla({ resuelto }) {
   const tiles = versiones((resuelto.portada ?? resuelto.pasos), 4)
@@ -289,14 +354,19 @@ function Rejilla({ resuelto }) {
  * @param variante  una de PORTADAS_REEL
  * @param pastilla  texto propio para la pastilla (si no, "qué cambia · N opciones")
  */
-export function PortadaReel({ resuelto, tema, serie, variante = 'pila', pastilla = null }) {
+export function PortadaReel({ resuelto, tema: temaBase, serie, variante = 'pila', pastilla = null }) {
+  let tema = temaBase
   const n = (resuelto.portada ?? resuelto.pasos).length
   // Lo que cada variante necesita para tener sentido; si no, la más cercana.
   let v = PORTADAS_REEL.includes(variante) ? variante : 'pila'
   if (v === 'rejilla' && n < 4) v = n > 1 ? 'duelo' : 'pila'
   if (v === 'numero' && n < 2) v = 'pila'
+  if (v === 'foto' && !resuelto.fondo) v = 'pila'
+  if (v === 'titular' && !resuelto.texto) v = 'pila'
+  // Sobre la foto real, el texto va en claro aunque el tema sea claro.
+  if (v === 'foto') tema = { ...tema, oscuro: true, texto: '#fff', suave: 'rgba(255,255,255,0.75)', acento: ACENTO_CLARO }
 
-  const Cuerpo = { pila: Pila, duelo: Duelo, rejilla: Rejilla, numero: Pila }[v]
+  const Cuerpo = { pila: Pila, duelo: Duelo, rejilla: Rejilla, numero: Pila, foto: Foto, titular: Titular }[v]
 
   return (
     <AbsoluteFill
@@ -311,7 +381,13 @@ export function PortadaReel({ resuelto, tema, serie, variante = 'pila', pastilla
         flexDirection: 'column',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      {v === 'foto' ? (
+        <AbsoluteFill>
+          <Img src={resuelto.fondo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <AbsoluteFill style={{ background: 'linear-gradient(to bottom, rgba(22,23,27,0.88) 0%, rgba(22,23,27,0.55) 38%, rgba(22,23,27,0.35) 70%, rgba(22,23,27,0.7) 100%)' }} />
+        </AbsoluteFill>
+      ) : null}
+      <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Marca tamano={38} tema={tema.oscuro ? 'oscuro' : 'claro'} />
         {serie ? <span style={antetitulo(24, tema.acento)}>{serie}</span> : null}
       </div>
@@ -330,7 +406,7 @@ export function PortadaReel({ resuelto, tema, serie, variante = 'pila', pastilla
           </h1>
         </>
       ) : (
-        <h1 style={{ ...titular(TIPO_REEL.gancho, tema.texto), lineHeight: 1.04, marginTop: Z.trasCabecera }}>
+        <h1 style={{ ...titular(TIPO_REEL.gancho, tema.texto), position: 'relative', lineHeight: 1.04, marginTop: Z.trasCabecera }}>
           <ConAcento texto={resuelto.gancho} acento={tema.acento} />
         </h1>
       )}

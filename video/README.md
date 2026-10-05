@@ -191,39 +191,33 @@ modifico X?".
 | `preset+color` · `estilo+color` · `tipografia+estilo` · `tipografia+color` | Las combinaciones con sentido |
 | `historia` | Un negocio de verdad, antes y ahora: vídeo real del oficio, su web en un móvil y Maketa en uso (tres toques), planos reales y la web terminada |
 
-### La plantilla `historia`: vídeo real
+### La plantilla `historia`: vídeo real, en tres formas
 
-La única con escenas propias (`motor/historia.js` + `motor/ReelHistoria.jsx`),
-dentro de la misma composición `Reel`: gancho sobre un clip del oficio → la
-web de antes en un móvil y la hoja de Maketa con un dedo que toca el punto de
-partida, el color y la portada → dos planos reales con dos frases → la web
-terminada bajando en el móvil ("Así quedaría la tuya") → cierre.
+Escenas propias (`motor/historia.js` + `motor/ReelHistoria.jsx`) dentro de la
+misma composición `Reel`. Todas abren con un clip real del oficio y su frase y
+cierran con el cierre de siempre; en medio, según la `forma` de cada negocio en
+`datos/historias.json`:
 
-- **Un negocio nuevo es datos**: su entrada en `datos/historias.json` (gancho,
-  las dos frases y los clips). Clips de Pexels, verticales y en 1080p
-  (`…-hd_1080_1920_…mp4`; la URL `pexels.com/download/video/<id>/` redirige al
-  archivo). Se enlazan, no se guardan en el repo.
+| Forma | Qué pasa | Portada | Negocios |
+| --- | --- | --- | --- |
+| `antes` | Su web de antes en un móvil y tres toques en la hoja de Maketa (`toques`: tres de `preset`, `estilo`, `color`, `tipografia`, `portada`); planos reales y la web terminada | `duelo` (Antes / Ahora) | clínica, abogados |
+| `escribe` | Teclea el titular en el campo de Maketa (con teclado) y la web se escribe a la vez; elige su foto en la galería del móvil; planos reales y la web terminada | `titular` | peluquería, fisio, arquitectura |
+| `partida` | Pantalla partida: arriba el oficio, abajo su web; cada plano con la sección que lo cuenta (`pares`: clip, `seccion` y texto de la pastilla) | `foto` (la foto real a sangre) | obrador, casa rural, taller |
+
+- **Un negocio nuevo es datos**: su entrada en `datos/historias.json`. Clips
+  de Pexels, verticales y en 1080p (`…-hd_1080_1920_…mp4`; la URL
+  `pexels.com/download/video/<id>/` redirige al archivo). Se enlazan, no se
+  guardan en el repo. Cada clip tiene que durar su escena desde `desde`: ~3,5 s
+  el del gancho, 5 s cada plano.
 - **Mientras no haya clientes, el negocio es de ejemplo**: se cuenta como "así
   quedaría", nunca como un caso real. Cuando lo haya, se cambian los clips por
-  los suyos (o por los que grabe Carlos) y la misma plantilla es el caso.
+  los suyos y la misma plantilla es el caso.
+- El fondo desenfocado del móvil es la foto del negocio (`datos/imagenes.json`).
+  El color del toque de color sale de lejos de la marca, para que se note.
 - El primer render descarga los clips (~1 min); si Remotion se queda
   esperando un fotograma, `pnpm crear` lo reintenta una vez.
-- Su portada usa la variante `duelo` con dos estados: Antes y Ahora.
-
-- **La web es la real**: `componentes/Escenario.jsx` pinta los componentes de
-  `../src/preview/` en un iframe de móvil, con los mismos guardarraíles que el
-  configurador. Cada variante se aplica con el mismo parche que la
-  herramienta (`motor/ejes.js`).
-- **Variantes automáticas** (`"variantes": "auto"`): las N más distintas
-  entre sí, por muestreo del punto más lejano con distancias explícitas
-  (`motor/elegir.js`).
-- **Los negocios** (`datos/negocios.mjs`) se montan en tres capas: el
-  contenido del sector de su preset, sus secciones propias
-  (`datos/secciones.mjs`) si ese sector no les casa, y su marca y portada. Un
-  negocio nuevo cuyo preset no sea de su sector necesita su entrada ahí, con
-  fotos de Pexels comprobadas a ojo (`node lib/fotos.mjs`).
-- **Una sola copia de React** (`webpack.mjs`): los componentes de `../src/` la
-  resolverían desde la raíz y los hooks fallarían.
+- Las portadas `foto` y `titular` son solo para historias: en otro reel caen a
+  `pila`.
 
 ## Carruseles
 
