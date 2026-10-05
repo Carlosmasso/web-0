@@ -1921,14 +1921,14 @@ body {
 
 .modal {
   width: 100%;
-  max-width: 420px;
+  max-width: 520px;
   max-height: 88vh;
   overflow-y: auto;
   background: var(--c-card);
   border: 1px solid var(--c-line);
   border-radius: var(--c-radius-lg);
   box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.55);
-  padding: 22px;
+  padding: 28px;
   animation: modal-in 200ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
@@ -2025,7 +2025,7 @@ body {
    modal mientras se desplaza, con una franja del color de la tarjeta. */
 form > .modal__submit {
   position: sticky;
-  bottom: -22px;
+  bottom: -28px;
   box-shadow: 0 -14px 0 0 var(--c-card), 0 8px 0 0 var(--c-card);
 }
 .modal__me {
@@ -2194,7 +2194,7 @@ form > .modal__submit {
 }
 .tour__card {
   position: absolute;
-  width: min(320px, calc(100vw - 24px));
+  width: min(400px, calc(100vw - 24px));
   background: var(--c-card);
   border: 1px solid var(--c-line);
   border-radius: 14px;
@@ -2227,6 +2227,20 @@ form > .modal__submit {
   display: grid;
   gap: 6px;
   margin-top: 14px;
+}
+/* La pregunta de sector necesita aire: en pantallas anchas, la tarjeta
+   crece y las respuestas van en dos columnas ("Otra cosa", a lo ancho). */
+@media (min-width: 700px) {
+  .tour__card:has(.tour__sectors) {
+    width: 520px;
+  }
+  .tour__sectors {
+    grid-template-columns: 1fr 1fr;
+  }
+  .tour__ask,
+  .tour__sector:last-child {
+    grid-column: 1 / -1;
+  }
 }
 .tour__ask {
   font-size: 0.86rem;
@@ -2425,4 +2439,14 @@ form > .modal__submit {
 .modal__extra:has(input:focus-visible) {
   outline: 2px solid var(--c-accent);
   outline-offset: 2px;
+}
+
+/* En el móvil, el modal recupera el margen ajustado de antes. */
+@media (max-width: 560px) {
+  .modal {
+    padding: 22px;
+  }
+  form > .modal__submit {
+    bottom: -22px;
+  }
 }

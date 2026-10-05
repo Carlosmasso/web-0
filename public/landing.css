@@ -270,28 +270,6 @@ h3 {
   margin-top: 28px;
   max-width: 62ch;
 }
-/* cómo trabajo: tres compromisos, en columnas con una línea encima (como los
-   extras del precio). */
-.trust__list {
-  list-style: none;
-  padding: 0;
-  display: grid;
-  gap: 24px 40px;
-}
-@media (min-width: 860px) {
-  .trust__list {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-.trust__list li {
-  padding-top: 16px;
-  border-top: 1px solid var(--line);
-}
-.trust__list p {
-  margin-top: 6px;
-  color: var(--ink-soft);
-}
-
 /* precio: una sola tarjeta, la web que se diseña en el configurador. Lo que
    no cabe en una página (más páginas, reservas, pagos) se habla por correo. */
 
@@ -493,38 +471,69 @@ h3 {
 
 /* ---------- soy Carlos ---------- */
 
-.me__intro {
+.me {
   display: grid;
-  grid-template-columns: 120px minmax(0, 1fr);
-  gap: 24px;
-  align-items: center;
-  margin-bottom: 28px;
+  gap: 32px;
+  align-items: start;
 }
 @media (min-width: 860px) {
-  .me__intro {
-    grid-template-columns: 180px minmax(0, 1fr);
-    gap: 40px;
+  .me {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 64px;
   }
 }
 .me__photo {
   display: block;
   width: 100%;
+  max-width: 420px;
   height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
   border-radius: 14px;
   background: var(--bg-alt);
 }
-.me__intro h2 {
-  margin-bottom: 12px;
+@media (min-width: 860px) {
+  .me__photo {
+    max-width: none;
+    position: sticky;
+    top: 24px;
+  }
+}
+.me h2 {
+  font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.1rem);
+  letter-spacing: -0.03em;
+  margin-bottom: 16px;
 }
 .me__lead {
+  font-size: 1.15rem;
+  line-height: 1.55;
+  color: var(--ink);
+  max-width: 52ch;
+}
+.me__text {
+  margin-top: 14px;
   color: var(--ink-soft);
   font-size: 1.05rem;
-  max-width: 60ch;
+  max-width: 54ch;
 }
-.me__lead a {
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+.me__contact {
+  margin-top: 32px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+}
+.me__contact span {
+  font-size: 0.9rem;
+  color: var(--ink-faint);
+}
+/* La despedida de la carta. */
+.me__sign {
+  margin-top: 28px;
+  font-style: italic;
+  font-size: 1.1rem;
+  line-height: 1.4;
+  color: var(--ink-soft);
 }
 
 /* ---------- pie ---------- */

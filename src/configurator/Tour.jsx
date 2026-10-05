@@ -51,7 +51,6 @@ export const TOUR_STEPS = [
   },
   {
     target: '.stage',
-    reveal: { selector: '.db-footer', label: 'El pie de página' },
     title: 'Todo se ve al momento',
     body: 'Lo que tocas en el panel aparece aquí al instante, y cada ajuste te señala qué parte de la web cambia. Prueba sin miedo: arriba tienes "Deshacer".',
   },
@@ -76,7 +75,7 @@ export const SECTOR_CHOICES = [
 ]
 
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v))
-const CARD_W = 320
+const CARD_W = 400
 
 /**
  * Coloca la tarjeta a un lado del elemento resaltado, o debajo si no cabe.
