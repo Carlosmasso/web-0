@@ -1,3 +1,4 @@
+import { isStudio } from "../config/mode";
 import { useEffect, useRef, useState } from "react";
 import { Icon } from "../preview/Icon";
 import { listProjects } from "./projects";
@@ -66,7 +67,7 @@ export function ProjectMenu({
         className="pmenu__trigger"
         onClick={() => setOpen((v) => !v)}
       >
-        <span className="pmenu__eyebrow">Maketa · proyecto</span>
+        <span className="pmenu__eyebrow">{isStudio ? "Maketa · proyecto" : "Tu web"}</span>
         <span className="pmenu__name">
           {active?.name ?? "Proyecto por defecto"}
           <Icon set="tabler" name="chevron" size={13} />

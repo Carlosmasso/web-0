@@ -22,6 +22,11 @@
 // picsum, porque ahí un rostro genérico sí es un marcador honesto y no se
 // atribuye una cara real a una opinión inventada.
 //
+// SOBRE LOS LOGOS. Los nombres de las franjas de logos son inventados a
+// propósito: una marca real (una aseguradora, una guía, un hotel) en una web
+// de ejemplo da a entender un respaldo que no existe, y estas webs salen en la
+// landing y en los reels. El cliente pone los suyos.
+//
 // Aun así son imágenes de archivo: el cliente pone las suyas, y una foto real
 // de su local convierte más que cualquiera de estas.
 // ============================================================
@@ -50,12 +55,12 @@ export const CONTENIDO_POR_SECTOR = {
       image: pexels(3946835, 1200, 1500),
     },
     logos: {
-      headline: 'Más de 4.000 familias de la ciudad pasan por aquí',
+      headline: 'Trabajamos con tu aseguradora',
       items: [
-        { name: 'Colegio de Dentistas' },
-        { name: 'Adeslas' },
-        { name: 'Sanitas' },
-        { name: 'DKV' },
+        { name: 'Mutua del Norte' },
+        { name: 'Salud Brisa' },
+        { name: 'Previsora Atlántica' },
+        { name: 'Seguros Alcor' },
       ],
     },
     features: {
@@ -155,7 +160,7 @@ export const CONTENIDO_POR_SECTOR = {
     faq: {
       title: 'Preguntas frecuentes',
       items: [
-        { q: '¿Trabajáis con seguros?', a: 'Sí, con Adeslas, Sanitas y DKV. Dinos cuál tienes al pedir la cita y lo comprobamos.' },
+        { q: '¿Trabajáis con seguros?', a: 'Sí, con las principales aseguradoras. Dinos cuál tienes al pedir la cita y lo comprobamos.' },
         { q: '¿Cuánto dura la primera visita?', a: 'Unos cuarenta minutos. Salimos de ahí con un plan y un precio, no con una lista de dudas.' },
         { q: '¿Se puede financiar?', a: 'Sí, hasta doce meses sin intereses. Lo gestionamos aquí mismo, sin papeleo por tu cuenta.' },
         { q: '¿Atendéis a niños?', a: 'Sí. La primera visita infantil es de reconocimiento: se sientan, miran y no se toca nada.' },
@@ -213,10 +218,10 @@ export const CONTENIDO_POR_SECTOR = {
     logos: {
       headline: 'Nos encontrarás también en',
       items: [
-        { name: 'Mercado de Abastos' },
+        { name: 'Mercado del Ensanche' },
         { name: 'La Tienda de Ana' },
         { name: 'Bar Cantábrico' },
-        { name: 'Hotel Zurbano' },
+        { name: 'Hostal La Vega' },
       ],
     },
     features: {
@@ -534,10 +539,10 @@ CONTENIDO_POR_SECTOR['real-estate'] = {
   logos: {
     headline: 'Premios y publicaciones',
     items: [
-      { name: 'Premio COAA' },
-      { name: 'Arquitectura Viva' },
+      { name: 'Premio Vivienda Norte' },
+      { name: 'Revista Habitar' },
       { name: 'Bienal de Vivienda' },
-      { name: 'Plataforma Arquitectura' },
+      { name: 'Cuadernos de Obra' },
     ],
   },
   features: {
@@ -855,10 +860,10 @@ CONTENIDO_POR_SECTOR['fine-dining'] = {
   logos: {
     headline: 'Reconocimientos',
     items: [
-      { name: 'Guía Michelin' },
-      { name: 'Repsol' },
-      { name: 'Gourmetour' },
-      { name: 'Euskadi Gastronomika' },
+      { name: 'Guía del Buen Comer' },
+      { name: 'Soles de la Mesa' },
+      { name: 'Ruta del Sabor' },
+      { name: 'Premio Cocina del Norte' },
     ],
   },
   features: {

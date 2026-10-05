@@ -34,18 +34,18 @@ import { SECTION_ORDER } from '../config/schema'
 export const DESIGN_STEPS = [
   {
     id: 'start',
-    label: 'Punto de partida',
-    lead: 'Elige un mundo entero. Color, tipografía y secciones llegan ya afinados entre sí.',
+    label: 'Tu tipo de negocio',
+    lead: 'Elige el que más se parezca al tuyo. Colores, letra y secciones llegan ya pensados para él.',
   },
   {
     id: 'identity',
-    label: 'Tu identidad',
-    lead: 'Lo que hace tuya esa base: tu color y tu tipo. El resto se recalcula solo.',
+    label: 'Tu marca',
+    lead: 'Tu color y tu letra. El resto de la paleta se ajusta solo para que todo se lea bien.',
   },
   {
     id: 'fine',
-    label: 'Ajuste fino',
-    lead: 'Qué secciones salen y en qué orden, y los detalles de cada pieza.',
+    label: 'Retoques',
+    lead: 'Qué secciones salen y en qué orden, y algún detalle más. Si no te apetece, sáltatelo: la base ya viene bien.',
     optional: true,
   },
 ]

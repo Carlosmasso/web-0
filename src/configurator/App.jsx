@@ -22,6 +22,7 @@ import { ErrorBoundary } from "../ErrorBoundary";
 import { Icon } from "../preview/Icon";
 import { getAesthetic } from "../registry/aesthetics";
 import { getTypePairing } from "../registry/fonts";
+import { getPreset } from "../registry/presets";
 import { safePalette } from "../theme/color";
 import { randomConfig } from "../theme/randomize";
 import { ContactModal } from "./ContactModal";
@@ -184,6 +185,21 @@ export function App() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [undo, redo]);
+
+  // Los ejemplos de la landing enlazan con `?sector=<preset>`: quien toca "la
+  // clínica" llega a la clínica, no al ejemplo neutro. Se aplica una sola vez y
+  // con la misma regla que el panel: el contenido solo cambia si sigue siendo
+  // el de demostración. Luego se quita de la URL para que recargar no lo repita.
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const preset = getPreset(url.searchParams.get("sector") ?? "");
+    if (!preset) return;
+    applyPreset(preset);
+    url.searchParams.delete("sector");
+    window.history.replaceState(null, "", url);
+    // Solo al arrancar.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /* ---- edición ---- */
 
@@ -775,6 +791,11 @@ export function App() {
         onPanel={setDesignStep}
         tab={mode}
         onTab={setMode}
+        askSector={content?.brand?.name === DEFAULT_CONTENT.brand.name}
+        onSector={(id) => {
+          const preset = getPreset(id);
+          if (preset) applyPreset(preset);
+        }}
       />
     </div>
   );

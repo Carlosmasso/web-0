@@ -35,64 +35,44 @@ export const markTourDone = () => {
   }
 }
 
-/** `target` es un selector CSS; sin él, el paso va centrado. */
+/**
+ * `target` es un selector CSS; sin él, el paso va centrado.
+ *
+ * Tres pasos y no más: para qué es, que todo se ve al momento, y dónde se pide.
+ * Lo demás (los tres pasos del panel, el dado, el WhatsApp) se explica solo
+ * al usarlo; un recorrido de diez pantallas tapaba la web justo cuando tenía
+ * que enganchar y casi nadie llegaba al paso que importa, el último.
+ */
 export const TOUR_STEPS = [
   {
     title: 'Esta herramienta es para ti',
-    body: 'Aquí diseñas tu propia web: eliges cómo se ve. Cuando te guste, me escribes y yo la construyo contigo, con tus textos y tus fotos, hasta que estés contento con ella.',
-  },
-  {
-    target: '[data-tour="steps"]',
-    panel: 'start',
-    title: 'Tres pasos, siempre a la vista',
-    body: 'El diseño se hace en tres: eliges una base, le pones tu marca y, si te apetece, afinas los detalles. Puedes saltar de uno a otro cuando quieras — nada se pierde por el camino.',
-  },
-  {
-    target: '[data-tour="start"]',
-    panel: 'start',
-    title: 'Paso 1 · No empiezas de cero',
-    body: 'Elige una base por tu sector (dentista, bufete, cafetería…) o por el estilo que te guste. Viene con colores, tipografía y secciones que ya encajan entre sí, y puedes cambiarla cuando quieras.',
-  },
-  {
-    target: '.surprise',
-    panel: 'start',
-    title: 'Y si no sabes por dónde empezar, tira el dado',
-    body: 'Pulsa "Sorpréndeme" y te monta una combinación entera —color, tipografía, acabado y estructura— coherente y sin romper nada. Púlsalo las veces que quieras: es la forma más rápida de descubrir qué te gusta, y lo que salga sigue siendo tuyo para retocarlo.',
-  },
-  {
-    target: '[data-tour="identity"]',
-    panel: 'identity',
-    title: 'Paso 2 · Ponle tu marca',
-    body: 'Tu color, tu tipografía, la forma de las esquinas y el movimiento. Elijas el color que elijas, el resto de la paleta se ajusta solo para que todo se lea bien.',
-  },
-  {
-    target: '[data-tour="fine"]',
-    panel: 'fine',
-    title: 'Paso 3 · Afina los detalles, si quieres',
-    body: 'Aquí eliges qué secciones aparecen y en qué orden, y retocas detalles como el fondo de la portada o el estilo de los botones. Es opcional: la base ya viene bien, esto es solo para rematar.',
+    body: 'Aquí diseñas tu propia web y la ves tal cual quedará. Cuando te guste, me escribes y yo la construyo contigo.',
+    sectors: true,
   },
   {
     target: '.stage',
     reveal: { selector: '.db-footer', label: 'El pie de página' },
-    title: 'Se ve al instante, y te señala qué cambia',
-    body: 'Todo lo que tocas aparece aquí al momento. Y cada ajuste del panel dice a qué parte de la web afecta: pásale el ratón y se ilumina aquí, o pulsa "Ver" y baja hasta ella (como ahora, al pie). Prueba sin miedo: nada se rompe y arriba tienes "Deshacer".',
-  },
-  {
-    target: '.shell__tabs',
-    title: 'Tus textos y fotos, si quieres',
-    body: 'En "Contenido" escribes tus textos y subes tus imágenes. Es opcional: si lo prefieres, lo pongo yo al construirla con lo que me pases.',
-  },
-  {
-    target: '[data-field="brand.whatsapp"]',
-    tab: 'content',
-    title: 'El botón de WhatsApp es tuyo',
-    body: 'Ese botón verde flotante que ves abajo a la derecha en tu web abre una conversación de WhatsApp contigo. Ahora lleva un número de ejemplo que no existe: escribe aquí el tuyo con el prefijo (+34…) y ya funciona. Si no lo quieres, borra el campo y el botón desaparece.',
+    title: 'Todo se ve al momento',
+    body: 'Lo que tocas en el panel aparece aquí al instante, y cada ajuste te señala qué parte de la web cambia. Prueba sin miedo: arriba tienes "Deshacer".',
   },
   {
     target: '.shell__cta',
     title: 'Cuando te guste, aquí me tienes',
     body: 'Pulsa "Quiero esta web", déjame tus datos y te escribo yo para verla juntos. Sin compromiso: aquí no pagas nada.',
   },
+]
+
+/**
+ * "¿A qué te dedicas?": cada respuesta abre su punto de partida por sector,
+ * con su contenido de ejemplo. Así nadie empieza mirando la web de otro tipo
+ * de negocio. "Otra cosa" deja el ejemplo neutro.
+ */
+export const SECTOR_CHOICES = [
+  { preset: 'local-food', label: 'Comercio u hostelería', note: 'Obrador, cafetería, tienda, taller' },
+  { preset: 'medical-wellness', label: 'Salud y bienestar', note: 'Clínica, fisio, consulta' },
+  { preset: 'corporate-legal', label: 'Despacho o asesoría', note: 'Abogados, gestoría, consultoría' },
+  { preset: 'real-estate', label: 'Casas y arquitectura', note: 'Estudio, inmobiliaria, reformas' },
+  { preset: null, label: 'Otra cosa', note: 'Empiezo por un ejemplo neutro' },
 ]
 
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v))
@@ -120,7 +100,7 @@ function placeCard(rect, cardH) {
   }
 }
 
-export function Tour({ steps, open, onClose, onReveal, panel, onPanel, tab, onTab }) {
+export function Tour({ steps, open, onClose, onReveal, panel, onPanel, tab, onTab, askSector = false, onSector }) {
   const [i, setI] = useState(0)
   const [rect, setRect] = useState(null)
   const cardRef = useRef(null)
@@ -216,9 +196,15 @@ export function Tour({ steps, open, onClose, onReveal, panel, onPanel, tab, onTa
   // saltarse ninguno o React pierde el orden entre renders.
   if (!open) return null
 
-  const cardStyle = rect
-    ? placeCard(rect, cardH)
-    : { left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }
+  // En el móvil la tarjeta va siempre abajo, a lo ancho: así no tapa la web,
+  // que es lo que tiene que enganchar.
+  const narrow = window.innerWidth < 700
+  const cardStyle = narrow
+    ? { left: 12, right: 12, bottom: 12, width: 'auto' }
+    : rect
+      ? placeCard(rect, cardH)
+      : { left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }
+  const showSectors = step.sectors && askSector
 
   return (
     <div className="tour" role="dialog" aria-modal="true" aria-label="Cómo funciona">
@@ -243,6 +229,25 @@ export function Tour({ steps, open, onClose, onReveal, panel, onPanel, tab, onTa
         </p>
         <h3>{step.title}</h3>
         <p>{step.body}</p>
+        {showSectors ? (
+          <div className="tour__sectors" role="group" aria-label="¿A qué te dedicas?">
+            <p className="tour__ask">¿A qué te dedicas?</p>
+            {SECTOR_CHOICES.map((c) => (
+              <button
+                key={c.label}
+                type="button"
+                className="tour__sector"
+                onClick={() => {
+                  if (c.preset) onSector?.(c.preset)
+                  next()
+                }}
+              >
+                <strong>{c.label}</strong>
+                <span>{c.note}</span>
+              </button>
+            ))}
+          </div>
+        ) : null}
         <div className="tour__nav">
           {!last ? (
             <button type="button" className="tour__skip" onClick={onClose}>
@@ -257,9 +262,11 @@ export function Tour({ steps, open, onClose, onReveal, panel, onPanel, tab, onTa
                 Atrás
               </button>
             )}
-            <button type="button" className="tour__next" onClick={next}>
-              {last ? 'Entendido' : 'Siguiente'}
-            </button>
+            {showSectors ? null : (
+              <button type="button" className="tour__next" onClick={next}>
+                {last ? 'Entendido' : 'Siguiente'}
+              </button>
+            )}
           </div>
         </div>
       </div>

@@ -87,6 +87,6 @@ export const IDENTITY_AFFECTS = {
   },
   brand: {
     selector: '.db-btn--primary, .db-eyebrow, .db-feature__icon',
-    label: 'Botones, antetítulos e iconos',
+    label: 'Botones, rótulos pequeños e iconos',
   },
 }

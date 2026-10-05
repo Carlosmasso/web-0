@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { IconCheck, IconX } from '@tabler/icons-react'
+import { IconCheck, IconPlus, IconX } from '@tabler/icons-react'
 import { submitLead, summariseImages, noteWithExtras, CONTACT_EMAIL } from '../export/contact'
 import { track } from '../config/analytics'
 import { isStudio } from '../config/mode'
@@ -174,7 +174,14 @@ export function ContactModal({
             <div className="modal__head">
               <div>
                 <h2 id="contact-title">Cuéntame y te escribo yo</h2>
-                <p>Déjame tus datos y te escribo en persona para verla juntos. Sin compromiso: aquí no pagas nada.</p>
+                {/* Quién va a escribir: la misma foto que en la landing. */}
+                <div className="modal__me">
+                  <img src="/carlos.jpg" alt="" width="44" height="44" />
+                  <p>
+                    Soy Carlos. Déjame tus datos y te escribo en persona para verla juntos.
+                    Sin compromiso: aquí no pagas nada.
+                  </p>
+                </div>
                 {/* Con varias versiones guardadas hay que decir cuál se está
                     pidiendo: el enlace que viaja es el del diseño en pantalla. */}
                 {versionName && (
@@ -255,6 +262,13 @@ export function ContactModal({
                 />
               </label>
 
+              {/* Lo opcional, plegado: lo que hace falta para enviar cabe en
+                  pantalla, también en el móvil. */}
+              <details className="modal__more">
+                <summary>
+                  <IconPlus size={14} stroke={2} aria-hidden />
+                  Añadir algo más<em>opcional</em>
+                </summary>
               <fieldset className="field modal__extras">
                 <legend className="field__label">
                   ¿Te hace falta algo más?<em>opcional</em>
@@ -288,6 +302,7 @@ export function ContactModal({
                   placeholder="Plazos, dudas, lo que sea…"
                 />
               </label>
+              </details>
 
               <label className={`modal__consent${errors.consent ? ' modal__consent--invalid' : ''}`}>
                 <input
