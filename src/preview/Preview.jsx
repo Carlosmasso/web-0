@@ -23,11 +23,31 @@ export function Preview() {
   const [focus, setFocus] = useState(null)
   const [zipping, setZipping] = useState(false)
 
+  // Cuándo la web está lista para enseñarse: con su tipografía, para que no
+  // cambie de letra delante del usuario. La foto no se espera (llega sola y
+  // esperarla hacía la carga más lenta) y la letra, como mucho 1,2 s.
+  const [firstConfig, setFirstConfig] = useState(false)
+  useEffect(() => {
+    if (!firstConfig) return undefined
+    let done = false
+    const finish = () => {
+      if (done) return
+      done = true
+      window.parent?.postMessage({ type: 'preview-painted' }, '*')
+    }
+    const timer = setTimeout(finish, 1200)
+    requestAnimationFrame(() => {
+      Promise.resolve(document.fonts?.ready).then(() => requestAnimationFrame(finish))
+    })
+    return () => clearTimeout(timer)
+  }, [firstConfig])
+
   useEffect(() => {
     function onMessage(event) {
       if (event.data?.type === 'config' && event.data.config) {
         setRaw(event.data.config)
         if (event.data.content) setContent(event.data.content)
+        setFirstConfig(true)
       }
       // El panel avisa de qué está tocando el usuario para que el lienzo
       // se explique solo.
