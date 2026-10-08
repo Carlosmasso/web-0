@@ -214,13 +214,19 @@ function FrameRow({ row, value, onChange, onFocus, onReveal }) {
   )
 }
 
-/** Enciende el foco del lienzo al pasar el puntero o al recibir foco de teclado. */
+/**
+ * Enciende el foco del lienzo al pasar el ratón o al llegar con el teclado.
+ *
+ * Solo ratón y teclado: en una pantalla táctil no hay "pasar por encima", y el
+ * toque emula un mouseenter y deja el botón enfocado sin que nada lo apague
+ * después. El resaltado se quedaba colgado sobre la web tras cada cambio.
+ */
 function focusProps(affects, onFocus) {
   if (!affects) return {}
   return {
-    onMouseEnter: () => onFocus?.(affects),
-    onMouseLeave: () => onFocus?.(null),
-    onFocusCapture: () => onFocus?.(affects),
+    onPointerEnter: (e) => e.pointerType === 'mouse' && onFocus?.(affects),
+    onPointerLeave: (e) => e.pointerType === 'mouse' && onFocus?.(null),
+    onFocusCapture: (e) => e.target.matches?.(':focus-visible') && onFocus?.(affects),
     onBlurCapture: () => onFocus?.(null),
   }
 }
@@ -331,6 +337,7 @@ export function Sidebar({
   onApplyPreset,
   onApplyType,
   onBrandColor,
+  onToggleMode,
   onSurprise,
   onFocus,
   onReveal,
@@ -352,12 +359,38 @@ export function Sidebar({
 
   const meta = DESIGN_STEPS[stepIndex(step)]
   const scrollRef = useRef(null)
+  const aestheticRef = useRef(null)
+  // Adónde ir tras cambiar de paso, si no es al principio. Se resuelve después
+  // de pintar el paso nuevo, cuando el destino ya existe.
+  const jumpTo = useRef(null)
 
   // Cambiar de paso devuelve el panel a su principio: si no, se entra al paso
   // nuevo por la mitad, justo a la altura a la que se había quedado el anterior.
+  // En escritorio se desplaza `.sidebar__scroll`; en móvil, la hoja entera
+  // (`.shell__panel`), así que allí se sube hasta dejar los pasos arriba.
   useEffect(() => {
-    if (scrollRef.current) scrollRef.current.scrollTop = 0
+    const el = scrollRef.current
+    if (!el) return
+    const target = jumpTo.current === 'aesthetic' ? aestheticRef.current?.closest('.grp') : null
+    jumpTo.current = null
+    if (target) {
+      target.scrollIntoView({ block: 'start', behavior: 'smooth' })
+      return
+    }
+    el.scrollTop = 0
+    const hoja = el.closest('.shell__panel')
+    if (!hoja || hoja.scrollHeight <= hoja.clientHeight) return
+    const tirador = hoja.querySelector('.hoja__tirador')?.offsetHeight ?? 0
+    const sobra =
+      el.parentElement.getBoundingClientRect().top - hoja.getBoundingClientRect().top - tirador
+    if (sobra < 0) hoja.scrollTop += sobra
   }, [step])
+
+  /** "Cambiar base" lleva al paso 1, directo a la estética base. */
+  const goToBase = () => {
+    jumpTo.current = 'aesthetic'
+    onStep('start')
+  }
 
   // De qué mundo salió esto. En los pasos 2 y 3 es el contexto que se pierde al
   // dejar de ver la rejilla de presets.
@@ -402,7 +435,7 @@ export function Sidebar({
                 <span>
                   Sobre <strong>{baseLabel}</strong>
                 </span>
-                <button type="button" onClick={() => onStep('start')}>
+                <button type="button" onClick={goToBase}>
                   Cambiar base
                 </button>
               </p>
@@ -441,7 +474,7 @@ export function Sidebar({
                   title="Estética base"
                   hint="El acabado sobre tu color y tu tipo. Cambiarla reajusta bordes, sombras y efectos de una vez."
                 >
-                  <div className="chips">
+                  <div className="chips" ref={aestheticRef}>
                     {AESTHETIC_OPTIONS.map((a) => (
                       <button
                         key={a.id}
@@ -492,12 +525,7 @@ export function Sidebar({
                     <button
                       type="button"
                       className="brand__mode"
-                      onClick={() =>
-                        onBrandColor(
-                          config.palette.primary,
-                          config.meta?.mode === 'dark' ? 'light' : 'dark',
-                        )
-                      }
+                      onClick={onToggleMode}
                     >
                       {config.meta?.mode === 'dark' ? 'Fondo claro' : 'Fondo oscuro'}
                     </button>

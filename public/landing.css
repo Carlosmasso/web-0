@@ -1,7 +1,7 @@
 :root {
   --ink: #16171b;
   --ink-soft: #55575e;
-  --ink-faint: #8b8d95;
+  --ink-faint: #6b6d75;
   --bg: #ffffff;
   --bg-alt: #f6f6f4;
   --line: #e6e6e2;
@@ -9,13 +9,23 @@
   --accent-ink: #ffffff;
   /* Texto e imagen comparten ancho: 1040 px de contenido + 20 px de margen. */
   --max: 1080px;
+  /* Escala de letra: seis tamaños y ninguno más. Es una página para leer con
+     calma, a menudo desde el móvil: el cuerpo va a 17–18 px, no a 16.
+     sm: notas, pie y navegación · base: cuerpo y botones · lg: entradillas,
+     h3, titulares de tarjeta y el precio · xl: h2 · 2xl y 3xl: titulares grandes. */
+  --text-sm: 0.9375rem;
+  --text-base: clamp(1.0625rem, 1rem + 0.25vw, 1.125rem);
+  --text-lg: clamp(1.1875rem, 1.1rem + 0.3vw, 1.25rem);
+  --text-xl: clamp(1.625rem, 1.3rem + 1.2vw, 2.125rem);
+  --text-2xl: clamp(2rem, 1.5rem + 2vw, 2.75rem);
+  --text-3xl: clamp(2.5rem, 1.5rem + 4.4vw, 4rem);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --ink: #ecedf1;
     --ink-soft: #a2a4ac;
-    --ink-faint: #71737c;
+    --ink-faint: #8a8c95;
     --bg: #131418;
     --bg-alt: #17181c;
     --line: #2b2d34;
@@ -36,7 +46,7 @@ html {
 body {
   background: var(--bg);
   color: var(--ink);
-  font: 16px/1.65 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font: var(--text-base)/1.65 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -63,7 +73,7 @@ a {
 }
 .nav nav > a:not(.btn) {
   color: var(--ink-soft);
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
 }
 .nav nav > a:not(.btn):hover {
   color: var(--ink);
@@ -74,7 +84,7 @@ a {
   align-items: center;
   gap: 9px;
   font-weight: 700;
-  font-size: 1.15rem;
+  font-size: var(--text-lg);
   letter-spacing: -0.02em;
 }
 .wordmark__logo {
@@ -87,10 +97,10 @@ a {
 
 .btn {
   display: inline-block;
-  padding: 12px 22px;
+  padding: 14px 26px;
   border-radius: 10px;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: var(--text-base);
   transition: transform 120ms ease, filter 140ms ease, border-color 140ms ease;
 }
 .btn:active {
@@ -107,7 +117,7 @@ a {
   border: 1px solid var(--line);
   color: var(--ink);
   padding: 9px 16px;
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
 }
 .btn--ghost:hover {
   border-color: var(--accent);
@@ -130,24 +140,28 @@ section:first-child {
 }
 
 h1 {
-  font-size: clamp(2rem, 1.3rem + 3.4vw, 3rem);
-  line-height: 1.1;
-  letter-spacing: -0.03em;
+  font-size: var(--text-3xl);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
   text-wrap: balance;
 }
 h2 {
-  font-size: 1.4rem;
-  letter-spacing: -0.02em;
-  margin-bottom: 20px;
+  font-size: var(--text-xl);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+  margin-bottom: 24px;
 }
 h3 {
-  font-size: 1.05rem;
-  margin-bottom: 6px;
+  font-size: var(--text-lg);
+  line-height: 1.35;
+  margin-bottom: 8px;
 }
 
 .lead {
-  margin-top: 20px;
-  font-size: 1.12rem;
+  margin-top: 24px;
+  font-size: var(--text-lg);
+  line-height: 1.55;
   color: var(--ink-soft);
   max-width: 60ch;
 }
@@ -163,7 +177,7 @@ h3 {
   gap: 14px 18px;
 }
 .hero__note {
-  font-size: 0.85rem;
+  font-size: var(--text-sm);
   color: var(--ink-faint);
 }
 
@@ -200,7 +214,7 @@ h3 {
 .shot figcaption {
   margin-top: 16px;
   text-align: center;
-  font-size: 0.85rem;
+  font-size: var(--text-sm);
   color: var(--ink-faint);
   text-wrap: balance;
 }
@@ -246,7 +260,7 @@ h3 {
   background: var(--bg-alt);
   border: 1px solid var(--line);
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: var(--text-sm);
 }
 .steps p {
   color: var(--ink-soft);
@@ -293,7 +307,8 @@ h3 {
 }
 .price__intro p {
   color: var(--ink-soft);
-  font-size: 1.05rem;
+  font-size: var(--text-lg);
+  line-height: 1.55;
   max-width: 46ch;
 }
 
@@ -316,13 +331,13 @@ h3 {
 }
 .price__amount {
   /* El precio se ve, pero no manda: el protagonismo es de lo que incluye. */
-  font-size: 1.4rem;
+  font-size: var(--text-lg);
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   line-height: 1.1;
 }
 .price__amount span {
-  font-size: 0.95rem;
+  font-size: var(--text-sm);
   font-weight: 500;
   letter-spacing: 0;
   color: var(--ink-faint);
@@ -337,7 +352,7 @@ h3 {
   margin-top: 18px;
   padding-top: 16px;
   border-top: 1px solid var(--line);
-  font-size: 0.85rem;
+  font-size: var(--text-sm);
   color: var(--ink-faint);
 }
 /* Los extras: debajo de las dos columnas, a todo el ancho. Texto con una línea
@@ -347,7 +362,6 @@ h3 {
   margin-top: 12px;
 }
 .price__extra h3 {
-  font-size: 1.05rem;
   margin-bottom: 18px;
 }
 .price__extra ul {
@@ -368,7 +382,6 @@ h3 {
 .price__extra li p {
   margin-top: 6px;
   color: var(--ink-soft);
-  font-size: 0.95rem;
 }
 .price__extra-note {
   margin-top: 24px;
@@ -384,7 +397,7 @@ h3 {
 }
 .cta-final .cta-final__sign {
   margin: 20px 0 0;
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
   color: var(--ink-faint);
 }
 
@@ -392,7 +405,8 @@ h3 {
 
 .examples__lead {
   color: var(--ink-soft);
-  font-size: 1.05rem;
+  font-size: var(--text-lg);
+  line-height: 1.55;
   max-width: 60ch;
 }
 .examples__list {
@@ -442,7 +456,7 @@ h3 {
   bottom: 18px;
   color: #fff;
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: var(--text-lg);
   line-height: 1.2;
   letter-spacing: -0.02em;
   text-wrap: balance;
@@ -458,14 +472,13 @@ h3 {
   display: block;
   margin-top: 12px;
   font-weight: 600;
-  font-size: 0.95rem;
 }
 @media (max-width: 560px) {
   .example__title {
     left: 12px;
     right: 12px;
     bottom: 12px;
-    font-size: 0.92rem;
+    font-size: var(--text-base);
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -482,7 +495,7 @@ h3 {
 .me {
   display: grid;
   gap: 32px;
-  align-items: start;
+  align-items: center;
 }
 @media (min-width: 860px) {
   .me {
@@ -499,6 +512,7 @@ h3 {
   object-fit: cover;
   border-radius: 14px;
   background: var(--bg-alt);
+  margin: 0 auto;
 }
 @media (min-width: 860px) {
   .me__photo {
@@ -508,21 +522,21 @@ h3 {
   }
 }
 .me h2 {
-  font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.1rem);
+  font-size: var(--text-2xl);
+  line-height: 1.1;
   letter-spacing: -0.03em;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 .me__lead {
-  font-size: 1.15rem;
+  font-size: var(--text-lg);
   line-height: 1.55;
   color: var(--ink);
-  max-width: 52ch;
+  /* max-width: 52ch; */
 }
 .me__text {
   margin-top: 14px;
   color: var(--ink-soft);
-  font-size: 1.05rem;
-  max-width: 54ch;
+  /* max-width: 54ch; */
 }
 .me__contact {
   margin-top: 32px;
@@ -532,14 +546,14 @@ h3 {
   gap: 10px 16px;
 }
 .me__contact span {
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
   color: var(--ink-faint);
 }
 /* La despedida de la carta. */
 .me__sign {
   margin-top: 28px;
   font-style: italic;
-  font-size: 1.1rem;
+  font-size: var(--text-lg);
   line-height: 1.4;
   color: var(--ink-soft);
 }
@@ -558,7 +572,7 @@ h3 {
   align-items: center;
   justify-content: space-between;
   gap: 12px 20px;
-  font-size: 0.85rem;
+  font-size: var(--text-sm);
   color: var(--ink-faint);
 }
 .foot nav {
@@ -619,9 +633,6 @@ h3 {
   main {
     padding: 0 16px;
   }
-  .lead {
-    font-size: 1.05rem;
-  }
   .hero {
     padding-top: 28px;
   }
@@ -659,7 +670,7 @@ h3 {
   border-radius: 999px;
   background: rgba(22, 23, 27, 0.9);
   color: #fff;
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
   font-weight: 600;
   box-shadow: 0 10px 30px -12px rgba(22, 23, 27, 0.6);
 }

@@ -8,7 +8,7 @@ colors:
   azul-tinta-relleno: "#4c66e6"
   tinta: "#16171b"
   tinta-suave: "#55575e"
-  tinta-tenue: "#8b8d95"
+  tinta-tenue: "#6b6d75"
   papel: "#ffffff"
   papel-alt: "#f6f6f4"
   linea: "#e6e6e2"
@@ -25,22 +25,24 @@ colors:
 typography:
   display:
     fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, sans-serif"
-    fontSize: "clamp(2rem, 1.3rem + 3.4vw, 3rem)"
+    fontSize: "clamp(2.5rem, 1.5rem + 4.4vw, 4rem)"
     fontWeight: 700
-    lineHeight: 1.1
-    letterSpacing: "-0.03em"
+    lineHeight: 1.05
+    letterSpacing: "-0.035em"
   headline:
     fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, sans-serif"
-    fontSize: "1.4rem"
+    fontSize: "clamp(1.625rem, 1.3rem + 1.2vw, 2.125rem)"
     fontWeight: 700
-    letterSpacing: "-0.02em"
+    lineHeight: 1.2
+    letterSpacing: "-0.025em"
   title:
     fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, sans-serif"
-    fontSize: "1.05rem"
+    fontSize: "clamp(1.1875rem, 1.1rem + 0.3vw, 1.25rem)"
     fontWeight: 700
+    lineHeight: 1.35
   body:
     fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, sans-serif"
-    fontSize: "16px"
+    fontSize: "clamp(1.0625rem, 1rem + 0.25vw, 1.125rem)"
     fontWeight: 400
     lineHeight: 1.65
   label:
@@ -130,7 +132,7 @@ Tinta azul sobre papel cálido, y una versión nocturna de lo mismo.
 ### Neutral
 - **Tinta** (#16171b): texto principal de la landing.
 - **Tinta suave** (#55575e): entradillas y párrafos secundarios.
-- **Tinta tenue** (#8b8d95): notas, pies de imagen, etiquetas.
+- **Tinta tenue** (#6b6d75; #8a8c95 en oscuro): notas, pies de imagen, etiquetas. Cumple AA (≥ 4,7:1 también sobre papel alternativo): las notas son texto pequeño y se tienen que leer.
 - **Papel** (#ffffff) y **papel alternativo** (#f6f6f4): fondo y tarjetas.
 - **Línea** (#e6e6e2): divisores entre secciones y bordes de tarjeta.
 - **Noche** (#131418 → #17181c → #23242a → #2e3038): las capas del
@@ -159,10 +161,14 @@ pose. La personalidad viene del peso y del interletrado apretado en los
 titulares, no de una fuente de marca.
 
 ### Hierarchy
-- **Display** (700, clamp(2rem, 1.3rem + 3.4vw, 3rem), 1.1, −0.03em, `text-wrap: balance`): el titular del hero, uno por página.
-- **Headline** (700, 1.4rem, −0.02em): el título de cada sección.
-- **Title** (700, 1.05rem): pasos, compromisos, tarjetas.
-- **Body** (400, 16px, 1.65): todo el texto corrido; entradillas a 1.05–1.12rem en tinta suave, con 46–62ch de ancho.
+La landing usa **seis tamaños y ninguno más**, como tokens en `public/landing.css`
+(`--text-sm` … `--text-3xl`). Un tamaño nuevo sale de esa escala o no entra.
+
+- **Display** (`3xl`, 700, 40–64 px, 1.05, −0.035em, `text-wrap: balance`): el titular del hero, uno por página.
+- **Headline** (`xl`, 700, 26–34 px, 1.2, −0.025em): el título de cada sección. "Hola, soy Carlos" sube a `2xl` (32–44 px).
+- **Title** (`lg`, 700, 19–20 px): pasos, tarjetas, titulares de ejemplo y el precio, que va a la altura del título que tiene al lado.
+- **Body** (`base`, 400, 17–18 px, 1.65): todo el texto corrido y los botones. Las entradillas van a `lg` con 1.55 de interlineado, en tinta suave, con 46–62ch de ancho.
+- **Small** (`sm`, 15 px): notas, pies de imagen, navegación y pie, en tinta tenue.
 - **Label** (700, 0.75rem, 0.1em, mayúsculas): rótulos pequeños como "Sí / No", en tinta tenue.
 
 **The Letter Voice Rule.** Los titulares se escriben como frases de una
@@ -211,7 +217,7 @@ panel, en línea de noche.
 ### Buttons
 Discretos y precisos: dicen lo que hacen y no compiten con la web del cliente.
 - **Shape:** suavemente redondeado (10 px).
-- **Primary:** azul tinta con texto blanco, 600, 0.95rem, 12 × 22 px.
+- **Primary:** azul tinta con texto blanco, 600, cuerpo (17–18 px), 14 × 26 px.
 - **Hover / Active:** brillo +7 % al pasar; baja 1 px al pulsar (120 ms).
 - **Ghost:** sin fondo, borde de línea, texto tinta, 9 × 16 px; el borde pasa a azul tinta al pasar.
 
@@ -228,7 +234,7 @@ Discretos y precisos: dicen lo que hacen y no compiten con la web del cliente.
 - **Error:** texto en el rojo de error, debajo del campo.
 
 ### Navigation
-- La palabra "Maketa" a la izquierda (700, 1.15rem, −0.02em) y, a la derecha,
+- La palabra "Maketa" a la izquierda (700, `lg`, −0.02em) y, a la derecha,
   un enlace en tinta suave y un botón fantasma "Abrir el configurador". Sin
   menú hamburguesa: la landing es corta.
 

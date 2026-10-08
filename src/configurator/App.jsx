@@ -253,6 +253,29 @@ export function App() {
     [merge, raw],
   );
 
+  /**
+   * Fondo claro ⇄ oscuro. Ir y volver deja la paleta EXACTAMENTE como estaba:
+   * recalcularla desde el primario no basta, porque el primario sale aclarado
+   * del modo oscuro y la paleta del preset (neutros, secundario) se perdía.
+   * Si entretanto se ha tocado la paleta, se recalcula como siempre.
+   */
+  const modeSwap = useRef(null);
+  const toggleMode = useCallback(() => {
+    const next = raw?.meta?.mode === "dark" ? "light" : "dark";
+    const swap = modeSwap.current;
+    const untouched =
+      swap &&
+      Object.entries(swap.applied).every(([k, v]) => raw.palette[k] === v);
+    if (untouched) {
+      modeSwap.current = null;
+      merge({ palette: swap.before, meta: { mode: next } });
+      return;
+    }
+    const applied = safePalette(raw.palette.primary, { scheme: next });
+    modeSwap.current = { before: raw.palette, applied };
+    merge({ palette: applied, meta: { mode: next } });
+  }, [merge, raw]);
+
   const surprise = useCallback(() => setRaw(randomConfig()), []);
 
   const openContact = useCallback(() => {
@@ -653,6 +676,7 @@ export function App() {
               onApplyPreset={applyPreset}
               onApplyType={applyType}
               onBrandColor={setBrandColor}
+              onToggleMode={toggleMode}
               onSurprise={surprise}
               onFocus={focusInPreview}
               onReveal={revealInPreview}
