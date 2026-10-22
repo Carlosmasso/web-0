@@ -122,11 +122,11 @@ function StepFoot({ step, onStep, onContact }) {
       )}
       {next ? (
         <button type="button" className="stepfoot__next" onClick={() => onStep(next.id)}>
-          {next.label} <span aria-hidden="true">→</span>
+          {next.label} <svg className="shell__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
         </button>
       ) : (
         <button type="button" className="stepfoot__next" onClick={onContact}>
-          Quiero esta web
+          Quiero esta web <svg className="shell__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
         </button>
       )}
     </div>

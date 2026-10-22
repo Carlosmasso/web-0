@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-05T22:20:55.197098",
+  "generatedAt": "2026-10-23T00:19:25",
   "title": "Design System: Maketa",
   "extensions": {
     "colorMeta": {
@@ -9,12 +9,12 @@
         "displayName": "Azul tinta",
         "tonalRamp": [
           "#141d4f",
-          "#1f2d78",
-          "#2c3fa6",
+          "#1f2c78",
+          "#2b3ca6",
           "#3b53d6",
-          "#5c71e0",
+          "#6278e4",
           "#8ba0ff",
-          "#c3cdff",
+          "#c9d2ff",
           "#eef1ff"
         ]
       },
@@ -22,14 +22,28 @@
         "role": "neutral",
         "displayName": "Tinta",
         "tonalRamp": [
-          "#0b0c0e",
+          "#0b0b0d",
           "#16171b",
-          "#2c2e34",
-          "#55575e",
-          "#8b8d95",
-          "#b9bbc1",
-          "#e6e6e2",
-          "#f6f6f4"
+          "#2a2c33",
+          "#3f414a",
+          "#5c5e66",
+          "#6b6d75",
+          "#a9a7a0",
+          "#e8e6e1"
+        ]
+      },
+      "papel": {
+        "role": "neutral",
+        "displayName": "Papel cálido",
+        "tonalRamp": [
+          "#d9d7d0",
+          "#e3e1db",
+          "#e8e6e1",
+          "#efeee9",
+          "#f6f5f2",
+          "#fbfaf8",
+          "#fdfcfb",
+          "#ffffff"
         ]
       },
       "noche-panel": {
@@ -50,18 +64,36 @@
     "typographyMeta": {
       "display": {
         "displayName": "Display",
-        "purpose": "El titular del hero, uno por página."
+        "purpose": "El titular del hero, uno por página; la segunda frase en azul tinta."
+      },
+      "headline": {
+        "displayName": "Titular de sección",
+        "purpose": "El título de cada sección, equilibrado con text-wrap: balance."
+      },
+      "statement": {
+        "displayName": "Frase de convicción",
+        "purpose": "La frase grande de \"Para quién es\"."
       },
       "panel": {
         "displayName": "Panel",
-        "purpose": "Inter, solo dentro del configurador."
+        "purpose": "El configurador usa la letra del sistema, como la landing, a 14 px."
       }
     },
     "shadows": [
       {
-        "name": "captura",
-        "value": "0 40px 80px -40px rgba(22,23,27,0.45), 0 10px 24px -14px rgba(22,23,27,0.25)",
-        "purpose": "La captura del configurador en la landing."
+        "name": "mesa-demo",
+        "value": "0 50px 100px -40px rgba(22,23,27,0.25)",
+        "purpose": "El contenedor de la demo \"Pruébalo aquí\"."
+      },
+      {
+        "name": "plantilla",
+        "value": "0 0 0 1px var(--edge), 0 40px 80px -30px rgba(22,23,27,0.35)",
+        "purpose": "Tarjetas del carrusel de plantillas."
+      },
+      {
+        "name": "respuesta-boton",
+        "value": "0 14px 30px rgba(59,83,214,0.28)",
+        "purpose": "El botón principal al pasar el ratón."
       },
       {
         "name": "elevacion-panel",
@@ -71,20 +103,46 @@
     ],
     "motion": [
       {
-        "name": "ease-out-expo",
-        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
-        "purpose": "Entrada y elevación de la captura (400–700 ms)."
+        "name": "ease",
+        "value": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Curva de salida de toda la landing (--ease)."
+      },
+      {
+        "name": "entrada-hero",
+        "value": "0.6s, palabras cada 35 ms",
+        "purpose": "El hero entero a la vista en ~0,6 s; el botón, a los 450 ms."
       },
       {
         "name": "pulsar",
-        "value": "transform 120ms ease",
-        "purpose": "Botón que baja 1 px al pulsar."
+        "value": "scale 0.97 en 80 ms, vuelta en 160 ms",
+        "purpose": "Botones, fichas y colores; se suma a la elevación del hover."
+      },
+      {
+        "name": "aparicion",
+        "value": "opacity + translateY(40px), 0.9s",
+        "purpose": "Bloques al entrar en pantalla; se rearman solo al salir por abajo."
       }
     ],
     "breakpoints": [
       {
+        "name": "piezas",
+        "value": "1180px"
+      },
+      {
         "name": "columnas",
-        "value": "860px"
+        "value": "900px"
+      },
+      {
+        "name": "movil",
+        "value": "760px"
+      },
+      {
+        "name": "navegacion",
+        "value": "640px"
+      },
+      {
+        "name": "hero-apilado",
+        "value": "560px"
       }
     ]
   },
@@ -93,32 +151,49 @@
       "name": "Botón principal",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "La acción principal: Diseñar mi web.",
-      "html": "<a class=\"ds-btn-primary\" href=\"#\">Diseñar mi web</a>",
-      "css": ".ds-btn-primary{display:inline-block;padding:12px 22px;border-radius:10px;font:600 0.95rem system-ui,sans-serif;background:#3b53d6;color:#fff;text-decoration:none;transition:transform 120ms ease,filter 140ms ease}.ds-btn-primary:hover{filter:brightness(1.07)}.ds-btn-primary:active{transform:translateY(1px)}.ds-btn-primary:focus-visible{outline:2px solid #8ba0ff;outline-offset:2px}"
+      "description": "La acción que importa: tinta en reposo, el azul sube como un relleno al pasar el ratón.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\">Diseñar mi web <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></a>",
+      "css": ".ds-btn-primary{font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;position:relative;display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:0 26px;border-radius:14px;background:#16171b;color:#fff;font-size:17px;font-weight:650;letter-spacing:-0.01em;text-decoration:none;overflow:hidden;isolation:isolate;transition:transform .35s cubic-bezier(0.22,1,0.36,1),box-shadow .35s ease,scale 160ms cubic-bezier(0.22,1,0.36,1)}.ds-btn-primary::before{content:'';position:absolute;inset:0;z-index:-1;background:#3b53d6;transform:translateY(101%);transition:transform .45s cubic-bezier(0.22,1,0.36,1)}.ds-btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(59,83,214,.28)}.ds-btn-primary:hover::before{transform:none}.ds-btn-primary svg{transition:transform .35s cubic-bezier(0.22,1,0.36,1)}.ds-btn-primary:hover svg{transform:translateX(4px)}.ds-btn-primary:active{scale:.97;transition:transform .35s cubic-bezier(0.22,1,0.36,1),box-shadow .35s ease,scale 80ms ease-out}.ds-btn-primary:focus-visible{outline:2px solid #3b53d6;outline-offset:3px}"
     },
     {
-      "name": "Botón fantasma",
+      "name": "Botón silencioso",
       "kind": "button",
-      "refersTo": "button-ghost",
-      "description": "Acción secundaria en la navegación.",
-      "html": "<a class=\"ds-btn-ghost\" href=\"#\">Abrir el configurador</a>",
-      "css": ".ds-btn-ghost{display:inline-block;padding:9px 16px;border-radius:10px;border:1px solid #e6e6e2;font:600 0.9rem system-ui,sans-serif;color:#16171b;text-decoration:none;transition:border-color 140ms ease}.ds-btn-ghost:hover{border-color:#3b53d6}.ds-btn-ghost:focus-visible{outline:2px solid #3b53d6;outline-offset:2px}"
+      "refersTo": "button-quiet",
+      "description": "La alternativa: sin fondo, contorno que se oscurece al pasar el ratón.",
+      "html": "<a class=\"ds-btn-quiet\" href=\"#\">Probar aquí mismo</a>",
+      "css": ".ds-btn-quiet{font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;display:inline-flex;align-items:center;min-height:52px;padding:0 26px;border-radius:14px;background:transparent;color:#16171b;font-size:17px;font-weight:650;text-decoration:none;box-shadow:inset 0 0 0 1.5px #d9d7d0;transition:transform .35s cubic-bezier(0.22,1,0.36,1),box-shadow .35s ease,scale 160ms cubic-bezier(0.22,1,0.36,1)}.ds-btn-quiet:hover{box-shadow:inset 0 0 0 1.5px #16171b;transform:translateY(-2px)}.ds-btn-quiet:active{scale:.97;transition-duration:.35s,.35s,80ms}.ds-btn-quiet:focus-visible{outline:2px solid #3b53d6;outline-offset:3px}"
+    },
+    {
+      "name": "Fichas de la demo",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Elegir negocio, letra o fondo en la demo; la elegida pasa a tinta.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip\" aria-pressed=\"true\">Clínica</button><button class=\"ds-chip\" aria-pressed=\"false\">Despacho</button><button class=\"ds-chip\" aria-pressed=\"false\">Escuela</button></div>",
+      "css": ".ds-chips{display:flex;gap:8px;flex-wrap:wrap}.ds-chip{font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;min-height:40px;padding:0 14px;border-radius:10px;border:1.5px solid #e3e1db;background:#fff;color:#16171b;font-size:14px;font-weight:600;cursor:pointer;transition:border-color .2s ease,background .2s ease,color .2s ease,transform .3s cubic-bezier(0.22,1,0.36,1),scale 160ms cubic-bezier(0.22,1,0.36,1)}.ds-chip:hover{border-color:#16171b;transform:translateY(-1px)}.ds-chip:active{scale:.96}.ds-chip[aria-pressed=true]{background:#16171b;border-color:#16171b;color:#fff}.ds-chip:focus-visible{outline:2px solid #3b53d6;outline-offset:3px}"
+    },
+    {
+      "name": "Tarjeta de paso",
+      "kind": "card",
+      "refersTo": "card-landing",
+      "description": "Un paso de \"Cómo funciona\": blanca, plana y quieta.",
+      "html": "<div class=\"ds-step\"><span class=\"ds-step__n\">01</span><div><h3>Diseñas</h3><p>Empiezas desde una plantilla pensada para tu sector y la haces tuya.</p></div></div>",
+      "css": ".ds-step{font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;display:flex;gap:28px;align-items:flex-start;padding:34px 36px;background:#fff;border:1px solid #e8e6e1;border-radius:22px;color:#16171b}.ds-step__n{font-size:15px;font-weight:700;color:#3b53d6;padding:6px 12px;border-radius:8px;background:#eef1ff}.ds-step h3{margin:0;font-size:26px;font-weight:720;letter-spacing:-0.02em}.ds-step p{margin:10px 0 0;color:#5c5e66;font-size:18px;line-height:1.65}"
+    },
+    {
+      "name": "Tarjeta de precio",
+      "kind": "card",
+      "refersTo": "price-card",
+      "description": "La única cifra de la landing, con lo que incluye.",
+      "html": "<div class=\"ds-price\"><div class=\"ds-price__head\"><strong>Tu web de una página</strong><span><small>desde</small> 249 €</span></div><ul><li>Adaptada a móvil, tablet y ordenador</li><li>Un mes de cambios pequeños incluido</li></ul></div>",
+      "css": ".ds-price{font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;max-width:520px;padding:40px;border-radius:26px;background:#fbfaf8;border:1px solid #e8e6e1;color:#16171b}.ds-price__head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding-bottom:22px;border-bottom:1px solid #e8e6e1}.ds-price__head strong{font-size:22px;font-weight:720;letter-spacing:-0.02em}.ds-price__head span{font-size:54px;font-weight:760;letter-spacing:-0.04em;line-height:1}.ds-price__head small{font-size:15px;font-weight:500;letter-spacing:0;color:#6b6d75}.ds-price ul{margin:20px 0 0;padding-left:20px;display:grid;gap:10px;font-size:16px}"
     },
     {
       "name": "Navegación",
       "kind": "nav",
-      "description": "Palabra Maketa, un enlace y el botón fantasma.",
-      "html": "<header class=\"ds-nav\"><span class=\"ds-word\">Maketa</span><nav><a href=\"#\">Cómo funciona</a><a class=\"ds-ghost\" href=\"#\">Abrir el configurador</a></nav></header>",
-      "css": ".ds-nav{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px 20px;font-family:system-ui,sans-serif}.ds-word{font-weight:700;font-size:1.15rem;letter-spacing:-0.02em;color:#16171b}.ds-nav nav{display:flex;gap:18px;align-items:center}.ds-nav nav a{color:#55575e;font-size:.9rem;text-decoration:none}.ds-nav nav a:hover{color:#16171b}.ds-nav .ds-ghost{padding:9px 16px;border:1px solid #e6e6e2;border-radius:10px;color:#16171b;font-weight:600}"
-    },
-    {
-      "name": "Tarjeta de la landing",
-      "kind": "card",
-      "refersTo": "card-landing",
-      "description": "Papel alternativo, sin sombra.",
-      "html": "<div class=\"ds-card\"><h3>Tu web de una página</h3><p>El diseño que has hecho en Maketa, construido a medida.</p></div>",
-      "css": ".ds-card{background:#f6f6f4;border:1px solid #e6e6e2;border-radius:14px;padding:28px;font-family:system-ui,sans-serif;color:#16171b}.ds-card h3{font-size:1.05rem;margin:0 0 6px}.ds-card p{color:#55575e;margin:0;line-height:1.65}"
+      "refersTo": null,
+      "description": "Barra fija: marca, tres enlaces con subrayado dibujado y el botón principal.",
+      "html": "<nav class=\"ds-nav\"><strong>Maketa</strong><span><a href=\"#\">Plantillas</a><a href=\"#\">Cómo funciona</a><a href=\"#\">Precio</a></span></nav>",
+      "css": ".ds-nav{font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 24px;background:rgba(251,250,248,.94);border-bottom:1px solid rgba(22,23,27,.06);color:#16171b}.ds-nav strong{font-size:19px;font-weight:700;letter-spacing:-0.02em}.ds-nav span{display:flex;gap:26px}.ds-nav a{position:relative;color:#5c5e66;font-size:15px;font-weight:550;text-decoration:none;transition:color .2s ease}.ds-nav a::after{content:'';position:absolute;left:0;right:0;bottom:-4px;height:1.5px;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .35s cubic-bezier(0.22,1,0.36,1)}.ds-nav a:hover{color:#16171b}.ds-nav a:hover::after{transform:scaleX(1);transform-origin:left}.ds-nav a:focus-visible{outline:2px solid #3b53d6;outline-offset:3px;border-radius:4px}"
     },
     {
       "name": "Campo del panel",
@@ -126,24 +201,17 @@
       "refersTo": "field-panel",
       "description": "Campo de texto en el configurador oscuro.",
       "html": "<label class=\"ds-field\"><span>Titular</span><input value=\"Pan que huele a las siete de la mañana\"></label>",
-      "css": ".ds-field{display:grid;gap:6px;padding:16px;background:#23242a;border-radius:14px;font-family:Inter,system-ui,sans-serif}.ds-field span{font-size:12px;color:#989ca7}.ds-field input{background:#2e3038;border:1px solid #3b3d47;border-radius:10px;padding:10px 12px;color:#eaebef;font:inherit;font-size:14px}.ds-field input:focus-visible{outline:none;border-color:#829dff;box-shadow:0 0 0 3px rgba(130,157,255,.15)}"
-    },
-    {
-      "name": "Número de paso",
-      "kind": "custom",
-      "description": "La única forma circular de la landing.",
-      "html": "<span class=\"ds-step\">1</span>",
-      "css": ".ds-step{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:999px;background:#f6f6f4;border:1px solid #e6e6e2;font:700 .85rem system-ui,sans-serif;color:#16171b}"
+      "css": ".ds-field{display:grid;gap:6px;padding:16px;background:#23242a;border-radius:14px;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}.ds-field span{font-size:12px;color:#989ca7}.ds-field input{background:#2e3038;border:1px solid #3b3d47;border-radius:10px;padding:10px 12px;color:#eaebef;font:inherit;font-size:14px}.ds-field input:focus-visible{outline:none;border-color:#829dff;box-shadow:0 0 0 3px rgba(130,157,255,.15)}"
     }
   ],
   "narrative": {
-    "northStar": "La carta escrita a mano",
-    "overview": "Maketa se presenta como una carta de alguien que te conoce: papel limpio, tinta azul, una sola voz en primera persona. La landing es papel claro donde se lee y se decide; el configurador, una mesa oscura y callada donde la web del cliente es lo único que importa.",
+    "northStar": "El taller a la vista",
+    "overview": "Maketa enseña cómo se hace la web en lugar de describirla. La landing es un taller luminoso con la puerta abierta: piezas sueltas que flotan en los márgenes, una demo que se toca en la primera pantalla, un carrusel de webs a medio montar y, al final, la mesa de trabajo con su cuadrícula. Quien entra ve el oficio antes de leer una promesa, y la voz sigue siendo la de una persona concreta que firma \"Un abrazo, Carlos\".\n\nEl sistema vive en dos superficies con la misma tinta. La **landing** es papel cálido y claro, con titulares grandes y apretados, bandas que alternan papel y blanco, y microinteracciones que responden al momento. El **configurador** es una mesa oscura y callada: el panel se retira para que la web del cliente, iluminada en el lienzo, sea lo único que importa. Las webs que genera Maketa tienen su propio sistema de temas (`src/theme/`) y no siguen este documento.\n\nEl vídeo y los carruseles (`video/src/diseno/marca.js`) usan la misma paleta de la landing: quien ve un reel y entra en maketa.es reconoce el sitio.",
     "keyCharacteristics": [
-      "Un solo color de marca, el azul tinta; el resto es tinta sobre papel.",
-      "Letra del sistema en la landing; Inter solo dentro del configurador.",
-      "Una columna de 1080 px que alinea texto e imagen.",
-      "Superficies planas; la sombra solo cuando algo flota de verdad.",
+      "Un solo color de marca, el azul tinta; el resto es tinta sobre papel cálido.",
+      "Titulares enormes y compactos (760, −0,04 em); el cuerpo, tranquilo y legible a 18 px.",
+      "El producto a la vista: demo, plantillas y piezas, no capturas ni promesas.",
+      "Movimiento corto y con respuesta inmediata; nada que haga esperar al botón.",
       "La obra del cliente siempre manda sobre la interfaz."
     ],
     "rules": [
@@ -154,39 +222,52 @@
       },
       {
         "name": "The Client's Colour Rule",
-        "body": "El color de la web del cliente nunca se mezcla con el de Maketa: el panel es neutro para que su elección se lea sin interferencias.",
+        "body": "Los colores de las webs de ejemplo (el verde de la clínica, el rosa del restaurante neón) pertenecen a esas webs y viven solo dentro de su marco: la demo, las tarjetas del carrusel o el lienzo. Nunca se filtran a la interfaz de Maketa.",
         "section": "colors"
       },
       {
         "name": "The Letter Voice Rule",
-        "body": "Los titulares se escriben como frases de una persona, en caja de oración, nunca en mayúsculas de cartel.",
+        "body": "Los titulares se escriben como frases de una persona (\"Diseña tu web tú mismo. Yo la construyo.\"), en caja de oración, nunca en mayúsculas de cartel.",
         "section": "typography"
       },
       {
-        "name": "The Shared Width Rule",
-        "body": "Si un bloque de texto es más estrecho o más ancho que la imagen que lo acompaña, está mal. Texto e imagen caen a la misma anchura.",
+        "name": "The Tracking Floor Rule",
+        "body": "Ningún titular baja de −0,04 em ni pasa de 96 px: más apretado, las letras se tocan; más grande, deja de leerse como una frase.",
+        "section": "typography"
+      },
+      {
+        "name": "The Margin Pieces Rule",
+        "body": "Las piezas decorativas viven en los márgenes y nunca tocan una línea de texto. Si no caben, se quitan; no se encogen ni se apartan a medias.",
         "section": "layout"
       },
       {
-        "name": "The Flat Paper Rule",
-        "body": "El papel no tiene sombra. Si una tarjeta de la landing necesita sombra para distinguirse, cambia su fondo a papel alternativo.",
+        "name": "The Product-Only Shadow Rule",
+        "body": "Solo proyecta sombra lo que es producto (la demo, una plantilla) o lo que responde a la mano (un botón bajo el ratón). Las tarjetas de texto son planas.",
         "section": "elevation"
+      },
+      {
+        "name": "The Growing Radius Rule",
+        "body": "Cuanto más grande es la pieza, más redondas sus esquinas; dos piezas del mismo tamaño nunca llevan radios distintos.",
+        "section": "shapes"
       }
     ],
     "dos": [
-      "Do usar el azul tinta (#3b53d6) solo en la acción principal, los enlaces y la marca.",
-      "Do alinear texto e imagen al mismo ancho de 1080 px.",
-      "Do escribir titulares en caja de oración y en primera persona.",
-      "Do separar secciones con 64 px y una línea fina, no con fondos de colores.",
-      "Do respetar prefers-reduced-motion: la captura no entra ni sube.",
-      "Do mantener el panel del configurador neutro para que el color del cliente se lea limpio."
+      "**Do** usar el azul tinta (#3b53d6) solo en la acción principal, los enlaces, la marca y el subrayado del titular.",
+      "**Do** enseñar el producto funcionando (demo, plantillas) antes que describirlo.",
+      "**Do** escribir titulares en caja de oración y en primera persona, con `text-wrap: balance`.",
+      "**Do** separar secciones alternando papel y blanco con una línea suave, no con fondos de color.",
+      "**Do** tener el botón principal a la vista en menos de medio segundo; las entradas del hero duran ~0,6 s.",
+      "**Do** respetar `prefers-reduced-motion`: fuera bucles, desplazamientos y escalas; se quedan los fundidos y los cambios de color.",
+      "**Do** mantener el panel del configurador neutro para que el color del cliente se lea limpio."
     ],
     "donts": [
-      "Don't introducir un segundo color de marca ni degradados de acento.",
-      "Don't poner sombra al papel de la landing.",
-      "Don't usar mayúsculas de cartel en titulares; solo en rótulos pequeños.",
-      "Don't enseñar precios fuera de la tarjeta \"desde 249 €\" de la landing.",
-      "Don't aplicar este sistema a las webs generadas: tienen el suyo en src/theme/."
+      "**Don't** introducir un segundo color de marca ni degradados de acento.",
+      "**Don't** dejar que una pieza decorativa toque un titular o un párrafo.",
+      "**Don't** apretar los titulares por debajo de −0,04 em ni pasar de 96 px.",
+      "**Don't** dar hover de elevación a algo que no se puede pulsar.",
+      "**Don't** usar mayúsculas de cartel en titulares; solo en rótulos pequeños.",
+      "**Don't** enseñar precios fuera de la tarjeta \"desde 249 €\" de la landing.",
+      "**Don't** aplicar este sistema a las webs generadas: tienen el suyo en `src/theme/`."
     ]
   }
 }

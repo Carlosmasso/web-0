@@ -19,7 +19,7 @@
   --c-lift: 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px 1px rgba(0, 0, 0, 0.16);
   --c-text: #eaebef;
   --c-muted: #989ca7; /* secundario */
-  --c-faint: #6f737e; /* terciario: pistas de pistas */
+  --c-faint: #8a8e9a; /* terciario: pistas de pistas. ≥ 4,7:1 sobre --c-card (AA) */
   --c-accent: #829dff;
   --c-accent-strong: #4c66e6; /* para botones rellenos: blanco encima cumple AA */
   --c-accent-soft: rgba(130, 157, 255, 0.15);
@@ -29,9 +29,15 @@
   --c-ok: #58b98a;
   --c-error: #f28b82; /* errores de formulario: ≥ 6:1 sobre --c-card */
 
+  /* Tres escalones de radio, como en la landing (crecen con la pieza): botones
+     dentro de un grupo, controles y tarjetas. Los interiores son 2 px más
+     pequeños que su grupo para que las curvas sean concéntricas. */
+  --c-radius-sm: 8px;
   --c-radius: 10px;
   --c-radius-lg: 14px;
-  font-family: "Inter", system-ui, sans-serif;
+  /* La letra del sistema, la misma que la landing. (Inter estaba declarada pero no
+     se cargaba nunca: solo salía en equipos que la tuvieran instalada.) */
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
 body {
@@ -117,6 +123,28 @@ body {
   z-index: 3;
 }
 
+/* El logo de la landing, enlazado a la portada: al llegar se reconoce el sitio. */
+.shell__brand-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+/* El desplegable de versiones se ancla a toda la fila, no solo al nombre, para
+   que siga ocupando el ancho de la cabecera. */
+.shell__brand-row .pmenu {
+  position: static;
+  flex: 1;
+  min-width: 0;
+}
+.shell__home {
+  flex: none;
+  display: block;
+  border-radius: var(--c-radius-sm);
+}
+.shell__home svg {
+  display: block;
+}
 .shell__logo {
   font-weight: 700;
   font-size: 1.05rem;
@@ -148,7 +176,7 @@ body {
   font-weight: 550;
   color: var(--c-muted);
   border: 1px solid var(--c-line);
-  border-radius: 8px;
+  border-radius: var(--c-radius-sm);
   transition:
     color 130ms ease,
     border-color 130ms ease,
@@ -207,7 +235,7 @@ body {
   font-weight: 600;
   color: var(--c-pending);
   border: 1px solid color-mix(in srgb, var(--c-pending) 45%, transparent);
-  border-radius: 7px;
+  border-radius: var(--c-radius-sm);
 }
 .shell__warn button:hover {
   background: color-mix(in srgb, var(--c-pending) 14%, transparent);
@@ -242,7 +270,7 @@ body {
   font-weight: 600;
   color: var(--c-text);
   border: 1px solid var(--c-line);
-  border-radius: 8px;
+  border-radius: var(--c-radius-sm);
 }
 .panel-error button:hover {
   border-color: var(--c-accent);
@@ -291,7 +319,7 @@ body {
   z-index: 10;
   background: var(--c-card);
   border: 1px solid var(--c-line);
-  border-radius: 11px;
+  border-radius: var(--c-radius);
   padding: 6px;
   box-shadow: 0 14px 40px -12px rgba(0, 0, 0, 0.55);
 }
@@ -311,7 +339,7 @@ body {
   padding: 8px 10px;
   font-size: 0.86rem;
   color: var(--c-text);
-  border-radius: 7px;
+  border-radius: var(--c-radius-sm);
   transition: background 130ms ease;
 }
 .pmenu__list button:hover {
@@ -336,7 +364,7 @@ body {
   font-size: 0.8rem;
   font-weight: 550;
   color: var(--c-text);
-  border-radius: 7px;
+  border-radius: var(--c-radius-sm);
   transition:
     background 130ms ease,
     color 130ms ease;
@@ -385,7 +413,7 @@ body {
   color: var(--c-text);
   background: var(--c-void);
   border: 1px solid var(--c-line);
-  border-radius: 7px;
+  border-radius: var(--c-radius-sm);
 }
 .pmenu__rename input:focus {
   outline: none;
@@ -397,7 +425,7 @@ body {
   font-weight: 600;
   color: #fff;
   background: var(--c-accent-strong);
-  border-radius: 7px;
+  border-radius: var(--c-radius-sm);
 }
 
 .shell__brand p {
@@ -422,7 +450,7 @@ body {
   font-size: 0.82rem;
   font-weight: 550;
   color: var(--c-muted);
-  border-radius: 8px;
+  border-radius: var(--c-radius-sm);
   transition:
     background 140ms ease,
     color 140ms ease,
@@ -503,7 +531,7 @@ body {
   gap: 7px;
   padding: 11px 6px 12px;
   border: 1px solid transparent;
-  border-radius: 11px;
+  border-radius: var(--c-radius);
   background: var(--c-void);
   color: var(--c-muted);
   text-align: center;
@@ -579,8 +607,9 @@ body {
   display: flex;
   align-items: center;
   gap: 9px;
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 720;
+  letter-spacing: -0.02em;
 }
 .step__opt {
   padding: 3px 8px;
@@ -650,7 +679,7 @@ body {
   font-size: 0.79rem;
   font-weight: 550;
   color: var(--c-muted);
-  border-radius: 9px;
+  border-radius: var(--c-radius);
   transition:
     background 140ms ease,
     color 140ms ease,
@@ -663,6 +692,9 @@ body {
   }
 }
 .stepfoot__next {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   padding: 10px 15px;
   font-size: 0.81rem;
   font-weight: 650;
@@ -729,7 +761,7 @@ body {
   padding: 14px;
   text-align: left;
   border: 1px solid var(--c-line);
-  border-radius: 12px;
+  border-radius: var(--c-radius-lg);
   background: var(--c-card-head);
   color: var(--c-text);
   transition:
@@ -753,7 +785,7 @@ body {
   flex-direction: column;
   width: 38px;
   height: 38px;
-  border-radius: 9px;
+  border-radius: var(--c-radius);
   overflow: hidden;
   border: 1px solid var(--c-line);
 }
@@ -790,7 +822,7 @@ body {
   gap: 4px;
   align-items: center;
   border: 1px dashed var(--c-line);
-  border-radius: 12px;
+  border-radius: var(--c-radius-lg);
   color: var(--c-text);
   font-size: 0.9rem;
   font-weight: 600;
@@ -844,7 +876,7 @@ body {
   height: 48px;
   padding: 0;
   border: 1px solid var(--c-line);
-  border-radius: 11px;
+  border-radius: var(--c-radius);
   background: none;
   cursor: pointer;
 }
@@ -856,7 +888,7 @@ body {
 .brand__derived span {
   flex: 1;
   height: 48px;
-  border-radius: 8px;
+  border-radius: var(--c-radius-sm);
   border: 1px solid var(--c-hair);
 }
 .brand__mode {
@@ -865,7 +897,7 @@ body {
   font-size: 0.76rem;
   color: var(--c-text);
   border: 1px solid var(--c-line);
-  border-radius: 9px;
+  border-radius: var(--c-radius);
   transition: border-color 140ms ease;
 }
 @media (hover: hover) {
@@ -1043,7 +1075,7 @@ body {
   font-size: 0.82rem;
   color: var(--c-muted);
   border: 1px dashed var(--c-line);
-  border-radius: 9px;
+  border-radius: var(--c-radius);
 }
 @media (hover: hover) {
   .sec-hidden__item:hover {
@@ -1074,7 +1106,7 @@ body {
   font-size: 0.8rem;
   font-weight: 500;
   color: var(--c-muted);
-  border-radius: 8px;
+  border-radius: var(--c-radius-sm);
   transition:
     background 140ms ease,
     color 140ms ease,
@@ -1102,7 +1134,7 @@ body {
   text-align: left;
   padding: 12px 13px;
   border: 1px solid var(--c-hair);
-  border-radius: 11px;
+  border-radius: var(--c-radius);
   background: var(--c-field);
   transition:
     border-color 140ms ease,
@@ -1189,7 +1221,7 @@ body {
   padding: 13px;
   margin-bottom: 16px;
   border: 1px solid var(--c-line);
-  border-radius: 11px;
+  border-radius: var(--c-radius);
   background: var(--c-field);
   cursor: pointer;
 }
@@ -1273,7 +1305,7 @@ body {
   font-size: 0.75rem;
   color: var(--c-text);
   border: 1px solid var(--c-line);
-  border-radius: 8px;
+  border-radius: var(--c-radius-sm);
   transition: border-color 140ms ease;
 }
 .cform__intro button:hover {
@@ -1353,7 +1385,7 @@ body {
   padding: 10px 12px;
   background: var(--c-field);
   border: 1px solid var(--c-line);
-  border-radius: 9px;
+  border-radius: var(--c-radius);
   font-size: 0.85rem;
   color: var(--c-text);
   resize: vertical;
@@ -1392,7 +1424,7 @@ body {
   width: 100%;
   height: 120px;
   object-fit: cover;
-  border-radius: 9px;
+  border-radius: var(--c-radius);
   border: 1px solid var(--c-hair);
 }
 .field__image-empty {
@@ -1401,7 +1433,7 @@ body {
   padding: 18px 0;
   text-align: center;
   border: 1px dashed var(--c-line);
-  border-radius: 9px;
+  border-radius: var(--c-radius);
 }
 .field__image-actions {
   display: flex;
@@ -1415,7 +1447,7 @@ body {
   color: var(--c-text);
   background: var(--c-field);
   border: 1px solid var(--c-line);
-  border-radius: 9px;
+  border-radius: var(--c-radius);
   transition:
     border-color 140ms ease,
     background 140ms ease;
@@ -1434,7 +1466,7 @@ body {
   font-weight: 600;
   color: var(--c-muted);
   border: 1px solid var(--c-line);
-  border-radius: 9px;
+  border-radius: var(--c-radius);
 }
 .field__image-clear:hover {
   border-color: var(--c-pending);
@@ -1456,7 +1488,7 @@ body {
 }
 .rep__item {
   border: 1px solid var(--c-hair);
-  border-radius: 11px;
+  border-radius: var(--c-radius);
   padding: 13px;
   margin-bottom: 10px;
   background: var(--c-card-head);
@@ -1486,7 +1518,7 @@ body {
   align-items: center;
   justify-content: center;
   border: 1px solid var(--c-line);
-  border-radius: 7px;
+  border-radius: var(--c-radius-sm);
   color: var(--c-muted);
   font-size: 0.78rem;
   transition:
@@ -1508,7 +1540,7 @@ body {
   font-weight: 550;
   color: var(--c-text);
   border: 1px dashed var(--c-line);
-  border-radius: 9px;
+  border-radius: var(--c-radius);
   transition: border-color 140ms ease;
 }
 .rep__add:hover {
@@ -1564,14 +1596,14 @@ body {
   gap: 3px;
   background: var(--c-void);
   border: 1px solid var(--c-hair);
-  border-radius: 9px;
+  border-radius: var(--c-radius);
   padding: 3px;
 }
 .shell__devices button {
   padding: 6px 14px;
   font-size: 0.8rem;
   color: var(--c-muted);
-  border-radius: 7px;
+  border-radius: var(--c-radius-sm);
   transition:
     background 140ms ease,
     color 140ms ease,
@@ -1603,7 +1635,7 @@ body {
   font-weight: 550;
   color: var(--c-text);
   border: 1px solid var(--c-line);
-  border-radius: 9px;
+  border-radius: var(--c-radius);
   transition:
     border-color 140ms ease,
     background 140ms ease,
@@ -1647,13 +1679,42 @@ body {
 /* La acción de cara al cliente: la única que debe destacar. Copiar enlace y
    Código son utilidades; esta es la que de verdad mueve el encargo. */
 .shell__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
   border-color: transparent !important;
+  border-radius: 10px !important;
   background: var(--c-accent-strong);
   color: #fff !important;
   font-weight: 650 !important;
 }
 .shell__cta:hover {
   filter: brightness(1.08);
+}
+/* La flecha de la landing: el mismo trazo, y avanza al pasar el ratón como allí.
+   Une la acción principal de las dos superficies. */
+.shell__arrow {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+@media (hover: hover) {
+  .shell__cta:hover .shell__arrow,
+  .stepfoot__next:hover .shell__arrow {
+    transform: translateX(3px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .shell__arrow {
+    transition: none;
+  }
 }
 
 /* ---------- barra en pantallas chicas ---------- */
@@ -1760,7 +1821,7 @@ body {
 /* `:where` deja la regla base sin peso: cada pieza fija su forma encima. */
 :where(.sk) i {
   display: block;
-  border-radius: 8px;
+  border-radius: var(--c-radius-sm);
   background: #e6e6e2;
   background-image: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.7) 50%, transparent 70%);
   background-size: 240% 100%;
@@ -1799,7 +1860,7 @@ body {
   gap: 14px;
   margin-top: auto;
 }
-.sk__card { height: 120px; border-radius: 12px; --d: 520ms; }
+.sk__card { height: 120px; border-radius: var(--c-radius-lg); --d: 520ms; }
 .sk__card:nth-child(2) { --d: 580ms; }
 .sk__card:nth-child(3) { --d: 640ms; }
 .stage--mobile .sk__cards { grid-template-columns: 1fr; }
@@ -2062,7 +2123,7 @@ body {
 .modal__head .modal__version {
   margin-top: 10px;
   padding: 7px 10px;
-  border-radius: 8px;
+  border-radius: var(--c-radius-sm);
   background: var(--c-accent-soft);
   border: 1px solid var(--c-accent-line);
   color: var(--c-text);
@@ -2080,7 +2141,7 @@ body {
   align-items: center;
   justify-content: center;
   color: var(--c-muted);
-  border-radius: 7px;
+  border-radius: var(--c-radius-sm);
 }
 .modal__close:hover {
   color: var(--c-text);
@@ -2233,7 +2294,7 @@ form > .modal__submit {
 }
 .modal__done-note {
   border: 1px solid var(--c-line);
-  border-radius: 8px;
+  border-radius: var(--c-radius-sm);
   padding: 10px 12px;
   margin: 0 0 18px !important;
   text-align: left;
@@ -2291,7 +2352,7 @@ form > .modal__submit {
 .tour__spot {
   position: absolute;
   border: 2px solid var(--c-accent);
-  border-radius: 12px;
+  border-radius: var(--c-radius-lg);
   box-shadow: 0 0 0 9999px rgba(8, 9, 13, 0.62);
   pointer-events: none;
   transition:
@@ -2402,7 +2463,7 @@ form > .modal__submit {
   font-size: 0.78rem;
   font-weight: 550;
   color: var(--c-muted);
-  border-radius: 8px;
+  border-radius: var(--c-radius-sm);
 }
 .tour__skip:hover,
 .tour__back:hover {
@@ -2415,7 +2476,7 @@ form > .modal__submit {
   font-weight: 650;
   color: #fff;
   background: var(--c-accent-strong);
-  border-radius: 8px;
+  border-radius: var(--c-radius-sm);
 }
 .tour__next:hover {
   filter: brightness(1.08);

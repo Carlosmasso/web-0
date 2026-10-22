@@ -598,17 +598,28 @@ export function App() {
         </button>
 
         <div className="shell__brand">
-          {/* {showPicker ? ( */}
-          <ProjectMenu
-            projectId={projectId}
-            studio={isStudio}
-            capped={atVersionCap}
-            onSwitch={switchProject}
-            onNew={newProject}
-            onDuplicate={duplicateProject}
-            onRename={renameCurrent}
-            onDelete={deleteCurrent}
-          />
+          <div className="shell__brand-row">
+            <a className="shell__home" href="/" aria-label="Maketa: volver a la portada">
+              <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true">
+                <rect width="32" height="32" rx="8" fill="#3b53d6" />
+                <rect x="7" y="6.5" width="18" height="19" rx="2.5" fill="none" stroke="#fff" strokeWidth="2" />
+                <rect x="10" y="9.5" width="12" height="4" rx="1" fill="#fff" />
+                <rect x="10" y="16" width="5.5" height="6.5" rx="1" fill="#fff" />
+                <rect x="17.5" y="16" width="4.5" height="6.5" rx="1" fill="#fff" opacity="0.5" />
+              </svg>
+            </a>
+            {/* {showPicker ? ( */}
+            <ProjectMenu
+              projectId={projectId}
+              studio={isStudio}
+              capped={atVersionCap}
+              onSwitch={switchProject}
+              onNew={newProject}
+              onDuplicate={duplicateProject}
+              onRename={renameCurrent}
+              onDelete={deleteCurrent}
+            />
+          </div>
           {/* ) : (
             <span className="shell__logo">Maketa</span>
           )} */}
@@ -782,7 +793,7 @@ export function App() {
               </button>
             )}
             <button onClick={openContact} type="button" className="shell__cta">
-              Quiero esta web
+              Quiero esta web <svg className="shell__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
             </button>
           </div>
         </div>

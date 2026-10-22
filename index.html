@@ -26,6 +26,8 @@
 
     <link rel="canonical" href="https://maketa.es/" />
     <link rel="stylesheet" href="/landing.css" />
+    <script>document.documentElement.classList.add('js')</script>
+    <script defer src="/landing.js"></script>
 
     <!-- Datos estructurados. Solo lo que es verdad hoy: no hay empresa dada de
          alta, así que nada de LocalBusiness con dirección, NIF ni precios —
@@ -80,271 +82,468 @@
     <script defer src="/_vercel/insights/script.js"></script>
   </head>
   <body>
+    <a class="skip" href="#contenido">Saltar al contenido</a>
+    <div class="progress" aria-hidden="true"></div>
+
     <header class="nav">
-      <span class="wordmark">
-        <!-- El dibujo del favicon: lámina de maqueta con un bloque "por colocar". -->
-        <svg class="wordmark__logo" viewBox="0 0 32 32" aria-hidden="true">
-          <rect width="32" height="32" rx="7" fill="#3b53d6" />
-          <rect x="7" y="6.5" width="18" height="19" rx="2.5" fill="none" stroke="#fff" stroke-width="2" />
-          <rect x="10" y="9.5" width="12" height="4" rx="1" fill="#fff" />
-          <rect x="10" y="16" width="5.5" height="6.5" rx="1" fill="#fff" />
-          <rect x="17.5" y="16" width="4.5" height="6.5" rx="1" fill="#fff" opacity="0.5" />
-        </svg>
-        Maketa
-      </span>
-      <nav>
-        <a href="#como-funciona">Cómo funciona</a>
-        <a class="btn btn--ghost" href="/app.html">Diseñar mi web</a>
-      </nav>
+      <div class="wrap nav__in">
+        <a class="wordmark" href="/">
+          <!-- El dibujo del favicon: lámina de maqueta con un bloque "por colocar". -->
+          <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#3b53d6" /><rect x="7" y="6.5" width="18" height="19" rx="2.5" fill="none" stroke="#fff" stroke-width="2" /><rect x="10" y="9.5" width="12" height="4" rx="1" fill="#fff" /><rect x="10" y="16" width="5.5" height="6.5" rx="1" fill="#fff" /><rect x="17.5" y="16" width="4.5" height="6.5" rx="1" fill="#fff" opacity="0.5" /></svg>
+          Maketa
+        </a>
+        <nav class="nav__links" aria-label="Principal">
+          <a class="navlink" href="#plantillas">Plantillas</a>
+          <a class="navlink" href="#como-funciona">Cómo funciona</a>
+          <a class="navlink" href="#precio">Precio</a>
+          <a class="btn btn--primary btn--sm" href="/app.html">Diseñar mi web <span class="arrow"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></a>
+        </nav>
+      </div>
     </header>
 
-    <main>
+    <main id="contenido" tabindex="-1">
       <section class="hero">
-        <h1>Diseña tu web tú mismo. Yo la construyo.</h1>
-        <p class="lead">
-          Eliges los colores, la letra, las secciones y el estilo, y lo ves en vivo tal cual
-          quedará. Cuando te guste, me lo cuentas y la construyo contigo, a tu medida, hasta
-          que estés contento con ella.
-        </p>
-        <div class="hero__cta">
-          <a class="btn btn--primary" href="/app.html">Diseñar mi web</a>
-          <span class="hero__note">Gratis y sin registro. Pruébalo con calma: no te compromete a nada.</span>
+        <div aria-hidden="true">
+          <div class="piece" style="--r: -12deg; left: 7%; top: 130px; width: 108px; height: 30px; border-radius: 10px; background: #e3e8ff"></div>
+          <div class="piece" style="--r: 10deg; left: 12%; top: 300px; width: 52px; height: 52px; border-radius: 14px; border: 2px solid #d9dffc; animation-delay: -3s"></div>
+          <div class="piece" style="--r: -6deg; right: 9%; top: 160px; width: 60px; height: 60px; border-radius: 16px; background: #eef1ff; animation-delay: -2s"></div>
+          <div class="piece" style="--r: 14deg; right: 13%; top: 330px; width: 44px; height: 44px; border-radius: 12px; border: 2px solid #e3e1db; animation-delay: -6s"></div>
         </div>
-        <!-- Lo que se promete, enseñado: el configurador real (modo cliente,
-             /app.html?sector=medical-wellness, la clínica dental). Se regenera
-             capturando el build (`pnpm build && pnpm vite preview`) a 1440×900 ×1,5:
-             en `pnpm dev` el configurador siempre entra en modo estudio. -->
-        <figure class="shot">
-          <a href="/app.html" tabindex="-1">
-            <img
-              src="/configurador-1440.webp"
-              srcset="/configurador-720.webp 720w, /configurador-1440.webp 1440w, /configurador-2160.webp 2160w"
-              sizes="(min-width: 1080px) 1040px, calc(100vw - 40px)"
-              width="1440"
-              height="900"
-              fetchpriority="high"
-              alt="El configurador de Maketa: a la izquierda, el panel con los puntos de partida por sector; a la derecha, la web de una clínica dental tal cual quedará."
-            />
-          </a>
-          <figcaption>Eliges a la izquierda y tu web cambia a la derecha, al momento.</figcaption>
-        </figure>
+
+        <div class="hero__copy">
+          <p class="badge fade-in"><span class="badge__dot" aria-hidden="true"></span>Gratis, sin registro y sin compromiso</p>
+          <h1>
+            <span class="w" style="--i: 0">Diseña</span> <span class="w" style="--i: 1">tu</span> <span class="w" style="--i: 2">web</span> <span class="w" style="--i: 3">tú</span> <span class="w" style="--i: 4">mismo.</span><br />
+            <span class="accent"><span class="w" style="--i: 7">Yo</span> <span class="w" style="--i: 8">la</span> <span class="w" style="--i: 9">construyo.</span><svg class="scribble" aria-hidden="true" viewBox="0 0 600 40" preserveAspectRatio="none"><path d="M6 26 C 140 10, 280 8, 400 18 S 560 26, 594 14" fill="none" stroke="#c9d2ff" stroke-width="10" stroke-linecap="round" /></svg></span>
+          </h1>
+          <p class="lead fade-in" style="--d: 0.1s">
+            Juega con los colores, la letra y las secciones hasta que te encante, y míralo en
+            vivo tal cual va a quedar. Cuando lo tengas, me escribes y la construyo contigo, con
+            tus cosas, hasta que estés contento de verdad.
+          </p>
+          <div class="hero__cta fade-in" style="--d: 0.15s">
+            <a class="btn btn--primary" href="/app.html">Diseñar mi web <span class="arrow"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></a>
+            <a class="btn btn--quiet btn--down" href="#prueba">Probar aquí mismo <span class="arrow"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></a>
+          </div>
+        </div>
+
+        <!-- Pruébalo aquí: una web de ejemplo dibujada (sin capturas) que cambia de negocio,
+             color, letra y fondo. Lo mueve /landing.js; sin JS se ve la clínica dental. -->
+        <!-- data-nosnippet: los textos de las webs de ejemplo (Clínica Ordóñez…) no deben
+             salir como resumen de Maketa en Google. -->
+        <div id="prueba" class="bench fade-in" style="--d: 0.25s" data-nosnippet>
+          <div class="bench__box">
+            <div class="panel">
+              <div>
+                <p class="eyebrow">Pruébalo aquí</p>
+                <p class="panel__title">Toca y mira cómo cambia.</p>
+              </div>
+              <div>
+                <p id="lbl-tpl" class="panel__label">Tu negocio</p>
+                <div class="panel__group" role="group" aria-labelledby="lbl-tpl">
+                  <button type="button" class="chip" data-tpl="0" aria-pressed="true">Clínica</button>
+                  <button type="button" class="chip" data-tpl="1" aria-pressed="false">Despacho</button>
+                  <button type="button" class="chip" data-tpl="2" aria-pressed="false">Arquitectura</button>
+                  <button type="button" class="chip" data-tpl="3" aria-pressed="false">Escuela</button>
+                  <button type="button" class="chip" data-tpl="4" aria-pressed="false">Restaurante</button>
+                </div>
+              </div>
+              <div>
+                <p id="lbl-color" class="panel__label">Color · <b id="pv-color">El de la plantilla</b></p>
+                <div class="panel__group" role="group" aria-labelledby="lbl-color">
+                  <button type="button" class="swatch" data-color="tpl" aria-label="El de la plantilla" aria-pressed="true" style="--c: #187567"></button>
+                  <button type="button" class="swatch" data-color="#3b53d6" aria-label="Azul tinta" aria-pressed="false" style="--c: #3b53d6"></button>
+                  <button type="button" class="swatch" data-color="#c2401f" aria-label="Terracota" aria-pressed="false" style="--c: #c2401f"></button>
+                  <button type="button" class="swatch" data-color="#7e3aa0" aria-label="Ciruela" aria-pressed="false" style="--c: #7e3aa0"></button>
+                  <button type="button" class="swatch" data-color="#8f6414" aria-label="Mostaza" aria-pressed="false" style="--c: #8f6414"></button>
+                </div>
+              </div>
+              <div>
+                <p id="lbl-font" class="panel__label">Letra</p>
+                <div class="panel__group" role="group" aria-labelledby="lbl-font">
+                  <button type="button" class="chip" data-font="modern" aria-pressed="true">Moderna</button>
+                  <button type="button" class="chip" data-font="classic" aria-pressed="false" style="font-family: Georgia, serif">Clásica</button>
+                  <button type="button" class="chip" data-font="round" aria-pressed="false" style="font-family: 'Trebuchet MS', sans-serif">Redonda</button>
+                </div>
+              </div>
+              <div>
+                <p id="lbl-mode" class="panel__label">Fondo</p>
+                <div class="panel__group" role="group" aria-labelledby="lbl-mode">
+                  <button type="button" class="chip" data-dark="0" aria-pressed="true">Claro</button>
+                  <button type="button" class="chip" data-dark="1" aria-pressed="false">Oscuro</button>
+                </div>
+              </div>
+              <div class="panel__foot">
+                <a id="pv-go" class="btn btn--primary btn--block" href="/app.html?sector=medical-wellness">Seguir en el configurador <span class="arrow"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></a>
+                <p>Allí tienes secciones, estilos, tus textos y tus fotos.</p>
+              </div>
+            </div>
+
+            <div id="pv" class="pv" role="region" aria-label="Vista previa de la web de ejemplo">
+              <div class="pv__bar">
+                <span class="pv__dots" aria-hidden="true"><span class="pv__dot"></span><span class="pv__dot"></span><span class="pv__dot"></span></span>
+                <span class="pv__url">
+                  <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V8a5 5 0 0 1 10 0v3M5 11h14v10H5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" /></svg>
+                  <span id="pv-domain">clinicaordonez.es</span>
+                </span>
+                <span class="pv__nav">
+                  <button id="pv-prev" type="button" class="round-btn round-btn--sm" aria-label="Negocio anterior"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg></button>
+                  <span id="pv-pos" class="pv__pos">1 / 5</span>
+                  <button id="pv-next" type="button" class="round-btn round-btn--sm" aria-label="Negocio siguiente"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg></button>
+                </span>
+              </div>
+              <div class="pv__page">
+                <div class="pv__swap">
+                  <div class="pv__top">
+                    <span id="pv-name" class="pv__name">Clínica Ordóñez</span>
+                    <span class="pv__menu">
+                      <span id="pv-nav1">Tratamientos</span><span id="pv-nav2">Equipo</span>
+                      <span class="pv__btn pv-cta">Pedir cita</span>
+                    </span>
+                  </div>
+                  <div class="pv__body">
+                    <div class="pv__text">
+                      <p id="pv-kicker" class="pv__kicker">ODONTOLOGÍA FAMILIAR · VALLADOLID</p>
+                      <p id="pv-title" class="pv__title">Ir al dentista sin que se te haga un nudo</p>
+                      <p id="pv-text" class="pv__p">Te explicamos qué tienes, qué cuesta y qué pasa si esperas. Sin prisa y sin tratamientos que no necesitas.</p>
+                      <div class="pv__ctas">
+                        <span class="pv__cta pv__cta--main"><span id="pv-cta-main">Pedir cita</span><svg class="pv__cta-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
+                        <span id="pv-cta2" class="pv__cta pv__cta--alt">Ver tratamientos</span>
+                      </div>
+                    </div>
+                    <div class="pv__art" aria-hidden="true">
+                      <div class="pv__ring pv__ring--1"></div>
+                      <div class="pv__ring pv__ring--2"></div>
+                      <svg class="pv__icon" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path id="pv-icon" d="M12 5.5c-1.6-1.6-4.6-2-6.3-.3-2 2-1.2 5 .1 7.4.9 1.7 1 3.4 1.4 5.5.3 1.6 1.1 2.4 2 2.4 1 0 1.4-1.2 1.6-2.6.2-1.5.5-2.6 1.2-2.6s1 1.1 1.2 2.6c.2 1.4.6 2.6 1.6 2.6.9 0 1.7-.8 2-2.4.4-2.1.5-3.8 1.4-5.5 1.3-2.4 2.1-5.4.1-7.4-1.7-1.7-4.7-1.3-6.3.3z" /></svg>
+                      <span id="pv-chip1" class="pv__chip pv__chip--a">Lun–Vie · 9 a 20 h</span>
+                      <span id="pv-chip2" class="pv__chip pv__chip--b">Pide cita online</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="dots">
+                  <button type="button" class="dot" aria-label="Clínica dental" aria-current="true"></button>
+                  <button type="button" class="dot" aria-label="Despacho de abogados" aria-current="false"></button>
+                  <button type="button" class="dot" aria-label="Estudio de arquitectura" aria-current="false"></button>
+                  <button type="button" class="dot" aria-label="Escuela infantil" aria-current="false"></button>
+                  <button type="button" class="dot" aria-label="Restaurante" aria-current="false"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p id="pv-status" class="sr-only" aria-live="polite"></p>
+          <p class="bench__note">Negocios de ejemplo para que veas distintos casos. La tuya llevará tus textos, tus fotos y tu color.</p>
+        </div>
       </section>
 
-      <!-- El resultado, no la herramienta: la portada de cada web de ejemplo
-           (foto y titular del contenido por sector, src/content/sectores.js). Son de ejemplo y así se dice: no hay clientes
-           todavía. Cada una abre el configurador en su sector (`?sector=`). -->
-      <section class="examples">
-        <h2>Así quedaría la tuya</h2>
-        <p class="examples__lead">
-          Cuatro webs de ejemplo hechas en Maketa, cada una con su sector. Toca una y
-          ábrela en el configurador; la tuya lleva tus textos, tus fotos y tu color.
-        </p>
-        <ul class="examples__list">
-          <li>
-            <a class="example" href="/app.html?sector=local-food">
-              <img src="https://images.pexels.com/photos/8633662/pexels-photo-8633662.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=720&amp;h=900&amp;fit=crop" width="720" height="900" loading="lazy" alt="Pan de masa madre recién horneado" />
-              <span class="example__title">Pan que huele a las siete de la mañana</span>
+      <!-- Plantillas por negocio: carrusel circular de webs dibujadas. Son de ejemplo
+           (no hay clientes todavía) y cada una abre el configurador en su sector. -->
+      <section id="plantillas" class="tpls">
+        <div class="wrap tpls__head">
+          <h2 class="h-xl reveal" style="font-size: clamp(38px, 5vw, 72px)">Así quedaría la tuya</h2>
+          <p class="lead reveal" style="--d: 0.08s">Cada negocio tiene su plantilla de partida, y cada una admite el estilo que quieras. Elige la que más se parezca a lo tuyo y hazla tuya.</p>
+        </div>
+        <div id="flow" class="flow" data-nosnippet role="region" aria-roledescription="carrusel" aria-label="Plantillas por negocio. Usa las flechas del teclado para cambiar." tabindex="0">
+          <div class="flow__item" role="group" aria-roledescription="plantilla" aria-label="1 de 7: Clínica dental">
+            <a class="tcard tcard--stack" href="/app.html?sector=medical-wellness" style="--bg: #ffffff; --fg: #16171b; --accent-c: #187567; --on: #fff; --ln: #e7ece9; --tint: #e3f2ef; --edge: #ecebe6; --r: 8px; --block: 14px; --font-c: system-ui, -apple-system, 'Segoe UI', sans-serif;" aria-label="Usar la plantilla Clínica dental">
+              <span class="tcard__web">
+                <span class="tc__top"><span class="tc__name">Clínica Ordóñez</span><span class="tc__btn">Pedir cita</span></span>
+                <span class="tc__kicker">ODONTOLOGÍA FAMILIAR · VALLADOLID</span>
+                <span class="tc__title">Ir al dentista sin que se te haga un nudo</span>
+                <span class="tc__line" style="width: 88%; margin-top: 14px"></span><span class="tc__line" style="width: 64%"></span>
+                <span class="tc__ctas"><span class="tc__cta tc__cta--main">Pedir cita<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span><span class="tc__cta tc__cta--alt">Ver tratamientos</span></span>
+                <span class="tc__art"><svg class="tc__icon" width="62" height="62" viewBox="0 0 24 24" aria-hidden="true" stroke-width="1.4"><path d="M12 5.5c-1.6-1.6-4.6-2-6.3-.3-2 2-1.2 5 .1 7.4.9 1.7 1 3.4 1.4 5.5.3 1.6 1.1 2.4 2 2.4 1 0 1.4-1.2 1.6-2.6.2-1.5.5-2.6 1.2-2.6s1 1.1 1.2 2.6c.2 1.4.6 2.6 1.6 2.6.9 0 1.7-.8 2-2.4.4-2.1.5-3.8 1.4-5.5 1.3-2.4 2.1-5.4.1-7.4-1.7-1.7-4.7-1.3-6.3.3z" /></svg></span>
+              </span>
+              <span class="tc__meta"><span class="tc__label">Clínica dental</span></span>
+              <span class="tc__tag">Cercana y tranquila</span>
             </a>
-            <span class="examples__name">Obrador</span>
-          </li>
-          <li>
-            <a class="example" href="/app.html?sector=medical-wellness">
-              <img src="https://images.pexels.com/photos/3946835/pexels-photo-3946835.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=720&amp;h=900&amp;fit=crop" width="720" height="900" loading="lazy" alt="Consulta de una clínica dental" />
-              <span class="example__title">Ir al dentista sin que se te haga un nudo</span>
+          </div>
+          <div class="flow__item" role="group" aria-roledescription="plantilla" aria-label="2 de 7: Despacho de abogados">
+            <a class="tcard tcard--center" href="/app.html?sector=corporate-legal" style="--bg: #fbf8f2; --fg: #1d2a4d; --accent-c: #1d2a4d; --on: #fff; --ln: #e6e0d3; --tint: #ece6d8; --edge: #e8e2d4; --r: 2px; --block: 4px; --font-c: Georgia, 'Times New Roman', serif;" aria-label="Usar la plantilla Despacho de abogados">
+              <span class="tcard__web">
+                <span class="tc__top"><span class="tc__name">Ferrer &amp; Nieto</span><span class="tc__btn">Consulta inicial</span></span>
+                <span class="tc__mid">
+                  <span class="tc__badge"><svg class="tc__icon" width="38" height="38" viewBox="0 0 24 24" aria-hidden="true" stroke-width="1.5"><path d="M12 3v18M7 21h10M5 7h14M12 5.5V7M5 7l-3 7a3.5 3.5 0 0 0 6 0L5 7zm14 0l-3 7a3.5 3.5 0 0 0 6 0l-3-7z" /></svg></span>
+                  <span class="tc__kicker">LABORAL Y MERCANTIL · ZARAGOZA</span>
+                  <span class="tc__title">Que el papeleo no decida por ti</span>
+                  <span class="tc__line" style="width: 80%; margin-top: 14px"></span><span class="tc__line" style="width: 56%"></span>
+                  <span class="tc__ctas"><span class="tc__cta tc__cta--main">Consulta inicial<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></span>
+                </span>
+              </span>
+              <span class="tc__meta"><span class="tc__label">Despacho de abogados</span></span>
+              <span class="tc__tag">Seria y sin jerga</span>
             </a>
-            <span class="examples__name">Clínica dental</span>
-          </li>
-          <li>
-            <a class="example" href="/app.html?sector=corporate-legal">
-              <img src="https://images.pexels.com/photos/3927126/pexels-photo-3927126.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=720&amp;h=900&amp;fit=crop" width="720" height="900" loading="lazy" alt="Estantería de libros de derecho" />
-              <span class="example__title">Que el papeleo no decida por ti</span>
+          </div>
+          <div class="flow__item" role="group" aria-roledescription="plantilla" aria-label="3 de 7: Estudio de arquitectura">
+            <a class="tcard tcard--bleed" href="/app.html?sector=real-estate" style="--bg: #f2f1ee; --fg: #2b2d34; --accent-c: #2b2d34; --on: #fff; --ln: #cfccc4; --tint: #e2e0da; --edge: #e4e2dc; --r: 0px; --block: 0px; --font-c: Georgia, 'Times New Roman', serif;" aria-label="Usar la plantilla Estudio de arquitectura">
+              <span class="tcard__web">
+                <span class="tc__bigring" aria-hidden="true"></span>
+                <span class="tc__bigicon"><svg class="tc__icon" width="140" height="140" viewBox="0 0 24 24" aria-hidden="true" stroke-width="1"><path d="M3 11.5L12 4l9 7.5M5.5 9.5V20h13V9.5M10 20v-5.5h4V20" /></svg></span>
+                <span class="tc__top"><span class="tc__name">Estudio Lomas</span><span class="tc__btn">Hablemos</span></span>
+                <span class="tc__foot">
+                  <span class="tc__kicker">VIVIENDA UNIFAMILIAR · ASTURIAS</span>
+                  <span class="tc__title">Casas que se parecen a quien vive en ellas</span>
+                  <span class="tc__ctas"><span class="tc__cta tc__cta--main">Hablemos<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span><span class="tc__cta tc__cta--alt">Ver proyectos</span></span>
+                </span>
+              </span>
+              <span class="tc__meta"><span class="tc__label">Estudio de arquitectura</span></span>
+              <span class="tc__tag">Que hable el espacio</span>
             </a>
-            <span class="examples__name">Despacho de abogados</span>
-          </li>
-          <li>
-            <a class="example" href="/app.html?sector=real-estate">
-              <img src="https://images.pexels.com/photos/16631149/pexels-photo-16631149.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=720&amp;h=900&amp;fit=crop" width="720" height="900" loading="lazy" alt="Vivienda unifamiliar de arquitectura contemporánea" />
-              <span class="example__title">Casas que se parecen a quien vive en ellas</span>
+          </div>
+          <div class="flow__item" role="group" aria-roledescription="plantilla" aria-label="4 de 7: Escuela infantil">
+            <a class="tcard tcard--center" href="/app.html?sector=kids-care" style="--bg: #fff6f1; --fg: #3a2420; --accent-c: #c2401f; --on: #fff; --ln: #f4ddd3; --tint: #fde3d8; --edge: #f6e2d9; --r: 999px; --block: 22px; --font-c: 'Trebuchet MS', 'Avenir Next', system-ui, sans-serif;" aria-label="Usar la plantilla Escuela infantil">
+              <span class="tcard__web">
+                <span class="tc__top"><span class="tc__name">Escuela Altamira</span><span class="tc__btn">Pedir visita</span></span>
+                <span class="tc__mid">
+                  <span class="tc__badge"><svg class="tc__icon" width="38" height="38" viewBox="0 0 24 24" aria-hidden="true" stroke-width="1.5"><path d="M4 13h7v7H4zM13 13h7v7h-7zM8.5 4h7v7h-7z" /></svg></span>
+                  <span class="tc__kicker">ESCUELA INFANTIL · 0 A 3 AÑOS</span>
+                  <span class="tc__title">El sitio donde tu hijo aprende a estar sin ti</span>
+                  <span class="tc__line" style="width: 80%; margin-top: 14px"></span><span class="tc__line" style="width: 56%"></span>
+                  <span class="tc__ctas"><span class="tc__cta tc__cta--main">Pedir visita<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></span>
+                </span>
+              </span>
+              <span class="tc__meta"><span class="tc__label">Escuela infantil</span></span>
+              <span class="tc__tag">Cálida y con color</span>
             </a>
-            <span class="examples__name">Estudio de arquitectura</span>
-          </li>
-        </ul>
+          </div>
+          <div class="flow__item" role="group" aria-roledescription="plantilla" aria-label="5 de 7: Restaurante · De mantel">
+            <a class="tcard tcard--bleed" href="/app.html?sector=fine-dining" style="--bg: #1a1410; --fg: #f2e6d0; --accent-c: #c9a25e; --on: #1a1410; --ln: #4a3b2d; --tint: #211a14; --edge: #2a211a; --r: 2px; --block: 6px; --font-c: Georgia, 'Times New Roman', serif;" aria-label="Usar la plantilla Restaurante · De mantel">
+              <span class="tcard__web">
+                <span class="tc__bigring" aria-hidden="true"></span>
+                <span class="tc__bigicon"><svg class="tc__icon" width="140" height="140" viewBox="0 0 24 24" aria-hidden="true" stroke-width="1"><path d="M12 19a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 3v6.5M1 3v3.5a1.5 1.5 0 0 0 3 0V3M2.5 9.5V21M21.5 3c-1.5 1.5-2 4-2 6.5h2V21" /></svg></span>
+                <span class="tc__top"><span class="tc__name">Casa Mendaro</span><span class="tc__btn">Reservar mesa</span></span>
+                <span class="tc__foot">
+                  <span class="tc__kicker">COCINA DE TEMPORADA · SAN SEBASTIÁN</span>
+                  <span class="tc__title">Lo que hay hoy depende de lo que hubo esta mañana</span>
+                  <span class="tc__ctas"><span class="tc__cta tc__cta--main">Reservar mesa<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span><span class="tc__cta tc__cta--alt">Ver la carta</span></span>
+                </span>
+              </span>
+              <span class="tc__meta"><span class="tc__label">Restaurante · De mantel</span></span>
+              <span class="tc__tag">Para reservar con tiempo</span>
+            </a>
+          </div>
+          <div class="flow__item" role="group" aria-roledescription="plantilla" aria-label="6 de 7: Restaurante · Clay">
+            <a class="tcard tcard--center" href="/app.html?sector=fine-dining" style="--bg: #efe8ff; --fg: #2e1f5e; --accent-c: #6a4cf0; --on: #fff; --ln: #ddd2fb; --tint: #e2d8ff; --edge: #e4dcfb; --r: 999px; --block: 26px; --font-c: 'Trebuchet MS', 'Avenir Next', system-ui, sans-serif; --glow: 0 6px 14px rgba(122,92,255,.35);" aria-label="Usar la plantilla Restaurante · Clay">
+              <span class="tcard__web">
+                <span class="tc__top"><span class="tc__name">Casa Mendaro</span><span class="tc__btn">Reservar mesa</span></span>
+                <span class="tc__mid">
+                  <span class="tc__badge"><svg class="tc__icon" width="38" height="38" viewBox="0 0 24 24" aria-hidden="true" stroke-width="1.5"><path d="M12 19a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 3v6.5M1 3v3.5a1.5 1.5 0 0 0 3 0V3M2.5 9.5V21M21.5 3c-1.5 1.5-2 4-2 6.5h2V21" /></svg></span>
+                  <span class="tc__kicker">COCINA DE TEMPORADA · SAN SEBASTIÁN</span>
+                  <span class="tc__title">Lo que hay hoy depende de lo que hubo esta mañana</span>
+                  <span class="tc__line" style="width: 80%; margin-top: 14px"></span><span class="tc__line" style="width: 56%"></span>
+                  <span class="tc__ctas"><span class="tc__cta tc__cta--main">Reservar mesa<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></span>
+                </span>
+              </span>
+              <span class="tc__meta"><span class="tc__label">Restaurante · Clay</span></span>
+              <span class="tc__tag">El mismo, más amable</span>
+            </a>
+          </div>
+          <div class="flow__item" role="group" aria-roledescription="plantilla" aria-label="7 de 7: Restaurante · Neón">
+            <a class="tcard tcard--stack" href="/app.html?sector=fine-dining" style="--bg: #0b0a14; --fg: #ffffff; --accent-c: #ff2bd6; --on: #14061a; --ln: #2a2643; --tint: #151229; --edge: #1c1930; --r: 6px; --block: 10px; --font-c: system-ui, -apple-system, 'Segoe UI', sans-serif; --glow: 0 0 18px rgba(255,43,214,.6); --tglow: 0 0 18px rgba(255,43,214,.45);" aria-label="Usar la plantilla Restaurante · Neón">
+              <span class="tcard__web">
+                <span class="tc__top"><span class="tc__name">Casa Mendaro</span><span class="tc__btn">Reservar mesa</span></span>
+                <span class="tc__kicker">COCINA DE TEMPORADA · SAN SEBASTIÁN</span>
+                <span class="tc__title">Lo que hay hoy depende de lo que hubo esta mañana</span>
+                <span class="tc__line" style="width: 88%; margin-top: 14px"></span><span class="tc__line" style="width: 64%"></span>
+                <span class="tc__ctas"><span class="tc__cta tc__cta--main">Reservar mesa<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span><span class="tc__cta tc__cta--alt">Ver la carta</span></span>
+                <span class="tc__art"><svg class="tc__icon" width="62" height="62" viewBox="0 0 24 24" aria-hidden="true" stroke-width="1.4"><path d="M12 19a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 3v6.5M1 3v3.5a1.5 1.5 0 0 0 3 0V3M2.5 9.5V21M21.5 3c-1.5 1.5-2 4-2 6.5h2V21" /></svg></span>
+              </span>
+              <span class="tc__meta"><span class="tc__label">Restaurante · Neón</span></span>
+              <span class="tc__tag">El mismo, para la noche</span>
+            </a>
+          </div>
+        </div>
+        <p id="flow-status" class="sr-only" aria-live="polite"></p>
+        <div class="flow__ctrl">
+          <button id="flow-prev" type="button" class="round-btn" aria-label="Plantilla anterior"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg></button>
+          <div id="flow-dots" class="dots">
+          <button type="button" class="dot" aria-label="Clínica dental" aria-current="true"></button>
+          <button type="button" class="dot" aria-label="Despacho de abogados" aria-current="false"></button>
+          <button type="button" class="dot" aria-label="Estudio de arquitectura" aria-current="false"></button>
+          <button type="button" class="dot" aria-label="Escuela infantil" aria-current="false"></button>
+          <button type="button" class="dot" aria-label="Restaurante · De mantel" aria-current="false"></button>
+          <button type="button" class="dot" aria-label="Restaurante · Clay" aria-current="false"></button>
+          <button type="button" class="dot" aria-label="Restaurante · Neón" aria-current="false"></button>
+          </div>
+          <button id="flow-next" type="button" class="round-btn" aria-label="Plantilla siguiente"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg></button>
+          <button id="flow-toggle" type="button" class="round-btn round-btn--sm flow__toggle" aria-pressed="false" aria-label="Pausar el carrusel"><svg class="ico ico--pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12" /></svg><svg class="ico ico--play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10-6.5z" /></svg></button>
+        </div>
       </section>
 
       <section id="como-funciona" class="steps">
-        <h2>Cómo funciona</h2>
-        <ol>
-          <li>
-            <span class="steps__n">1</span>
-            <h3>Diseñas</h3>
-            <p>
-              Eliges un punto de partida pensado para tu sector, o un estilo que te guste, y
-              lo haces tuyo: tu color, tu letra, las secciones que quieres. Todo se ve al
-              instante.
-            </p>
-          </li>
-          <li>
-            <span class="steps__n">2</span>
-            <h3>Hablamos</h3>
-            <p>
-              Cuando el diseño te convence, me dejas tus datos y te escribo yo, en persona.
-              Vemos juntos qué necesitas y te lo explico todo claro, sin letra pequeña.
-            </p>
-          </li>
-          <li>
-            <span class="steps__n">3</span>
-            <h3>Te la entrego</h3>
-            <p>
-              La construyo con tus textos y tus fotos (o te echo una mano con ellos), la
-              repasamos juntos y no la publico hasta que estés contento. Y después sigo aquí
-              para lo que necesites.
-            </p>
-          </li>
-        </ol>
-      </section>
-
-      <section class="audience">
-        <h2>Para quién es</h2>
-        <div class="audience__grid">
-          <div>
-            <h3>Comercio de barrio</h3>
-            <p>Obradores y cafeterías, peluquerías, talleres, casas rurales.</p>
+        <div class="wrap steps__in">
+          <div class="steps__side">
+            <h2 class="h-xl reveal" style="font-size: clamp(38px, 5vw, 72px)">Cómo funciona</h2>
+            <p class="lead reveal" style="--d: 0.08s">Tres pasos. El primero lo haces tú, tranquilamente desde el sofá. Los otros dos, conmigo.</p>
           </div>
-          <div>
-            <h3>Profesionales</h3>
-            <p>Clínicas y consultas, fisios, despachos, estudios de arquitectura.</p>
-          </div>
+          <ol>
+            <li class="card step reveal">
+              <span class="step__n">01</span>
+              <div>
+                <h3>Diseñas</h3>
+                <p>Empiezas desde una plantilla pensada para tu sector (o la que más te guste) y la haces tuya: tu color, tu letra, tus secciones. Todo cambia al instante.</p>
+              </div>
+            </li>
+            <li class="card step reveal" style="--d: 0.08s">
+              <span class="step__n">02</span>
+              <div>
+                <h3>Hablamos</h3>
+                <p>Cuando te convenza, me dejas tus datos y te escribo yo, en persona. Vemos qué necesitas y te lo cuento todo claro, sin letra pequeña ni palabras raras.</p>
+              </div>
+            </li>
+            <li class="card step reveal" style="--d: 0.16s">
+              <span class="step__n">03</span>
+              <div>
+                <h3>Te la entrego</h3>
+                <p>La monto con tus textos y tus fotos (si no los tienes, te echo una mano), la repasamos juntos y no se publica hasta que te guste. Y después sigo aquí para lo que haga falta.</p>
+              </div>
+            </li>
+          </ol>
         </div>
-        <p class="audience__note">
-          No es un creador de webs que acabas manteniendo tú: te llevas la web terminada. Si
-          no sabes nada de webs, no pasa nada; de eso me encargo yo.
-        </p>
       </section>
 
-      <!-- La firma de la carta: quién está detrás y cómo trabaja. La foto manda
-           y el bloque se despide como una carta. Maketa
-           crece por recomendación: el trato va antes que el dinero. -->
-      <section class="me">
-        <img class="me__photo" src="/carlos.jpg" width="640" height="800" loading="lazy" alt="Carlos, sonriendo, junto a una ría en un día nublado." />
-        <div class="me__body">
-          <h2>Hola, soy Carlos</h2>
-          <p class="me__lead">
-            Me apasiona diseñar y construir webs. Soy de los que disfrutan moviendo un botón
-            dos píxeles hasta que queda justo donde tiene que estar.
-          </p>
-          <p class="me__text">
-            Lo que más me gusta es ver cómo un negocio pequeño (una peluquería, una clínica, un
-            despacho) pasa de "tengo que hacerme una web" a "mira qué web tengo". Que cargue
-            rápido, que se vea genial en el móvil y que tus clientes te encuentren sin
-            buscar: de eso me encargo, y te lo explico todo sin tecnicismos.
-          </p>
-          <p class="me__text">
-            ¿Tienes una idea o alguna duda? Escríbeme y lo hablamos con calma, sin
-            compromiso.
-          </p>
-          <div class="me__contact">
-            <a class="btn btn--ghost" href="mailto:hola@maketa.es">Escríbeme</a>
-            <span>hola@maketa.es</span>
+      <section class="who">
+        <div class="wrap split-head">
+          <h2 class="h-xl reveal" style="font-size: clamp(38px, 5vw, 72px)">Para quién es</h2>
+          <p class="lead reveal" style="--d: 0.08s">Para negocios con nombre y apellidos, de los que conoces a quien está detrás del mostrador.</p>
+        </div>
+        <div class="lanes" aria-hidden="true">
+          <div class="lane"><span class="pill">Cafeterías</span><span class="pill">Peluquerías</span><span class="pill">Talleres</span><span class="pill">Casas rurales</span><span class="pill">Barberías</span><span class="pill">Floristerías</span><span class="pill">Panaderías</span><span class="pill" aria-hidden="true">Cafeterías</span><span class="pill" aria-hidden="true">Peluquerías</span><span class="pill" aria-hidden="true">Talleres</span><span class="pill" aria-hidden="true">Casas rurales</span><span class="pill" aria-hidden="true">Barberías</span><span class="pill" aria-hidden="true">Floristerías</span><span class="pill" aria-hidden="true">Panaderías</span></div>
+          <div class="lane lane--r"><span class="pill">Clínicas</span><span class="pill">Consultas</span><span class="pill">Fisios</span><span class="pill">Despachos</span><span class="pill">Estudios de arquitectura</span><span class="pill">Academias</span><span class="pill">Centros de yoga</span><span class="pill" aria-hidden="true">Clínicas</span><span class="pill" aria-hidden="true">Consultas</span><span class="pill" aria-hidden="true">Fisios</span><span class="pill" aria-hidden="true">Despachos</span><span class="pill" aria-hidden="true">Estudios de arquitectura</span><span class="pill" aria-hidden="true">Academias</span><span class="pill" aria-hidden="true">Centros de yoga</span></div>
+        </div>
+        <div class="wrap">
+          <div class="grid2">
+            <div class="card card--soft reveal">
+              <h3>Comercio de barrio</h3>
+              <p>La cafetería, la peluquería, el taller o la casa rural de toda la vida.</p>
+            </div>
+            <div class="card card--soft reveal" style="--d: 0.08s">
+              <h3>Profesionales</h3>
+              <p>Clínicas y consultas, fisios, despachos y estudios de arquitectura que quieren que se les encuentre (y se les entienda).</p>
+            </div>
           </div>
-          <p class="me__sign">Un abrazo,<br />Carlos</p>
+          <p class="sr-only">Cafeterías, peluquerías, talleres, casas rurales, barberías, floristerías, panaderías, clínicas, consultas, fisios, despachos, estudios de arquitectura, academias y centros de yoga.</p>
+          <p class="ink reveal">Aquí no te dejo una herramienta para que te pelees con ella: te llevas la web terminada. <br />¿No sabes nada de webs? Mejor, para eso estoy yo.</p>
+        </div>
+      </section>
+
+      <!-- La firma de la carta: quién está detrás y cómo trabaja. Maketa crece por
+           recomendación: el trato va antes que el dinero. -->
+      <section class="me">
+        <div class="wrap me__in">
+          <div class="me__photo">
+            <img
+              src="/carlos-640.webp"
+              srcset="/carlos-640.webp 640w, /carlos-1200.webp 1200w"
+              sizes="(min-width: 900px) 440px, calc(100vw - 48px)"
+              width="640"
+              height="853"
+              loading="lazy"
+              alt="Carlos, sonriendo, junto a una ría en un día nublado."
+            />
+          </div>
+          <div class="me__body">
+            <h2 class="reveal">Hola, soy Carlos</h2>
+            <p class="me__lead reveal" style="--d: 0.06s">Me encanta diseñar y construir webs. Soy de los que disfrutan moviendo un botón dos píxeles hasta que queda justo donde tiene que estar.</p>
+            <p class="me__text reveal" style="--d: 0.12s">Lo que más me gusta es ver cómo un negocio pequeño (una peluquería, una clínica, un despacho) pasa de "tengo que hacerme una web" a "mira qué web tengo". Que cargue rápido, que se vea genial en el móvil y que tus clientes te encuentren sin buscar: de eso me encargo, y te lo explico todo sin tecnicismos.</p>
+            <p class="me__text reveal" style="--d: 0.18s">¿Tienes una idea o alguna duda? Escríbeme y lo hablamos con calma, sin compromiso. Te contesto yo, no un robot.</p>
+            <div class="me__contact reveal" style="--d: 0.24s">
+              <a class="btn btn--quiet" href="mailto:hola@maketa.es">Escríbeme <span class="arrow"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></a>
+              <span class="muted">hola@maketa.es</span>
+            </div>
+            <p class="me__sign reveal" style="--d: 0.3s">Un abrazo,<br />Carlos</p>
+          </div>
         </div>
       </section>
 
       <section id="precio" class="price">
-        <div class="price__intro">
-          <h2>Lo que te llevas</h2>
-          <p>
-            Una web hecha a tu medida y alguien de confianza detrás. El precio lo hablamos
-            con calma cuando tengas claro lo que quieres, y siempre lo sabes antes de
-            empezar.
-          </p>
-        </div>
-        <div class="price__card">
-          <div class="price__head">
-            <h3>Tu web de una página</h3>
-            <p class="price__amount"><span>desde</span> 249 €</p>
+        <div class="wrap">
+          <div class="price__in">
+            <div class="price__intro">
+              <h2 class="h-xl reveal" style="font-size: clamp(38px, 5vw, 72px)">Lo que te llevas</h2>
+              <p class="lead reveal" style="--d: 0.08s">Una web hecha a tu medida y alguien de confianza al otro lado. El precio lo hablamos con calma cuando sepas lo que quieres, y siempre lo sabes antes de empezar. Nada de sorpresas.</p>
+            </div>
+            <div class="card price__card reveal">
+              <div class="price__head">
+                <h3>Tu web de una página</h3>
+                <p class="price__amount"><span>desde</span>249 €</p>
+              </div>
+              <ul class="price__list">
+              <li class="check" style="--i: 0"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#eef1ff" /><path d="M7.5 12.5l3 3L16.5 9" fill="none" stroke="#3b53d6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>El diseño que has hecho en Maketa, construido a medida</li>
+              <li class="check" style="--i: 1"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#eef1ff" /><path d="M7.5 12.5l3 3L16.5 9" fill="none" stroke="#3b53d6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>Adaptada a móvil, tablet y ordenador</li>
+              <li class="check" style="--i: 2"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#eef1ff" /><path d="M7.5 12.5l3 3L16.5 9" fill="none" stroke="#3b53d6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>Tus textos, tus fotos y tus secciones</li>
+              <li class="check" style="--i: 3"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#eef1ff" /><path d="M7.5 12.5l3 3L16.5 9" fill="none" stroke="#3b53d6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>Formulario de contacto y mapa con tu ubicación</li>
+              <li class="check" style="--i: 4"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#eef1ff" /><path d="M7.5 12.5l3 3L16.5 9" fill="none" stroke="#3b53d6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>Enlaces a tus redes sociales</li>
+              <li class="check" style="--i: 5"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#eef1ff" /><path d="M7.5 12.5l3 3L16.5 9" fill="none" stroke="#3b53d6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>SEO básico para que te encuentren</li>
+              <li class="check" style="--i: 6"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#eef1ff" /><path d="M7.5 12.5l3 3L16.5 9" fill="none" stroke="#3b53d6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>La revisamos juntos y la publico en tu dominio</li>
+              <li class="check" style="--i: 7"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#eef1ff" /><path d="M7.5 12.5l3 3L16.5 9" fill="none" stroke="#3b53d6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>Un mes de cambios pequeños incluido tras publicarla</li>
+              </ul>
+              <p class="price__note">El dominio y el hosting van aparte; si no sabes cuáles elegir, te oriento.</p>
+              <a class="btn btn--primary btn--block" href="/app.html">Diseñar mi web <span class="arrow"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></a>
+            </div>
           </div>
-          <ul>
-            <li>El diseño que has hecho en Maketa, construido a medida</li>
-            <li>Adaptada a móvil, tablet y ordenador</li>
-            <li>Tus textos, tus fotos y tus secciones</li>
-            <li>Formulario de contacto y mapa con tu ubicación</li>
-            <li>Enlaces a tus redes sociales</li>
-            <li>SEO básico para que te encuentren</li>
-            <li>La revisamos juntos y la publico en tu dominio</li>
-            <li>Un mes de cambios pequeños incluido tras publicarla</li>
-          </ul>
-          <p class="price__note">El dominio y el hosting van aparte; si no sabes cuáles elegir, te oriento.</p>
-        </div>
 
-        <!-- Los extras, sin precio: dependen de cada negocio y se cierran por
-             correo (ver TARIFAS.md). Maketa es la puerta de entrada, no un límite. -->
-        <div class="price__extra">
-          <h3>¿Te hace falta más?</h3>
-          <ul>
-            <li>
-              <strong>Más páginas</strong>
-              <p>
-                Tu web crece contigo: empieza por la portada que has diseñado y añadimos la
-                carta, los servicios o lo que necesites, con el mismo diseño.
-              </p>
-            </li>
-            <li>
-              <strong>Reservas, citas o venta online</strong>
-              <p>
-                La conecto con herramientas que ya funcionan para que tus clientes reserven o
-                paguen sin tener que llamarte. Sin montar una tienda entera.
-              </p>
-            </li>
-            <li>
-              <strong>Cambios cuando los necesites</strong>
-              <p>
-                El primer mes van incluidos. Después, si cambias de horario o de carta, me
-                escribes y lo cambio. No te quedas solo con tu web.
-              </p>
-            </li>
-          </ul>
-          <p class="price__extra-note">
-            Diseña aquí la base y lo demás lo vemos juntos.
-          </p>
+          <!-- Los extras, sin precio: dependen de cada negocio y se cierran por correo
+               (ver TARIFAS.md). Maketa es la puerta de entrada, no un límite. -->
+          <div class="extra">
+            <h3 class="reveal">¿Te hace falta más?</h3>
+            <ul class="grid3">
+              <li class="card card--soft reveal">
+                <strong>Más páginas</strong>
+                <p>Tu web crece contigo: empezamos por la portada que has diseñado y añadimos la carta, los servicios o lo que necesites, con el mismo diseño.</p>
+              </li>
+              <li class="card card--soft reveal" style="--d: 0.08s">
+                <strong>Reservas, citas o venta online</strong>
+                <p>La conecto con herramientas que ya funcionan para que tus clientes reserven o paguen sin tener que llamarte. Sin montar una tienda entera.</p>
+              </li>
+              <li class="card card--soft reveal" style="--d: 0.16s">
+                <strong>Cambios cuando los necesites</strong>
+                <p>El primer mes van incluidos. Después, si cambias de horario o de carta, me escribes y lo cambio yo. No te quedas solo con tu web.</p>
+              </li>
+            </ul>
+            <p class="extra__note reveal">Diseña aquí la base y lo demás lo vemos juntos.</p>
+          </div>
         </div>
       </section>
 
-      <section class="cta-final">
-        <h2>¿Le damos forma a tu web?</h2>
-        <p>Empieza por el diseño, a tu ritmo. Cuando te guste, aquí estaré.</p>
-        <a class="btn btn--primary" href="/app.html">Diseñar mi web</a>
-        <p class="cta-final__sign">Carlos · <a href="mailto:hola@maketa.es">hola@maketa.es</a></p>
+      <section class="final">
+        <div class="final__box">
+          <div class="final__grid" aria-hidden="true"></div>
+          <div aria-hidden="true">
+            <div class="piece" style="--r: -10deg; left: 5%; top: 11%; width: 100px; height: 28px; border-radius: 10px; background: #3b53d6"></div>
+            <div class="piece" style="--r: 14deg; right: 6%; top: 10%; width: 54px; height: 54px; border-radius: 14px; border: 2px solid rgba(255, 255, 255, 0.25); animation-delay: -3s"></div>
+            <div class="piece" style="--r: 6deg; left: 8%; bottom: 14%; width: 46px; height: 46px; border-radius: 13px; background: rgba(139, 160, 255, 0.35); animation-delay: -5s"></div>
+          </div>
+          <div class="final__in">
+            <h2 class="reveal">¿Le damos forma a tu web?</h2>
+            <p class="reveal" style="--d: 0.08s">Empieza por el diseño, a tu ritmo y sin prisa. Cuando te guste, aquí estaré.</p>
+            <div class="reveal" style="--d: 0.16s">
+              <a class="btn btn--white" href="/app.html">Diseñar mi web <span class="arrow"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></a>
+            </div>
+            <p class="final__sign reveal" style="--d: 0.24s">Carlos · <a href="mailto:hola@maketa.es">hola@maketa.es</a></p>
+          </div>
+        </div>
       </section>
     </main>
 
     <footer class="foot">
-      <span>Maketa · Madrid</span>
-      <nav>
-        <a href="/aviso-legal.html">Aviso legal</a>
-        <a href="/privacidad.html">Privacidad</a>
-        <a href="/cookies.html">Cookies</a>
-      </nav>
+      <div class="wrap">
+        <span>Maketa · Madrid</span>
+        <nav aria-label="Legal">
+          <a class="navlink" href="/aviso-legal.html">Aviso legal</a>
+          <a class="navlink" href="/privacidad.html">Privacidad</a>
+          <a class="navlink" href="/cookies.html">Cookies</a>
+        </nav>
+      </div>
     </footer>
+
     <!-- Del clic al configurador sin parón:
          1. Chrome y Edge preparan /app.html en segundo plano en cuanto el ratón
             se posa sobre un enlace (o el dedo lo toca), y el salto es inmediato.
          2. En los demás navegadores, el clic responde al instante: la página se
-            apaga y aparece "Abriendo tu web…" mientras llega la siguiente. -->
+            apaga y aparece "Abriendo tu web…" (lo gestiona /landing.js). -->
     <script type="speculationrules">
       { "prerender": [{ "where": { "href_matches": "/app.html*" }, "eagerness": "moderate" }] }
     </script>
     <div class="leaving" aria-hidden="true"><span>Abriendo tu web…</span></div>
-    <script>
-      document.addEventListener('click', function (e) {
-        var a = e.target.closest && e.target.closest('a[href^="/app.html"]')
-        if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
-        document.documentElement.classList.add('is-leaving')
-      })
-      // Al volver con "atrás" la página sale de la caché tal cual estaba.
-      window.addEventListener('pageshow', function () {
-        document.documentElement.classList.remove('is-leaving')
-      })
-    </script>
   </body>
 </html>

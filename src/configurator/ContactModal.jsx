@@ -176,7 +176,7 @@ export function ContactModal({
                 <h2 id="contact-title">Cuéntame y te escribo yo</h2>
                 {/* Quién va a escribir: la misma foto que en la landing. */}
                 <div className="modal__me">
-                  <img src="/carlos.jpg" alt="" width="44" height="44" />
+                  <img src="/carlos-640.webp" alt="" width="44" height="44" />
                   <p>
                     Soy Carlos. Déjame tus datos y te escribo en persona para verla juntos.
                     Sin compromiso: aquí no pagas nada.
