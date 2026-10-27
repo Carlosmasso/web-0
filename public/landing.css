@@ -141,7 +141,7 @@ main:focus { outline: none; }
 .wordmark { display: flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 750; font-size: 19px; letter-spacing: -0.02em; }
 .wordmark:hover { color: var(--ink); }
 .nav__links { display: flex; align-items: center; gap: 26px; flex-wrap: wrap; }
-.navlink { position: relative; color: var(--ink-soft); font-size: 15px; font-weight: 550; transition: color 0.2s ease; }
+.navlink { position: relative; color: var(--ink-soft); font-size: 15px; font-weight: 500; transition: color 0.2s ease; }
 .navlink:hover { color: var(--ink); }
 .navlink::after {
   content: '';

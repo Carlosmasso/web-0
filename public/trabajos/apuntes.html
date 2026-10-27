@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Acento · Academia de idiomas en Salamanca — web de ejemplo</title>
+<meta name="description" content="Web de ejemplo hecha a mano por Maketa para una academia de idiomas inventada.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23FFE45C'/%3E%3Cpath d='M9 22l7-14 7 14M11.5 17h9M14 6l4-3' stroke='%231B2A4A' stroke-width='2.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://images.pexels.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Instrument+Sans:wght@400..700&family=Kalam:wght@400;700&display=swap">
+<!--
+  Apuntes · plantilla a medida de Maketa (academia de idiomas ficticia).
+  Un solo archivo, sin dependencias. Un cuaderno que se usa:
+    1. Subrayados de rotulador que se pintan al entrar en pantalla y un saludo
+       que cambia de idioma.
+    2. Prueba de nivel de inglés de verdad: cuatro preguntas, corrección al
+       momento (tachón rojo o marca verde) y un nivel orientativo.
+    3. Escalera de niveles A1 → C2 con lo que sabrás hacer en cada uno; la
+       prueba deja una nota "tú estás aquí".
+    4. Cursos por idioma, con los exámenes oficiales de cada uno.
+    5. "¿Cuánto tardo?": de tu nivel al que quieres, según horas por semana,
+       con el camino dibujado.
+-->
+<style>
+:root {
+  --paper: #FBFAF5;
+  --grid: #E3EAF4;
+  --card: #FFFFFF;
+  --ink: #1B2A4A;
+  --soft: #3B4A68;
+  --muted: #5F6B82;
+  --line: #D5DCE8;
+  --yellow: #FFE45C;
+  --pink: #FFB3CF;
+  --green: #B6F0BD;
+  --blue: #BFDDFF;
+  --red: #D43F3A;
+  --ok: #1E8A4C;
+  --pad: clamp(16px, 4vw, 40px);
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  --spring: cubic-bezier(.34, 1.56, .64, 1);
+  --serif: 'Young Serif', Georgia, serif;
+  --hand: 'Kalam', 'Comic Sans MS', cursive;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; color: var(--ink); font: 400 17px/1.6 'Instrument Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: clip;
+  background-color: var(--paper);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+h1, h2, h3, p, ul, ol { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+:focus-visible { outline: 2.5px solid var(--ink); outline-offset: 3px; border-radius: 6px; }
+::selection { background: var(--yellow); }
+[hidden] { display: none !important; }
+[id] { scroll-margin-top: 24px; }
+
+.wrap { max-width: 1240px; margin: 0 auto; padding-left: var(--pad); padding-right: var(--pad); }
+.hand { font-family: var(--hand); }
+.kicker { font-family: var(--hand); font-size: 20px; font-weight: 700; color: var(--red); transform: rotate(-1.5deg); display: inline-block; }
+.h2 { margin-top: 10px; font-family: var(--serif); font-weight: 400; font-size: clamp(40px, 5.6vw, 76px); line-height: 1.02; letter-spacing: -0.02em; text-wrap: balance; }
+.lead { font-size: 19px; line-height: 1.6; color: var(--soft); max-width: 540px; }
+
+/* Rotulador: se pinta de izquierda a derecha cuando entra en pantalla. */
+.hl { background: linear-gradient(104deg, transparent .5%, var(--c, var(--yellow)) 2%, var(--c, var(--yellow)) 97%, transparent 99%) 0 85% / 0% 42% no-repeat; padding: 0 .08em; border-radius: 4px; transition: background-size .9s cubic-bezier(.6, .1, .3, 1); transition-delay: var(--d, .2s); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.hl.is-in, .no-js .hl { background-size: 100% 42%; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 24px; border-radius: 14px; border: 2px solid var(--ink); background: var(--card); font-weight: 600; font-size: 16px; text-decoration: none; cursor: pointer; box-shadow: 4px 4px 0 var(--ink); transition: transform .15s ease, box-shadow .15s ease, background .2s ease; }
+.btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+.btn:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--ink); }
+.btn--yellow { background: var(--yellow); }
+
+/* ---------- cabecera ---------- */
+
+.top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-top: 20px; padding-bottom: 20px; }
+.brand { display: inline-flex; align-items: baseline; gap: 2px; font-family: var(--serif); font-size: 28px; text-decoration: none; }
+.brand b { font-weight: 400; position: relative; }
+.brand b::after { content: "´"; position: absolute; left: 50%; top: -.46em; transform: translateX(-30%); color: var(--red); }
+.top nav { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 26px; font-weight: 500; font-size: 15px; }
+.top nav a:not(.btn) { text-decoration: none; padding: 12px 0; }
+.top nav a:not(.btn):hover { text-decoration: underline wavy var(--red); text-underline-offset: 6px; }
+.top nav .btn { min-height: 44px; padding: 0 16px; box-shadow: 3px 3px 0 var(--ink); }
+@media (max-width: 760px) { .top nav a:not(.btn) { display: none; } }
+
+/* ---------- portada ---------- */
+
+.hero { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 56px; align-items: center; padding-top: clamp(32px, 6vw, 80px); padding-bottom: clamp(64px, 8vw, 112px); }
+.hello { display: inline-block; height: 1.3em; overflow: hidden; vertical-align: bottom; font-family: var(--hand); font-weight: 700; font-size: 34px; color: var(--red); perspective: 400px; }
+.hello span { display: inline-block; transform-origin: 50% 50% -20px; }
+.hello span.is-out { animation: out .35s ease-in both; }
+.hello span.is-in { animation: in .45s var(--spring) both; }
+@keyframes out { to { transform: rotateX(90deg); opacity: 0; } }
+@keyframes in { from { transform: rotateX(-90deg); opacity: 0; } }
+.hero h1 { margin-top: 12px; font-family: var(--serif); font-weight: 400; font-size: clamp(54px, 7.8vw, 112px); line-height: 1; letter-spacing: -0.03em; }
+.hero .lead { margin-top: 26px; }
+.hero__ctas { margin-top: 36px; display: flex; flex-wrap: wrap; gap: 16px; }
+.polaroid { position: relative; padding: 14px 14px 56px; background: var(--card); box-shadow: 0 24px 40px -24px rgba(27, 42, 74, .45); transform: rotate(2.5deg); max-width: 480px; margin-left: auto; }
+.polaroid img { aspect-ratio: 4 / 3.4; width: 100%; object-fit: cover; }
+.polaroid figcaption { position: absolute; left: 18px; bottom: 14px; font-family: var(--hand); font-size: 22px; }
+.tape { position: absolute; width: 110px; height: 30px; background: rgba(255, 228, 92, .75); top: -14px; left: 50%; margin-left: -55px; transform: rotate(-4deg); }
+/* Debajo de la foto, a la derecha, apuntando hacia arriba: así no pisa el pie de foto. */
+.note-arrow { position: absolute; right: 8px; bottom: -92px; display: flex; flex-direction: column-reverse; align-items: flex-end; font-family: var(--hand); font-size: 21px; color: var(--red); transform: rotate(-4deg); white-space: nowrap; }
+.note-arrow svg { display: block; margin-right: 40px; width: 70px; height: 44px; overflow: visible; }
+.note-arrow path { fill: none; stroke: var(--red); stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 200; stroke-dashoffset: 200; animation: draw 1.2s 1s ease forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@media (max-width: 900px) {
+  .hero { grid-template-columns: minmax(0, 1fr); }
+  .polaroid { margin: 0 auto; }
+  .note-arrow { display: none; }
+}
+
+/* ---------- prueba de nivel ---------- */
+
+.section { padding-top: clamp(72px, 9vw, 120px); padding-bottom: clamp(72px, 9vw, 120px); }
+.test { margin-top: 40px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .55fr); gap: 32px 56px; align-items: start; }
+.sheet { position: relative; padding: 36px 36px 36px 72px; background: var(--card); border-radius: 6px; box-shadow: 0 20px 40px -24px rgba(27, 42, 74, .35); background-image: linear-gradient(90deg, transparent 52px, #F3A6A3 52px, #F3A6A3 54px, transparent 54px), repeating-linear-gradient(transparent 0 35px, #E6EDF7 35px 36px); }
+.sheet__top { display: flex; justify-content: space-between; align-items: center; gap: 16px; font-weight: 600; color: var(--muted); }
+.dots { display: flex; gap: 6px; }
+.dots i { width: 28px; height: 6px; border-radius: 6px; background: var(--line); transition: background .3s ease; }
+.dots i.is-done { background: var(--ink); }
+.q { margin-top: 26px; font-family: var(--serif); font-size: clamp(24px, 2.8vw, 34px); line-height: 1.3; }
+.q u { text-decoration: none; display: inline-block; min-width: 3.4em; border-bottom: 2px solid var(--ink); }
+.opts { margin-top: 24px; display: grid; gap: 10px; }
+.opt { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; padding: 0 18px; border-radius: 12px; border: 2px solid var(--line); background: var(--card); font-size: 18px; font-weight: 500; text-align: left; cursor: pointer; transition: border-color .2s ease, background .2s ease, transform .2s ease; }
+.opt:hover:not(:disabled) { border-color: var(--ink); transform: translateX(4px); }
+.opt:disabled { cursor: default; color: var(--ink); }
+.opt.is-right { border-color: var(--ok); background: #EAF8EE; }
+.opt.is-wrong { border-color: var(--red); background: #FDEEEE; }
+.opt.is-wrong span { position: relative; }
+.opt.is-wrong span::after { content: ""; position: absolute; left: -4px; right: -4px; top: 52%; height: 3px; border-radius: 3px; background: var(--red); transform: rotate(-3deg) scaleX(0); transform-origin: left; animation: strike .35s ease forwards; }
+@keyframes strike { to { transform: rotate(-3deg) scaleX(1); } }
+.opt em { font-family: var(--hand); font-style: normal; font-weight: 700; font-size: 26px; line-height: 1; }
+.opt.is-right em { color: var(--ok); }
+.opt.is-wrong em { color: var(--red); }
+.opt.is-wrong.is-shake { animation: shake .4s ease; }
+@keyframes shake { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+.sheet__foot { margin-top: 24px; min-height: 52px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+.sheet__why { font-family: var(--hand); font-size: 20px; color: var(--soft); }
+.result { text-align: left; }
+.result__lvl { position: relative; display: inline-block; margin-top: 18px; font-family: var(--serif); font-size: 96px; line-height: 1; padding: 0 18px; }
+.result__lvl svg { position: absolute; inset: -14px -24px; width: calc(100% + 48px); height: calc(100% + 28px); overflow: visible; }
+.result__lvl ellipse { fill: none; stroke: var(--red); stroke-width: 3; stroke-dasharray: 520; stroke-dashoffset: 520; animation: draw 1s .2s ease forwards; }
+.result p { margin-top: 18px; font-size: 18px; color: var(--soft); max-width: 520px; }
+.result .btn { margin-top: 24px; margin-right: 12px; }
+.aside { display: flex; flex-direction: column; gap: 16px; }
+.sticky { padding: 22px; background: var(--yellow); transform: rotate(-1.5deg); box-shadow: 0 14px 24px -16px rgba(27, 42, 74, .5); font-family: var(--hand); font-size: 20px; line-height: 1.4; }
+.sticky--pink { background: var(--pink); transform: rotate(1.5deg); }
+@media (max-width: 900px) { .test { grid-template-columns: minmax(0, 1fr); } .sheet { padding: 28px 20px 28px 52px; background-image: linear-gradient(90deg, transparent 34px, #F3A6A3 34px, #F3A6A3 36px, transparent 36px), repeating-linear-gradient(transparent 0 35px, #E6EDF7 35px 36px); } }
+
+/* ---------- escalera de niveles ---------- */
+
+.stairs { margin-top: 48px; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; align-items: end; }
+.step { position: relative; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start; height: calc(90px + var(--i) * 42px); padding: 16px; border-radius: 14px 14px 4px 4px; border: 2px solid var(--ink); background: var(--card); font-family: var(--serif); font-size: clamp(22px, 2.6vw, 34px); cursor: pointer; text-align: left; transition: background .25s ease, transform .3s var(--spring); }
+.step:hover { transform: translateY(-6px); background: var(--c); }
+.step[aria-pressed="true"] { background: var(--c); transform: translateY(-10px); box-shadow: 4px 4px 0 var(--ink); }
+.step small { font-family: 'Instrument Sans', sans-serif; font-size: 13px; color: var(--muted); }
+.you { position: absolute; top: -46px; left: 50%; transform: translateX(-50%) rotate(-6deg); font-family: var(--hand); font-weight: 700; font-size: 22px; color: var(--red); white-space: nowrap; animation: pop .5s var(--spring) both; }
+.you::after { content: "↓"; display: block; text-align: center; line-height: .8; }
+@keyframes pop { from { transform: translateX(-50%) rotate(-6deg) scale(.4); opacity: 0; } }
+.can { margin-top: 28px; padding: 24px 28px; background: var(--card); border: 2px solid var(--ink); border-radius: 14px; display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: baseline; }
+.can b { font-family: var(--serif); font-weight: 400; font-size: 28px; }
+.can p { flex: 1 1 320px; font-size: 18px; color: var(--soft); }
+@media (max-width: 700px) {
+  .stairs { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 56px; }
+  .step { height: calc(70px + (var(--i) - var(--row, 0)) * 26px); }
+}
+
+/* ---------- cursos ---------- */
+
+.tabs { margin-top: 36px; display: flex; flex-wrap: wrap; gap: 10px; }
+.tabs button { min-height: 48px; padding: 0 20px; border-radius: 12px; border: 2px solid var(--ink); background: var(--card); font-weight: 600; cursor: pointer; transition: background .2s ease, transform .2s ease; }
+.tabs button[aria-selected="true"] { background: var(--ink); color: var(--paper); }
+.tabs button:hover { transform: translateY(-2px); }
+.courses { margin-top: 24px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; transition: opacity .2s ease; }
+.courses.is-swap { opacity: 0; }
+.course { padding: 26px; background: var(--card); border: 2px solid var(--ink); border-radius: 16px; display: flex; flex-direction: column; gap: 12px; transition: transform .3s var(--spring), box-shadow .3s ease; }
+.course:hover { transform: rotate(-1deg) translateY(-4px); box-shadow: 6px 6px 0 var(--c, var(--yellow)); }
+.course h3 { font-family: var(--serif); font-weight: 400; font-size: 26px; line-height: 1.15; }
+.course p { color: var(--soft); }
+.course ul { margin-top: auto; padding-top: 14px; border-top: 1.5px dashed var(--line); display: flex; flex-direction: column; gap: 6px; font-size: 15px; }
+.course li::before { content: "✓ "; font-family: var(--hand); font-weight: 700; color: var(--ok); }
+@media (max-width: 900px) { .courses { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------- ¿cuánto tardo? ---------- */
+
+.path { margin-top: 40px; display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 32px 56px; align-items: center; }
+.pick { display: flex; flex-direction: column; gap: 22px; }
+.pick__label { display: block; margin-bottom: 10px; font-weight: 600; }
+.seg { display: flex; flex-wrap: wrap; gap: 8px; }
+.seg button { min-width: 56px; min-height: 48px; padding: 0 14px; border-radius: 12px; border: 2px solid var(--line); background: var(--card); font-weight: 600; cursor: pointer; transition: border-color .2s ease, background .2s ease; }
+.seg button:hover:not(:disabled) { border-color: var(--ink); }
+.seg button[aria-pressed="true"] { border-color: var(--ink); background: var(--yellow); }
+.seg button:disabled { opacity: .3; cursor: default; }
+.map { padding: 28px; background: var(--card); border: 2px solid var(--ink); border-radius: 18px; }
+.map svg { width: 100%; height: auto; overflow: visible; }
+.map .road { fill: none; stroke: var(--line); stroke-width: 3; stroke-dasharray: 2 8; stroke-linecap: round; }
+.map .walk { fill: none; stroke: var(--red); stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 1s cubic-bezier(.6, .1, .3, 1); }
+.map circle { fill: var(--card); stroke: var(--ink); stroke-width: 2.5; transition: fill .3s ease; }
+.map circle.is-on { fill: var(--yellow); }
+.map text { font-family: var(--serif); font-size: 18px; fill: var(--ink); text-anchor: middle; }
+.map__out { margin-top: 18px; font-size: 19px; line-height: 1.5; }
+.map__out b { font-family: var(--serif); font-weight: 400; font-size: 30px; }
+.map__fine { margin-top: 10px; font-size: 14px; color: var(--muted); }
+@media (max-width: 900px) { .path { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------- opiniones y matrícula ---------- */
+
+.voices { margin-top: 40px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.voice { padding: 26px; background: var(--card); box-shadow: 0 14px 30px -20px rgba(27, 42, 74, .4); transform: rotate(var(--r)); }
+.voice p { font-family: var(--hand); font-size: 22px; line-height: 1.35; }
+.voice span { display: block; margin-top: 14px; font-size: 14px; color: var(--muted); }
+@media (max-width: 900px) { .voices { grid-template-columns: minmax(0, 1fr); } }
+.cta { margin-top: 24px; padding: clamp(32px, 5vw, 56px); background: var(--ink); color: var(--paper); border-radius: 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 24px; }
+.cta h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(34px, 4.4vw, 56px); line-height: 1.05; }
+.cta p { margin-top: 10px; color: rgba(251, 250, 245, .75); }
+/* El mismo botón amarillo que el resto (texto y borde en tinta); sobre el azul,
+   la sombra sólida va en papel para que se siga viendo. */
+.cta .btn { color: var(--ink); border-color: var(--ink); box-shadow: 4px 4px 0 var(--paper); }
+.cta .btn:hover { box-shadow: 6px 6px 0 var(--paper); }
+.cta .btn:active { box-shadow: 1px 1px 0 var(--paper); }
+.cta :focus-visible { outline-color: var(--paper); }
+.foot { padding-top: 32px; padding-bottom: 40px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 14px; color: var(--muted); }
+.foot a { text-decoration: none; }
+.foot a:hover { text-decoration: underline wavy var(--red); }
+
+/* ---------- aviso de ejemplo ---------- */
+
+.maketa { position: fixed; left: 16px; bottom: 16px; z-index: 40; display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 16px; border-radius: 12px; border: 2px solid var(--ink); background: var(--yellow); color: var(--ink); font-size: 14px; font-weight: 600; text-decoration: none; box-shadow: 3px 3px 0 var(--ink); }
+.is-embedded .maketa { display: none; }
+.demo { width: min(480px, calc(100% - 32px)); padding: 0; border: 2px solid var(--ink); border-radius: 18px; background: var(--card); color: var(--ink); box-shadow: 8px 8px 0 var(--ink); }
+.demo::backdrop { background: rgba(27, 42, 74, .45); }
+.demo form { display: flex; flex-direction: column; gap: 16px; padding: 32px; }
+.demo h2 { font-family: var(--serif); font-weight: 400; font-size: 32px; line-height: 1.1; }
+.demo p { color: var(--soft); }
+.demo__actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 8px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .hl { transition: none; }
+  .hello span.is-in, .hello span.is-out, .opt.is-wrong.is-shake, .you { animation: none; }
+  .note-arrow path, .result__lvl ellipse, .opt.is-wrong span::after { animation: none; stroke-dashoffset: 0; transform: rotate(-3deg); }
+  .map .walk { transition: none; }
+  .btn, .step, .course, .tabs button, .opt { transition: background .2s ease; }
+  .btn:hover, .step:hover, .course:hover, .opt:hover:not(:disabled) { transform: none; }
+}
+</style>
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+
+<header class="top wrap">
+  <a class="brand" href="#inicio">Ac<b>e</b>nto</a>
+  <nav aria-label="Principal">
+    <a href="#prueba">Prueba de nivel</a>
+    <a href="#cursos">Cursos</a>
+    <a href="#camino">¿Cuánto tardo?</a>
+    <a class="btn btn--yellow" href="#matricula">Matrícula</a>
+  </nav>
+</header>
+
+<main>
+  <section id="inicio" class="hero wrap">
+    <div>
+      <p class="hello" aria-hidden="true"><span data-hello>¡Hola!</span></p>
+      <h1>Habla <span class="hl" style="--d: .4s">sin miedo</span> a equivocarte.</h1>
+      <p class="lead">Inglés, francés, alemán e italiano en grupos de ocho como mucho, a un paso de la Plaza Mayor de Salamanca. Aquí equivocarse es parte del temario.</p>
+      <div class="hero__ctas">
+        <a class="btn btn--yellow" href="#prueba">Haz la prueba de nivel</a>
+        <a class="btn" href="#cursos">Ver cursos</a>
+      </div>
+    </div>
+    <figure class="polaroid">
+      <span class="tape" aria-hidden="true"></span>
+      <img src="https://images.pexels.com/photos/6147369/pexels-photo-6147369.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Dos estudiantes repasando apuntes sentados al aire libre" fetchpriority="high">
+      <figcaption>Clase de B2, un martes cualquiera</figcaption>
+      <span class="note-arrow" aria-hidden="true">tú, dentro de unos meses
+        <svg viewBox="0 0 70 44"><path d="M64 40C48 34 30 22 12 6M12 6l2 14M12 6l14 1"/></svg>
+      </span>
+    </figure>
+  </section>
+
+  <section id="prueba" class="section wrap">
+    <p class="kicker">Prueba de nivel</p>
+    <h2 class="h2">Cuatro preguntas y te decimos <span class="hl" style="--c: var(--pink)">por dónde empezar.</span></h2>
+    <div class="test">
+      <div class="sheet" data-sheet aria-live="polite">
+        <div data-quiz>
+          <div class="sheet__top"><span data-q-n>Pregunta 1 de 4 · Inglés</span><span class="dots" aria-hidden="true" data-q-dots><i></i><i></i><i></i><i></i></span></div>
+          <p class="q" data-q-text></p>
+          <div class="opts" role="group" aria-label="Respuestas" data-q-opts></div>
+          <div class="sheet__foot"><span class="sheet__why" data-q-why></span><button type="button" class="btn" data-q-next hidden>Siguiente →</button></div>
+        </div>
+        <div class="result" data-result hidden>
+          <div class="sheet__top"><span>Resultado</span></div>
+          <p style="margin-top: 22px; font-size: 20px">Tu nivel aproximado es</p>
+          <div class="result__lvl"><span data-r-lvl>B1</span><svg viewBox="0 0 200 120" preserveAspectRatio="none" aria-hidden="true"><ellipse cx="100" cy="60" rx="96" ry="54" transform="rotate(-4 100 60)"/></svg></div>
+          <p data-r-text></p>
+          <button type="button" class="btn btn--yellow" data-r-go>Ver tu camino</button>
+          <button type="button" class="btn" data-r-again>Repetir</button>
+        </div>
+      </div>
+      <div class="aside">
+        <p class="sticky">Es una prueba rápida de inglés. En la academia hacemos una completa, con conversación incluida, antes de darte grupo.</p>
+        <p class="sticky sticky--pink">Si fallas, mejor: así sabemos qué repasar.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="niveles" class="section wrap" style="padding-top: 0">
+    <p class="kicker">Los niveles</p>
+    <h2 class="h2">De A1 a C2, <span class="hl" style="--c: var(--green)">escalón a escalón.</span></h2>
+    <div class="stairs" role="group" aria-label="Niveles" data-stairs></div>
+    <div class="can" aria-live="polite"><b data-can-lvl>B1</b><p data-can-text></p></div>
+  </section>
+
+  <section id="cursos" class="section wrap" style="padding-top: 0">
+    <p class="kicker">Cursos</p>
+    <h2 class="h2">Elige idioma. <span class="hl" style="--c: var(--blue)">El ritmo lo ponemos juntos.</span></h2>
+    <div class="tabs" role="tablist" aria-label="Idiomas" data-tabs></div>
+    <div class="courses" role="tabpanel" data-courses></div>
+  </section>
+
+  <section id="camino" class="section wrap" style="padding-top: 0">
+    <p class="kicker">¿Cuánto tardo?</p>
+    <h2 class="h2">Del nivel que tienes <span class="hl">al que quieres.</span></h2>
+    <div class="path">
+      <div class="pick">
+        <div><span class="pick__label" id="lbl-from">Ahora estoy en</span><div class="seg" role="group" aria-labelledby="lbl-from" data-from></div></div>
+        <div><span class="pick__label" id="lbl-to">Quiero llegar a</span><div class="seg" role="group" aria-labelledby="lbl-to" data-to></div></div>
+        <div><span class="pick__label" id="lbl-hpw">Horas de clase a la semana</span><div class="seg" role="group" aria-labelledby="lbl-hpw" data-hpw></div></div>
+      </div>
+      <div class="map">
+        <svg viewBox="0 0 560 220" aria-hidden="true" data-map></svg>
+        <p class="map__out" aria-live="polite" data-out></p>
+        <p class="map__fine">Orientativo: usamos las horas de aprendizaje guiado que se suelen dar para cada nivel del Marco Común Europeo. Cada persona va a su ritmo.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="matricula" class="section wrap" style="padding-top: 0">
+    <p class="kicker">Nos lo dicen en clase</p>
+    <div class="voices">
+      <div class="voice" style="--r: -1.5deg"><p>“Llegué con un inglés de película y en junio me presenté al B2. Aprobé a la primera.”</p><span>Lucía · Inglés B2</span></div>
+      <div class="voice" style="--r: 1deg"><p>“Ocho en clase: no hay dónde esconderse, y eso es lo mejor que me ha pasado.”</p><span>Marcos · Alemán A2</span></div>
+      <div class="voice" style="--r: -.5deg"><p>“Me voy de Erasmus a Bolonia y ya pido el café sin señalar.”</p><span>Irene · Italiano B1</span></div>
+    </div>
+    <div class="cta">
+      <div><h2>Grupos nuevos cada trimestre.</h2><p>Reserva tu plaza y hacemos la prueba completa el primer día.</p></div>
+      <button type="button" class="btn btn--yellow" data-demo>Reserva tu plaza</button>
+    </div>
+    <footer class="foot">
+      <span>© 2026 Acento · Salamanca</span>
+      <a href="/trabajos.html" target="_top">Academia ficticia · web de ejemplo de Maketa</a>
+      <a href="#inicio">Volver arriba ↑</a>
+    </footer>
+  </section>
+</main>
+
+<a class="maketa" href="/trabajos.html" target="_top">Web de ejemplo · Maketa</a>
+
+<dialog class="demo" data-demo-note aria-labelledby="demo-title">
+  <form method="dialog">
+    <p class="kicker">Web de ejemplo</p>
+    <h2 id="demo-title">Acento no existe. <span class="hl is-in">Tu academia, sí.</span></h2>
+    <p>Esta academia es inventada: la web la he hecho para enseñar lo que se puede construir a mano. En tu web, la reserva te llegaría con el nivel de la prueba ya apuntado.</p>
+    <div class="demo__actions">
+      <a class="btn btn--yellow" href="/trabajos.html?quiero=apuntes#apuntes" target="_top">Quiero una web así</a>
+      <button class="btn" value="close">Seguir mirando</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+(function () {
+  var doc = document.documentElement
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
+  var embedded = false
+  try { embedded = window.self !== window.top } catch (e) { embedded = true }
+  if (embedded) doc.classList.add('is-embedded')
+  else {
+    var va = document.createElement('script')
+    va.defer = true
+    va.src = '/_vercel/insights/script.js'
+    document.head.appendChild(va)
+  }
+  var $ = function (s, r) { return (r || document).querySelector(s) }
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)) }
+  var esc = function (t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] }) }
+  var replay = function (el, cls) { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls) }
+
+  /* ---------- 1. rotulador y saludo ---------- */
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (en) { en.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target) } }) }, { rootMargin: '0px 0px -12% 0px' })
+    $$('.hl').forEach(function (el) { io.observe(el) })
+  } else $$('.hl').forEach(function (el) { el.classList.add('is-in') })
+
+  var HELLO = ['¡Hola!', 'Hello!', 'Bonjour !', 'Hallo!', 'Ciao!'], hi = 0, helloEl = $('[data-hello]')
+  if (!reduce) setInterval(function () {
+    helloEl.classList.remove('is-in'); helloEl.classList.add('is-out')
+    setTimeout(function () {
+      hi = (hi + 1) % HELLO.length
+      helloEl.textContent = HELLO[hi]
+      helloEl.classList.remove('is-out'); helloEl.classList.add('is-in')
+    }, 330)
+  }, 2200)
+
+  /* ---------- 2. prueba de nivel ---------- */
+  var QS = [
+    { q: 'She ___ to work by bus every day.', o: ['go', 'goes', 'going'], a: 1, why: 'Presente simple: con she, la -s.' },
+    { q: 'I ___ to London, but I would love to go.', o: ['have never been', 'has never been', 'am never been'], a: 0, why: 'Present perfect: have + participio.' },
+    { q: 'If I ___ more time, I would travel more.', o: ['have', 'will have', 'had'], a: 2, why: 'Segundo condicional: if + pasado.' },
+    { q: 'By the time we arrived, the film ___.', o: ['has already started', 'had already started', 'already starts'], a: 1, why: 'Pasado anterior a otro pasado: past perfect.' }
+  ]
+  var LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
+  var CAN = [
+    'Presentarte, pedir en un bar y entender frases muy sencillas.',
+    'Hablar de tu día a día, de tu trabajo y de lo que hiciste el fin de semana.',
+    'Defenderte de viaje, contar una experiencia y dar tu opinión con sencillez.',
+    'Seguir una serie sin subtítulos y discutir con soltura en una reunión.',
+    'Trabajar o estudiar en el idioma sin pensar en el idioma.',
+    'Captar matices, ironías y dobles sentidos, como en tu propia lengua.'
+  ]
+  var qi = 0, right = 0
+  var quiz = $('[data-quiz]'), result = $('[data-result]'), opts = $('[data-q-opts]'), nextBtn = $('[data-q-next]')
+  function drawQ() {
+    var q = QS[qi]
+    $('[data-q-n]').textContent = 'Pregunta ' + (qi + 1) + ' de ' + QS.length + ' · Inglés'
+    $('[data-q-text]').innerHTML = esc(q.q).replace('___', '<u aria-label="hueco">&nbsp;</u>')
+    $('[data-q-why]').textContent = ''
+    $$('[data-q-dots] i').forEach(function (d, i) { d.classList.toggle('is-done', i < qi) })
+    opts.innerHTML = q.o.map(function (o, i) { return '<button type="button" class="opt" data-i="' + i + '"><span>' + esc(o) + '</span><em aria-hidden="true"></em></button>' }).join('')
+    nextBtn.hidden = true
+  }
+  opts.addEventListener('click', function (e) {
+    var b = e.target.closest('.opt')
+    if (!b || b.disabled) return
+    var q = QS[qi], i = +b.getAttribute('data-i'), ok = i === q.a
+    if (ok) right++
+    $$('.opt', opts).forEach(function (o, j) {
+      o.disabled = true
+      if (j === q.a) { o.classList.add('is-right'); o.querySelector('em').textContent = '✓' }
+    })
+    if (!ok) { b.classList.add('is-wrong'); b.querySelector('em').textContent = '✗'; if (!reduce) replay(b, 'is-shake') }
+    $('[data-q-why]').textContent = (ok ? '¡Bien! ' : 'Casi. ') + q.why
+    nextBtn.textContent = qi < QS.length - 1 ? 'Siguiente →' : 'Ver mi nivel →'
+    nextBtn.hidden = false
+    nextBtn.focus()
+  })
+  var level = 2
+  nextBtn.addEventListener('click', function () {
+    if (qi < QS.length - 1) { qi++; drawQ(); opts.querySelector('.opt').focus(); return }
+    level = right <= 1 ? 1 : right === 2 ? 2 : 3
+    $('[data-r-lvl]').textContent = LEVELS[level] + (right === 4 ? '+' : '')
+    $('[data-r-text]').textContent = (right === 4
+      ? 'Has acertado las cuatro: B2 o más. En la prueba oral afinamos si vas a B2 o a C1. '
+      : 'Has acertado ' + right + ' de 4. ') + 'Con un ' + LEVELS[level] + ' puedes ' + CAN[level].charAt(0).toLowerCase() + CAN[level].slice(1)
+    quiz.hidden = true
+    result.hidden = false
+    markYou(level)
+    setFrom(level)
+    $('[data-r-go]').focus()
+  })
+  $('[data-r-again]').addEventListener('click', function () { qi = 0; right = 0; result.hidden = true; quiz.hidden = false; drawQ(); opts.querySelector('.opt').focus() })
+  $('[data-r-go]').addEventListener('click', function () { $('#camino').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }) })
+  drawQ()
+
+  /* ---------- 3. la escalera ---------- */
+  var COLORS = ['var(--green)', 'var(--green)', 'var(--yellow)', 'var(--yellow)', 'var(--pink)', 'var(--pink)']
+  var stairs = $('[data-stairs]')
+  stairs.innerHTML = LEVELS.map(function (l, i) {
+    return '<button type="button" class="step" style="--i:' + i + ';--row:' + (i >= 3 ? 3 : 0) + ';--c:' + COLORS[i] + '" aria-pressed="' + (i === 2) + '" data-i="' + i + '">' + l + '<small>' + ['Inicial', 'Básico', 'Intermedio', 'Intermedio alto', 'Avanzado', 'Maestría'][i] + '</small></button>'
+  }).join('')
+  function showStep(i) {
+    $$('.step', stairs).forEach(function (s, j) { s.setAttribute('aria-pressed', String(i === j)) })
+    $('[data-can-lvl]').textContent = LEVELS[i]
+    $('[data-can-text]').textContent = 'Sabrás ' + CAN[i].charAt(0).toLowerCase() + CAN[i].slice(1)
+  }
+  function markYou(i) {
+    $$('.you', stairs).forEach(function (y) { y.remove() })
+    $$('.step', stairs)[i].insertAdjacentHTML('beforeend', '<span class="you" aria-hidden="true">tú</span>')
+    showStep(i)
+  }
+  stairs.addEventListener('click', function (e) { var s = e.target.closest('.step'); if (s) showStep(+s.getAttribute('data-i')) })
+  showStep(2)
+
+  /* ---------- 4. cursos ---------- */
+  var LANGS = [
+    { id: 'en', name: 'Inglés', exam: 'Cambridge: B2 First y C1 Advanced' },
+    { id: 'fr', name: 'Francés', exam: 'DELF B1 y B2, DALF C1' },
+    { id: 'de', name: 'Alemán', exam: 'Goethe-Zertifikat B1 y B2' },
+    { id: 'it', name: 'Italiano', exam: 'CELI y CILS' }
+  ]
+  var tabs = $('[data-tabs]'), courses = $('[data-courses]')
+  tabs.innerHTML = LANGS.map(function (l, i) { return '<button type="button" role="tab" id="tab-' + l.id + '" aria-selected="' + (i === 0) + '"' + (i ? ' tabindex="-1"' : '') + '>' + l.name + '</button>' }).join('')
+  courses.id = 'courses-panel'
+  function drawCourses(i) {
+    var l = LANGS[i]
+    courses.setAttribute('aria-labelledby', 'tab-' + l.id)
+    courses.innerHTML =
+      '<article class="course" style="--c: var(--yellow)"><h3>' + l.name + ' en grupo</h3><p>Todo el curso, de octubre a junio. El grupo de siempre y el mismo profesor.</p><ul><li>Máximo ocho personas</li><li>Dos días a la semana, hora y media</li><li>De A1 a C1</li></ul></article>' +
+      '<article class="course" style="--c: var(--green)"><h3>Intensivo de julio</h3><p>Un mes para dar un salto: perfecto antes de un Erasmus o un trabajo nuevo.</p><ul><li>Tres horas cada mañana</li><li>Mucha conversación</li><li>Grupos por nivel</li></ul></article>' +
+      '<article class="course" style="--c: var(--pink)"><h3>Exámenes oficiales</h3><p>Preparación por destrezas, con simulacros en condiciones de examen.</p><ul><li>' + l.exam + '</li><li>Simulacro cada mes</li><li>Corrección individual del writing</li></ul></article>'
+  }
+  var tabBtns = $$('button', tabs), cur = 0, swapT = 0
+  function selectTab(i) {
+    if (i === cur) return
+    cur = i
+    tabBtns.forEach(function (b, j) { b.setAttribute('aria-selected', String(i === j)); b.tabIndex = i === j ? 0 : -1 })
+    clearTimeout(swapT)
+    if (reduce) return drawCourses(i)
+    courses.classList.add('is-swap')
+    swapT = setTimeout(function () { drawCourses(i); courses.classList.remove('is-swap') }, 180)
+  }
+  tabBtns.forEach(function (b, i) {
+    b.addEventListener('click', function () { selectTab(i) })
+    b.addEventListener('keydown', function (e) {
+      var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0
+      if (!d) return
+      e.preventDefault()
+      var n = (i + d + tabBtns.length) % tabBtns.length
+      selectTab(n); tabBtns[n].focus()
+    })
+  })
+  drawCourses(0)
+
+  /* ---------- 5. ¿cuánto tardo? ---------- */
+  // Horas acumuladas aproximadas hasta completar cada nivel.
+  var HOURS = [90, 190, 375, 550, 750, 1100]
+  var HPW = [3, 4.5, 6]
+  var path = { from: 1, to: 3, hpw: 0 }
+  var fromBox = $('[data-from]'), toBox = $('[data-to]'), hpwBox = $('[data-hpw]'), map = $('[data-map]')
+  fromBox.innerHTML = LEVELS.slice(0, 5).map(function (l, i) { return '<button type="button" data-i="' + i + '">' + l + '</button>' }).join('')
+  toBox.innerHTML = LEVELS.map(function (l, i) { return i ? '<button type="button" data-i="' + i + '">' + l + '</button>' : '' }).join('')
+  hpwBox.innerHTML = HPW.map(function (h, i) { return '<button type="button" data-i="' + i + '">' + String(h).replace('.', ',') + ' h</button>' }).join('')
+  // Mapa: seis paradas en una curva, la ruta roja va de tu nivel al que quieres.
+  var PTS = LEVELS.map(function (l, i) { return [40 + i * 96, 170 - i * 24 - (i % 2 ? 22 : 0)] })
+  var d = 'M' + PTS.map(function (p) { return p.join(' ') }).join(' L')
+  map.innerHTML = '<path class="road" d="' + d + '"/><path class="walk" data-walk d=""/>' +
+    PTS.map(function (p, i) { return '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="16" data-c="' + i + '"/><text x="' + p[0] + '" y="' + (p[1] + 44) + '">' + LEVELS[i] + '</text>' }).join('')
+  var walk = $('[data-walk]', map)
+  function drawPath() {
+    $$('button', fromBox).forEach(function (b) { b.setAttribute('aria-pressed', String(+b.getAttribute('data-i') === path.from)) })
+    $$('button', toBox).forEach(function (b) {
+      var i = +b.getAttribute('data-i')
+      b.disabled = i <= path.from
+      b.setAttribute('aria-pressed', String(i === path.to))
+    })
+    $$('button', hpwBox).forEach(function (b) { b.setAttribute('aria-pressed', String(+b.getAttribute('data-i') === path.hpw)) })
+    var pts = PTS.slice(path.from, path.to + 1)
+    walk.setAttribute('d', 'M' + pts.map(function (p) { return p.join(' ') }).join(' L'))
+    var len = walk.getTotalLength()
+    walk.style.transition = 'none'
+    walk.style.strokeDasharray = len
+    walk.style.strokeDashoffset = len
+    void walk.getBoundingClientRect()
+    walk.style.transition = ''
+    walk.style.strokeDashoffset = 0
+    $$('circle', map).forEach(function (c) { var i = +c.getAttribute('data-c'); c.classList.toggle('is-on', i >= path.from && i <= path.to) })
+    var hours = HOURS[path.to] - HOURS[path.from], hpw = HPW[path.hpw]
+    // Un curso va de octubre a junio: unos nueve meses de clase.
+    var months = Math.max(1, Math.round(hours / hpw / 4.3)), courses = Math.max(1, Math.round(months / 9))
+    $('[data-out]').innerHTML = 'De ' + LEVELS[path.from] + ' a ' + LEVELS[path.to] + ': unas <b>' + hours + ' horas</b>. Con ' + String(hpw).replace('.', ',') + ' h a la semana, en torno a <b>' + months + ' meses</b>' + (courses > 1 ? ': ' + courses + ' cursos.' : ': un curso.')
+  }
+  function setFrom(i) { path.from = Math.min(4, i); if (path.to <= path.from) path.to = path.from + 1; drawPath() }
+  fromBox.addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) setFrom(+b.getAttribute('data-i')) })
+  toBox.addEventListener('click', function (e) { var b = e.target.closest('button'); if (b && !b.disabled) { path.to = +b.getAttribute('data-i'); drawPath() } })
+  hpwBox.addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) { path.hpw = +b.getAttribute('data-i'); drawPath() } })
+  drawPath()
+
+  /* ---------- aviso de web de ejemplo ---------- */
+  var note = $('[data-demo-note]')
+  $$('[data-demo]').forEach(function (b) { b.addEventListener('click', function () { if (note.showModal) note.showModal() }) })
+  note.addEventListener('click', function (e) { if (e.target === note) note.close() })
+})()
+</script>
+</body>
+</html>

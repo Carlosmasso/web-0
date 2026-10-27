@@ -32,5 +32,6 @@ describe('tooLarge', () => {
     expect(tooLarge({ name: 'x'.repeat(300) })).toBe(true)
     expect(tooLarge({ note: 'x'.repeat(5000) })).toBe(true)
     expect(tooLarge({ contentText: 'x'.repeat(200001) })).toBe(true)
+    expect(tooLarge({ piece: 'x'.repeat(81) })).toBe(true)
   })
 })

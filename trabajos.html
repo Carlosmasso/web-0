@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <title>Webs a medida · Maketa</title>
+    <meta
+      name="description"
+      content="Webs diseñadas y programadas a mano, con movimiento y detalles que no caben en una plantilla. Mira los ejemplos en vivo y, si te gusta uno, pídeme algo así para tu negocio."
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://maketa.es/trabajos.html" />
+    <meta property="og:title" content="Webs a medida · Maketa" />
+    <meta property="og:description" content="Webs hechas a mano, una a una. Míralas en vivo y pide algo así para tu negocio." />
+    <meta property="og:image" content="https://maketa.es/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="canonical" href="https://maketa.es/trabajos.html" />
+    <link rel="stylesheet" href="/landing.css" />
+    <link rel="stylesheet" href="/trabajos.css" />
+    <script>document.documentElement.classList.add('js')</script>
+    <script defer src="/landing.js"></script>
+    <script defer src="/trabajos.js"></script>
+
+    <!-- Vercel Web Analytics. La cola recoge los eventos que salten antes de que cargue el script. -->
+    <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments) }</script>
+    <script defer src="/_vercel/insights/script.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#contenido">Saltar al contenido</a>
+    <div class="progress" aria-hidden="true"></div>
+
+    <header class="nav">
+      <div class="wrap nav__in">
+        <a class="wordmark" href="/">
+          <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#3b53d6" /><rect x="7" y="6.5" width="18" height="19" rx="2.5" fill="none" stroke="#fff" stroke-width="2" /><rect x="10" y="9.5" width="12" height="4" rx="1" fill="#fff" /><rect x="10" y="16" width="5.5" height="6.5" rx="1" fill="#fff" /><rect x="17.5" y="16" width="4.5" height="6.5" rx="1" fill="#fff" opacity="0.5" /></svg>
+          Maketa
+        </a>
+        <nav class="nav__links" aria-label="Principal">
+          <a class="navlink" href="/#plantillas">Plantillas</a>
+          <a class="navlink" href="/trabajos.html" aria-current="page">A medida</a>
+          <a class="navlink" href="/#como-funciona">Cómo funciona</a>
+          <a class="navlink" href="/#precio">Precio</a>
+          <a class="btn btn--primary btn--sm" href="/app.html">Diseñar mi web <span class="arrow"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="contenido" tabindex="-1">
+      <section class="jobs-hero">
+        <div class="wrap">
+          <p class="eyebrow fade-in">Hechas a mano</p>
+          <h1 class="fade-in" style="--d: 0.05s">Cuando tu web tiene que ser <span class="accent">solo tuya.</span></h1>
+          <p class="lead fade-in" style="--d: 0.1s">
+            Estas webs las he diseñado y programado a mano, una a una, con movimiento y detalles
+            que no caben en un configurador. Los negocios son inventados; lo que ves funcionando, no.
+          </p>
+        </div>
+      </section>
+
+      <section class="jobs" aria-label="Webs de ejemplo">
+        <div class="wrap">
+          <!-- Cada pieza vive en public/trabajos/<id>.html y se enseña aquí en miniatura,
+               funcionando. data-name y data-kind alimentan el formulario y la analítica. -->
+          <article id="rayos-x" class="job" data-piece="rayos-x" data-name="Rayos X" data-kind="Estudio de arquitectura">
+            <div class="job__frame reveal">
+              <div class="job__bar" aria-hidden="true"><i></i><i></i><i></i><span>vano-arquitectura · ejemplo</span></div>
+              <div class="job__screen" data-screen>
+                <iframe src="/trabajos/rayos-x.html" title="Vista previa de Rayos X" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
+              </div>
+              <a class="job__hit" href="/trabajos/rayos-x.html" data-live aria-label="Ver Rayos X en vivo"></a>
+            </div>
+            <div class="job__copy">
+              <p class="eyebrow reveal">01 · Estudio de arquitectura</p>
+              <h2 class="reveal" style="--d: 0.05s">Rayos X</h2>
+              <p class="lead reveal" style="--d: 0.1s">
+                Para un estudio que quiere enseñar lo que no se ve: una lente sigue al cursor, o al
+                dedo, y descubre el plano que hay bajo la fachada.
+              </p>
+              <ul class="job__list reveal" style="--d: 0.15s">
+                <li>La lente que revela el plano, con deriva propia cuando nadie la toca</li>
+                <li>Servicios con una imagen que flota junto al cursor</li>
+                <li>Proceso por fases y un botón de contacto que se deja atraer</li>
+              </ul>
+              <div class="job__ctas reveal" style="--d: 0.2s">
+                <a class="btn btn--primary" href="/trabajos/rayos-x.html" data-live>Verla en vivo <span class="arrow"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></a>
+                <button type="button" class="btn btn--quiet" data-want>Quiero algo así</button>
+              </div>
+            </div>
+          </article>
+
+          <article id="mesa-de-trabajo" class="job job--flip" data-piece="mesa-de-trabajo" data-name="Mesa de trabajo" data-kind="Estudio de diseño gráfico">
+            <div class="job__frame reveal">
+              <div class="job__bar" aria-hidden="true"><i></i><i></i><i></i><span>pliego-estudio · ejemplo</span></div>
+              <div class="job__screen" data-screen>
+                <iframe src="/trabajos/mesa-de-trabajo.html" title="Vista previa de Mesa de trabajo" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
+              </div>
+              <a class="job__hit" href="/trabajos/mesa-de-trabajo.html" data-live aria-label="Ver Mesa de trabajo en vivo"></a>
+            </div>
+            <div class="job__copy">
+              <p class="eyebrow reveal">02 · Estudio de diseño gráfico</p>
+              <h2 class="reveal" style="--d: 0.05s">Mesa de trabajo</h2>
+              <p class="lead reveal" style="--d: 0.1s">
+                Para un estudio que trabaja con las manos: la web entera es su mesa, con polaroids,
+                pósits y una tarjeta de visita que puedes mover a tu antojo.
+              </p>
+              <ul class="job__list reveal" style="--d: 0.15s">
+                <li>Objetos que se arrastran por la portada y se recogen con un botón</li>
+                <li>Servicios en sobres que se abren y casos en un cuaderno que pasa la página</li>
+                <li>Una regla para medir el proyecto y una máquina de escribir que sella tu carta</li>
+              </ul>
+              <div class="job__ctas reveal" style="--d: 0.2s">
+                <a class="btn btn--primary" href="/trabajos/mesa-de-trabajo.html" data-live>Verla en vivo <span class="arrow"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></a>
+                <button type="button" class="btn btn--quiet" data-want>Quiero algo así</button>
+              </div>
+            </div>
+          </article>
+
+          <article id="analogica" class="job" data-piece="analogica" data-name="Analógica" data-kind="Estudio de fotografía">
+            <div class="job__frame reveal">
+              <div class="job__bar" aria-hidden="true"><i></i><i></i><i></i><span>revelado-foto · ejemplo</span></div>
+              <div class="job__screen" data-screen>
+                <iframe src="/trabajos/analogica.html" title="Vista previa de Analógica" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
+              </div>
+              <a class="job__hit" href="/trabajos/analogica.html" data-live aria-label="Ver Analógica en vivo"></a>
+            </div>
+            <div class="job__copy">
+              <p class="eyebrow reveal">03 · Estudio de fotografía</p>
+              <h2 class="reveal" style="--d: 0.05s">Analógica</h2>
+              <p class="lead reveal" style="--d: 0.1s">
+                Para un estudio de fotografía que vive de la luz: la web empieza a oscuras y se enciende
+                tirando de un cordón. Después, todo funciona como un objeto de los de antes.
+              </p>
+              <ul class="job__list reveal" style="--d: 0.15s">
+                <li>Un cordón que enciende la página y un panel de letras de aeropuerto</li>
+                <li>Un selector que gira, un proyector de diapositivas y un fichero de fases</li>
+                <li>Opiniones en un contestador y preguntas con interruptores</li>
+              </ul>
+              <div class="job__ctas reveal" style="--d: 0.2s">
+                <a class="btn btn--primary" href="/trabajos/analogica.html" data-live>Verla en vivo <span class="arrow"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></a>
+                <button type="button" class="btn btn--quiet" data-want>Quiero algo así</button>
+              </div>
+            </div>
+          </article>
+
+          <article id="reticula" class="job job--flip" data-piece="reticula" data-name="Retícula suiza" data-kind="Asesoría">
+            <div class="job__frame reveal">
+              <div class="job__bar" aria-hidden="true"><i></i><i></i><i></i><span>cifra-asesores · ejemplo</span></div>
+              <div class="job__screen" data-screen>
+                <iframe src="/trabajos/reticula.html" title="Vista previa de Retícula suiza" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
+              </div>
+              <a class="job__hit" href="/trabajos/reticula.html" data-live aria-label="Ver Retícula suiza en vivo"></a>
+            </div>
+            <div class="job__copy">
+              <p class="eyebrow reveal">04 · Asesoría</p>
+              <h2 class="reveal" style="--d: 0.05s">Retícula suiza</h2>
+              <p class="lead reveal" style="--d: 0.1s">
+                Para un negocio serio que no quiere parecer aburrido: tipografía, filetes y un solo
+                color, y por dentro, detalles que trabajan para el cliente.
+              </p>
+              <ul class="job__list reveal" style="--d: 0.15s">
+                <li>Un calendario fiscal en vivo con la cuenta atrás al próximo plazo</li>
+                <li>Servicios que se rellenan al pasar y eligen el tema del contacto</li>
+                <li>Casos que se descubren al pasar por encima</li>
+              </ul>
+              <div class="job__ctas reveal" style="--d: 0.2s">
+                <a class="btn btn--primary" href="/trabajos/reticula.html" data-live>Verla en vivo <span class="arrow"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></a>
+                <button type="button" class="btn btn--quiet" data-want>Quiero algo así</button>
+              </div>
+            </div>
+          </article>
+
+          <article id="comanda" class="job" data-piece="comanda" data-name="Comanda" data-kind="Restaurante">
+            <div class="job__frame reveal">
+              <div class="job__bar" aria-hidden="true"><i></i><i></i><i></i><span>lume-brasas · ejemplo</span></div>
+              <div class="job__screen" data-screen>
+                <iframe src="/trabajos/comanda.html" title="Vista previa de Comanda" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
+              </div>
+              <a class="job__hit" href="/trabajos/comanda.html" data-live aria-label="Ver Comanda en vivo"></a>
+            </div>
+            <div class="job__copy">
+              <p class="eyebrow reveal">05 · Restaurante</p>
+              <h2 class="reveal" style="--d: 0.05s">Comanda</h2>
+              <p class="lead reveal" style="--d: 0.1s">
+                Para un restaurante con oficio: la portada imprime un ticket de cocina y la carta
+                se pide como en la mesa, apuntando platos en una comanda que se escribe sola.
+              </p>
+              <ul class="job__list reveal" style="--d: 0.15s">
+                <li>Un ticket que se imprime línea a línea y se inclina hacia el cursor</li>
+                <li>Carta por secciones con comanda en vivo y pizarra del día escrita a tiza</li>
+                <li>"Abierto ahora" con la hora real y una reserva que se arranca como un resguardo</li>
+              </ul>
+              <div class="job__ctas reveal" style="--d: 0.2s">
+                <a class="btn btn--primary" href="/trabajos/comanda.html" data-live>Verla en vivo <span class="arrow"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></a>
+                <button type="button" class="btn btn--quiet" data-want>Quiero algo así</button>
+              </div>
+            </div>
+          </article>
+
+          <article id="anatomia" class="job job--flip" data-piece="anatomia" data-name="Anatomía" data-kind="Centro de fisioterapia">
+            <div class="job__frame reveal">
+              <div class="job__bar" aria-hidden="true"><i></i><i></i><i></i><span>eje-fisio · ejemplo</span></div>
+              <div class="job__screen" data-screen>
+                <iframe src="/trabajos/anatomia.html" title="Vista previa de Anatomía" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
+              </div>
+              <a class="job__hit" href="/trabajos/anatomia.html" data-live aria-label="Ver Anatomía en vivo"></a>
+            </div>
+            <div class="job__copy">
+              <p class="eyebrow reveal">06 · Fisioterapia y pilates</p>
+              <h2 class="reveal" style="--d: 0.05s">Anatomía</h2>
+              <p class="lead reveal" style="--d: 0.1s">
+                Para un centro que cuida: el paciente toca dónde le duele y la web le explica qué
+                suele ser, cómo se trata y cuántas sesiones hacen falta.
+              </p>
+              <ul class="job__list reveal" style="--d: 0.15s">
+                <li>Un mapa del cuerpo que responde, con consejo según la intensidad del dolor</li>
+                <li>Un ejercicio de respiración guiado, con un solo botón</li>
+                <li>Horario de clases filtrable que marca el día de hoy</li>
+              </ul>
+              <div class="job__ctas reveal" style="--d: 0.2s">
+                <a class="btn btn--primary" href="/trabajos/anatomia.html" data-live>Verla en vivo <span class="arrow"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></a>
+                <button type="button" class="btn btn--quiet" data-want>Quiero algo así</button>
+              </div>
+            </div>
+          </article>
+
+
+          <article id="cata" class="job" data-piece="cata" data-name="Cata" data-kind="Vinoteca">
+            <div class="job__frame reveal">
+              <div class="job__bar" aria-hidden="true"><i></i><i></i><i></i><span>lias-vinoteca · ejemplo</span></div>
+              <div class="job__screen" data-screen>
+                <iframe src="/trabajos/cata.html" title="Vista previa de Cata" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
+              </div>
+              <a class="job__hit" href="/trabajos/cata.html" data-live aria-label="Ver Cata en vivo"></a>
+            </div>
+            <div class="job__copy">
+              <p class="eyebrow reveal">07 · Vinoteca</p>
+              <h2 class="reveal" style="--d: 0.05s">Cata</h2>
+              <p class="lead reveal" style="--d: 0.1s">
+                Para una tienda que sabe de lo que vende: la copa se sirve al bajar y la web
+                recomienda botellas como lo haría el dependiente.
+              </p>
+              <ul class="job__list reveal" style="--d: 0.15s">
+                <li>Una copa que se llena con el scroll y se agita con el ratón</li>
+                <li>"Encuentra tu vino" por cuerpo, carácter y ocasión, y una caja de seis que se llena</li>
+                <li>Rueda de aromas y catas de los próximos jueves con sus plazas</li>
+              </ul>
+              <div class="job__ctas reveal" style="--d: 0.2s">
+                <a class="btn btn--primary" href="/trabajos/cata.html" data-live>Verla en vivo <span class="arrow"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></a>
+                <button type="button" class="btn btn--quiet" data-want>Quiero algo así</button>
+              </div>
+            </div>
+          </article>
+
+          <article id="apuntes" class="job job--flip" data-piece="apuntes" data-name="Apuntes" data-kind="Academia de idiomas">
+            <div class="job__frame reveal">
+              <div class="job__bar" aria-hidden="true"><i></i><i></i><i></i><span>acento-idiomas · ejemplo</span></div>
+              <div class="job__screen" data-screen>
+                <iframe src="/trabajos/apuntes.html" title="Vista previa de Apuntes" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
+              </div>
+              <a class="job__hit" href="/trabajos/apuntes.html" data-live aria-label="Ver Apuntes en vivo"></a>
+            </div>
+            <div class="job__copy">
+              <p class="eyebrow reveal">08 · Academia de idiomas</p>
+              <h2 class="reveal" style="--d: 0.05s">Apuntes</h2>
+              <p class="lead reveal" style="--d: 0.1s">
+                Para una academia cercana: un cuaderno con subrayados de rotulador donde el
+                alumno hace la prueba de nivel y ve cuánto le falta para el que quiere.
+              </p>
+              <ul class="job__list reveal" style="--d: 0.15s">
+                <li>Prueba de nivel de inglés con corrección al momento</li>
+                <li>Escalera de niveles que te marca dónde estás</li>
+                <li>"¿Cuánto tardo?": del nivel que tienes al que quieres, con el camino dibujado</li>
+              </ul>
+              <div class="job__ctas reveal" style="--d: 0.2s">
+                <a class="btn btn--primary" href="/trabajos/apuntes.html" data-live>Verla en vivo <span class="arrow"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></a>
+                <button type="button" class="btn btn--quiet" data-want>Quiero algo así</button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="how">
+        <div class="wrap how__in">
+          <div class="how__side">
+            <h2 class="h-xl reveal">Así se hace una web a medida</h2>
+            <p class="lead reveal" style="--d: 0.08s">El precio depende de lo que lleve, y lo sabes antes de empezar. Nada de sorpresas.</p>
+          </div>
+          <ol class="how__list">
+            <li class="reveal"><span class="how__n">1</span><div><h3>Me cuentas tu negocio</h3><p>Qué haces, para quién y qué webs te gustan. Si una de estas te encaja, mejor: ya tenemos por dónde empezar.</p></div></li>
+            <li class="reveal" style="--d: 0.08s"><span class="how__n">2</span><div><h3>Te propongo una idea</h3><p>Una sola, pensada para ti y con su gesto propio, como la lente del estudio de arquitectura.</p></div></li>
+            <li class="reveal" style="--d: 0.16s"><span class="how__n">3</span><div><h3>La construyo contigo</h3><p>Con tus textos y tus fotos, y la ajustamos hasta que estés contento de verdad.</p></div></li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="final">
+        <div class="final__box">
+          <div class="final__grid" aria-hidden="true"></div>
+          <div class="final__in">
+            <h2 class="reveal">¿Prefieres empezar tú?</h2>
+            <p class="reveal" style="--d: 0.08s">En el configurador montas tu web en unos minutos y la ves en vivo. Si luego quieres llevarla más lejos, lo hablamos.</p>
+            <div class="reveal" style="--d: 0.16s">
+              <a class="btn btn--white" href="/app.html">Diseñar mi web <span class="arrow"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></a>
+            </div>
+            <p class="final__sign reveal" style="--d: 0.24s">Carlos · <a href="mailto:hola@maketa.es">hola@maketa.es</a></p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="wrap">
+        <span>Maketa · Madrid</span>
+        <nav aria-label="Legal">
+          <a class="navlink" href="/aviso-legal.html">Aviso legal</a>
+          <a class="navlink" href="/privacidad.html">Privacidad</a>
+          <a class="navlink" href="/cookies.html">Cookies</a>
+        </nav>
+      </div>
+    </footer>
+
+    <!-- "Quiero algo así": un lead a /api/lead con la pieza en la nota. -->
+    <dialog class="want" data-want-dialog aria-labelledby="want-title">
+      <div class="want__head">
+        <div>
+          <p class="eyebrow">Web a medida</p>
+          <h2 id="want-title">Quiero algo como <span data-want-name>Rayos X</span></h2>
+        </div>
+        <button type="button" class="round-btn round-btn--sm" data-want-close aria-label="Cerrar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+        </button>
+      </div>
+
+      <form class="want__form" data-want-form novalidate>
+        <p class="want__intro">Déjame cómo escribirte y te contesto en menos de un día laborable para hablarlo con calma.</p>
+        <!-- Honeypot: fuera de pantalla y del recorrido de tab. -->
+        <div class="want__hp" aria-hidden="true"><label>Empresa <input type="text" name="company" tabindex="-1" autocomplete="off" /></label></div>
+
+        <label class="want__field">
+          <span>Nombre</span>
+          <input type="text" name="name" autocomplete="name" placeholder="Tu nombre" required aria-describedby="want-err-name" />
+          <em class="want__err" id="want-err-name" data-err="name"></em>
+        </label>
+        <label class="want__field">
+          <span>Email</span>
+          <input type="email" name="email" autocomplete="email" inputmode="email" placeholder="tu@correo.com" required aria-describedby="want-err-email" />
+          <em class="want__err" id="want-err-email" data-err="email"></em>
+        </label>
+        <label class="want__field">
+          <span>Teléfono <small>opcional</small></span>
+          <input type="tel" name="phone" autocomplete="tel" placeholder="600 000 000" />
+        </label>
+        <label class="want__field">
+          <span>Tu negocio <small>opcional</small></span>
+          <textarea name="note" rows="3" placeholder="A qué te dedicas y qué te gustaría tener"></textarea>
+        </label>
+        <label class="want__consent">
+          <input type="checkbox" name="consent" required aria-describedby="want-err-consent" />
+          <span>He leído y acepto la <a href="/privacidad.html" target="_blank" rel="noopener noreferrer">política de privacidad</a>. Usaré tus datos solo para escribirte sobre tu web.</span>
+        </label>
+        <em class="want__err" id="want-err-consent" data-err="consent"></em>
+
+        <p class="want__error" role="alert" data-want-error hidden>No se pudo enviar. Vuelve a intentarlo o escríbeme a <a href="mailto:hola@maketa.es">hola@maketa.es</a>.</p>
+        <button type="submit" class="btn btn--primary btn--block" data-want-submit>Escríbeme</button>
+      </form>
+
+      <div class="want__done" data-want-done hidden>
+        <p class="want__done-title">¡Recibido!</p>
+        <p>Te escribo en menos de un día laborable. Mientras, si quieres, juega con el configurador: lo que diseñes también me sirve para conocer tus gustos.</p>
+        <a class="btn btn--quiet" href="/app.html">Abrir el configurador</a>
+      </div>
+    </dialog>
+
+    <script type="speculationrules">
+      { "prerender": [{ "where": { "href_matches": "/app.html*" }, "eagerness": "moderate" }] }
+    </script>
+    <div class="leaving" aria-hidden="true"><span>Abriendo tu web…</span></div>
+  </body>
+</html>

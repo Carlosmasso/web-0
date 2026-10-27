@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eje · Fisioterapia y pilates en Málaga — web de ejemplo</title>
+<meta name="description" content="Web de ejemplo hecha a mano por Maketa para un centro de fisioterapia inventado.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%231F2A24' stroke-width='2.5'/%3E%3Cpath d='M16 6v20' stroke='%23C2643F' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://images.pexels.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400..700&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500&display=swap">
+<!--
+  Anatomía · plantilla a medida de Maketa (centro de fisioterapia ficticio).
+  Un solo archivo, sin dependencias. Calma por fuera, utilidad por dentro:
+    1. Mapa del cuerpo: tocas dónde te duele y te cuenta qué suele ser, cómo se
+       trata y cuántas sesiones hacen falta. Un control de intensidad ajusta el
+       consejo (y con dolor fuerte, manda primero al médico).
+    2. Respira: un ejercicio guiado 4-4-6 con un solo botón (Empezar ↔ Parar).
+    3. Tratamientos en tarjetas que se abren al pasar.
+    4. Horario de clases filtrable, con el día de hoy marcado; eliges hueco y
+       el botón de reserva lo dice.
+    5. "Abierto ahora" con la hora de Málaga.
+-->
+<style>
+:root {
+  --paper: #F5F2EC;
+  --card: #FFFFFF;
+  --ink: #1F2A24;
+  --soft: #3C4A42;
+  --muted: #5D665F;
+  --line: #DED8CC;
+  --sage: #5E7A68;
+  --sage-soft: #DCE3DA;
+  --sage-mist: #EAEEE6;
+  --clay: #C2643F;
+  --clay-ink: #A04C2B;
+  --pad: clamp(16px, 4vw, 40px);
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  --spring: cubic-bezier(.34, 1.56, .64, 1);
+  --serif: 'Newsreader', Georgia, serif;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 17px/1.55 'Schibsted Grotesk', system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: clip; }
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+button, input { font: inherit; color: inherit; }
+h1, h2, h3, p, ul { margin: 0; }
+ul { padding: 0; list-style: none; }
+:focus-visible { outline: 2px solid var(--clay); outline-offset: 3px; border-radius: 8px; }
+::selection { background: var(--sage-soft); }
+[hidden] { display: none !important; }
+[id] { scroll-margin-top: 24px; }
+
+.wrap { max-width: 1280px; margin: 0 auto; padding-left: var(--pad); padding-right: var(--pad); }
+.serif { font-family: var(--serif); font-style: italic; font-weight: 400; letter-spacing: -0.01em; }
+.kicker { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--sage); }
+.kicker::before { content: ""; width: 18px; height: 2px; border-radius: 2px; background: var(--clay); }
+.h2 { margin-top: 14px; font-weight: 600; font-size: clamp(36px, 5vw, 64px); line-height: 1.02; letter-spacing: -0.035em; text-wrap: balance; }
+.h2 .serif { font-weight: 400; color: var(--sage); }
+.lead { font-size: 19px; line-height: 1.6; color: var(--soft); max-width: 540px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 24px; border-radius: 999px; border: 1.5px solid var(--ink); background: none; font-weight: 600; font-size: 16px; text-decoration: none; cursor: pointer; transition: background .25s ease, color .25s ease, border-color .25s ease, transform .2s ease, box-shadow .25s ease; }
+.btn:hover { background: var(--ink); color: var(--paper); }
+.btn:active { transform: scale(.97); }
+.btn--solid { background: var(--ink); color: var(--paper); }
+.btn--solid:hover { background: var(--sage); border-color: var(--sage); box-shadow: 0 12px 24px -12px rgba(94, 122, 104, .8); }
+.btn svg { transition: transform .3s var(--ease); }
+.btn:hover svg { transform: translateX(3px); }
+
+/* ---------- cabecera ---------- */
+
+.top { position: sticky; top: 0; z-index: 30; background: rgba(245, 242, 236, .88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.top .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-top: 16px; padding-bottom: 16px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: 22px; letter-spacing: -0.03em; text-decoration: none; }
+.brand__mark { position: relative; width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--ink); }
+.brand__mark::after { content: ""; position: absolute; left: 50%; top: 3px; bottom: 3px; width: 3px; margin-left: -1.5px; border-radius: 2px; background: var(--clay); }
+.top nav { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 26px; font-size: 15px; font-weight: 500; }
+.top nav a:not(.btn) { text-decoration: none; padding: 12px 0; color: var(--soft); }
+.top nav a:not(.btn):hover { color: var(--ink); }
+.top nav .btn { min-height: 44px; padding: 0 18px; font-size: 15px; }
+@media (max-width: 760px) { .top nav a:not(.btn) { display: none; } }
+
+/* ---------- portada ---------- */
+
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px 64px; align-items: center; padding-top: clamp(32px, 6vw, 80px); padding-bottom: clamp(64px, 8vw, 112px); }
+.hero h1 { margin-top: 18px; font-weight: 600; font-size: clamp(48px, 7.4vw, 104px); line-height: .98; letter-spacing: -0.045em; text-wrap: balance; }
+.hero h1 .serif { font-weight: 400; color: var(--sage); }
+.hero .lead { margin-top: 26px; }
+.hero__ctas { margin-top: 34px; display: flex; flex-wrap: wrap; gap: 12px; }
+.hero__media { position: relative; }
+.hero__photo { aspect-ratio: 4 / 5; border-radius: 32px; overflow: hidden; background: var(--sage-soft); }
+.hero__photo img { width: 100%; height: 100%; object-fit: cover; }
+.float { position: absolute; display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-radius: 18px; background: var(--card); box-shadow: 0 20px 40px -20px rgba(31, 42, 36, .35); font-size: 15px; animation: bob 6s ease-in-out infinite; }
+.float b { display: block; font-weight: 600; }
+.float span { color: var(--muted); font-size: 14px; }
+.float--a { left: -28px; bottom: 56px; }
+.float--b { right: -18px; top: 40px; animation-delay: -3s; }
+.float__icon { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--sage-mist); color: var(--sage); flex: none; }
+.live { width: 10px; height: 10px; border-radius: 50%; background: #9AA39D; flex: none; }
+.live.is-open { background: #3E9B5F; animation: live 1.8s ease-out infinite; }
+@keyframes live { 0% { box-shadow: 0 0 0 0 rgba(62, 155, 95, .5); } 100% { box-shadow: 0 0 0 10px rgba(62, 155, 95, 0); } }
+@keyframes bob { 50% { transform: translateY(-8px); } }
+@media (max-width: 900px) {
+  .hero { grid-template-columns: minmax(0, 1fr); }
+  .hero__media { max-width: 520px; }
+  .float--a { left: 12px; }
+  .float--b { right: 12px; }
+}
+
+/* ---------- mapa del cuerpo ---------- */
+
+.section { padding-top: clamp(72px, 9vw, 128px); padding-bottom: clamp(72px, 9vw, 128px); }
+.band { background: var(--card); border-radius: 40px; margin: 0 clamp(8px, 1.5vw, 20px); }
+.map { margin-top: 48px; display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 32px 72px; align-items: center; }
+.body { position: relative; max-width: 340px; margin: 0 auto; width: 100%; }
+.body svg { width: 100%; height: auto; overflow: visible; }
+.body__fig { fill: var(--sage-soft); stroke: var(--sage-soft); }
+.spot { cursor: pointer; }
+.spot circle:first-child { fill: var(--clay); opacity: .18; transform-box: fill-box; transform-origin: center; animation: ring 2.4s ease-out infinite; }
+.spot circle:last-child { fill: var(--card); stroke: var(--clay); stroke-width: 3; transition: fill .25s ease, r .3s var(--spring); }
+.spot:hover circle:last-child, .spot:focus-visible circle:last-child { r: 11; }
+.spot.is-on circle:last-child { fill: var(--clay); r: 11; }
+.spot.is-on circle:first-child { opacity: .3; }
+.spot:focus-visible { outline: none; }
+.map.has-pick .spot:not(.is-on) circle:first-child { animation: none; opacity: 0; }
+@keyframes ring { 0% { transform: scale(.6); opacity: .35; } 100% { transform: scale(2.2); opacity: 0; } }
+.zones { display: flex; flex-wrap: wrap; gap: 8px; }
+.zones button { min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1.5px solid var(--line); background: none; font-size: 15px; font-weight: 500; cursor: pointer; transition: background .2s ease, border-color .2s ease, color .2s ease; }
+.zones button:hover { border-color: var(--ink); }
+.zones button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.zone { margin-top: 28px; padding: clamp(24px, 3vw, 36px); border-radius: 28px; background: var(--sage-mist); transition: opacity .25s ease, transform .35s var(--ease); }
+.zone.is-swap { opacity: 0; transform: translateY(8px); }
+.zone h3 { font-size: clamp(28px, 3vw, 38px); font-weight: 600; letter-spacing: -0.03em; }
+.zone dl { margin: 20px 0 0; display: grid; gap: 16px; }
+.zone dt { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--sage); }
+.zone dd { margin: 4px 0 0; color: var(--soft); }
+.pain { margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(31, 42, 36, .12); }
+.pain__row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.pain label { font-weight: 600; }
+.pain output { font-family: var(--serif); font-style: italic; font-size: 26px; color: var(--clay-ink); }
+.pain input { width: 100%; height: 44px; margin: 4px 0 0; accent-color: var(--clay); cursor: pointer; }
+.pain p { margin-top: 6px; color: var(--soft); min-height: 3.1em; }
+.pain.is-high p { color: var(--clay-ink); font-weight: 500; }
+@media (max-width: 860px) {
+  .map { grid-template-columns: minmax(0, 1fr); }
+  .body { max-width: 260px; }
+}
+
+/* ---------- respira ---------- */
+
+.breathe { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px 72px; align-items: center; }
+.breathe .lead { margin-top: 22px; }
+.orb { position: relative; width: min(420px, 100%); aspect-ratio: 1; margin: 0 auto; display: grid; place-items: center; }
+.orb__ring { position: absolute; inset: 0; }
+.orb__ring circle { fill: none; stroke-width: 2; }
+.orb__ring .track { stroke: var(--line); }
+.orb__ring .prog { stroke: var(--clay); stroke-linecap: round; stroke-dasharray: 1194; stroke-dashoffset: 1194; transform: rotate(-90deg); transform-origin: center; }
+.orb__ball { position: absolute; width: 74%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #F1F4EE, var(--sage-soft) 55%, #C8D3C5); box-shadow: 0 30px 60px -30px rgba(94, 122, 104, .6), inset 0 -10px 30px rgba(94, 122, 104, .15); transform: scale(var(--s, .6)); }
+.orb__text { position: relative; text-align: center; }
+.orb__text strong { display: block; font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(34px, 4vw, 48px); letter-spacing: -0.01em; }
+.orb__text span { font-size: 15px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.breathe__ctl { margin-top: 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+.breathe__ctl span { color: var(--muted); font-size: 15px; }
+@media (max-width: 860px) { .breathe { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------- tratamientos ---------- */
+
+.cards { margin-top: 48px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.tcard { position: relative; aspect-ratio: 3 / 4; border-radius: 28px; overflow: hidden; background: var(--sage-soft); color: #fff; isolation: isolate; }
+.tcard img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transition: transform 1s var(--ease); }
+.tcard::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(31, 42, 36, 0) 30%, rgba(31, 42, 36, .85)); transition: opacity .4s ease; }
+.tcard__in { position: absolute; left: 0; right: 0; bottom: 0; padding: 22px; }
+.tcard h3 { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; }
+.tcard p { display: grid; grid-template-rows: 0fr; margin-top: 0; font-size: 15px; line-height: 1.5; color: rgba(255, 255, 255, .88); transition: grid-template-rows .45s var(--ease), margin-top .45s var(--ease); }
+.tcard p > span { overflow: hidden; }
+.tcard:hover img, .tcard:focus-within img { transform: scale(1.06); }
+.tcard:hover p, .tcard:focus-within p { grid-template-rows: 1fr; margin-top: 8px; }
+.tcard__tag { position: absolute; top: 16px; left: 16px; padding: 6px 12px; border-radius: 999px; background: rgba(255, 255, 255, .9); color: var(--ink); font-size: 13px; font-weight: 600; }
+@media (hover: none) { .tcard p { grid-template-rows: 1fr; margin-top: 8px; } }
+@media (max-width: 1000px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .cards { grid-template-columns: minmax(0, 1fr); } .tcard { aspect-ratio: 4 / 3; } }
+
+/* ---------- clases ---------- */
+
+.filters { margin-top: 36px; display: flex; flex-wrap: wrap; gap: 8px; }
+.filters button { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1.5px solid var(--line); background: var(--card); font-size: 15px; font-weight: 500; cursor: pointer; transition: background .2s ease, border-color .2s ease, color .2s ease; }
+.filters button::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--c, var(--ink)); }
+.filters button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.week { margin-top: 24px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+.day { padding: 14px; border-radius: 22px; background: var(--card); border: 1.5px solid transparent; display: flex; flex-direction: column; gap: 8px; min-height: 340px; }
+.day.is-today { border-color: var(--clay); }
+.day h3 { display: flex; justify-content: space-between; align-items: baseline; font-size: 16px; font-weight: 600; padding: 4px 4px 8px; }
+.day h3 small { font-size: 12px; font-weight: 600; color: var(--clay-ink); text-transform: uppercase; letter-spacing: .06em; }
+.slot { text-align: left; padding: 12px 12px 12px 14px; border-radius: 14px; border: 0; background: var(--paper); cursor: pointer; display: flex; flex-direction: column; gap: 2px; position: relative; overflow: hidden; transition: opacity .3s ease, transform .3s var(--ease), background .2s ease, box-shadow .2s ease; }
+.slot::before { content: ""; position: absolute; left: 0; top: 10px; bottom: 10px; width: 3px; border-radius: 3px; background: var(--c); }
+.slot b { font-size: 15px; font-variant-numeric: tabular-nums; }
+.slot span { font-size: 14px; color: var(--soft); }
+.slot i { font-style: normal; font-size: 13px; color: var(--muted); }
+.slot:hover { background: var(--sage-mist); }
+.slot[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.slot[aria-pressed="true"] span, .slot[aria-pressed="true"] i { color: rgba(245, 242, 236, .8); }
+.slot.is-off { opacity: .18; transform: scale(.97); pointer-events: none; }
+.slot.is-full { cursor: default; }
+.slot.is-full i { color: var(--clay-ink); }
+.pick { margin-top: 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; padding: 18px 18px 18px 26px; border-radius: 999px; background: var(--card); }
+.pick p { color: var(--soft); }
+.pick p b { color: var(--ink); }
+@media (max-width: 900px) {
+  .week { grid-template-columns: minmax(0, 1fr); }
+  .day { min-height: 0; }
+  .pick { border-radius: 24px; }
+}
+
+/* ---------- cierre ---------- */
+
+.cta { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 32px 64px; align-items: center; padding: clamp(32px, 5vw, 64px); border-radius: 40px; background: var(--ink); color: var(--paper); }
+.cta .h2 .serif { color: #B8C9BB; }
+.cta p { margin-top: 18px; color: rgba(245, 242, 236, .78); max-width: 480px; }
+.cta__card { padding: 26px; border-radius: 26px; background: rgba(245, 242, 236, .07); display: flex; flex-direction: column; gap: 14px; }
+.cta__card li { display: flex; justify-content: space-between; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(245, 242, 236, .12); font-size: 15px; }
+.cta__card li span:last-child { color: rgba(245, 242, 236, .7); }
+.cta .btn { border-color: var(--paper); background: var(--paper); color: var(--ink); }
+.cta .btn:hover { background: var(--clay); border-color: var(--clay); color: #fff; }
+.cta :focus-visible { outline-color: var(--paper); }
+@media (max-width: 860px) { .cta { grid-template-columns: minmax(0, 1fr); } }
+.foot { padding-top: 32px; padding-bottom: 40px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 14px; color: var(--muted); }
+.foot a { text-decoration: none; }
+.foot a:hover { color: var(--ink); }
+
+/* ---------- aviso de ejemplo ---------- */
+
+.maketa { position: fixed; left: 16px; bottom: 16px; z-index: 40; display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 16px; border-radius: 999px; background: var(--ink); color: var(--paper); font-size: 14px; text-decoration: none; box-shadow: 0 10px 30px -12px rgba(31, 42, 36, .6); transition: background .25s ease; }
+.maketa:hover { background: var(--sage); }
+.is-embedded .maketa { display: none; }
+
+.demo { width: min(480px, calc(100% - 32px)); padding: 0; border: 0; border-radius: 28px; background: var(--paper); color: var(--ink); box-shadow: 0 40px 80px -30px rgba(31, 42, 36, .5); }
+.demo::backdrop { background: rgba(31, 42, 36, .5); }
+.demo form { display: flex; flex-direction: column; gap: 16px; padding: 32px; }
+.demo h2 { font-weight: 600; font-size: 30px; line-height: 1.08; letter-spacing: -0.03em; }
+.demo h2 .serif { color: var(--sage); font-weight: 400; }
+.demo p { color: var(--soft); }
+.demo__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .float, .live.is-open, .spot circle:first-child { animation: none; }
+  .tcard img, .btn svg { transition: none; }
+  .tcard:hover img, .btn:hover svg { transform: none; }
+  .zone { transition: opacity .2s ease; }
+  .zone.is-swap { transform: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#inicio"><span class="brand__mark" aria-hidden="true"></span>eje</a>
+    <nav aria-label="Principal">
+      <a href="#mapa">Qué tratamos</a>
+      <a href="#respira">Respira</a>
+      <a href="#clases">Clases</a>
+      <a class="btn btn--solid" href="#cita">Pide cita</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section id="inicio" class="hero wrap">
+    <div>
+      <p class="kicker">Fisioterapia y pilates · Málaga</p>
+      <h1>Muévete <span class="serif">sin pensar</span> en el dolor.</h1>
+      <p class="lead">Tratamos la causa, no solo el síntoma: terapia manual, ejercicio y pilates terapéutico, con el mismo fisio de principio a fin.</p>
+      <div class="hero__ctas">
+        <a class="btn btn--solid" href="#cita">Pide cita
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a class="btn" href="#mapa">¿Dónde te duele?</a>
+      </div>
+    </div>
+    <div class="hero__media">
+      <div class="hero__photo"><img src="https://images.pexels.com/photos/5793904/pexels-photo-5793904.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Fisioterapeuta trabajando la pierna de un paciente en una camilla, en una sala luminosa" fetchpriority="high"></div>
+      <div class="float float--a">
+        <span class="float__icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+        <span><b>Primera valoración</b><span>50 minutos, sin prisas</span></span>
+      </div>
+      <div class="float float--b">
+        <span class="live" data-live aria-hidden="true"></span>
+        <span><b data-open-title>Abierto</b><span data-open-text>de lunes a viernes</span></span>
+      </div>
+    </div>
+  </section>
+
+  <section id="mapa" class="band">
+    <div class="section wrap">
+      <p class="kicker">Qué tratamos</p>
+      <h2 class="h2">Toca dónde te duele. <span class="serif">Te contamos el resto.</span></h2>
+      <div class="map" data-map>
+        <div class="body">
+          <svg viewBox="0 0 240 520" role="group" aria-label="Mapa del cuerpo">
+            <g class="body__fig" aria-hidden="true" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="120" cy="50" r="30"/>
+              <path d="M120 80v24" stroke-width="22"/>
+              <path d="M82 108q38-12 76 0l-6 146q-32 14-64 0z"/>
+              <path d="M86 116q-26 56-30 122" fill="none" stroke-width="22"/>
+              <path d="M154 116q26 56 30 122" fill="none" stroke-width="22"/>
+              <circle cx="56" cy="252" r="12"/>
+              <circle cx="184" cy="252" r="12"/>
+              <path d="M88 250q32 14 64 0l4 42q-36 14-72 0z"/>
+              <path d="M104 290l-4 108-2 86" fill="none" stroke-width="26"/>
+              <path d="M136 290l4 108 2 86" fill="none" stroke-width="26"/>
+              <ellipse cx="94" cy="496" rx="18" ry="9"/>
+              <ellipse cx="146" cy="496" rx="18" ry="9"/>
+            </g>
+            <g data-spots></g>
+          </svg>
+        </div>
+        <div>
+          <div class="zones" role="group" aria-label="Zonas" data-zones></div>
+          <div class="zone" data-zone aria-live="polite">
+            <h3 data-z-name></h3>
+            <dl>
+              <div><dt>Lo más habitual</dt><dd data-z-common></dd></div>
+              <div><dt>Cómo lo tratamos</dt><dd data-z-treat></dd></div>
+              <div><dt>Sesiones orientativas</dt><dd data-z-sessions></dd></div>
+            </dl>
+            <div class="pain" data-pain>
+              <div class="pain__row"><label for="dolor">¿Cuánto te duele?</label><output for="dolor" data-pain-out>4 / 10</output></div>
+              <input id="dolor" type="range" min="1" max="10" value="4" data-pain-input>
+              <p data-pain-text></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="respira" class="section wrap">
+    <div class="breathe">
+      <div>
+        <p class="kicker">Respira</p>
+        <h2 class="h2">Un minuto para ti, <span class="serif">antes de seguir.</span></h2>
+        <p class="lead">Así empezamos cada sesión: inspira en cuatro, mantén cuatro y suelta en seis. Cinco veces. Tu espalda lo nota.</p>
+        <div class="breathe__ctl">
+          <button type="button" class="btn btn--solid" data-breathe aria-pressed="false">Empezar</button>
+          <span data-cycle aria-live="polite">5 respiraciones · 70 segundos</span>
+        </div>
+      </div>
+      <div class="orb" data-orb>
+        <svg class="orb__ring" viewBox="0 0 400 400" aria-hidden="true"><circle class="track" cx="200" cy="200" r="190"/><circle class="prog" cx="200" cy="200" r="190" data-ring/></svg>
+        <div class="orb__ball" data-ball aria-hidden="true"></div>
+        <div class="orb__text" aria-live="polite"><strong data-phase>Cuando quieras</strong><span data-count>&nbsp;</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tratamientos" class="band">
+    <div class="section wrap">
+      <p class="kicker">Tratamientos</p>
+      <h2 class="h2">Cuatro maneras de <span class="serif">volver a moverte.</span></h2>
+      <div class="cards">
+        <article class="tcard" tabindex="0">
+          <img loading="lazy" alt="Fisioterapeuta trabajando con las manos la espalda de una paciente" src="https://images.pexels.com/photos/4506109/pexels-photo-4506109.jpeg?auto=compress&cs=tinysrgb&w=700">
+          <span class="tcard__tag">45 min</span>
+          <div class="tcard__in"><h3>Fisioterapia</h3><p><span>Terapia manual y ejercicio para dolor de espalda, cuello y articulaciones.</span></p></div>
+        </article>
+        <article class="tcard" tabindex="0">
+          <img loading="lazy" alt="Clase de pilates con máquinas reformer" src="https://images.pexels.com/photos/6111616/pexels-photo-6111616.jpeg?auto=compress&cs=tinysrgb&w=700">
+          <span class="tcard__tag">Grupos de 4</span>
+          <div class="tcard__in"><h3>Pilates máquina</h3><p><span>Con fisio al frente, para fortalecer sin cargar la zona que duele.</span></p></div>
+        </article>
+        <article class="tcard" tabindex="0">
+          <img loading="lazy" alt="Fisioterapeuta tratando la rodilla de un paciente" src="https://images.pexels.com/photos/5473182/pexels-photo-5473182.jpeg?auto=compress&cs=tinysrgb&w=700">
+          <span class="tcard__tag">30 min</span>
+          <div class="tcard__in"><h3>Punción seca</h3><p><span>Para puntos gatillo y contracturas que no ceden con otras técnicas.</span></p></div>
+        </article>
+        <article class="tcard" tabindex="0">
+          <img loading="lazy" alt="Fisioterapeuta guiando un ejercicio en esterilla" src="https://images.pexels.com/photos/6111609/pexels-photo-6111609.jpeg?auto=compress&cs=tinysrgb&w=700">
+          <span class="tcard__tag">Por fases</span>
+          <div class="tcard__in"><h3>Readaptación</h3><p><span>Vuelta al deporte tras una lesión o una operación, sin saltarse pasos.</span></p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="clases" class="section wrap">
+    <p class="kicker">Clases</p>
+    <h2 class="h2">Grupos pequeños, <span class="serif">fisio al frente.</span></h2>
+    <div class="filters" role="group" aria-label="Filtrar clases" data-filters></div>
+    <div class="week" data-week></div>
+    <div class="pick">
+      <p data-pick-text>Elige un hueco del horario.</p>
+      <button type="button" class="btn btn--solid" data-demo data-pick-btn disabled>Reservar plaza</button>
+    </div>
+  </section>
+
+  <section id="cita" class="wrap" style="padding-bottom: 24px">
+    <div class="cta">
+      <div>
+        <p class="kicker" style="color: #B8C9BB">Primera cita</p>
+        <h2 class="h2">Empezamos por <span class="serif">escucharte.</span></h2>
+        <p>Cincuenta minutos para valorar, explicarte qué pasa y salir ya con ejercicios para casa.</p>
+      </div>
+      <div class="cta__card">
+        <ul>
+          <li><span>Valoración completa</span><span>50 min</span></li>
+          <li><span>Mismo fisio todo el tratamiento</span><span>Siempre</span></li>
+          <li><span>Informe y ejercicios</span><span>Por escrito</span></li>
+        </ul>
+        <button type="button" class="btn" data-demo>Pide tu primera cita</button>
+      </div>
+    </div>
+    <footer class="foot">
+      <span>© 2026 Eje · Málaga</span>
+      <a href="/trabajos.html" target="_top">Centro ficticio · web de ejemplo de Maketa</a>
+      <a href="#inicio">Volver arriba ↑</a>
+    </footer>
+  </section>
+</main>
+
+<a class="maketa" href="/trabajos.html" target="_top">Web de ejemplo · <strong>Maketa</strong></a>
+
+<dialog class="demo" data-demo-note aria-labelledby="demo-title">
+  <form method="dialog">
+    <p class="kicker">Web de ejemplo</p>
+    <h2 id="demo-title">Eje no existe. <span class="serif">Tu centro, sí.</span></h2>
+    <p>Este centro es inventado: la web la he hecho para enseñar lo que se puede construir a mano. En tu web, este botón llevaría a tu agenda de citas o a tu WhatsApp.</p>
+    <div class="demo__actions">
+      <a class="btn btn--solid" href="/trabajos.html?quiero=anatomia#anatomia" target="_top">Quiero una web así</a>
+      <button class="btn" value="close">Seguir mirando</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+(function () {
+  var doc = document.documentElement
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
+  var embedded = false
+  try { embedded = window.self !== window.top } catch (e) { embedded = true }
+  if (embedded) doc.classList.add('is-embedded')
+  else {
+    var va = document.createElement('script')
+    va.defer = true
+    va.src = '/_vercel/insights/script.js'
+    document.head.appendChild(va)
+  }
+  var $ = function (s, r) { return (r || document).querySelector(s) }
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)) }
+
+  /* ---------- 1. mapa del cuerpo ---------- */
+  var ZONES = [
+    { id: 'cuello', label: 'Cuello', x: 120, y: 92, name: 'Cuello y cervicales', common: 'Contracturas, dolor al girar la cabeza y dolores de cabeza que empiezan en la nuca.', treat: 'Terapia manual, ejercicio de control cervical y pautas para tu puesto de trabajo.', sessions: 'De 3 a 5 sesiones' },
+    { id: 'hombro', label: 'Hombro', x: 88, y: 116, name: 'Hombro', common: 'Tendinopatías, dolor al levantar el brazo o al dormir de ese lado, hombro rígido.', treat: 'Ejercicio terapéutico progresivo, terapia manual y, si hace falta, punción seca.', sessions: 'De 6 a 10 sesiones' },
+    { id: 'espalda', label: 'Espalda', x: 120, y: 214, name: 'Espalda baja', common: 'Lumbalgia, ciática y rigidez al levantarte por la mañana.', treat: 'Movimiento antes que reposo: ejercicio guiado, terapia manual y pilates terapéutico.', sessions: 'De 4 a 8 sesiones' },
+    { id: 'muneca', label: 'Muñeca', x: 58, y: 236, name: 'Muñeca y mano', common: 'Túnel carpiano y tendinitis por ordenador, móvil o deporte.', treat: 'Terapia manual, ejercicios de deslizamiento neural y ajustes en tu día a día.', sessions: 'De 4 a 6 sesiones' },
+    { id: 'cadera', label: 'Cadera', x: 150, y: 272, name: 'Cadera', common: 'Dolor al caminar o al estar mucho rato sentado, bursitis y artrosis temprana.', treat: 'Fuerza de glúteo, movilidad y control del movimiento.', sessions: 'De 6 a 8 sesiones' },
+    { id: 'rodilla', label: 'Rodilla', x: 101, y: 392, name: 'Rodilla', common: 'Dolor al subir escaleras, rodilla del corredor y recuperación tras una operación.', treat: 'Readaptación con fuerza progresiva y vuelta al deporte por fases.', sessions: 'De 8 a 12 sesiones' },
+    { id: 'tobillo', label: 'Tobillo', x: 141, y: 474, name: 'Tobillo y pie', common: 'Esguinces que no terminan de curar, fascitis plantar y tendón de Aquiles.', treat: 'Movilidad, equilibrio y carga progresiva hasta que el pie vuelve a fiarse.', sessions: 'De 4 a 8 sesiones' }
+  ]
+  var map = $('[data-map]'), spotsG = $('[data-spots]'), zonesBox = $('[data-zones]'), zoneCard = $('[data-zone]')
+  var SVGNS = 'http://www.w3.org/2000/svg'
+  ZONES.forEach(function (z) {
+    var g = document.createElementNS(SVGNS, 'g')
+    g.setAttribute('class', 'spot')
+    g.setAttribute('tabindex', '0')
+    g.setAttribute('role', 'button')
+    g.setAttribute('aria-label', z.label)
+    g.setAttribute('data-id', z.id)
+    ;[16, 8].forEach(function (r) {
+      var c = document.createElementNS(SVGNS, 'circle')
+      c.setAttribute('cx', z.x); c.setAttribute('cy', z.y); c.setAttribute('r', r)
+      g.appendChild(c)
+    })
+    spotsG.appendChild(g)
+  })
+  zonesBox.innerHTML = ZONES.map(function (z) { return '<button type="button" aria-pressed="false" data-id="' + z.id + '">' + z.label + '</button>' }).join('')
+  var current = null, swapT = 0
+  function show(id, first) {
+    if (id === current) return
+    current = id
+    var z = ZONES.filter(function (x) { return x.id === id })[0]
+    map.classList.add('has-pick')
+    $$('.spot', spotsG).forEach(function (s) { var on = s.getAttribute('data-id') === id; s.classList.toggle('is-on', on); s.setAttribute('aria-pressed', String(on)) })
+    $$('button', zonesBox).forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-id') === id)) })
+    var fill = function () {
+      $('[data-z-name]').textContent = z.name
+      $('[data-z-common]').textContent = z.common
+      $('[data-z-treat]').textContent = z.treat
+      $('[data-z-sessions]').textContent = z.sessions
+      zoneCard.classList.remove('is-swap')
+    }
+    clearTimeout(swapT)
+    if (first || reduce) return fill()
+    zoneCard.classList.add('is-swap')
+    swapT = setTimeout(fill, 200)
+  }
+  spotsG.addEventListener('click', function (e) { var s = e.target.closest('.spot'); if (s) show(s.getAttribute('data-id')) })
+  spotsG.addEventListener('keydown', function (e) {
+    var s = e.target.closest('.spot')
+    if (s && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); show(s.getAttribute('data-id')) }
+  })
+  zonesBox.addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) show(b.getAttribute('data-id')) })
+  show('espalda', true)
+  map.classList.remove('has-pick')
+
+  var pain = $('[data-pain]'), painIn = $('[data-pain-input]')
+  function painAdvice() {
+    var v = +painIn.value
+    $('[data-pain-out]').textContent = v + ' / 10'
+    pain.classList.toggle('is-high', v >= 8)
+    $('[data-pain-text]').textContent =
+      v <= 3 ? 'Molestia leve: empezamos con ejercicio y pautas, y muchas veces bastan pocas sesiones.'
+      : v <= 7 ? 'Dolor que te limita: valoración completa y tratamiento combinado desde la primera cita.'
+      : 'Dolor fuerte: pide cita cuanto antes. Si viene de un golpe o una caída reciente, consulta primero con tu médico.'
+  }
+  painIn.addEventListener('input', painAdvice)
+  painAdvice()
+
+  /* ---------- 2. respira ---------- */
+  // 4 s inspira, 4 s mantén, 6 s suelta; cinco veces. Un solo botón: Empezar ↔ Parar.
+  var PHASES = [['Inspira', 4, .6, 1], ['Mantén', 4, 1, 1], ['Suelta', 6, 1, .6]]
+  var CYCLE = 14, CYCLES = 5, RING = 1194
+  var btn = $('[data-breathe]'), ball = $('[data-ball]'), ring = $('[data-ring]')
+  var phaseEl = $('[data-phase]'), countEl = $('[data-count]'), cycleEl = $('[data-cycle]')
+  var raf = 0, t0 = 0
+  var ease = function (p) { return p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2 }
+  function frame(now) {
+    var t = (now - t0) / 1000
+    if (t >= CYCLE * CYCLES) return finish(true)
+    var c = Math.floor(t / CYCLE), inCycle = t - c * CYCLE, acc = 0, ph = PHASES[0], local = 0
+    for (var i = 0; i < PHASES.length; i++) {
+      if (inCycle < acc + PHASES[i][1]) { ph = PHASES[i]; local = inCycle - acc; break }
+      acc += PHASES[i][1]
+    }
+    var p = local / ph[1]
+    if (!reduce) ball.style.setProperty('--s', (ph[2] + (ph[3] - ph[2]) * ease(p)).toFixed(3))
+    ring.style.strokeDashoffset = (RING * (1 - t / (CYCLE * CYCLES))).toFixed(1)
+    if (phaseEl.textContent !== ph[0]) phaseEl.textContent = ph[0]
+    countEl.textContent = Math.ceil(ph[1] - local)
+    cycleEl.textContent = 'Respiración ' + (c + 1) + ' de ' + CYCLES
+    raf = requestAnimationFrame(frame)
+  }
+  function start() {
+    t0 = performance.now()
+    btn.textContent = 'Parar'
+    btn.setAttribute('aria-pressed', 'true')
+    raf = requestAnimationFrame(frame)
+  }
+  function finish(done) {
+    cancelAnimationFrame(raf); raf = 0
+    btn.textContent = done ? 'Otra vez' : 'Empezar'
+    btn.setAttribute('aria-pressed', 'false')
+    ball.style.setProperty('--s', .6)
+    ring.style.strokeDashoffset = RING
+    phaseEl.textContent = done ? 'Muy bien' : 'Cuando quieras'
+    countEl.innerHTML = done ? 'Así empieza también cada sesión' : '&nbsp;'
+    cycleEl.textContent = '5 respiraciones · 70 segundos'
+  }
+  btn.addEventListener('click', function () { raf ? finish(false) : start() })
+  document.addEventListener('visibilitychange', function () { if (document.hidden && raf) finish(false) })
+
+  /* ---------- 3. horario de clases ---------- */
+  var TYPES = {
+    maquina: { name: 'Pilates máquina', c: '#C2643F' },
+    suelo: { name: 'Pilates suelo', c: '#5E7A68' },
+    espalda: { name: 'Espalda sana', c: '#3E6C8F' },
+    embarazo: { name: 'Pilates embarazo', c: '#B08A3E' }
+  }
+  var CLASSES = [
+    [1, '08:00', 'maquina', 2], [1, '10:00', 'espalda', 5], [1, '18:30', 'maquina', 0], [1, '19:30', 'suelo', 3],
+    [2, '09:00', 'suelo', 4], [2, '12:00', 'embarazo', 2], [2, '18:00', 'maquina', 1], [2, '20:00', 'espalda', 3],
+    [3, '08:00', 'maquina', 3], [3, '10:00', 'espalda', 2], [3, '18:30', 'maquina', 2], [3, '19:30', 'suelo', 0],
+    [4, '09:00', 'suelo', 5], [4, '12:00', 'embarazo', 3], [4, '18:00', 'maquina', 2], [4, '20:00', 'espalda', 1],
+    [5, '08:00', 'maquina', 1], [5, '10:00', 'suelo', 4], [5, '17:30', 'espalda', 2]
+  ]
+  var DAYS = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
+  var malaga = function () {
+    try { return new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Madrid' })) } catch (e) { return new Date() }
+  }
+  var todayIdx = malaga().getDay()
+  var filtersBox = $('[data-filters]'), week = $('[data-week]')
+  filtersBox.innerHTML = '<button type="button" aria-pressed="true" data-f="all" style="--c: var(--muted)">Todas</button>' +
+    Object.keys(TYPES).map(function (k) { return '<button type="button" aria-pressed="false" data-f="' + k + '" style="--c:' + TYPES[k].c + '">' + TYPES[k].name + '</button>' }).join('')
+  week.innerHTML = [1, 2, 3, 4, 5].map(function (d) {
+    return '<div class="day' + (d === todayIdx ? ' is-today' : '') + '"><h3>' + DAYS[d] + (d === todayIdx ? '<small>Hoy</small>' : '') + '</h3>' +
+      CLASSES.filter(function (c) { return c[0] === d }).map(function (c) {
+        var t = TYPES[c[2]], full = c[3] === 0
+        return '<button type="button" class="slot' + (full ? ' is-full' : '') + '" data-type="' + c[2] + '" data-label="' + DAYS[d] + ' ' + c[1] + ' · ' + t.name + '" aria-pressed="false"' + (full ? ' aria-disabled="true"' : '') + ' style="--c:' + t.c + '">' +
+          '<b>' + c[1] + '</b><span>' + t.name + '</span><i>' + (full ? 'Completa' : c[3] === 1 ? 'Queda 1 plaza' : 'Quedan ' + c[3] + ' plazas') + '</i></button>'
+      }).join('') + '</div>'
+  }).join('')
+  var slots = $$('.slot', week), pickBtn = $('[data-pick-btn]'), pickText = $('[data-pick-text]')
+  filtersBox.addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return
+    var f = b.getAttribute('data-f')
+    $$('button', filtersBox).forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)) })
+    slots.forEach(function (s) {
+      var off = f !== 'all' && s.getAttribute('data-type') !== f
+      s.classList.toggle('is-off', off)
+      s.tabIndex = off ? -1 : 0
+      if (off && s.getAttribute('aria-pressed') === 'true') choose(null)
+    })
+  })
+  function choose(slot) {
+    slots.forEach(function (s) { s.setAttribute('aria-pressed', String(s === slot)) })
+    pickBtn.disabled = !slot
+    pickText.innerHTML = slot ? 'Has elegido <b>' + slot.getAttribute('data-label') + '</b>' : 'Elige un hueco del horario.'
+    pickBtn.textContent = slot ? 'Reservar esta plaza' : 'Reservar plaza'
+  }
+  week.addEventListener('click', function (e) {
+    var s = e.target.closest('.slot')
+    if (!s || s.classList.contains('is-full')) return
+    choose(s.getAttribute('aria-pressed') === 'true' ? null : s)
+  })
+
+  /* ---------- 4. abierto ahora ---------- */
+  function openNow() {
+    var now = malaga(), d = now.getDay(), m = now.getHours() * 60 + now.getMinutes()
+    var weekday = d >= 1 && d <= 5, open = weekday && m >= 8 * 60 && m < 21 * 60
+    $('[data-live]').classList.toggle('is-open', open)
+    $('[data-open-title]').textContent = open ? 'Abierto ahora' : 'Cerrado ahora'
+    $('[data-open-text]').textContent = open ? 'hasta las 21:00' : (weekday && m < 8 * 60 ? 'abrimos hoy a las 8:00' : 'de lunes a viernes, 8:00–21:00')
+  }
+  openNow()
+  setInterval(openNow, 30000)
+
+  /* ---------- aviso de web de ejemplo ---------- */
+  var note = $('[data-demo-note]')
+  $$('[data-demo]').forEach(function (b) { b.addEventListener('click', function () { if (note.showModal) note.showModal() }) })
+  note.addEventListener('click', function (e) { if (e.target === note) note.close() })
+})()
+</script>
+</body>
+</html>

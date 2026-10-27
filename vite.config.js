@@ -2,8 +2,9 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'node:path'
 
-// Tres entradas:
+// Cuatro entradas:
 //   index.html    — la landing (HTML estático, sin React).
+//   trabajos.html — las webs a medida (HTML estático; las demos viven en public/trabajos/).
 //   app.html      — el configurador (panel + lienzo).
 //   preview.html  — el lienzo aislado que el configurador embebe en un iframe.
 export default defineConfig({
@@ -16,6 +17,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         landing: resolve(__dirname, 'index.html'),
+        trabajos: resolve(__dirname, 'trabajos.html'),
         app: resolve(__dirname, 'app.html'),
         preview: resolve(__dirname, 'preview.html'),
       },

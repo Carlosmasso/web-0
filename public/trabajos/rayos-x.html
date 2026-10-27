@@ -1,0 +1,781 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vano Arquitectura · Estudio en Valencia — web de ejemplo</title>
+<meta name="description" content="Web de ejemplo hecha a mano por Maketa para un estudio de arquitectura inventado.">
+<!-- Es una demo de un negocio que no existe: que no compita en buscadores con negocios reales. -->
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='none' stroke='%230B0B12' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23173A8C'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://images.pexels.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap">
+<!--
+  Rayos X · plantilla a medida de Maketa (estudio de arquitectura ficticio).
+  Un solo archivo, sin dependencias. Las microinteracciones:
+    1. Portada: una lente sigue al cursor (o al dedo) y descubre el plano bajo la
+       fachada. Sin nadie tocando, deriva sola; "Ver el plano" la abre entera.
+    2. Cinta de obras que se para al pasar el ratón.
+    3. Servicios: la imagen de cada uno flota junto al cursor; en móvil va dentro.
+    4. Proceso por fases con barra de progreso.
+    5. Botón de contacto magnético y reloj de Valencia en vivo.
+  Con movimiento reducido: sin deriva, sin cinta, sin imán; la lente salta al punto.
+-->
+<style>
+:root {
+  --bg: #EDECEF;
+  --hero: #E2E1E7;
+  --ink: #0B0B12;
+  --soft: #2E2E3A;
+  --muted: #55556A;
+  --line: #C9C8D2;
+  --accent: #173A8C;
+  --accent-on-dark: #9DB2FF;
+  --night: #0B0B12;
+  --night-soft: #C9C9D6;
+  --night-muted: #A9A9B8;
+  --pad: clamp(16px, 4vw, 40px);
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  --ease-io: cubic-bezier(.7, 0, .2, 1);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 17px/1.5 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+h1, h2, h3, p, figure, ul, ol { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
+::selection { background: var(--accent); color: #fff; }
+[id] { scroll-margin-top: 24px; }
+
+.serif { font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-weight: 400; letter-spacing: -0.02em; }
+.wrap { max-width: 1360px; margin: 0 auto; padding-left: var(--pad); padding-right: var(--pad); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Subrayado que entra por la izquierda y sale por la derecha. */
+.ul { position: relative; text-decoration: none; }
+.ul::after { content: ""; position: absolute; left: 0; right: 0; bottom: 8px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform .45s var(--ease-io); }
+.ul:hover::after { transform: scaleX(1); transform-origin: left; }
+
+.pill {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 48px; padding: 0 22px; border-radius: 999px;
+  border: 1px solid var(--ink); background: transparent; color: var(--ink);
+  font-size: 15px; font-weight: 500; text-decoration: none; cursor: pointer; white-space: nowrap;
+  transition: background .3s ease, color .3s ease, border-color .3s ease, transform .3s var(--ease);
+}
+.pill:active { transform: scale(.97); }
+.pill--ink { background: var(--ink); color: var(--bg); }
+.pill--ink:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+.pill--line:hover { background: var(--ink); color: var(--bg); }
+
+/* ---------- cabecera ---------- */
+
+.top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-top: 20px; padding-bottom: 20px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 600; font-size: 19px; letter-spacing: -0.02em; }
+.brand__mark { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--ink); display: inline-grid; place-items: center; }
+.brand__mark::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.top__nav { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 28px; font-size: 15px; }
+.top__nav .ul { padding: 12px 0; }
+.top__nav .pill { min-height: 44px; padding: 0 20px; }
+@media (max-width: 720px) { .top__nav .ul { display: none; } }
+
+/* ---------- portada con lente ---------- */
+
+.hero {
+  position: relative; isolation: isolate; overflow: hidden;
+  margin: 0 clamp(8px, 1.5vw, 20px); border-radius: 28px; background: var(--hero);
+  cursor: crosshair;
+}
+.hero__base {
+  display: grid; gap: 32px clamp(32px, 5vw, 72px);
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr);
+  grid-template-rows: auto 1fr auto;
+  min-height: 760px; padding: clamp(32px, 5vw, 64px);
+}
+.hero__meta { grid-column: 1 / -1; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: 14px; color: var(--muted); }
+.hero h1 { align-self: center; font-weight: 500; font-size: clamp(50px, 7.6vw, 132px); line-height: .95; letter-spacing: -0.05em; max-width: 11ch; text-wrap: balance; }
+.hero__foot { display: flex; flex-direction: column; gap: 24px; }
+.hero__foot p { max-width: 440px; font-size: 18px; line-height: 1.5; color: var(--soft); }
+.hero__ctl { position: relative; z-index: 3; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; cursor: auto; }
+.hint { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; color: var(--muted); }
+.pulse { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); animation: pulse 1.6s ease-out infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(23, 58, 140, .5); } 100% { box-shadow: 0 0 0 14px rgba(23, 58, 140, 0); } }
+.hero__fig { grid-column: 2; grid-row: 2 / 4; position: relative; border-radius: 18px; overflow: hidden; background: #D6D5DC; min-height: 420px; }
+.hero__fig img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+/* La segunda capa: el mismo hueco, en plano. La recorta un círculo que mueve el JS. */
+.xray {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  display: flex; flex-direction: column; gap: 32px;
+  padding: clamp(32px, 5vw, 64px);
+  color: #fff; background-color: var(--accent);
+  background-image:
+    linear-gradient(rgba(255, 255, 255, .12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .12) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, .05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .05) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+  clip-path: circle(0 at 50% 50%);
+}
+.xray .hero__meta { color: rgba(255, 255, 255, .85); }
+.xray__body { flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 32px; max-width: calc(var(--fx, 60%) - 64px); }
+.xray__title { font-size: clamp(54px, 8.4vw, 148px); line-height: .92; letter-spacing: -0.03em; max-width: 10ch; }
+.xray__text { max-width: 420px; font-size: 18px; line-height: 1.5; padding-bottom: 72px; }
+.xray__plan { position: absolute; left: var(--fx, 60%); top: var(--fy, 20%); width: var(--fw, 30%); height: var(--fh, 60%); border: 1px dashed rgba(255, 255, 255, .45); border-radius: 18px; padding: 20px; }
+.xray__plan svg { width: 100%; height: 100%; }
+
+@media (max-width: 900px) {
+  .hero__base { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; min-height: 0; }
+  .hero__fig { grid-column: 1; grid-row: 2; min-height: 0; aspect-ratio: 4 / 3; }
+  .hero h1 { font-size: clamp(46px, 12vw, 96px); }
+  .hero__meta span + span { display: none; }
+  .xray__body { position: absolute; left: clamp(32px, 5vw, 64px); right: clamp(32px, 5vw, 64px); top: calc(var(--fy, 50%) + var(--fh, 0px) + 32px); max-width: none; }
+  .xray__title { font-size: clamp(46px, 12vw, 96px); }
+}
+
+/* ---------- cinta de obras ---------- */
+
+.marquee { overflow: hidden; border-bottom: 1px solid var(--line); padding: 28px 0; margin-top: 24px; }
+.marquee__track { display: flex; width: max-content; animation: mq 46s linear infinite; }
+.marquee:hover .marquee__track { animation-play-state: paused; }
+.marquee ul { display: flex; gap: 56px; padding-right: 56px; font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(26px, 3vw, 40px); color: var(--muted); white-space: nowrap; }
+.marquee li { display: inline-flex; align-items: center; gap: 56px; }
+.marquee li::after { content: "✶"; font-family: 'Geist', sans-serif; font-size: 18px; color: var(--accent); }
+@keyframes mq { to { transform: translateX(-50%); } }
+
+/* ---------- servicios ---------- */
+
+.section { padding-top: clamp(64px, 9vw, 128px); padding-bottom: clamp(64px, 9vw, 128px); }
+.section + .section { padding-top: clamp(16px, 3vw, 40px); }
+.head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 40px; }
+.head h2 { font-weight: 500; font-size: clamp(36px, 5vw, 64px); letter-spacing: -0.04em; line-height: 1; }
+.head p { font-size: 15px; color: var(--muted); }
+
+.svc-list { position: relative; }
+.svc-rows { border-top: 1px solid var(--ink); }
+.svc { border-bottom: 1px solid var(--line); transition: opacity .35s ease; }
+.svc-list.is-hovering .svc:not(.is-hover) { opacity: .4; }
+.svc__head { width: 100%; display: grid; grid-template-columns: 56px minmax(0, 1fr) 44px; align-items: center; gap: 16px; padding: 28px 0; border: 0; background: none; text-align: left; cursor: pointer; }
+.svc__n { font-size: 14px; color: var(--muted); }
+.svc__title { font-size: clamp(28px, 4.4vw, 60px); font-weight: 500; letter-spacing: -0.04em; line-height: 1; transition: transform .5s var(--ease); }
+.svc.is-hover .svc__title { transform: translateX(16px); }
+.svc__dot { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--ink); display: inline-grid; place-items: center; transition: transform .45s var(--ease), background .3s ease, color .3s ease; }
+.svc.is-hover .svc__dot, .svc.is-open .svc__dot { background: var(--ink); color: var(--bg); }
+.svc.is-open .svc__dot { transform: rotate(45deg); }
+.svc__body { display: grid; grid-template-rows: 0fr; visibility: hidden; transition: grid-template-rows .5s var(--ease), visibility 0s linear .5s; }
+.svc.is-open .svc__body { grid-template-rows: 1fr; visibility: visible; transition: grid-template-rows .5s var(--ease), visibility 0s; }
+.svc__inner { overflow: hidden; }
+.svc__cols { display: flex; flex-wrap: wrap; gap: 16px 48px; padding: 0 0 32px 72px; }
+.svc__desc { flex: 1 1 280px; max-width: 520px; font-size: 18px; line-height: 1.5; color: var(--soft); }
+.svc__items { flex: 1 1 200px; font-size: 15px; line-height: 1.8; color: var(--muted); }
+.svc__img { display: none; }
+
+/* La imagen que flota junto al cursor (solo con ratón). */
+.peek { position: absolute; left: 0; top: 0; z-index: 4; width: 260px; height: 320px; pointer-events: none; will-change: transform; }
+.peek__card { position: absolute; inset: 0; border-radius: 18px; overflow: hidden; background: var(--line); opacity: 0; transform: translate(-50%, -50%) scale(.6) rotate(0deg); transition: opacity .3s ease, transform .45s var(--ease); }
+.peek.is-on .peek__card { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(var(--rot, -4deg)); }
+.peek img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .3s ease; }
+.peek img.is-on { opacity: 1; }
+.peek__label { position: absolute; left: 14px; bottom: 14px; padding: 6px 10px; border-radius: 999px; background: rgba(11, 11, 18, .72); color: #fff; font-size: 13px; }
+
+@media (hover: none), (max-width: 900px) {
+  .peek { display: none; }
+  .svc__cols { padding-left: 0; }
+  .svc__img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 14px; }
+}
+
+/* ---------- obras ---------- */
+
+.works { display: flex; flex-wrap: wrap; gap: 40px 24px; }
+.work { display: flex; flex-direction: column; gap: 14px; min-width: 0; flex: 1 1 280px; }
+.work--wide { flex: 2 1 560px; }
+.work--full { flex: 1 1 100%; }
+.work__img { position: relative; overflow: hidden; border-radius: 18px; background: var(--line); }
+.work__img img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.1s var(--ease); }
+.work:hover .work__img img { transform: scale(1.04); }
+.work__cap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; font-size: 18px; }
+.work__cap strong { font-weight: 500; }
+.work__cap span { font-size: 14px; color: var(--muted); }
+.work__note { font-size: 16px; line-height: 1.5; color: var(--soft); max-width: 560px; }
+
+/* ---------- proceso ---------- */
+
+.process { background: var(--night); color: var(--bg); margin: 0 clamp(8px, 1.5vw, 20px); border-radius: 28px; }
+.process .head p { color: var(--night-muted); }
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+.step { min-height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 20px; border-radius: 14px; border: 1px solid #3A3A48; background: transparent; color: var(--bg); font-size: 16px; font-weight: 500; cursor: pointer; transition: background .3s ease, color .3s ease, border-color .3s ease; }
+.step span { font-size: 13px; opacity: .75; }
+.step:hover { border-color: var(--night-muted); }
+.step[aria-pressed="true"] { background: var(--bg); color: var(--ink); border-color: var(--bg); }
+.bar { margin-top: 24px; height: 2px; background: #2A2A36; border-radius: 2px; overflow: hidden; }
+.bar span { display: block; height: 2px; width: 25%; background: var(--accent-on-dark); transition: width .6s var(--ease-io); }
+.phase { margin-top: 48px; display: flex; flex-wrap: wrap; gap: 24px 64px; align-items: flex-start; transition: opacity .25s ease, transform .35s var(--ease); }
+.phase.is-swap { opacity: 0; transform: translateY(8px); }
+.phase__n { flex: 0 0 auto; font-size: clamp(96px, 14vw, 200px); line-height: .8; color: var(--accent-on-dark); }
+.phase__body { flex: 1 1 320px; max-width: 560px; display: flex; flex-direction: column; gap: 16px; padding-top: 12px; }
+.phase__body h3 { font-size: clamp(26px, 3vw, 36px); font-weight: 500; letter-spacing: -0.03em; }
+.phase__body p { font-size: 18px; line-height: 1.55; color: var(--night-soft); }
+.phase__body .phase__time { font-size: 15px; color: var(--night-muted); }
+
+/* ---------- contacto ---------- */
+
+.contact { padding-top: clamp(80px, 11vw, 160px); padding-bottom: 48px; }
+.contact__in { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 48px; }
+.contact__copy { flex: 1 1 520px; display: flex; flex-direction: column; gap: 24px; }
+.contact h2 { font-weight: 500; font-size: clamp(52px, 8vw, 128px); line-height: .95; letter-spacing: -0.05em; }
+.contact__copy p { max-width: 460px; font-size: 18px; line-height: 1.5; color: var(--soft); }
+.magnet { flex: 0 0 auto; width: 300px; height: 300px; display: grid; place-items: center; margin: 0 auto; }
+.magnet__btn { width: 200px; height: 200px; border-radius: 50%; border: 0; background: var(--accent); color: #fff; display: grid; place-items: center; font-size: 18px; font-weight: 500; cursor: pointer; transform: translate(var(--mx, 0), var(--my, 0)); transition: transform .35s var(--ease), background .3s ease; }
+.magnet__btn:hover { background: var(--ink); }
+.magnet__btn > span { display: flex; flex-direction: column; align-items: center; gap: 8px; transform: translate(var(--mx2, 0), var(--my2, 0)); transition: transform .35s var(--ease); }
+
+.foot { margin-top: clamp(64px, 9vw, 120px); padding-top: 24px; padding-bottom: 32px; border-top: 1px solid var(--ink); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 14px; color: var(--muted); }
+.foot__clock { display: inline-flex; align-items: center; gap: 8px; font-variant-numeric: tabular-nums; }
+.foot__clock::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #1E9E5A; }
+.foot a { text-decoration: none; }
+
+/* ---------- aviso de ejemplo ---------- */
+
+.maketa { position: fixed; left: 16px; bottom: 16px; z-index: 40; display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 16px; border-radius: 999px; background: rgba(11, 11, 18, .88); color: #fff; font-size: 14px; text-decoration: none; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, .5); backdrop-filter: blur(8px); transition: background .3s ease, transform .3s var(--ease); }
+.maketa:hover { background: var(--accent); transform: translateY(-2px); }
+.maketa strong { font-weight: 600; }
+.is-embedded .maketa { display: none; }
+
+.note { width: min(480px, calc(100% - 32px)); padding: 0; border: 0; border-radius: 22px; background: var(--bg); color: var(--ink); box-shadow: 0 40px 80px -30px rgba(0, 0, 0, .5); }
+.note::backdrop { background: rgba(11, 11, 18, .55); }
+.note[open] { animation: note-in .35s var(--ease); }
+@keyframes note-in { from { opacity: 0; transform: translateY(16px) scale(.98); } }
+.note form { display: flex; flex-direction: column; gap: 16px; padding: 32px; }
+.note__kicker { font-size: 13px; color: var(--accent); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+.note h2 { font-weight: 500; font-size: 32px; line-height: 1.05; letter-spacing: -0.035em; }
+.note p { font-size: 16px; line-height: 1.55; color: var(--soft); }
+.note__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .pulse, .marquee__track, .note[open] { animation: none; }
+  .marquee { overflow-x: auto; }
+  .svc.is-hover .svc__title, .work:hover .work__img img { transform: none; }
+  .magnet__btn, .magnet__btn > span { transform: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="top wrap">
+  <a class="brand" href="#inicio"><span class="brand__mark" aria-hidden="true"></span>Vano</a>
+  <nav class="top__nav" aria-label="Principal">
+    <a class="ul" href="#servicios">Servicios</a>
+    <a class="ul" href="#obras">Obras</a>
+    <a class="ul" href="#proceso">Proceso</a>
+    <a class="pill pill--ink" href="#contacto">Pedir una visita</a>
+  </nav>
+</header>
+
+<main>
+  <section id="inicio" class="hero" data-hero aria-labelledby="hero-title">
+    <div class="hero__base">
+      <div class="hero__meta"><span>Vano — Estudio de arquitectura</span><span>Valencia · Desde 2014</span></div>
+      <h1 id="hero-title">Casas que se entienden <span class="serif">a la primera.</span></h1>
+      <div class="hero__foot">
+        <p>Proyectamos viviendas, rehabilitaciones e interiores en Valencia y alrededores, con el presupuesto claro desde el primer boceto.</p>
+        <div class="hero__ctl">
+          <span class="hint"><span class="pulse" aria-hidden="true"></span><span data-hint>Pasa el cursor por la casa</span></span>
+          <button type="button" class="pill pill--ink" data-reveal aria-pressed="false">Ver el plano</button>
+        </div>
+      </div>
+      <figure class="hero__fig" data-fig>
+        <img src="https://images.pexels.com/photos/1974596/pexels-photo-1974596.jpeg?auto=compress&cs=tinysrgb&w=1100" alt="Fachada blanca de una casa con portones de madera entre palmeras" width="1100" height="1467" fetchpriority="high">
+      </figure>
+    </div>
+
+    <div class="xray" data-xray aria-hidden="true">
+      <div class="hero__meta"><span>Capa 02 — El plano</span><span>Planta baja · E 1:100</span></div>
+      <div class="xray__body">
+        <p class="xray__title serif">Porque antes la dibujamos por dentro.</p>
+        <p class="xray__text">Luz, recorridos, instalaciones y presupuesto, resueltos sobre el plano antes de poner un ladrillo. Así la obra no trae sorpresas.</p>
+      </div>
+      <div class="xray__plan">
+        <svg viewBox="0 0 400 500" fill="none" stroke="currentColor" stroke-linecap="square" preserveAspectRatio="xMidYMid meet">
+          <!-- cotas -->
+          <g stroke-width="1" opacity=".8">
+            <path d="M30 16h340M30 10v12M370 10v12"/>
+            <path d="M8 40v420M2 40h12M2 460h12"/>
+          </g>
+          <g fill="currentColor" stroke="none" font-family="Geist, system-ui, sans-serif" font-size="11" letter-spacing=".08em" text-anchor="middle">
+            <text x="200" y="11">11,40</text>
+            <text x="0" y="0" transform="translate(22 250) rotate(-90)">14,00</text>
+          </g>
+          <!-- muros -->
+          <rect x="30" y="40" width="340" height="420" stroke-width="7"/>
+          <g stroke-width="3.5">
+            <path d="M230 40v80M230 160v55M230 245v85M230 370v90"/>
+            <path d="M230 190h140M230 290h140"/>
+            <path d="M30 250h65M135 250h95"/>
+            <path d="M150 250v210"/>
+          </g>
+          <!-- ventanas -->
+          <g fill="#173A8C" stroke-width="1.5">
+            <rect x="70" y="36.5" width="120" height="7"/>
+            <rect x="366.5" y="70" width="7" height="90"/>
+            <rect x="270" y="456.5" width="70" height="7"/>
+            <rect x="26.5" y="300" width="7" height="100"/>
+          </g>
+          <!-- puertas -->
+          <g stroke-width="1.5">
+            <path d="M230 120l40 0M270 120a40 40 0 0 1-40 40"/>
+            <path d="M230 215l30 0M260 215a30 30 0 0 1-30 30"/>
+            <path d="M230 330l40 0M270 330a40 40 0 0 1-40 40"/>
+            <path d="M95 250v40M95 290a40 40 0 0 0 40-40"/>
+          </g>
+          <!-- escalera -->
+          <g stroke-width="1.2">
+            <path d="M160 290h60M160 306h60M160 322h60M160 338h60M160 354h60M160 370h60M160 386h60M160 402h60M160 418h60M160 434h60"/>
+            <path d="M190 440V284M184 296l6-12 6 12"/>
+          </g>
+          <!-- mobiliario -->
+          <g stroke-width="1.2" opacity=".75">
+            <rect x="52" y="70" width="34" height="110" rx="6"/>
+            <circle cx="160" cy="150" r="30"/>
+            <rect x="248" y="58" width="104" height="22"/>
+            <rect x="330" y="200" width="22" height="40" rx="4"/>
+            <rect x="248" y="350" width="90" height="94" rx="4"/>
+            <path d="M256 360h30M300 360h30"/>
+            <rect x="48" y="300" width="70" height="90" rx="4"/>
+          </g>
+          <!-- rótulos -->
+          <g fill="currentColor" stroke="none" font-family="Geist, system-ui, sans-serif" font-size="11" letter-spacing=".1em" text-anchor="middle">
+            <text x="130" y="225">SALÓN · COMEDOR</text>
+            <text x="300" y="150">COCINA</text>
+            <text x="300" y="275">BAÑO</text>
+            <text x="300" y="320">DORM. 1</text>
+            <text x="90" y="430">DORM. 2</text>
+            <text x="190" y="455">ESC.</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="marquee" aria-label="Obras recientes">
+    <div class="marquee__track">
+      <ul>
+        <li>Casa Patio en Godella</li>
+        <li>Ático en Ruzafa</li>
+        <li>Alquería en Alboraia</li>
+        <li>Vivienda entre medianeras en Benimaclet</li>
+        <li>Bajo comercial en El Carmen</li>
+        <li>Casa de playa en El Saler</li>
+      </ul>
+      <ul aria-hidden="true">
+        <li>Casa Patio en Godella</li>
+        <li>Ático en Ruzafa</li>
+        <li>Alquería en Alboraia</li>
+        <li>Vivienda entre medianeras en Benimaclet</li>
+        <li>Bajo comercial en El Carmen</li>
+        <li>Casa de playa en El Saler</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="servicios" class="section wrap">
+    <div class="head">
+      <h2>Lo que hacemos <span class="serif">bien.</span></h2>
+      <p>Pasa por encima o toca para abrir</p>
+    </div>
+    <div class="svc-list" data-services>
+      <div class="peek" data-peek aria-hidden="true">
+        <div class="peek__card">
+          <img data-peek-img alt="" loading="lazy" src="https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=600">
+          <img data-peek-img alt="" loading="lazy" src="https://images.pexels.com/photos/3990359/pexels-photo-3990359.jpeg?auto=compress&cs=tinysrgb&w=600">
+          <img data-peek-img alt="" loading="lazy" src="https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=600">
+          <img data-peek-img alt="" loading="lazy" src="https://images.pexels.com/photos/1109541/pexels-photo-1109541.jpeg?auto=compress&cs=tinysrgb&w=600">
+          <span class="peek__label" data-peek-label></span>
+        </div>
+      </div>
+      <div class="svc-rows">
+        <div class="svc is-open" data-label="Casa en Godella">
+          <button type="button" class="svc__head" aria-expanded="true" aria-controls="svc-1">
+            <span class="svc__n">01</span>
+            <span class="svc__title">Vivienda nueva</span>
+            <span class="svc__dot" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+          </button>
+          <div class="svc__body" id="svc-1">
+            <div class="svc__inner"><div class="svc__cols">
+              <img class="svc__img" loading="lazy" alt="Casa blanca de líneas rectas con grandes ventanales" src="https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=900">
+              <p class="svc__desc">Casas unifamiliares pensadas para la parcela, el clima y vuestra forma de vivir. Sabéis lo que va a costar desde el primer boceto, no al final.</p>
+              <ul class="svc__items"><li>Estudio de parcela y normativa</li><li>Anteproyecto y proyecto de ejecución</li><li>Infografías y maqueta</li></ul>
+            </div></div>
+          </div>
+        </div>
+        <div class="svc" data-label="Reforma en Ruzafa">
+          <button type="button" class="svc__head" aria-expanded="false" aria-controls="svc-2">
+            <span class="svc__n">02</span>
+            <span class="svc__title">Rehabilitación</span>
+            <span class="svc__dot" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+          </button>
+          <div class="svc__body" id="svc-2">
+            <div class="svc__inner"><div class="svc__cols">
+              <img class="svc__img" loading="lazy" alt="Vivienda en obras con escaleras de mano y tabiques nuevos" src="https://images.pexels.com/photos/3990359/pexels-photo-3990359.jpeg?auto=compress&cs=tinysrgb&w=900">
+              <p class="svc__desc">Pisos y casas antiguas que conservan lo que merece la pena y ganan luz, aislamiento y orden. Sin tirar lo que todavía cuenta una historia.</p>
+              <ul class="svc__items"><li>Levantamiento del estado actual</li><li>Redistribución y mejora energética</li><li>Gestión de ayudas a la rehabilitación</li></ul>
+            </div></div>
+          </div>
+        </div>
+        <div class="svc" data-label="Interior en Benimaclet">
+          <button type="button" class="svc__head" aria-expanded="false" aria-controls="svc-3">
+            <span class="svc__n">03</span>
+            <span class="svc__title">Interiorismo</span>
+            <span class="svc__dot" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+          </button>
+          <div class="svc__body" id="svc-3">
+            <div class="svc__inner"><div class="svc__cols">
+              <img class="svc__img" loading="lazy" alt="Salón luminoso con sofá gris y escalera blanca" src="https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=900">
+              <p class="svc__desc">Cocinas, baños y casas enteras: materiales, luz y muebles a medida, todo dibujado antes de comprar nada.</p>
+              <ul class="svc__items"><li>Planos de detalle</li><li>Selección de materiales</li><li>Mobiliario a medida</li></ul>
+            </div></div>
+          </div>
+        </div>
+        <div class="svc" data-label="En obra, cada semana">
+          <button type="button" class="svc__head" aria-expanded="false" aria-controls="svc-4">
+            <span class="svc__n">04</span>
+            <span class="svc__title">Licencias y dirección de obra</span>
+            <span class="svc__dot" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+          </button>
+          <div class="svc__body" id="svc-4">
+            <div class="svc__inner"><div class="svc__cols">
+              <img class="svc__img" loading="lazy" alt="Mano dibujando un plano con rotulador" src="https://images.pexels.com/photos/1109541/pexels-photo-1109541.jpeg?auto=compress&cs=tinysrgb&w=900">
+              <p class="svc__desc">Nos encargamos del papeleo con el ayuntamiento y estamos en la obra cada semana, para que se construya exactamente lo que se dibujó.</p>
+              <ul class="svc__items"><li>Licencias y comunicaciones</li><li>Comparativa de presupuestos</li><li>Visitas de obra semanales</li></ul>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="obras" class="section wrap">
+    <div class="head">
+      <h2>Obra <span class="serif">reciente.</span></h2>
+      <p>Tres de los últimos proyectos</p>
+    </div>
+    <div class="works">
+      <article class="work work--wide">
+        <div class="work__img" style="aspect-ratio: 16 / 10"><img loading="lazy" alt="Casa de piedra con terraza frente al mar al atardecer" src="https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=1400"></div>
+        <div class="work__cap"><strong>Casa de playa en El Saler</strong><span>Vivienda nueva · 2025</span></div>
+        <p class="work__note">Muros de piedra del lugar, una sola planta y todas las estancias abiertas al levante.</p>
+      </article>
+      <article class="work">
+        <div class="work__img" style="aspect-ratio: 4 / 5"><img loading="lazy" alt="Bloque de viviendas blanco con terrazas de vidrio" src="https://images.pexels.com/photos/2462015/pexels-photo-2462015.jpeg?auto=compress&cs=tinysrgb&w=800"></div>
+        <div class="work__cap"><strong>Doce viviendas en Patraix</strong><span>2024</span></div>
+        <p class="work__note">Terrazas profundas que dan sombra en verano y dejan entrar el sol en invierno.</p>
+      </article>
+      <article class="work work--full">
+        <div class="work__img" style="aspect-ratio: 16 / 7"><img loading="lazy" alt="Salón de un ático con paredes de ladrillo visto y ventanales" src="https://images.pexels.com/photos/1918291/pexels-photo-1918291.jpeg?auto=compress&cs=tinysrgb&w=1800"></div>
+        <div class="work__cap"><strong>Ático en Ruzafa</strong><span>Rehabilitación · 2024</span></div>
+        <p class="work__note">Quitamos tres tabiques y un falso techo: apareció el ladrillo original y la luz llega hasta la cocina.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="proceso" class="process">
+    <div class="section wrap">
+      <div class="head">
+        <h2>Cuatro fases. <span class="serif">Cero sorpresas.</span></h2>
+        <p>Elige una fase</p>
+      </div>
+      <div class="steps" role="group" aria-label="Fases del proyecto" data-steps>
+        <button type="button" class="step" aria-pressed="true">Escuchar<span>01</span></button>
+        <button type="button" class="step" aria-pressed="false">Proyectar<span>02</span></button>
+        <button type="button" class="step" aria-pressed="false">Tramitar<span>03</span></button>
+        <button type="button" class="step" aria-pressed="false">Construir<span>04</span></button>
+      </div>
+      <div class="bar" aria-hidden="true"><span data-bar></span></div>
+      <div class="phase" data-phase aria-live="polite">
+        <span class="phase__n serif" data-phase-n>01</span>
+        <div class="phase__body">
+          <h3 data-phase-title>Escuchar</h3>
+          <p data-phase-text>Visitamos la parcela o la casa con vosotros y hablamos de cómo vivís y de cuánto queréis invertir. Salís con un programa de necesidades y un primer orden de costes.</p>
+          <p class="phase__time" data-phase-time>Duración orientativa: 2 semanas</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto" class="contact wrap">
+    <div class="contact__in">
+      <div class="contact__copy">
+        <h2>¿Hablamos de tu <span class="serif">casa?</span></h2>
+        <p>Una parcela, un piso que reformar o solo una idea. Cuéntanos qué tienes en mente y quedamos para verlo.</p>
+      </div>
+      <div class="magnet" data-magnet>
+        <button type="button" class="magnet__btn" data-demo>
+          <span>Escríbenos
+            <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M8 7h9v9"/></svg>
+          </span>
+        </button>
+      </div>
+    </div>
+    <footer class="foot">
+      <span>© 2026 Vano Arquitectura</span>
+      <span class="foot__clock">Valencia — <time data-clock>--:--:--</time></span>
+      <a class="ul" href="/trabajos.html" target="_top">Estudio ficticio · web de ejemplo de Maketa</a>
+    </footer>
+  </section>
+</main>
+
+<a class="maketa" href="/trabajos.html" target="_top">Web de ejemplo · <strong>Maketa</strong></a>
+
+<dialog class="note" data-note aria-labelledby="note-title">
+  <form method="dialog">
+    <p class="note__kicker">Web de ejemplo</p>
+    <h2 id="note-title">Vano no existe. Tu negocio, sí.</h2>
+    <p>Este estudio es inventado: la web la he hecho para enseñar lo que se puede construir a mano. En tu web, este botón llevaría a tu correo o a un formulario para que te escriban tus clientes.</p>
+    <div class="note__actions">
+      <a class="pill pill--ink" href="/trabajos.html?quiero=rayos-x#rayos-x" target="_top">Quiero una web así</a>
+      <button class="pill pill--line" value="close">Seguir mirando</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+(function () {
+  var doc = document.documentElement
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
+  var mouse = matchMedia('(hover: hover) and (pointer: fine)').matches
+  var embedded = false
+  try { embedded = window.self !== window.top } catch (e) { embedded = true }
+
+  // Dentro de la página de trabajos se ve en miniatura: sin aviso flotante y sin
+  // contar la visita (la cuenta la página que la enseña).
+  if (embedded) doc.classList.add('is-embedded')
+  else {
+    var va = document.createElement('script')
+    va.defer = true
+    va.src = '/_vercel/insights/script.js'
+    document.head.appendChild(va)
+  }
+
+  /* ---------- 1. la lente de la portada ---------- */
+  var hero = document.querySelector('[data-hero]')
+  var xray = hero.querySelector('[data-xray]')
+  var fig = hero.querySelector('[data-fig]')
+  var revealBtn = hero.querySelector('[data-reveal]')
+  var hint = hero.querySelector('[data-hint]')
+  var HINT = mouse ? 'Pasa el cursor por la casa' : 'Toca la casa'
+  hint.textContent = HINT
+
+  var w = 0, h = 0, f = { x: 0, y: 0, w: 0, h: 0 }, lens = 150
+  var cur = { x: 0, y: 0, r: 0 }, aim = { x: 0, y: 0 }
+  var full = false, touchedAt = -1e9, visible = true, raf = 0, t0 = performance.now()
+
+  function measure() {
+    var hr = hero.getBoundingClientRect(), fr = fig.getBoundingClientRect()
+    w = hr.width; h = hr.height
+    f = { x: fr.left - hr.left, y: fr.top - hr.top, w: fr.width, h: fr.height }
+    hero.style.setProperty('--fx', f.x + 'px')
+    hero.style.setProperty('--fy', f.y + 'px')
+    hero.style.setProperty('--fw', f.w + 'px')
+    hero.style.setProperty('--fh', f.h + 'px')
+    lens = w < 700 ? 110 : 150
+  }
+  // Sin nadie tocando, la lente pasea sobre la casa en una curva de Lissajous.
+  function drift(now) {
+    var t = (now - t0) / 1000
+    return {
+      x: f.x + f.w / 2 + Math.max(f.w * 0.55, w * 0.12) * Math.sin(t * 0.55),
+      y: f.y + f.h / 2 + f.h * 0.32 * Math.sin(t * 0.9)
+    }
+  }
+  function paint() {
+    xray.style.clipPath = 'circle(' + cur.r.toFixed(1) + 'px at ' + cur.x.toFixed(1) + 'px ' + cur.y.toFixed(1) + 'px)'
+  }
+  function frame(now) {
+    raf = 0
+    var idle = now - touchedAt > 2400
+    if (idle && !full && !reduce) aim = drift(now)
+    var r = full ? Math.hypot(w, h) : lens
+    var k = reduce ? 1 : 0.14
+    cur.x += (aim.x - cur.x) * k
+    cur.y += (aim.y - cur.y) * k
+    cur.r += (r - cur.r) * (reduce ? 1 : 0.09)
+    paint()
+    var settled = Math.abs(aim.x - cur.x) < 0.3 && Math.abs(aim.y - cur.y) < 0.3 && Math.abs(r - cur.r) < 0.3
+    var drifting = idle && !full && !reduce
+    if (visible && !document.hidden && (drifting || !settled)) raf = requestAnimationFrame(frame)
+  }
+  function wake() { if (!raf && visible) raf = requestAnimationFrame(frame) }
+  function point(e) {
+    var hr = hero.getBoundingClientRect()
+    aim = { x: e.clientX - hr.left, y: e.clientY - hr.top }
+    touchedAt = performance.now()
+    wake()
+  }
+
+  measure()
+  aim = reduce ? { x: f.x + f.w / 2, y: f.y + f.h / 2 } : drift(performance.now())
+  cur.x = aim.x; cur.y = aim.y
+  paint()
+
+  hero.addEventListener('pointermove', function (e) { if (!full && e.pointerType === 'mouse') point(e) })
+  hero.addEventListener('pointerdown', function (e) {
+    if (full || e.target.closest('button, a')) return
+    point(e)
+  })
+  hero.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') { touchedAt = -1e9; wake() } })
+
+  revealBtn.addEventListener('click', function () {
+    full = !full
+    revealBtn.setAttribute('aria-pressed', String(full))
+    revealBtn.textContent = full ? 'Ocultar el plano' : 'Ver el plano'
+    hint.textContent = full ? 'El plano, a la vista' : HINT
+    wake()
+  })
+
+  if ('ResizeObserver' in window) new ResizeObserver(function () { measure(); wake() }).observe(hero)
+  else addEventListener('resize', function () { measure(); wake() })
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (en) { visible = en[0].isIntersecting; wake() }).observe(hero)
+  }
+  document.addEventListener('visibilitychange', wake)
+  // La foto llega después del primer cálculo en conexiones lentas.
+  fig.querySelector('img').addEventListener('load', measure)
+
+  /* ---------- 2. servicios: acordeón e imagen flotante ---------- */
+  var list = document.querySelector('[data-services]')
+  var rows = Array.prototype.slice.call(list.querySelectorAll('.svc'))
+  var peek = list.querySelector('[data-peek]')
+  var peekImgs = list.querySelectorAll('[data-peek-img]')
+  var peekLabel = list.querySelector('[data-peek-label]')
+
+  rows.forEach(function (row, i) {
+    var btn = row.querySelector('.svc__head')
+    btn.addEventListener('click', function () {
+      var open = !row.classList.contains('is-open')
+      rows.forEach(function (r) {
+        var on = open && r === row
+        r.classList.toggle('is-open', on)
+        r.querySelector('.svc__head').setAttribute('aria-expanded', String(on))
+      })
+    })
+    if (!mouse) return
+    btn.addEventListener('pointerenter', function () {
+      rows.forEach(function (r) { r.classList.toggle('is-hover', r === row) })
+      list.classList.add('is-hovering')
+      Array.prototype.forEach.call(peekImgs, function (img, j) { img.classList.toggle('is-on', j === i) })
+      peekLabel.textContent = row.getAttribute('data-label')
+      peek.style.setProperty('--rot', (i % 2 ? 4 : -4) + 'deg')
+      peek.classList.add('is-on')
+    })
+  })
+
+  if (mouse) {
+    var p = { x: 0, y: 0 }, q = null, peekRaf = 0
+    var follow = function () {
+      peekRaf = 0
+      if (!q) return
+      var k = reduce ? 1 : 0.2
+      p.x += (q.x - p.x) * k; p.y += (q.y - p.y) * k
+      peek.style.transform = 'translate3d(' + p.x.toFixed(1) + 'px,' + p.y.toFixed(1) + 'px,0)'
+      if (Math.abs(q.x - p.x) > 0.3 || Math.abs(q.y - p.y) > 0.3) peekRaf = requestAnimationFrame(follow)
+    }
+    list.addEventListener('pointermove', function (e) {
+      var r = list.getBoundingClientRect()
+      var x = Math.min(Math.max(e.clientX - r.left + 170, 140), r.width - 140)
+      var y = e.clientY - r.top
+      if (!q) { p = { x: x, y: y } }
+      q = { x: x, y: y }
+      if (!peekRaf) peekRaf = requestAnimationFrame(follow)
+    })
+    list.addEventListener('pointerleave', function () {
+      rows.forEach(function (r) { r.classList.remove('is-hover') })
+      list.classList.remove('is-hovering')
+      peek.classList.remove('is-on')
+      q = null
+    })
+  }
+
+  /* ---------- 3. proceso ---------- */
+  var PHASES = [
+    { title: 'Escuchar', text: 'Visitamos la parcela o la casa con vosotros y hablamos de cómo vivís y de cuánto queréis invertir. Salís con un programa de necesidades y un primer orden de costes.', time: '2 semanas' },
+    { title: 'Proyectar', text: 'Bocetos, maqueta y ajustes hasta que la casa encaja. Después, el proyecto de ejecución con cada detalle medido y cada partida presupuestada.', time: 'de 6 a 10 semanas' },
+    { title: 'Tramitar', text: 'Preparamos y presentamos la licencia, y pedimos precio a tres constructoras con el mismo proyecto para que comparéis de verdad.', time: 'lo que tarde el ayuntamiento' },
+    { title: 'Construir', text: 'Dirección de obra con una visita a la semana, acta y fotos de cada visita. Lo que se dibujó es lo que se construye.', time: 'según la obra' }
+  ]
+  var steps = document.querySelectorAll('[data-steps] .step')
+  var phase = document.querySelector('[data-phase]')
+  var bar = document.querySelector('[data-bar]')
+  var swapT = 0
+  Array.prototype.forEach.call(steps, function (btn, i) {
+    btn.addEventListener('click', function () {
+      if (btn.getAttribute('aria-pressed') === 'true') return
+      Array.prototype.forEach.call(steps, function (b, j) { b.setAttribute('aria-pressed', String(i === j)) })
+      bar.style.width = ((i + 1) / PHASES.length) * 100 + '%'
+      var fill = function () {
+        phase.querySelector('[data-phase-n]').textContent = '0' + (i + 1)
+        phase.querySelector('[data-phase-title]').textContent = PHASES[i].title
+        phase.querySelector('[data-phase-text]').textContent = PHASES[i].text
+        phase.querySelector('[data-phase-time]').textContent = 'Duración orientativa: ' + PHASES[i].time
+        phase.classList.remove('is-swap')
+      }
+      clearTimeout(swapT)
+      if (reduce) return fill()
+      phase.classList.add('is-swap')
+      swapT = setTimeout(fill, 200)
+    })
+  })
+
+  /* ---------- 4. botón magnético y reloj ---------- */
+  var magnet = document.querySelector('[data-magnet]')
+  var magBtn = magnet.querySelector('.magnet__btn')
+  if (mouse && !reduce) {
+    magnet.addEventListener('pointermove', function (e) {
+      var r = magnet.getBoundingClientRect()
+      var dx = (e.clientX - r.left - r.width / 2) * 0.35
+      var dy = (e.clientY - r.top - r.height / 2) * 0.35
+      magBtn.style.setProperty('--mx', dx.toFixed(1) + 'px')
+      magBtn.style.setProperty('--my', dy.toFixed(1) + 'px')
+      magBtn.style.setProperty('--mx2', (dx * 0.4).toFixed(1) + 'px')
+      magBtn.style.setProperty('--my2', (dy * 0.4).toFixed(1) + 'px')
+    })
+    magnet.addEventListener('pointerleave', function () {
+      ['--mx', '--my', '--mx2', '--my2'].forEach(function (v) { magBtn.style.setProperty(v, '0px') })
+    })
+  }
+
+  var clock = document.querySelector('[data-clock]')
+  var tick = function () {
+    try { clock.textContent = new Date().toLocaleTimeString('es-ES', { timeZone: 'Europe/Madrid' }) }
+    catch (e) { clock.textContent = new Date().toLocaleTimeString('es-ES') }
+  }
+  tick()
+  setInterval(tick, 1000)
+
+  /* ---------- 5. aviso de web de ejemplo ---------- */
+  // El botón de contacto de un estudio que no existe no puede llevar a ningún
+  // sitio: explica qué es esto y ofrece pedir una web así.
+  var note = document.querySelector('[data-note]')
+  document.querySelectorAll('[data-demo]').forEach(function (el) {
+    el.addEventListener('click', function () {
+      if (note.showModal) note.showModal()
+      else location.href = '/trabajos.html?quiero=rayos-x#rayos-x'
+    })
+  })
+  note.addEventListener('click', function (e) { if (e.target === note) note.close() })
+})()
+</script>
+</body>
+</html>

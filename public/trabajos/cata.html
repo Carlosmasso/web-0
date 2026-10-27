@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lías · Vinoteca en Logroño — web de ejemplo</title>
+<meta name="description" content="Web de ejemplo hecha a mano por Maketa para una vinoteca inventada.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M9 3h14c0 9-3 13-7 13S9 12 9 3z' fill='%236B1428'/%3E%3Cpath d='M16 16v10M11 28h10' stroke='%2323161A' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://images.pexels.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400..700;1,400..700&family=Work+Sans:wght@400..600&display=swap">
+<!--
+  Cata · plantilla a medida de Maketa (vinoteca ficticia).
+  Un solo archivo, sin dependencias. Para quien vende vino y lo explica:
+    1. Una copa que se sirve sola al hacer scroll y se agita con el ratón.
+    2. "Encuentra tu vino": cuerpo, carácter y ocasión; recomienda tres botellas
+       de la casa con su grado de acierto. Las botellas están dibujadas.
+    3. La caja de seis: cada botella que añades cae en su hueco. Sin precios.
+    4. Rueda de aromas: cada familia se separa al tocarla y dice qué vinos la tienen.
+    5. Catas de los próximos jueves (fechas de verdad) con las plazas que quedan.
+    6. "Abierto ahora" con la hora de Logroño.
+-->
+<style>
+:root {
+  --paper: #F4EEE6;
+  --card: #FBF8F3;
+  --ink: #23161A;
+  --soft: #4B3A3F;
+  --muted: #6C5A5E;
+  --line: #E2D6CB;
+  --wine: #6B1428;
+  --wine-deep: #3B0F1A;
+  --gold: #B98E57;
+  --pad: clamp(16px, 4vw, 40px);
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  --spring: cubic-bezier(.34, 1.56, .64, 1);
+  --serif: 'Cormorant', Garamond, Georgia, serif;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 17px/1.6 'Work Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: clip; }
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+button, input { font: inherit; color: inherit; }
+h1, h2, h3, p, ul { margin: 0; }
+ul { padding: 0; list-style: none; }
+:focus-visible { outline: 2px solid var(--wine); outline-offset: 3px; }
+::selection { background: var(--wine); color: var(--paper); }
+[hidden] { display: none !important; }
+[id] { scroll-margin-top: 24px; }
+
+.wrap { max-width: 1280px; margin: 0 auto; padding-left: var(--pad); padding-right: var(--pad); }
+.kicker { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .2em; color: var(--wine); }
+.h2 { margin-top: 14px; font-family: var(--serif); font-weight: 500; font-size: clamp(44px, 6vw, 88px); line-height: .95; letter-spacing: -0.015em; }
+.h2 em { color: var(--wine); }
+.lead { font-size: 18px; line-height: 1.65; color: var(--soft); max-width: 520px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 50px; padding: 0 24px; border-radius: 999px; border: 1px solid var(--ink); background: none; font-size: 15px; font-weight: 500; text-decoration: none; cursor: pointer; transition: background .25s ease, color .25s ease, border-color .25s ease, transform .2s ease; }
+.btn:hover { background: var(--ink); color: var(--paper); }
+.btn:active { transform: scale(.97); }
+.btn--wine { background: var(--wine); border-color: var(--wine); color: var(--paper); }
+.btn--wine:hover { background: var(--wine-deep); border-color: var(--wine-deep); }
+.btn:disabled { opacity: .4; cursor: default; background: none; color: var(--ink); }
+
+/* ---------- cabecera ---------- */
+
+.top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-top: 22px; padding-bottom: 22px; }
+.brand { font-family: var(--serif); font-style: italic; font-weight: 600; font-size: 34px; line-height: 1; text-decoration: none; }
+.brand span { color: var(--wine); }
+.top nav { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 26px; font-size: 15px; }
+.top nav a:not(.btn) { text-decoration: none; padding: 12px 0; color: var(--soft); }
+.top nav a:not(.btn):hover { color: var(--wine); }
+.top nav .btn { min-height: 44px; padding: 0 18px; }
+@media (max-width: 760px) { .top nav a:not(.btn) { display: none; } }
+
+/* ---------- portada con copa ---------- */
+
+.hero { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 40px; align-items: center; min-height: 680px; padding-top: 24px; padding-bottom: clamp(48px, 7vw, 96px); }
+.hero h1 { margin-top: 18px; font-family: var(--serif); font-weight: 500; font-size: clamp(60px, 9vw, 144px); line-height: .88; letter-spacing: -0.02em; }
+.hero h1 em { color: var(--wine); }
+.hero .lead { margin-top: 28px; }
+.hero__ctas { margin-top: 36px; display: flex; flex-wrap: wrap; gap: 12px; }
+.glass { position: relative; display: grid; place-items: center; }
+.glass::before { content: ""; position: absolute; width: 76%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgba(107, 20, 40, .14), transparent 65%); }
+.glass svg { position: relative; width: min(340px, 80%); height: auto; overflow: visible; }
+.glass__hint { position: relative; margin-top: 8px; font-family: var(--serif); font-style: italic; font-size: 20px; color: var(--muted); }
+@media (max-width: 860px) { .hero { grid-template-columns: minmax(0, 1fr); min-height: 0; } .glass svg { width: min(240px, 60%); } }
+
+/* ---------- encuentra tu vino ---------- */
+
+.section { padding-top: clamp(72px, 9vw, 128px); padding-bottom: clamp(72px, 9vw, 128px); }
+.band { background: var(--card); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.finder { margin-top: 48px; display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 40px 64px; align-items: start; }
+.dials { display: flex; flex-direction: column; gap: 28px; position: sticky; top: 24px; }
+.dial__head { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .14em; color: var(--muted); }
+.dial input { width: 100%; height: 44px; margin: 0; accent-color: var(--wine); cursor: pointer; }
+.dial__ends { display: flex; justify-content: space-between; font-family: var(--serif); font-style: italic; font-size: 19px; color: var(--soft); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.chips button { min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--line); background: var(--paper); font-size: 15px; cursor: pointer; transition: background .2s ease, border-color .2s ease, color .2s ease; }
+.chips button:hover { border-color: var(--ink); }
+.chips button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.picks { display: grid; gap: 16px; }
+.wine { display: grid; grid-template-columns: 72px minmax(0, 1fr) auto; gap: 20px; align-items: center; padding: 20px 24px 20px 16px; border-radius: 20px; background: var(--paper); border: 1px solid var(--line); animation: rise .5s var(--ease) both; animation-delay: var(--d, 0s); }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } }
+.wine > svg { width: 72px; height: 150px; }
+.wine h3 { font-family: var(--serif); font-weight: 600; font-size: 28px; line-height: 1.05; }
+.wine__meta { margin-top: 4px; font-size: 14px; color: var(--muted); }
+.wine__note { margin-top: 10px; font-size: 15px; color: var(--soft); }
+.wine__pair { margin-top: 8px; font-family: var(--serif); font-style: italic; font-size: 18px; color: var(--wine); }
+.wine__side { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.match { position: relative; width: 64px; height: 64px; }
+.match svg { width: 64px; height: 64px; transform: rotate(-90deg); }
+.match circle { fill: none; stroke-width: 5; }
+.match .t { stroke: var(--line); }
+.match .p { stroke: var(--wine); stroke-linecap: round; stroke-dasharray: 176; transition: stroke-dashoffset .8s var(--ease); }
+.match b { position: absolute; inset: 0; display: grid; place-items: center; font-size: 15px; font-weight: 600; }
+.add { min-height: 40px; padding: 0 14px; font-size: 14px; }
+@media (max-width: 900px) { .finder { grid-template-columns: minmax(0, 1fr); } .dials { position: static; } }
+@media (max-width: 560px) { .wine { grid-template-columns: 56px minmax(0, 1fr); padding: 18px; } .wine > svg { width: 56px; height: 118px; } .wine__side { grid-column: 1 / -1; flex-direction: row; justify-content: space-between; } }
+
+/* ---------- la caja ---------- */
+
+.box-wrap { margin-top: 48px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px 64px; align-items: center; }
+.box { position: relative; padding: 28px 28px 34px; border-radius: 8px; background: linear-gradient(180deg, #C9A57A, #B48A5E); box-shadow: inset 0 0 0 6px #A57C52, 0 30px 50px -30px rgba(59, 15, 26, .6); }
+.box::before { content: "LÍAS · LOGROÑO"; position: absolute; left: 0; right: 0; bottom: 8px; text-align: center; font-family: var(--serif); font-style: italic; font-size: 15px; letter-spacing: .3em; color: rgba(35, 22, 26, .55); }
+.slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.slot { position: relative; height: 170px; border-radius: 6px; background: #8E6941; box-shadow: inset 0 6px 12px rgba(0, 0, 0, .35); display: grid; place-items: end center; padding-bottom: 6px; }
+.slot button { padding: 0; border: 0; background: none; cursor: pointer; animation: drop .55s var(--spring) both; }
+.slot button svg { width: 56px; height: 150px; display: block; }
+.slot button:hover { filter: brightness(1.1); }
+@keyframes drop { from { transform: translateY(-160px); opacity: 0; } 60% { opacity: 1; } }
+.box-info h3 { font-family: var(--serif); font-weight: 600; font-size: 34px; line-height: 1.1; }
+.box-info p { margin-top: 12px; color: var(--soft); }
+.box-meter { margin-top: 24px; height: 6px; border-radius: 6px; background: var(--line); overflow: hidden; }
+.box-meter span { display: block; height: 6px; width: 0; background: var(--wine); transition: width .5s var(--ease); }
+.box-info .btn { margin-top: 28px; }
+.box-pill { position: fixed; right: 16px; bottom: 16px; z-index: 30; display: none; align-items: center; gap: 8px; min-height: 48px; padding: 0 18px; border-radius: 999px; border: 0; background: var(--wine); color: var(--paper); font-size: 15px; box-shadow: 0 10px 30px -10px rgba(59, 15, 26, .7); cursor: pointer; }
+@media (max-width: 860px) { .box-wrap { grid-template-columns: minmax(0, 1fr); } .slot { height: 140px; } .slot button svg { width: 46px; height: 124px; } .box-pill.is-on { display: inline-flex; } }
+
+/* ---------- rueda de aromas ---------- */
+
+.aromas { margin-top: 48px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px 64px; align-items: center; }
+.wheel { width: min(460px, 100%); margin: 0 auto; }
+.wheel svg { width: 100%; height: auto; overflow: visible; }
+/* El quesito que señalas se separa del resto, como si lo sacaras de la tabla;
+   el elegido se queda fuera. Los demás se apagan un poco para que destaque. */
+.seg { cursor: pointer; transition: transform .45s var(--spring), opacity .3s ease, filter .3s ease; }
+.seg path { stroke: var(--paper); stroke-width: 3; }
+.seg text { fill: #fff; font-family: var(--serif); font-style: italic; font-size: 19px; pointer-events: none; }
+.seg:hover, .seg:focus-visible, .seg.is-on { transform: translate(var(--dx), var(--dy)); filter: drop-shadow(0 10px 12px rgba(59, 15, 26, .35)); }
+.seg:hover path { filter: brightness(1.12); }
+.wheel:hover .seg:not(:hover):not(.is-on), .wheel.has-pick .seg:not(.is-on):not(:hover) { opacity: .5; }
+.seg:focus-visible { outline: none; }
+.seg:focus-visible path { stroke: var(--ink); }
+.aroma-card h3 { font-family: var(--serif); font-weight: 600; font-size: 40px; line-height: 1; }
+.aroma-card p { margin-top: 14px; color: var(--soft); }
+.aroma-card ul { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px; }
+.aroma-card li { padding: 6px 14px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); font-size: 14px; }
+@media (max-width: 860px) { .aromas { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------- catas ---------- */
+
+.events { margin-top: 48px; border-top: 1px solid var(--ink); }
+.event { display: grid; grid-template-columns: 120px minmax(0, 1fr) auto; gap: 24px; align-items: center; padding: 26px 0; border-bottom: 1px solid var(--line); }
+.event__date { font-family: var(--serif); line-height: 1; }
+.event__date b { display: block; font-size: 56px; font-weight: 500; }
+.event__date span { font-size: 18px; font-style: italic; color: var(--muted); }
+.event h3 { font-family: var(--serif); font-weight: 600; font-size: 28px; line-height: 1.1; }
+.event p { margin-top: 4px; color: var(--muted); font-size: 15px; }
+.seats { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px; }
+.seats i { width: 10px; height: 10px; border-radius: 50%; background: var(--wine); }
+.seats i.is-free { background: none; box-shadow: inset 0 0 0 1.5px var(--wine); }
+@media (max-width: 700px) { .event { grid-template-columns: 80px minmax(0, 1fr); } .event .btn { grid-column: 2; justify-self: start; } .event__date b { font-size: 42px; } }
+
+/* ---------- visítanos ---------- */
+
+.visit { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px 64px; align-items: center; }
+.visit__img { aspect-ratio: 4 / 3; border-radius: 200px 200px 12px 12px; overflow: hidden; }
+.visit__img img { width: 100%; height: 100%; object-fit: cover; }
+.status { margin-top: 24px; display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); font-size: 15px; }
+.status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #A89A92; }
+.status.is-open::before { background: #3E8E5A; animation: live 1.8s ease-out infinite; }
+@keyframes live { 0% { box-shadow: 0 0 0 0 rgba(62, 142, 90, .5); } 100% { box-shadow: 0 0 0 10px rgba(62, 142, 90, 0); } }
+.hours { margin-top: 20px; font-size: 15px; }
+.hours li { display: flex; justify-content: space-between; gap: 16px; padding: 9px 0; border-bottom: 1px solid var(--line); color: var(--soft); }
+.hours li.is-today { color: var(--wine); font-weight: 600; }
+@media (max-width: 860px) { .visit { grid-template-columns: minmax(0, 1fr); } }
+
+.foot { margin-top: clamp(72px, 9vw, 120px); padding-top: 24px; padding-bottom: 32px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 14px; color: var(--muted); }
+.foot a { text-decoration: none; }
+.foot a:hover { color: var(--wine); }
+
+/* ---------- aviso de ejemplo ---------- */
+
+.maketa { position: fixed; left: 16px; bottom: 16px; z-index: 40; display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 16px; border-radius: 999px; background: var(--ink); color: var(--paper); font-size: 14px; text-decoration: none; box-shadow: 0 10px 30px -12px rgba(35, 22, 26, .6); transition: background .25s ease; }
+.maketa:hover { background: var(--wine); }
+.is-embedded .maketa, .is-embedded .box-pill { display: none !important; }
+
+.demo { width: min(480px, calc(100% - 32px)); padding: 0; border: 0; border-radius: 20px; background: var(--card); color: var(--ink); box-shadow: 0 40px 80px -30px rgba(59, 15, 26, .5); }
+.demo::backdrop { background: rgba(35, 22, 26, .55); }
+.demo form { display: flex; flex-direction: column; gap: 16px; padding: 32px; }
+.demo h2 { font-family: var(--serif); font-weight: 600; font-size: 36px; line-height: 1; }
+.demo h2 em { color: var(--wine); }
+.demo p { color: var(--soft); }
+.demo__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .wine, .slot button, .status.is-open::before { animation: none; }
+  .seg, .match .p, .box-meter span { transition: none; }
+  .seg:hover, .seg:focus-visible, .seg.is-on { transform: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="top wrap">
+  <a class="brand" href="#inicio">Lías<span>.</span></a>
+  <nav aria-label="Principal">
+    <a href="#encuentra">Encuentra tu vino</a>
+    <a href="#aromas">Aromas</a>
+    <a href="#catas">Catas</a>
+    <a class="btn" href="#caja">Tu caja · <span data-box-count>0</span>/6</a>
+  </nav>
+</header>
+
+<main>
+  <section id="inicio" class="hero wrap" data-hero>
+    <div>
+      <p class="kicker">Vinoteca · Calle Laurel, Logroño</p>
+      <h1>Cada botella, <em>una conversación.</em></h1>
+      <p class="lead">Trescientas referencias de pequeñas bodegas de La Rioja y alrededores. Cuéntanos qué te gusta y te lo encontramos, aunque no sepas cómo se llama.</p>
+      <div class="hero__ctas">
+        <a class="btn btn--wine" href="#encuentra">Encuentra tu vino</a>
+        <a class="btn" href="#catas">Próximas catas</a>
+      </div>
+    </div>
+    <div class="glass" data-glass>
+      <svg viewBox="0 0 200 360" aria-hidden="true">
+        <defs>
+          <clipPath id="bowl"><path d="M44 34q-2 120 56 136 58-16 56-136z"/></clipPath>
+          <linearGradient id="liquid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8A1C35"/><stop offset="1" stop-color="#3B0F1A"/></linearGradient>
+          <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".0"/><stop offset=".25" stop-color="#fff" stop-opacity=".55"/><stop offset=".4" stop-color="#fff" stop-opacity="0"/></linearGradient>
+        </defs>
+        <g clip-path="url(#bowl)"><path data-liquid fill="url(#liquid)" d=""/></g>
+        <path d="M40 30q-2 126 60 142 62-16 60-142" fill="url(#shine)" opacity=".5"/>
+        <path d="M40 30q-2 126 60 142 62-16 60-142" fill="none" stroke="#23161A" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M100 172v128" stroke="#23161A" stroke-width="5" stroke-linecap="round"/>
+        <ellipse cx="100" cy="306" rx="52" ry="9" fill="none" stroke="#23161A" stroke-width="2.5"/>
+      </svg>
+      <p class="glass__hint" data-glass-hint>Baja despacio, que te servimos.</p>
+    </div>
+  </section>
+
+  <section id="encuentra" class="band">
+    <div class="section wrap">
+      <p class="kicker">Encuentra tu vino</p>
+      <h2 class="h2">Dinos cómo te gusta. <em>Elegimos tres.</em></h2>
+      <div class="finder">
+        <div class="dials">
+          <div class="dial">
+            <div class="dial__head"><label for="cuerpo">Cuerpo</label></div>
+            <input id="cuerpo" type="range" min="0" max="100" value="55" data-body>
+            <div class="dial__ends" aria-hidden="true"><span>ligero</span><span>potente</span></div>
+          </div>
+          <div class="dial">
+            <div class="dial__head"><label for="caracter">Carácter</label></div>
+            <input id="caracter" type="range" min="0" max="100" value="40" data-char>
+            <div class="dial__ends" aria-hidden="true"><span>clásico</span><span>atrevido</span></div>
+          </div>
+          <div>
+            <div class="dial__head"><span id="lbl-occ">Para</span></div>
+            <div class="chips" role="group" aria-labelledby="lbl-occ" data-occ>
+              <button type="button" aria-pressed="true" data-v="diario">Cualquier día</button>
+              <button type="button" aria-pressed="false" data-v="comida">Una comida especial</button>
+              <button type="button" aria-pressed="false" data-v="regalo">Regalar</button>
+              <button type="button" aria-pressed="false" data-v="brasa">Barbacoa</button>
+            </div>
+          </div>
+        </div>
+        <div class="picks" data-picks aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="caja" class="section wrap">
+    <p class="kicker">La caja de seis</p>
+    <h2 class="h2">Llena tu caja <em>a tu gusto.</em></h2>
+    <div class="box-wrap">
+      <div class="box"><div class="slots" data-slots></div></div>
+      <div class="box-info" aria-live="polite">
+        <h3 data-box-title>Tu caja está vacía</h3>
+        <p data-box-text>Añade botellas desde "Encuentra tu vino". Toca una botella de la caja para sacarla.</p>
+        <div class="box-meter" aria-hidden="true"><span data-box-meter></span></div>
+        <button type="button" class="btn btn--wine" data-box-go disabled>Pedir la caja</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="aromas" class="band">
+    <div class="section wrap">
+      <p class="kicker">Rueda de aromas</p>
+      <h2 class="h2">¿A qué <em>huele?</em></h2>
+      <div class="aromas">
+        <div class="wheel" data-wheel>
+          <svg viewBox="-220 -220 440 440" role="group" aria-label="Rueda de aromas"><g data-segs></g><circle r="70" fill="var(--paper)"/><text text-anchor="middle" y="8" font-family="Cormorant, serif" font-style="italic" font-size="24" fill="#6C5A5E" data-wheel-center>Toca uno</text></svg>
+        </div>
+        <div class="aroma-card" aria-live="polite">
+          <h3 data-aroma-name>Seis familias</h3>
+          <p data-aroma-text>Así describimos los vinos en la tienda: sin palabras raras. Toca una familia y te decimos qué botellas la tienen.</p>
+          <ul data-aroma-wines></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="catas" class="section wrap">
+    <p class="kicker">Catas de los jueves</p>
+    <h2 class="h2">Seis vinos, doce sillas <em>y una mesa larga.</em></h2>
+    <div class="events" data-events></div>
+  </section>
+
+  <section id="visitanos" class="band">
+    <div class="section wrap visit">
+      <div class="visit__img"><img loading="lazy" src="https://images.pexels.com/photos/434311/pexels-photo-434311.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Fila de barricas de roble en una bodega"></div>
+      <div>
+        <p class="kicker">Visítanos</p>
+        <h2 class="h2">En la Laurel, <em>sin prisa.</em></h2>
+        <p class="lead" style="margin-top: 20px">Abajo guardamos lo que no cabe en las estanterías. Si buscas algo concreto, pregunta: probablemente esté.</p>
+        <p class="status" data-status>Comprobando el horario…</p>
+        <ul class="hours" data-hours></ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <footer class="foot">
+      <span>© 2026 Lías · Logroño</span>
+      <a href="/trabajos.html" target="_top">Vinoteca ficticia · web de ejemplo de Maketa</a>
+      <a href="#inicio">Volver arriba ↑</a>
+    </footer>
+  </div>
+</main>
+
+<button type="button" class="box-pill" data-box-pill>Caja · <span data-pill-n>0</span>/6</button>
+<a class="maketa" href="/trabajos.html" target="_top">Web de ejemplo · <strong>Maketa</strong></a>
+
+<dialog class="demo" data-demo-note aria-labelledby="demo-title">
+  <form method="dialog">
+    <p class="kicker">Web de ejemplo</p>
+    <h2 id="demo-title">Lías no existe. <em>Tu tienda, sí.</em></h2>
+    <p>Esta vinoteca es inventada, igual que sus vinos: la web la he hecho para enseñar lo que se puede construir a mano. En tu web, la caja o la cata te llegarían como pedido o reserva.</p>
+    <div class="demo__actions">
+      <a class="btn btn--wine" href="/trabajos.html?quiero=cata#cata" target="_top">Quiero una web así</a>
+      <button class="btn" value="close">Seguir mirando</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+(function () {
+  var doc = document.documentElement
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
+  var mouse = matchMedia('(hover: hover) and (pointer: fine)').matches
+  var embedded = false
+  try { embedded = window.self !== window.top } catch (e) { embedded = true }
+  if (embedded) doc.classList.add('is-embedded')
+  else {
+    var va = document.createElement('script')
+    va.defer = true
+    va.src = '/_vercel/insights/script.js'
+    document.head.appendChild(va)
+  }
+  var $ = function (s, r) { return (r || document).querySelector(s) }
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)) }
+  var esc = function (t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] }) }
+  var note = $('[data-demo-note]')
+  var openNote = function () { if (note.showModal) note.showModal() }
+
+  /* ---------- la bodega (inventada) ---------- */
+  // body y char van de 0 a 100; occ, las ocasiones que le van; aromas, sus familias.
+  var WINES = [
+    { id: 'grillos', name: 'Ladera de los Grillos', year: 2022, type: 'tinto', label: '#C9A45C', zone: 'Rioja Alavesa', grape: 'Tempranillo', body: 55, char: 30, occ: ['diario', 'comida'], aromas: ['roja', 'madera'], note: 'Fresco y con fruta, de los que se terminan sin darte cuenta.', pair: 'Pinchos, embutido, verduras a la brasa' },
+    { id: 'cierzo', name: 'Viña del Cierzo Crianza', year: 2020, type: 'tinto', label: '#7A1F2E', zone: 'Rioja Alta', grape: 'Tempranillo y graciano', body: 72, char: 35, occ: ['comida', 'regalo'], aromas: ['negra', 'madera', 'especias'], note: 'El clásico que gusta a todos: fruta madura y su punto de barrica.', pair: 'Cordero asado, cochinillo' },
+    { id: 'piedra', name: 'Piedra Suelta', year: 2021, type: 'tinto', label: '#2F4A3A', zone: 'Rioja Oriental', grape: 'Garnacha', body: 60, char: 72, occ: ['brasa', 'diario'], aromas: ['roja', 'especias', 'tierra'], note: 'Garnacha de monte: fresca, especiada y con un fondo de tierra.', pair: 'Chuletillas al sarmiento' },
+    { id: 'abuela', name: 'Clarete de la Abuela', year: 2023, type: 'rosado', label: '#E8B4A8', zone: 'Rioja Alta', grape: 'Tempranillo y viura', body: 28, char: 55, occ: ['diario', 'brasa'], aromas: ['roja', 'flores'], note: 'Como los de antes: tinto ligero, frío y para picar algo.', pair: 'Patatas a la riojana, pimientos' },
+    { id: 'lias', name: 'Blanco sobre Lías', year: 2023, type: 'blanco', label: '#E9DFC6', zone: 'Rioja Alta', grape: 'Viura fermentada en barrica', body: 45, char: 50, occ: ['comida', 'regalo'], aromas: ['flores', 'madera'], note: 'Cremoso, con flor blanca y un final tostado muy suave.', pair: 'Bacalao, quesos curados' },
+    { id: 'n3', name: 'Tempranillo Blanco Nº 3', year: 2023, type: 'blanco', label: '#A8C4B0', zone: 'Rioja Baja', grape: 'Tempranillo blanco', body: 30, char: 78, occ: ['diario', 'comida'], aromas: ['flores', 'roja'], note: 'Una uva que casi nadie conoce: fruta blanca, flores y mucha frescura.', pair: 'Ensaladas, pescado a la plancha' },
+    { id: 'losas', name: 'Las Losas Gran Reserva', year: 2015, type: 'tinto', label: '#1E1418', zone: 'Rioja Alta', grape: 'Tempranillo, garnacha y mazuelo', body: 85, char: 18, occ: ['regalo', 'comida'], aromas: ['madera', 'tierra', 'especias'], note: 'Diez años de calma: cuero, tabaco y fruta en compota.', pair: 'Caza, guisos largos' },
+    { id: 'maturana', name: 'Maturana Tinta', year: 2021, type: 'tinto', label: '#5B3A7A', zone: 'Rioja Alta', grape: 'Maturana tinta', body: 76, char: 88, occ: ['regalo', 'brasa'], aromas: ['negra', 'especias'], note: 'Una variedad recuperada: pimienta, fruta negra y personalidad.', pair: 'Carnes rojas, setas' },
+    { id: 'sangrado', name: 'Rosado de Sangrado', year: 2023, type: 'rosado', label: '#D9707A', zone: 'Rioja Oriental', grape: 'Garnacha', body: 32, char: 42, occ: ['diario', 'brasa'], aromas: ['roja', 'flores'], note: 'Fresa, golosina y ganas de terraza.', pair: 'Arroces, pasta, barbacoa' },
+    { id: 'brut', name: 'Brut Nature de la Casa', year: 2020, type: 'espumoso', label: '#D7C08A', zone: 'Rioja', grape: 'Viura y tempranillo blanco', body: 38, char: 62, occ: ['regalo', 'comida'], aromas: ['flores', 'madera'], note: 'Burbuja fina y pan tostado: para brindar sin postureo.', pair: 'Aperitivo, marisco' }
+  ]
+  var GLASS = { tinto: '#2A0A12', rosado: '#E7A1A0', blanco: '#D8D3A0', espumoso: '#1F3A2A' }
+  function bottle(w, small) {
+    var g = GLASS[w.type], initials = w.name.split(' ').filter(function (x) { return x.length > 2 }).slice(0, 2).map(function (x) { return x[0] }).join('')
+    var dark = w.label === '#1E1418' || w.label === '#2F4A3A' || w.label === '#5B3A7A' || w.label === '#7A1F2E'
+    return '<svg viewBox="0 0 60 160" aria-hidden="true"><path d="M24 4h12v34c0 10 14 16 14 34v80c0 4-3 6-6 6H16c-3 0-6-2-6-6V72c0-18 14-24 14-34z" fill="' + g + '"/>' +
+      '<rect x="23" y="2" width="14" height="14" rx="2" fill="' + (w.type === 'espumoso' ? '#C9B27A' : '#4A1220') + '"/>' +
+      '<rect x="12" y="88" width="36" height="48" rx="2" fill="' + w.label + '"/>' +
+      (small ? '' : '<text x="30" y="117" text-anchor="middle" font-family="Cormorant, serif" font-style="italic" font-weight="600" font-size="16" fill="' + (dark ? '#F4EEE6' : '#23161A') + '">' + initials + '</text>') +
+      '<path d="M16 76v66" stroke="#fff" stroke-opacity=".25" stroke-width="3" stroke-linecap="round"/></svg>'
+  }
+
+  /* ---------- 1. la copa ---------- */
+  var liquid = $('[data-liquid]'), hero = $('[data-hero]'), glass = $('[data-glass]')
+  var level = .18, target = .18, wobble = 0, t0 = performance.now(), raf = 0
+  function wave(now) {
+    raf = 0
+    level += (target - level) * (reduce ? 1 : .08)
+    wobble *= .96
+    var t = (now - t0) / 1000, y0 = 170 - level * 136, amp = reduce ? 0 : 1.6 + wobble
+    var d = 'M20 ' + (y0 + Math.sin(t * 2.2) * amp).toFixed(1)
+    for (var x = 30; x <= 180; x += 10) d += ' L' + x + ' ' + (y0 + Math.sin(t * 2.2 + x / 18) * amp + Math.sin(t * 1.3 + x / 9) * amp * .4).toFixed(1)
+    liquid.setAttribute('d', d + ' L180 200 L20 200 Z')
+    if (glassOn && (!reduce || Math.abs(target - level) > .002)) raf = requestAnimationFrame(wave)
+  }
+  // La ola solo se mueve mientras la copa está en pantalla.
+  var glassOn = true
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (en) { glassOn = en[0].isIntersecting; if (glassOn && !raf) raf = requestAnimationFrame(wave) }).observe(glass)
+  }
+  function onScroll() {
+    var p = Math.max(0, Math.min(1, scrollY / Math.max(1, hero.offsetHeight * .75)))
+    target = .18 + p * .62
+    $('[data-glass-hint]').textContent = p > .85 ? 'Servida. ¿Buscamos la botella?' : 'Baja despacio, que te servimos.'
+    if (!raf) raf = requestAnimationFrame(wave)
+  }
+  addEventListener('scroll', onScroll, { passive: true })
+  onScroll()
+  if (mouse && !reduce) {
+    var lastX = null
+    glass.addEventListener('pointermove', function (e) { if (lastX !== null) wobble = Math.min(10, wobble + Math.abs(e.clientX - lastX) * .08); lastX = e.clientX })
+    glass.addEventListener('pointerleave', function () { lastX = null })
+  }
+
+  /* ---------- 2. encuentra tu vino ---------- */
+  var bodyIn = $('[data-body]'), charIn = $('[data-char]'), picks = $('[data-picks]'), occ = 'diario'
+  var box = []
+  function score(w) {
+    var dist = Math.hypot(w.body - bodyIn.value, w.char - charIn.value)
+    return Math.max(52, Math.min(98, Math.round(100 - dist * .55 - (w.occ.indexOf(occ) >= 0 ? 0 : 14))))
+  }
+  function drawPicks() {
+    var list = WINES.map(function (w) { return { w: w, s: score(w) } }).sort(function (a, b) { return b.s - a.s }).slice(0, 3)
+    picks.innerHTML = list.map(function (x, i) {
+      var w = x.w, inBox = box.length >= 6
+      return '<article class="wine" style="--d:' + (i * .08) + 's">' + bottle(w) +
+        '<div><h3>' + esc(w.name) + '</h3><p class="wine__meta">' + w.year + ' · ' + esc(w.zone) + ' · ' + esc(w.grape) + '</p>' +
+        '<p class="wine__note">' + esc(w.note) + '</p><p class="wine__pair">Con: ' + esc(w.pair.toLowerCase()) + '</p></div>' +
+        '<div class="wine__side"><div class="match" aria-label="Acierto ' + x.s + '%"><svg viewBox="0 0 64 64"><circle class="t" cx="32" cy="32" r="28"/><circle class="p" cx="32" cy="32" r="28" style="stroke-dashoffset:' + (176 * (1 - x.s / 100)).toFixed(1) + '"/></svg><b>' + x.s + '%</b></div>' +
+        '<button type="button" class="btn add" data-add="' + w.id + '"' + (inBox ? ' disabled' : '') + '>' + (inBox ? 'Caja llena' : 'A la caja') + '</button></div></article>'
+    }).join('')
+  }
+  var drawT = 0
+  function later() { clearTimeout(drawT); drawT = setTimeout(drawPicks, 120) }
+  bodyIn.addEventListener('input', later)
+  charIn.addEventListener('input', later)
+  $$('[data-occ] button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      $$('[data-occ] button').forEach(function (o) { o.setAttribute('aria-pressed', String(o === b)) })
+      occ = b.getAttribute('data-v')
+      drawPicks()
+    })
+  })
+  drawPicks()
+
+  /* ---------- 3. la caja de seis ---------- */
+  var slots = $('[data-slots]'), pill = $('[data-box-pill]')
+  var byId = function (id) { return WINES.filter(function (w) { return w.id === id })[0] }
+  function drawBox(added) {
+    var html = ''
+    for (var i = 0; i < 6; i++) {
+      var w = box[i] && byId(box[i])
+      html += '<div class="slot">' + (w ? '<button type="button" data-out="' + i + '" aria-label="Sacar ' + esc(w.name) + ' de la caja"' + (i === added ? '' : ' style="animation:none"') + '>' + bottle(w, true) + '</button>' : '') + '</div>'
+    }
+    slots.innerHTML = html
+    var n = box.length
+    $$('[data-box-count], [data-pill-n]').forEach(function (el) { el.textContent = n })
+    $('[data-box-meter]').style.width = (n / 6 * 100) + '%'
+    $('[data-box-title]').textContent = n === 0 ? 'Tu caja está vacía' : n < 6 ? n + ' de 6 botellas' : 'Caja completa'
+    $('[data-box-text]').textContent = n === 0 ? 'Añade botellas desde "Encuentra tu vino". Toca una botella de la caja para sacarla.'
+      : n < 6 ? 'Te ' + (6 - n === 1 ? 'falta una' : 'faltan ' + (6 - n)) + ' para completarla. Puedes repetir botella.'
+      : 'La preparamos con papel de seda y te la llevamos a casa si estás en Logroño.'
+    $('[data-box-go]').disabled = n === 0
+    pill.classList.toggle('is-on', n > 0)
+  }
+  picks.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-add]')
+    if (!b || box.length >= 6) return
+    box.push(b.getAttribute('data-add'))
+    drawBox(box.length - 1)
+    drawPicks()
+  })
+  slots.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-out]')
+    if (!b) return
+    box.splice(+b.getAttribute('data-out'), 1)
+    drawBox()
+    drawPicks()
+  })
+  $('[data-box-go]').addEventListener('click', openNote)
+  pill.addEventListener('click', function () { $('#caja').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }) })
+  drawBox()
+
+  /* ---------- 4. rueda de aromas ---------- */
+  var AROMAS = [
+    { id: 'roja', name: 'Fruta roja', c: '#B33A3A', text: 'Fresa, cereza, frambuesa. Vinos jóvenes y alegres, para beber frescos.' },
+    { id: 'negra', name: 'Fruta negra', c: '#4A1E2E', text: 'Mora, ciruela, arándano. Tintos con más cuerpo y madurez.' },
+    { id: 'flores', name: 'Flores', c: '#B9789E', text: 'Violeta, flor blanca, azahar. Blancos y rosados, y alguna garnacha.' },
+    { id: 'especias', name: 'Especias', c: '#B8743A', text: 'Pimienta, regaliz, clavo. Viene de la uva o de la barrica.' },
+    { id: 'madera', name: 'Madera', c: '#7C5B3E', text: 'Vainilla, tostado, coco. El paso por barrica de roble.' },
+    { id: 'tierra', name: 'Tierra', c: '#5E5A48', text: 'Cuero, tabaco, sotobosque. Vinos con años y paciencia.' }
+  ]
+  var segs = $('[data-segs]'), wheel = $('[data-wheel]'), NS = 'http://www.w3.org/2000/svg'
+  var R = 200, r = 70, step = Math.PI * 2 / AROMAS.length
+  var pt = function (rad, a) { return (rad * Math.cos(a)).toFixed(2) + ' ' + (rad * Math.sin(a)).toFixed(2) }
+  AROMAS.forEach(function (ar, i) {
+    var a0 = -Math.PI / 2 + i * step, a1 = a0 + step, mid = (a0 + a1) / 2
+    var g = document.createElementNS(NS, 'g')
+    g.setAttribute('class', 'seg'); g.setAttribute('tabindex', '0'); g.setAttribute('role', 'button'); g.setAttribute('aria-label', ar.name); g.setAttribute('data-id', ar.id)
+    g.style.setProperty('--dx', (18 * Math.cos(mid)).toFixed(1) + 'px')
+    g.style.setProperty('--dy', (18 * Math.sin(mid)).toFixed(1) + 'px')
+    g.innerHTML = '<path fill="' + ar.c + '" d="M' + pt(r, a0) + ' L' + pt(R, a0) + ' A' + R + ' ' + R + ' 0 0 1 ' + pt(R, a1) + ' L' + pt(r, a1) + ' A' + r + ' ' + r + ' 0 0 0 ' + pt(r, a0) + ' Z"/>' +
+      '<text text-anchor="middle" x="' + (135 * Math.cos(mid)).toFixed(1) + '" y="' + (135 * Math.sin(mid) + 6).toFixed(1) + '">' + ar.name + '</text>'
+    segs.appendChild(g)
+  })
+  var segEls = $$('.seg', segs), center = $('[data-wheel-center]'), picked = null
+  var aroma = function (id) { return AROMAS.filter(function (x) { return x.id === id })[0] }
+  function pickAroma(id) {
+    var ar = aroma(id)
+    picked = ar
+    wheel.classList.add('has-pick')
+    segEls.forEach(function (s) {
+      var on = s.getAttribute('data-id') === id
+      s.classList.toggle('is-on', on)
+      s.setAttribute('aria-pressed', String(on))
+    })
+    center.textContent = ar.name
+    $('[data-aroma-name]').textContent = ar.name
+    $('[data-aroma-text]').textContent = ar.text
+    $('[data-aroma-wines]').innerHTML = WINES.filter(function (w) { return w.aromas.indexOf(id) >= 0 }).map(function (w) { return '<li>' + esc(w.name) + '</li>' }).join('')
+  }
+  segs.addEventListener('click', function (e) { var s = e.target.closest('.seg'); if (s) pickAroma(s.getAttribute('data-id')) })
+  // Al pasar por encima, el centro de la rueda anticipa qué familia es.
+  segs.addEventListener('pointerover', function (e) { var s = e.target.closest('.seg'); if (s) center.textContent = aroma(s.getAttribute('data-id')).name })
+  segs.addEventListener('pointerleave', function () { center.textContent = picked ? picked.name : 'Toca uno' })
+  segs.addEventListener('keydown', function (e) { var s = e.target.closest('.seg'); if (s && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); pickAroma(s.getAttribute('data-id')) } })
+
+  /* ---------- 5. catas de los jueves ---------- */
+  var MONTHS = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre']
+  var logrono = function () { try { return new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Madrid' })) } catch (e) { return new Date() } }
+  var now = logrono(), thu = new Date(now)
+  thu.setDate(thu.getDate() + ((4 - thu.getDay() + 7) % 7))
+  if (thu.toDateString() === now.toDateString() && now.getHours() >= 19) thu.setDate(thu.getDate() + 7)
+  var THEMES = [
+    ['Garnachas de la Rioja Oriental', 'Seis garnachas de viñas viejas, de Alfaro a Aldeanueva.', 4],
+    ['Blancos que envejecen', 'Viura con años: de la barrica a la botella olvidada.', 9],
+    ['Uvas que casi desaparecen', 'Maturana, graciano y tempranillo blanco.', 12]
+  ]
+  $('[data-events]').innerHTML = THEMES.map(function (t, i) {
+    var d = new Date(thu); d.setDate(d.getDate() + i * 7)
+    var left = t[2], seats = ''
+    for (var s = 0; s < 12; s++) seats += '<i' + (s >= 12 - left ? ' class="is-free"' : '') + '></i>'
+    return '<article class="event"><div class="event__date"><b>' + d.getDate() + '</b><span>' + MONTHS[d.getMonth()] + '</span></div>' +
+      '<div><h3>' + t[0] + '</h3><p>Jueves a las 19:30 · ' + t[1] + '</p><div class="seats" aria-label="Quedan ' + left + ' de 12 plazas">' + seats + '</div></div>' +
+      '<button type="button" class="btn" data-seat>' + (left === 12 ? 'Sé el primero' : 'Quedan ' + left) + '</button></article>'
+  }).join('')
+  $$('[data-seat]').forEach(function (b) { b.addEventListener('click', openNote) })
+
+  /* ---------- 6. abierto ahora ---------- */
+  var DAYS = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
+  var SHIFTS = { 0: [[720, 900]], 1: [], 2: [[660, 840], [1080, 1290]], 3: [[660, 840], [1080, 1290]], 4: [[660, 840], [1080, 1290]], 5: [[660, 840], [1080, 1290]], 6: [[660, 840], [1080, 1290]] }
+  var hm = function (m) { return Math.floor(m / 60) + ':' + String(m % 60).padStart(2, '0') }
+  $('[data-hours]').innerHTML = [2, 3, 4, 5, 6, 0, 1].map(function (d) {
+    var s = SHIFTS[d]
+    return '<li' + (d === now.getDay() ? ' class="is-today"' : '') + '><span>' + DAYS[d] + '</span><span>' + (s.length ? s.map(function (x) { return hm(x[0]) + '–' + hm(x[1]) }).join(' · ') : 'Cerrado') + '</span></li>'
+  }).join('')
+  function status() {
+    var t = logrono(), m = t.getHours() * 60 + t.getMinutes(), el = $('[data-status]')
+    var cur = SHIFTS[t.getDay()].filter(function (s) { return m >= s[0] && m < s[1] })[0]
+    el.classList.toggle('is-open', !!cur)
+    el.textContent = cur ? 'Abierto ahora · hasta las ' + hm(cur[1]) : 'Cerrado ahora'
+  }
+  status()
+  setInterval(status, 30000)
+
+  note.addEventListener('click', function (e) { if (e.target === note) note.close() })
+})()
+</script>
+</body>
+</html>

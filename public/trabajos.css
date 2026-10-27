@@ -1,0 +1,132 @@
+/* Maketa · webs a medida (trabajos.html). Se carga después de landing.css y usa sus
+   tokens, botones, nav, cierre y pie: aquí solo va lo propio de esta página. */
+
+/* ---------- entrada ---------- */
+
+.jobs-hero { padding: clamp(64px, 9vw, 120px) 0 clamp(56px, 7vw, 96px); }
+.jobs-hero h1 { margin-top: 22px; max-width: 980px; font-size: clamp(44px, 6.6vw, 96px); font-weight: 760; line-height: 0.98; letter-spacing: -0.04em; text-wrap: balance; }
+.jobs-hero h1 .accent { color: var(--accent); }
+.jobs-hero .lead { margin-top: 28px; max-width: 640px; }
+
+/* ---------- las piezas ---------- */
+
+.jobs { padding: clamp(72px, 9vw, 120px) 0 clamp(80px, 10vw, 130px); background: var(--white); border-top: 1px solid var(--line-soft); }
+.jobs .wrap { display: flex; flex-direction: column; gap: clamp(80px, 10vw, 140px); }
+.job { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: clamp(36px, 5vw, 72px); align-items: center; }
+
+/* La web, funcionando, dentro de una ventana: es producto, así que lleva sombra. */
+.job__frame {
+  position: relative;
+  border-radius: 26px;
+  overflow: hidden;
+  background: var(--white);
+  box-shadow: 0 0 0 1px #ecebe6, 0 40px 80px -30px rgba(22, 23, 27, 0.35);
+  transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease);
+}
+.job__frame:hover { transform: translateY(-8px); box-shadow: 0 0 0 1px #e3e1db, 0 50px 90px -30px rgba(22, 23, 27, 0.45); }
+.job__bar { display: grid; grid-template-columns: auto auto auto minmax(0, 1fr); align-items: center; gap: 7px; height: 42px; padding: 0 16px; background: var(--panel); border-bottom: 1px solid var(--line); }
+.job__bar i { width: 10px; height: 10px; border-radius: 10px; background: #dcdad3; }
+.job__bar span { justify-self: center; margin-right: 37px; padding: 3px 14px; border-radius: 999px; background: var(--white); color: var(--ink-faint); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.job__screen { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: #edecef; }
+/* El iframe se pinta a 1440 px de ancho y se reduce al hueco (la escala la pone trabajos.js). */
+.job__screen iframe { position: absolute; left: 0; top: 0; width: 1440px; height: 900px; border: 0; transform-origin: 0 0; transform: scale(var(--s, 0.5)); pointer-events: none; }
+.job__hit { position: absolute; inset: 0; z-index: 2; border-radius: inherit; }
+.job__hit:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
+
+.job__copy h2 { margin-top: 14px; font-size: clamp(40px, 4.6vw, 64px); font-weight: 760; line-height: 0.98; letter-spacing: -0.04em; }
+.job__copy .lead { margin-top: 20px; max-width: 520px; }
+.job__list { margin-top: 26px; padding-top: 24px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 12px; }
+.job__list li { position: relative; padding-left: 22px; font-size: 17px; line-height: 1.5; }
+.job__list li::before { content: ''; position: absolute; left: 0; top: 0.62em; width: 8px; height: 8px; border-radius: 8px; background: var(--accent); }
+.job__ctas { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 12px; }
+.job__ctas .btn { cursor: pointer; border: 0; }
+
+/* Una sí y otra no, la ventana pasa a la derecha: la lista respira. */
+.job--flip { grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr); }
+.job--flip .job__frame { order: 2; }
+
+@media (max-width: 960px) {
+  .job, .job--flip { grid-template-columns: minmax(0, 1fr); }
+  .job--flip .job__frame { order: 0; }
+}
+@media (max-width: 560px) {
+  .job__ctas { display: grid; grid-template-columns: 1fr; }
+  .job__bar span { margin-right: 0; }
+}
+
+/* ---------- cómo se hace ---------- */
+
+.how { padding: clamp(80px, 10vw, 130px) 0; }
+.how__in { display: flex; flex-wrap: wrap; gap: 64px; align-items: flex-start; }
+.how__side { flex: 1 1 340px; position: sticky; top: 120px; }
+.how__side h2 { font-size: clamp(38px, 4.2vw, 60px); }
+.how__side .lead { margin-top: 22px; max-width: 400px; }
+.how__list { flex: 999 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+.how__list li { display: flex; gap: 22px; align-items: flex-start; padding: 30px 34px; border-radius: 22px; background: var(--white); border: 1px solid var(--line); }
+.how__n { flex: none; width: 40px; height: 40px; border-radius: 40px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); font-weight: 750; }
+.how__list h3 { font-size: 24px; font-weight: 720; letter-spacing: -0.02em; line-height: 1.2; }
+.how__list p { margin-top: 8px; color: var(--ink-soft); line-height: 1.6; }
+@media (max-width: 900px) { .how__side { position: static; } }
+@media (max-width: 560px) { .how__list li { padding: 24px 22px; gap: 16px; } }
+
+/* ---------- "Quiero algo así" ---------- */
+
+.want {
+  width: min(520px, calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
+  /* landing.css pone `* { margin: 0 }`: sin esto el diálogo no se centra. */
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 26px;
+  background: var(--white);
+  color: var(--ink);
+  box-shadow: 0 50px 100px -40px rgba(22, 23, 27, 0.45);
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.want::backdrop { background: rgba(19, 20, 24, 0.55); }
+.want[open] { animation: fade 0.4s var(--ease) both; }
+.want__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 30px 32px 0; }
+.want__head h2 { margin-top: 8px; font-size: 26px; font-weight: 720; letter-spacing: -0.02em; line-height: 1.15; }
+.want__form, .want__done { display: flex; flex-direction: column; gap: 16px; padding: 18px 32px 32px; }
+.want__intro { color: var(--ink-soft); font-size: 16px; line-height: 1.55; }
+.want__hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.want__field { display: flex; flex-direction: column; gap: 6px; }
+.want__field > span { font-size: 14px; font-weight: 650; }
+.want__field small { margin-left: 6px; font-size: 13px; font-weight: 500; color: var(--ink-faint); }
+.want__field input, .want__field textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1.5px solid #d9d7d0;
+  background: var(--white);
+  font: inherit;
+  font-size: 17px;
+  color: var(--ink);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.want__field textarea { padding: 12px 14px; resize: vertical; line-height: 1.5; }
+.want__field input:focus, .want__field textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.want__field input[aria-invalid='true'], .want__consent input[aria-invalid='true'] { border-color: #b3261e; }
+.want__err { font-style: normal; font-size: 14px; color: #b3261e; }
+.want__err:empty { display: none; }
+.want__consent { display: flex; gap: 12px; align-items: flex-start; font-size: 15px; line-height: 1.5; color: var(--ink-soft); }
+.want__consent input { flex: none; width: 20px; height: 20px; margin-top: 2px; accent-color: var(--accent); }
+.want__error { font-size: 15px; color: #b3261e; }
+.want__error[hidden], .want__done[hidden], .want__form[hidden] { display: none; }
+.want__done-title { font-size: 26px; font-weight: 720; letter-spacing: -0.02em; }
+.want__done p:not(.want__done-title) { color: var(--ink-soft); }
+.want__done .btn { align-self: flex-start; }
+@media (max-width: 560px) {
+  .want__head { padding: 24px 22px 0; }
+  .want__form, .want__done { padding: 16px 22px 24px; }
+}
+
+@media (hover: none) {
+  .job__frame:hover { transform: none; box-shadow: 0 0 0 1px #ecebe6, 0 40px 80px -30px rgba(22, 23, 27, 0.35); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .job__frame:hover { transform: none; }
+}
