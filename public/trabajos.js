@@ -27,7 +27,7 @@
     var live = e.target.closest && e.target.closest('[data-live]')
     if (!live) return
     var job = live.closest('[data-piece]')
-    if (job) track('custom_live_opened', { piece: job.getAttribute('data-piece') })
+    if (job) track('custom_live_opened', { piece: job.getAttribute('data-piece'), source: 'trabajos' })
   })
 
   /* ---------- 2. "Quiero algo así" ---------- */

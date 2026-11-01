@@ -78,7 +78,9 @@
       }
     </script>
 
-    <!-- Vercel Web Analytics (activar en Vercel → pestaña Analytics). Sin cookies. -->
+    <!-- Vercel Web Analytics (activar en Vercel → pestaña Analytics). Sin cookies.
+         La cola recoge los eventos que salten antes de que cargue el script. -->
+    <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments) }</script>
     <script defer src="/_vercel/insights/script.js"></script>
   </head>
   <body>
@@ -93,8 +95,7 @@
           Maketa
         </a>
         <nav class="nav__links" aria-label="Principal">
-          <a class="navlink" href="#plantillas">Plantillas</a>
-          <a class="navlink" href="/trabajos.html">A medida</a>
+          <a class="navlink" href="#a-medida">A medida</a>
           <a class="navlink" href="#como-funciona">Cómo funciona</a>
           <a class="navlink" href="#precio">Precio</a>
           <a class="btn btn--primary btn--sm" href="/app.html">Diseñar mi web <span class="arrow"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></a>
@@ -236,137 +237,116 @@
         </div>
       </section>
 
-      <!-- Plantillas por negocio: carrusel circular de webs dibujadas. Son de ejemplo
-           (no hay clientes todavía) y cada una abre el configurador en su sector. -->
-      <section id="plantillas" class="tpls">
+      <!-- Webs a medida: carrusel circular con capturas de las demos de public/trabajos/.
+           La demo de arriba ya enseña Maketa por sector; aquí va lo que se hace a mano.
+           Los negocios son inventados y cada tarjeta abre la web funcionando. -->
+      <section id="a-medida" class="tpls">
         <div class="wrap tpls__head">
-          <h2 class="h-xl reveal" style="font-size: clamp(38px, 5vw, 72px)">Así quedaría la tuya</h2>
-          <p class="lead reveal" style="--d: 0.08s">Cada negocio tiene su plantilla de partida, y cada una admite el estilo que quieras. Elige la que más se parezca a lo tuyo y hazla tuya.</p>
+          <p class="eyebrow reveal">Hechas a mano</p>
+          <h2 class="h-xl reveal" style="font-size: clamp(38px, 5vw, 72px)">¿Quieres algo único? Lo hago a mano.</h2>
+          <p class="lead reveal" style="--d: 0.08s">Webs que dan ganas de tocar, cada una pensada para un negocio. Arrastra, gira, enciende la luz…</p>
         </div>
-        <div id="flow" class="flow" data-nosnippet role="region" aria-roledescription="carrusel" aria-label="Plantillas por negocio. Usa las flechas del teclado para cambiar." tabindex="0">
-          <div class="flow__item" role="group" aria-roledescription="plantilla" aria-label="1 de 7: Clínica dental">
-            <a class="tcard tcard--stack" href="/app.html?sector=medical-wellness" style="--bg: #ffffff; --fg: #16171b; --accent-c: #187567; --on: #fff; --ln: #e7ece9; --tint: #e3f2ef; --edge: #ecebe6; --r: 8px; --block: 14px; --font-c: system-ui, -apple-system, 'Segoe UI', sans-serif;" aria-label="Usar la plantilla Clínica dental">
+        <div id="flow" class="flow" data-nosnippet role="region" aria-roledescription="carrusel" aria-label="Webs a medida. Usa las flechas del teclado para cambiar." tabindex="0">
+          <div class="flow__item" role="group" aria-roledescription="web a medida" aria-label="1 de 8: Restaurante">
+            <a class="tcard tcard--shot" href="/trabajos/comanda.html" data-piece="comanda" aria-label="Ver en vivo la web de ejemplo de restaurante (Comanda)">
               <span class="tcard__web">
-                <span class="tc__top"><span class="tc__name">Clínica Ordóñez</span><span class="tc__btn">Pedir cita</span></span>
-                <span class="tc__kicker">ODONTOLOGÍA FAMILIAR · VALLADOLID</span>
-                <span class="tc__title">Ir al dentista sin que se te haga un nudo</span>
-                <span class="tc__line" style="width: 88%; margin-top: 14px"></span><span class="tc__line" style="width: 64%"></span>
-                <span class="tc__ctas"><span class="tc__cta tc__cta--main">Pedir cita<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span><span class="tc__cta tc__cta--alt">Ver tratamientos</span></span>
-                <span class="tc__art"><svg class="tc__icon" width="62" height="62" viewBox="0 0 24 24" aria-hidden="true" stroke-width="1.4"><path d="M12 5.5c-1.6-1.6-4.6-2-6.3-.3-2 2-1.2 5 .1 7.4.9 1.7 1 3.4 1.4 5.5.3 1.6 1.1 2.4 2 2.4 1 0 1.4-1.2 1.6-2.6.2-1.5.5-2.6 1.2-2.6s1 1.1 1.2 2.6c.2 1.4.6 2.6 1.6 2.6.9 0 1.7-.8 2-2.4.4-2.1.5-3.8 1.4-5.5 1.3-2.4 2.1-5.4.1-7.4-1.7-1.7-4.7-1.3-6.3.3z" /></svg></span>
+                <picture><source type="image/avif" srcset="/trabajos/capturas/comanda.avif" /><img src="/trabajos/capturas/comanda.jpg" alt="" width="720" height="940" loading="lazy" decoding="async" /></picture>
+                <video class="tc__video" data-src="/trabajos/videos/comanda.mp4" muted playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
               </span>
-              <span class="tc__meta"><span class="tc__label">Clínica dental</span></span>
-              <span class="tc__tag">Cercana y tranquila</span>
+              <span class="tc__meta"><span class="tc__label">Restaurante</span></span>
+              <span class="tc__tag">Comanda</span>
             </a>
           </div>
-          <div class="flow__item" role="group" aria-roledescription="plantilla" aria-label="2 de 7: Despacho de abogados">
-            <a class="tcard tcard--center" href="/app.html?sector=corporate-legal" style="--bg: #fbf8f2; --fg: #1d2a4d; --accent-c: #1d2a4d; --on: #fff; --ln: #e6e0d3; --tint: #ece6d8; --edge: #e8e2d4; --r: 2px; --block: 4px; --font-c: Georgia, 'Times New Roman', serif;" aria-label="Usar la plantilla Despacho de abogados">
+          <div class="flow__item" role="group" aria-roledescription="web a medida" aria-label="2 de 8: Estudio de arquitectura">
+            <a class="tcard tcard--shot" href="/trabajos/rayos-x.html" data-piece="rayos-x" aria-label="Ver en vivo la web de ejemplo de estudio de arquitectura (Rayos X)">
               <span class="tcard__web">
-                <span class="tc__top"><span class="tc__name">Ferrer &amp; Nieto</span><span class="tc__btn">Consulta inicial</span></span>
-                <span class="tc__mid">
-                  <span class="tc__badge"><svg class="tc__icon" width="38" height="38" viewBox="0 0 24 24" aria-hidden="true" stroke-width="1.5"><path d="M12 3v18M7 21h10M5 7h14M12 5.5V7M5 7l-3 7a3.5 3.5 0 0 0 6 0L5 7zm14 0l-3 7a3.5 3.5 0 0 0 6 0l-3-7z" /></svg></span>
-                  <span class="tc__kicker">LABORAL Y MERCANTIL · ZARAGOZA</span>
-                  <span class="tc__title">Que el papeleo no decida por ti</span>
-                  <span class="tc__line" style="width: 80%; margin-top: 14px"></span><span class="tc__line" style="width: 56%"></span>
-                  <span class="tc__ctas"><span class="tc__cta tc__cta--main">Consulta inicial<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></span>
-                </span>
-              </span>
-              <span class="tc__meta"><span class="tc__label">Despacho de abogados</span></span>
-              <span class="tc__tag">Seria y sin jerga</span>
-            </a>
-          </div>
-          <div class="flow__item" role="group" aria-roledescription="plantilla" aria-label="3 de 7: Estudio de arquitectura">
-            <a class="tcard tcard--bleed" href="/app.html?sector=real-estate" style="--bg: #f2f1ee; --fg: #2b2d34; --accent-c: #2b2d34; --on: #fff; --ln: #cfccc4; --tint: #e2e0da; --edge: #e4e2dc; --r: 0px; --block: 0px; --font-c: Georgia, 'Times New Roman', serif;" aria-label="Usar la plantilla Estudio de arquitectura">
-              <span class="tcard__web">
-                <span class="tc__bigring" aria-hidden="true"></span>
-                <span class="tc__bigicon"><svg class="tc__icon" width="140" height="140" viewBox="0 0 24 24" aria-hidden="true" stroke-width="1"><path d="M3 11.5L12 4l9 7.5M5.5 9.5V20h13V9.5M10 20v-5.5h4V20" /></svg></span>
-                <span class="tc__top"><span class="tc__name">Estudio Lomas</span><span class="tc__btn">Hablemos</span></span>
-                <span class="tc__foot">
-                  <span class="tc__kicker">VIVIENDA UNIFAMILIAR · ASTURIAS</span>
-                  <span class="tc__title">Casas que se parecen a quien vive en ellas</span>
-                  <span class="tc__ctas"><span class="tc__cta tc__cta--main">Hablemos<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span><span class="tc__cta tc__cta--alt">Ver proyectos</span></span>
-                </span>
+                <picture><source type="image/avif" srcset="/trabajos/capturas/rayos-x.avif" /><img src="/trabajos/capturas/rayos-x.jpg" alt="" width="720" height="940" loading="lazy" decoding="async" /></picture>
+                <video class="tc__video" data-src="/trabajos/videos/rayos-x.mp4" muted playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
               </span>
               <span class="tc__meta"><span class="tc__label">Estudio de arquitectura</span></span>
-              <span class="tc__tag">Que hable el espacio</span>
+              <span class="tc__tag">Rayos X</span>
             </a>
           </div>
-          <div class="flow__item" role="group" aria-roledescription="plantilla" aria-label="4 de 7: Escuela infantil">
-            <a class="tcard tcard--center" href="/app.html?sector=kids-care" style="--bg: #fff6f1; --fg: #3a2420; --accent-c: #c2401f; --on: #fff; --ln: #f4ddd3; --tint: #fde3d8; --edge: #f6e2d9; --r: 999px; --block: 22px; --font-c: 'Trebuchet MS', 'Avenir Next', system-ui, sans-serif;" aria-label="Usar la plantilla Escuela infantil">
+          <div class="flow__item" role="group" aria-roledescription="web a medida" aria-label="3 de 8: Estudio de fotografía">
+            <a class="tcard tcard--shot" href="/trabajos/analogica.html" data-piece="analogica" aria-label="Ver en vivo la web de ejemplo de estudio de fotografía (Analógica)">
               <span class="tcard__web">
-                <span class="tc__top"><span class="tc__name">Escuela Altamira</span><span class="tc__btn">Pedir visita</span></span>
-                <span class="tc__mid">
-                  <span class="tc__badge"><svg class="tc__icon" width="38" height="38" viewBox="0 0 24 24" aria-hidden="true" stroke-width="1.5"><path d="M4 13h7v7H4zM13 13h7v7h-7zM8.5 4h7v7h-7z" /></svg></span>
-                  <span class="tc__kicker">ESCUELA INFANTIL · 0 A 3 AÑOS</span>
-                  <span class="tc__title">El sitio donde tu hijo aprende a estar sin ti</span>
-                  <span class="tc__line" style="width: 80%; margin-top: 14px"></span><span class="tc__line" style="width: 56%"></span>
-                  <span class="tc__ctas"><span class="tc__cta tc__cta--main">Pedir visita<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></span>
-                </span>
+                <picture><source type="image/avif" srcset="/trabajos/capturas/analogica.avif" /><img src="/trabajos/capturas/analogica.jpg" alt="" width="720" height="940" loading="lazy" decoding="async" /></picture>
+                <video class="tc__video" data-src="/trabajos/videos/analogica.mp4" muted playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
               </span>
-              <span class="tc__meta"><span class="tc__label">Escuela infantil</span></span>
-              <span class="tc__tag">Cálida y con color</span>
+              <span class="tc__meta"><span class="tc__label">Estudio de fotografía</span></span>
+              <span class="tc__tag">Analógica</span>
             </a>
           </div>
-          <div class="flow__item" role="group" aria-roledescription="plantilla" aria-label="5 de 7: Restaurante · De mantel">
-            <a class="tcard tcard--bleed" href="/app.html?sector=fine-dining" style="--bg: #1a1410; --fg: #f2e6d0; --accent-c: #c9a25e; --on: #1a1410; --ln: #4a3b2d; --tint: #211a14; --edge: #2a211a; --r: 2px; --block: 6px; --font-c: Georgia, 'Times New Roman', serif;" aria-label="Usar la plantilla Restaurante · De mantel">
+          <div class="flow__item" role="group" aria-roledescription="web a medida" aria-label="4 de 8: Fisioterapia y pilates">
+            <a class="tcard tcard--shot" href="/trabajos/anatomia.html" data-piece="anatomia" aria-label="Ver en vivo la web de ejemplo de fisioterapia y pilates (Anatomía)">
               <span class="tcard__web">
-                <span class="tc__bigring" aria-hidden="true"></span>
-                <span class="tc__bigicon"><svg class="tc__icon" width="140" height="140" viewBox="0 0 24 24" aria-hidden="true" stroke-width="1"><path d="M12 19a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 3v6.5M1 3v3.5a1.5 1.5 0 0 0 3 0V3M2.5 9.5V21M21.5 3c-1.5 1.5-2 4-2 6.5h2V21" /></svg></span>
-                <span class="tc__top"><span class="tc__name">Casa Mendaro</span><span class="tc__btn">Reservar mesa</span></span>
-                <span class="tc__foot">
-                  <span class="tc__kicker">COCINA DE TEMPORADA · SAN SEBASTIÁN</span>
-                  <span class="tc__title">Lo que hay hoy depende de lo que hubo esta mañana</span>
-                  <span class="tc__ctas"><span class="tc__cta tc__cta--main">Reservar mesa<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span><span class="tc__cta tc__cta--alt">Ver la carta</span></span>
-                </span>
+                <picture><source type="image/avif" srcset="/trabajos/capturas/anatomia.avif" /><img src="/trabajos/capturas/anatomia.jpg" alt="" width="720" height="940" loading="lazy" decoding="async" /></picture>
+                <video class="tc__video" data-src="/trabajos/videos/anatomia.mp4" muted playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
               </span>
-              <span class="tc__meta"><span class="tc__label">Restaurante · De mantel</span></span>
-              <span class="tc__tag">Para reservar con tiempo</span>
+              <span class="tc__meta"><span class="tc__label">Fisioterapia y pilates</span></span>
+              <span class="tc__tag">Anatomía</span>
             </a>
           </div>
-          <div class="flow__item" role="group" aria-roledescription="plantilla" aria-label="6 de 7: Restaurante · Clay">
-            <a class="tcard tcard--center" href="/app.html?sector=fine-dining" style="--bg: #efe8ff; --fg: #2e1f5e; --accent-c: #6a4cf0; --on: #fff; --ln: #ddd2fb; --tint: #e2d8ff; --edge: #e4dcfb; --r: 999px; --block: 26px; --font-c: 'Trebuchet MS', 'Avenir Next', system-ui, sans-serif; --glow: 0 6px 14px rgba(122,92,255,.35);" aria-label="Usar la plantilla Restaurante · Clay">
+          <div class="flow__item" role="group" aria-roledescription="web a medida" aria-label="5 de 8: Estudio de diseño gráfico">
+            <a class="tcard tcard--shot" href="/trabajos/mesa-de-trabajo.html" data-piece="mesa-de-trabajo" aria-label="Ver en vivo la web de ejemplo de estudio de diseño gráfico (Mesa de trabajo)">
               <span class="tcard__web">
-                <span class="tc__top"><span class="tc__name">Casa Mendaro</span><span class="tc__btn">Reservar mesa</span></span>
-                <span class="tc__mid">
-                  <span class="tc__badge"><svg class="tc__icon" width="38" height="38" viewBox="0 0 24 24" aria-hidden="true" stroke-width="1.5"><path d="M12 19a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 3v6.5M1 3v3.5a1.5 1.5 0 0 0 3 0V3M2.5 9.5V21M21.5 3c-1.5 1.5-2 4-2 6.5h2V21" /></svg></span>
-                  <span class="tc__kicker">COCINA DE TEMPORADA · SAN SEBASTIÁN</span>
-                  <span class="tc__title">Lo que hay hoy depende de lo que hubo esta mañana</span>
-                  <span class="tc__line" style="width: 80%; margin-top: 14px"></span><span class="tc__line" style="width: 56%"></span>
-                  <span class="tc__ctas"><span class="tc__cta tc__cta--main">Reservar mesa<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></span>
-                </span>
+                <picture><source type="image/avif" srcset="/trabajos/capturas/mesa-de-trabajo.avif" /><img src="/trabajos/capturas/mesa-de-trabajo.jpg" alt="" width="720" height="940" loading="lazy" decoding="async" /></picture>
+                <video class="tc__video" data-src="/trabajos/videos/mesa-de-trabajo.mp4" muted playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
               </span>
-              <span class="tc__meta"><span class="tc__label">Restaurante · Clay</span></span>
-              <span class="tc__tag">El mismo, más amable</span>
+              <span class="tc__meta"><span class="tc__label">Estudio de diseño gráfico</span></span>
+              <span class="tc__tag">Mesa de trabajo</span>
             </a>
           </div>
-          <div class="flow__item" role="group" aria-roledescription="plantilla" aria-label="7 de 7: Restaurante · Neón">
-            <a class="tcard tcard--stack" href="/app.html?sector=fine-dining" style="--bg: #0b0a14; --fg: #ffffff; --accent-c: #ff2bd6; --on: #14061a; --ln: #2a2643; --tint: #151229; --edge: #1c1930; --r: 6px; --block: 10px; --font-c: system-ui, -apple-system, 'Segoe UI', sans-serif; --glow: 0 0 18px rgba(255,43,214,.6); --tglow: 0 0 18px rgba(255,43,214,.45);" aria-label="Usar la plantilla Restaurante · Neón">
+          <div class="flow__item" role="group" aria-roledescription="web a medida" aria-label="6 de 8: Vinoteca">
+            <a class="tcard tcard--shot" href="/trabajos/cata.html" data-piece="cata" aria-label="Ver en vivo la web de ejemplo de vinoteca (Cata)">
               <span class="tcard__web">
-                <span class="tc__top"><span class="tc__name">Casa Mendaro</span><span class="tc__btn">Reservar mesa</span></span>
-                <span class="tc__kicker">COCINA DE TEMPORADA · SAN SEBASTIÁN</span>
-                <span class="tc__title">Lo que hay hoy depende de lo que hubo esta mañana</span>
-                <span class="tc__line" style="width: 88%; margin-top: 14px"></span><span class="tc__line" style="width: 64%"></span>
-                <span class="tc__ctas"><span class="tc__cta tc__cta--main">Reservar mesa<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span><span class="tc__cta tc__cta--alt">Ver la carta</span></span>
-                <span class="tc__art"><svg class="tc__icon" width="62" height="62" viewBox="0 0 24 24" aria-hidden="true" stroke-width="1.4"><path d="M12 19a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 3v6.5M1 3v3.5a1.5 1.5 0 0 0 3 0V3M2.5 9.5V21M21.5 3c-1.5 1.5-2 4-2 6.5h2V21" /></svg></span>
+                <picture><source type="image/avif" srcset="/trabajos/capturas/cata.avif" /><img src="/trabajos/capturas/cata.jpg" alt="" width="720" height="940" loading="lazy" decoding="async" /></picture>
+                <video class="tc__video" data-src="/trabajos/videos/cata.mp4" muted playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
               </span>
-              <span class="tc__meta"><span class="tc__label">Restaurante · Neón</span></span>
-              <span class="tc__tag">El mismo, para la noche</span>
+              <span class="tc__meta"><span class="tc__label">Vinoteca</span></span>
+              <span class="tc__tag">Cata</span>
+            </a>
+          </div>
+          <div class="flow__item" role="group" aria-roledescription="web a medida" aria-label="7 de 8: Asesoría">
+            <a class="tcard tcard--shot" href="/trabajos/reticula.html" data-piece="reticula" aria-label="Ver en vivo la web de ejemplo de asesoría (Retícula suiza)">
+              <span class="tcard__web">
+                <picture><source type="image/avif" srcset="/trabajos/capturas/reticula.avif" /><img src="/trabajos/capturas/reticula.jpg" alt="" width="720" height="940" loading="lazy" decoding="async" /></picture>
+                <video class="tc__video" data-src="/trabajos/videos/reticula.mp4" muted playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+              </span>
+              <span class="tc__meta"><span class="tc__label">Asesoría</span></span>
+              <span class="tc__tag">Retícula suiza</span>
+            </a>
+          </div>
+          <div class="flow__item" role="group" aria-roledescription="web a medida" aria-label="8 de 8: Academia de idiomas">
+            <a class="tcard tcard--shot" href="/trabajos/apuntes.html" data-piece="apuntes" aria-label="Ver en vivo la web de ejemplo de academia de idiomas (Apuntes)">
+              <span class="tcard__web">
+                <picture><source type="image/avif" srcset="/trabajos/capturas/apuntes.avif" /><img src="/trabajos/capturas/apuntes.jpg" alt="" width="720" height="940" loading="lazy" decoding="async" /></picture>
+                <video class="tc__video" data-src="/trabajos/videos/apuntes.mp4" muted playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+              </span>
+              <span class="tc__meta"><span class="tc__label">Academia de idiomas</span></span>
+              <span class="tc__tag">Apuntes</span>
             </a>
           </div>
         </div>
         <p id="flow-status" class="sr-only" aria-live="polite"></p>
         <div class="flow__ctrl">
-          <button id="flow-prev" type="button" class="round-btn" aria-label="Plantilla anterior"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg></button>
+          <button id="flow-prev" type="button" class="round-btn" aria-label="Web anterior"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg></button>
           <div id="flow-dots" class="dots">
-          <button type="button" class="dot" aria-label="Clínica dental" aria-current="true"></button>
-          <button type="button" class="dot" aria-label="Despacho de abogados" aria-current="false"></button>
+          <button type="button" class="dot" aria-label="Restaurante" aria-current="true"></button>
           <button type="button" class="dot" aria-label="Estudio de arquitectura" aria-current="false"></button>
-          <button type="button" class="dot" aria-label="Escuela infantil" aria-current="false"></button>
-          <button type="button" class="dot" aria-label="Restaurante · De mantel" aria-current="false"></button>
-          <button type="button" class="dot" aria-label="Restaurante · Clay" aria-current="false"></button>
-          <button type="button" class="dot" aria-label="Restaurante · Neón" aria-current="false"></button>
+          <button type="button" class="dot" aria-label="Estudio de fotografía" aria-current="false"></button>
+          <button type="button" class="dot" aria-label="Fisioterapia y pilates" aria-current="false"></button>
+          <button type="button" class="dot" aria-label="Estudio de diseño gráfico" aria-current="false"></button>
+          <button type="button" class="dot" aria-label="Vinoteca" aria-current="false"></button>
+          <button type="button" class="dot" aria-label="Asesoría" aria-current="false"></button>
+          <button type="button" class="dot" aria-label="Academia de idiomas" aria-current="false"></button>
           </div>
-          <button id="flow-next" type="button" class="round-btn" aria-label="Plantilla siguiente"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg></button>
+          <button id="flow-next" type="button" class="round-btn" aria-label="Web siguiente"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg></button>
           <button id="flow-toggle" type="button" class="round-btn round-btn--sm flow__toggle" aria-pressed="false" aria-label="Pausar el carrusel"><svg class="ico ico--pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12" /></svg><svg class="ico ico--play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10-6.5z" /></svg></button>
+        </div>
+        <div class="tpls__cta reveal">
+          <p class="tpls__note">Son ejemplos: si te gusta una, la hago para tu negocio. El precio depende de lo que lleve, y lo sabes antes de empezar.</p>
+          <a class="btn btn--quiet" href="/trabajos.html" data-piece-index>Ver todas, con lo que lleva cada una <span class="arrow"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></a>
         </div>
       </section>
 

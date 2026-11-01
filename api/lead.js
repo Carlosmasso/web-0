@@ -36,6 +36,7 @@ export function tooLarge(p = {}) {
     str(p.phone).length > 40 ||
     str(p.brand).length > 200 ||
     str(p.note).length > 4000 ||
+    str(p.piece).length > 80 ||
     str(p.contentText).length > 200000
   )
 }
@@ -61,6 +62,8 @@ export default async function handler(req, res) {
     consent,
     contentText = '',
     images = '',
+    // Solo en los leads de /trabajos.html: la web de ejemplo que le ha gustado.
+    piece = '',
   } = p
 
   // Bots: 200 "ok" para no darles pistas, pero sin procesar nada.
@@ -121,7 +124,9 @@ export default async function handler(req, res) {
           from,
           to,
           reply_to: email,
-          subject: `Petición de presupuesto — ${brand || 'web'} · ${name}`,
+          subject: piece
+            ? `Web a medida (${piece}) · ${name}`
+            : `Petición de presupuesto — ${brand || 'web'} · ${name}`,
           text: adminText({ name, email, phone, note, brand, previewLink, images, now }),
         }),
       })
@@ -140,8 +145,8 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         from,
         to: email,
-        subject: 'Hemos recibido tu petición de presupuesto',
-        text: clientText(name),
+        subject: piece ? 'He recibido tu mensaje' : 'Hemos recibido tu petición de presupuesto',
+        text: clientText(name, piece),
       }),
     }).catch(() => {})
   }
@@ -168,11 +173,13 @@ function adminText({ name, email, phone, note, brand, previewLink, images, now }
   ].join('\n')
 }
 
-function clientText(name) {
+function clientText(name, piece) {
   return [
     `Hola ${name},`,
     '',
-    'He recibido el diseño de tu web. Te paso un presupuesto sin compromiso en menos de un día laborable.',
+    piece
+      ? 'He recibido tu mensaje sobre una web a medida. Te escribo en menos de un día laborable para hablarlo con calma.'
+      : 'He recibido el diseño de tu web. Te paso un presupuesto sin compromiso en menos de un día laborable.',
     '',
     'Un saludo.',
   ].join('\n')

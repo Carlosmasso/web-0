@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Maketa · tarjeta OG de webs a medida</title>
+    <!-- Fuente de /og-trabajos.png (1200 × 630), la imagen al compartir /trabajos.html.
+         Si cambian las capturas, se vuelve a exportar desde aquí. -->
+    <style>
+      :root {
+        --ink: #16171b;
+        --ink-soft: #55575e;
+        --bg: #f6f6f4;
+        --accent: #3b53d6;
+      }
+      * { box-sizing: border-box; margin: 0; }
+      html, body { width: 1200px; height: 630px; overflow: hidden; }
+      body {
+        position: relative;
+        background: var(--bg);
+        color: var(--ink);
+        font: 400 20px/1.5 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        padding: 84px 88px;
+      }
+      .col { position: relative; z-index: 2; max-width: 520px; }
+      .wordmark { display: flex; align-items: center; gap: 14px; font-weight: 700; font-size: 26px; letter-spacing: -0.02em; }
+      .wordmark svg { width: 40px; height: 40px; display: block; }
+      h1 { margin-top: 44px; font-size: 64px; line-height: 1.04; letter-spacing: -0.035em; font-weight: 700; }
+      h1 span { color: var(--accent); }
+      .sub { margin-top: 26px; font-size: 24px; color: var(--ink-soft); max-width: 24ch; }
+
+      /* Abanico de webs: las capturas reales, como en el carrusel de la landing. */
+      .fan { position: absolute; right: -40px; top: 70px; width: 660px; height: 560px; }
+      .fan img {
+        position: absolute;
+        width: 250px;
+        height: 326px;
+        object-fit: cover;
+        object-position: top;
+        border-radius: 16px;
+        box-shadow: 0 0 0 1px #e3e1db, 0 30px 60px -24px rgba(22, 23, 27, 0.4);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="col">
+      <div class="wordmark">
+        <svg viewBox="0 0 32 32">
+          <rect width="32" height="32" rx="7" fill="#3b53d6" />
+          <rect x="7" y="6.5" width="18" height="19" rx="2.5" fill="none" stroke="#fff" stroke-width="2" />
+          <rect x="10" y="9.5" width="12" height="4" rx="1" fill="#fff" />
+          <rect x="10" y="16" width="5.5" height="6.5" rx="1" fill="#fff" />
+          <rect x="17.5" y="16" width="4.5" height="6.5" rx="1" fill="#fff" opacity="0.5" />
+        </svg>
+        <span>Maketa</span>
+      </div>
+      <h1>Webs hechas <span>a&nbsp;mano.</span></h1>
+      <p class="sub">Míralas funcionando y pide una así para tu negocio.</p>
+    </div>
+
+    <div class="fan" aria-hidden="true">
+      <img src="/trabajos/capturas/apuntes.jpg" alt="" style="left: 410px; top: 60px; transform: rotate(9deg)" />
+      <img src="/trabajos/capturas/analogica.jpg" alt="" style="left: 290px; top: 20px; transform: rotate(4deg)" />
+      <img src="/trabajos/capturas/rayos-x.jpg" alt="" style="left: 40px; top: 60px; transform: rotate(-7deg)" />
+      <img src="/trabajos/capturas/comanda.jpg" alt="" style="left: 160px; top: 0; transform: rotate(-1deg); z-index: 2" />
+    </div>
+  </body>
+</html>

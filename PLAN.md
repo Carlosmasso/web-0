@@ -171,6 +171,63 @@ en analítica si suben las solicitudes.
 Un "así quedó la web de X" en la landing, con antes y después. Es la prueba
 social que más decide, y no se puede fabricar: depende de tener clientes.
 
+**Mientras tanto: webs a medida (oct. 2026).** `/trabajos.html` enseña webs
+hechas a mano, más ambiciosas que lo que sale del configurador, para dar
+confianza y abrir público (estudios, fotógrafos, creativos, despachos). Son
+**ejemplos de negocios inventados** y se dicen así, nunca como clientes. Cada una
+es un HTML autónomo en `public/trabajos/<id>.html`, sin dependencias y con
+`noindex`, que la página enseña funcionando en miniatura (iframe escalado). Dentro
+de cada demo, el botón de contacto explica que el negocio no existe y lleva a
+`/trabajos.html?quiero=<id>`, que abre "Quiero algo así": un lead a `/api/lead`
+con el campo `piece`. Salen de los cuatro lienzos de Design de Carlos:
+
+- ~~Rayos X → Vano, estudio de arquitectura (Valencia)~~ HECHO.
+- ~~Mesa de trabajo → Pliego, estudio de diseño gráfico (Sevilla)~~ HECHO. En
+  pantallas táctiles los objetos se tocan en vez de arrastrarse, para no robar
+  el scroll; en móvil el cuaderno enseña una hoja.
+- ~~Analógica → Revelado, estudio de fotografía (Bilbao)~~ HECHO.
+- ~~Retícula suiza → Cifra, asesoría (Madrid)~~ HECHO. El lienzo no tenía
+  microinteracciones; se le añadió un calendario fiscal en vivo con los plazos
+  trimestrales reales de la AEAT y cuenta atrás. **Si cambian los plazos, se
+  corrigen en `Q` dentro del propio archivo.**
+- ~~Comanda → Lume, casa de brasas (A Coruña)~~ HECHO. Pieza nueva, sin
+  lienzo de partida: ticket que se imprime, carta con comanda en vivo (dice para
+  cuántos da, sin precios), pizarra a tiza, "abierto ahora" y reserva con días y
+  horas reales que se arranca como un resguardo.
+- ~~Anatomía → Eje, fisioterapia y pilates (Málaga)~~ HECHO. Pieza nueva: mapa
+  del cuerpo con consejo según la intensidad del dolor (con dolor fuerte, manda
+  primero al médico), respiración guiada con un solo botón y horario filtrable.
+- ~~Cata → Lías, vinoteca (Logroño)~~ HECHO. Copa que se sirve con el scroll,
+  recomendador por cuerpo, carácter y ocasión, caja de seis (sin precios), rueda
+  de aromas y catas de los próximos jueves. Bodegas y vinos inventados.
+- ~~Apuntes → Acento, academia de idiomas (Salamanca)~~ HECHO. Prueba de nivel
+  de inglés real (cuatro preguntas), escalera A1–C2 y "¿Cuánto tardo?" con horas
+  orientativas por nivel del MCER.
+
+Una pieza nueva: su HTML en `public/trabajos/`, un `<article>` en
+`trabajos.html` con `data-piece`, `data-name` y `data-kind`, y el
+`?quiero=<id>` en su aviso de ejemplo.
+
+**En la landing (nov. 2026).** El carrusel "Así quedaría la tuya", que repetía
+las plantillas por sector de la demo de arriba, pasa a ser "¿Quieres algo
+único? Lo hago a mano.": ocho capturas de las demos que abren cada una en vivo
+(`#a-medida`, enlazado desde el menú). La entrada al configurador por sector
+sigue en la demo. Una pieza nueva también necesita su captura en
+`public/trabajos/capturas/` y su tarjeta y punto en el carrusel de `index.html`.
+
+**Mejoras del carrusel (nov. 2026).** La tarjeta central reproduce un vídeo
+de unos seis segundos con el gesto de su web; el sector va como título; una
+línea de precio sin cifra ("el precio depende de lo que lleve, y lo sabes antes
+de empezar") y `/trabajos.html` tiene su propia imagen para compartir
+(`public/og-trabajos.html` → `og-trabajos.png`). Pósteres (AVIF + JPEG) y vídeos
+(MP4) se regeneran con `pnpm capturas:trabajos [id]`, con `pnpm dev` en marcha;
+cada demo tiene su guion en `scripts/capturar-trabajos.mjs`. Medir con
+`custom_live_opened` (`source`: `landing` o `trabajos`), `custom_index_opened`,
+`custom_lead_opened` y `custom_lead_sent`. **Pendiente de Carlos:** si se quiere
+una cifra orientativa para las webs a medida, no está en `TARIFAS.md`.
+
+Medir con `custom_live_opened`, `custom_lead_opened` y `custom_lead_sent`.
+
 ---
 
 ## Bloqueos de negocio (no son código)
@@ -364,3 +421,4 @@ correcto.
 | oct. 2026 | Pulido de la landing nueva: las piezas decorativas ya no pisan los titulares (en el cierre se apartan a las esquinas y por debajo de 1180 px se quitan, porque los titulares ocupan los márgenes); titulares grandes con `text-wrap: balance` ("¿Le damos / forma a tu web?", sin "web?" sola), interletrado a −0,04 em y tope de 96 px; en móvil, la fila de negocios de la demo se difumina por la derecha mientras quedan fichas por ver y se alinea con su etiqueta al deslizar. |
 | oct. 2026 | DESIGN.md (y `.impeccable/design.json`) al día con la landing nueva, fusionado con lo del configurador, que no cambia. Nueva idea central: **"El taller a la vista"** (la landing enseña cómo se hace la web: demo, plantillas, piezas). Reglas nuevas: interletrado mínimo −0,04 em y tope de 96 px en titulares, piezas solo en los márgenes, sombra solo para lo que es producto o responde a la mano, radios que crecen con el tamaño de la pieza. |
 | oct. 2026 | El configurador se acerca a la landing sin dejar de ser una mesa oscura: letra del sistema (Inter estaba declarada pero no se cargaba nunca), texto terciario a #8a8e9a para cumplir AA (antes 3,3–3,7:1), "Quiero esta web" y "Siguiente" con la flecha de la landing que avanza al pasar el ratón, títulos de paso a 720 y −0,02 em, el logo enlazado a la portada en la cabecera, y los radios sueltos (7, 8, 9, 11, 12 px) en tres escalones: 8 / 10 / 14. |
+| oct. 2026 | Webs a medida: página `/trabajos.html` (cuarta entrada de Vite, enlazada desde el menú y el precio de la landing) y las ocho piezas en `public/trabajos/`: **Rayos X** (arquitectura), **Mesa de trabajo** (diseño gráfico), **Analógica** (fotografía), **Retícula suiza** (asesoría), **Comanda** (restaurante), **Anatomía** (fisioterapia), **Cata** (vinoteca) y **Apuntes** (academia). `/api/lead` acepta `piece` para el asunto y la confirmación al cliente. |

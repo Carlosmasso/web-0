@@ -88,7 +88,7 @@
       {
         "name": "plantilla",
         "value": "0 0 0 1px var(--edge), 0 40px 80px -30px rgba(22,23,27,0.35)",
-        "purpose": "Tarjetas del carrusel de plantillas."
+        "purpose": "Tarjetas del carrusel de webs a medida."
       },
       {
         "name": "respuesta-boton",
@@ -206,7 +206,7 @@
   ],
   "narrative": {
     "northStar": "El taller a la vista",
-    "overview": "Maketa enseña cómo se hace la web en lugar de describirla. La landing es un taller luminoso con la puerta abierta: piezas sueltas que flotan en los márgenes, una demo que se toca en la primera pantalla, un carrusel de webs a medio montar y, al final, la mesa de trabajo con su cuadrícula. Quien entra ve el oficio antes de leer una promesa, y la voz sigue siendo la de una persona concreta que firma \"Un abrazo, Carlos\".\n\nEl sistema vive en dos superficies con la misma tinta. La **landing** es papel cálido y claro, con titulares grandes y apretados, bandas que alternan papel y blanco, y microinteracciones que responden al momento. El **configurador** es una mesa oscura y callada: el panel se retira para que la web del cliente, iluminada en el lienzo, sea lo único que importa. Las webs que genera Maketa tienen su propio sistema de temas (`src/theme/`) y no siguen este documento.\n\nEl vídeo y los carruseles (`video/src/diseno/marca.js`) usan la misma paleta de la landing: quien ve un reel y entra en maketa.es reconoce el sitio.",
+    "overview": "Maketa enseña cómo se hace la web en lugar de describirla. La landing es un taller luminoso con la puerta abierta: piezas sueltas que flotan en los márgenes, una demo que se toca en la primera pantalla, un carrusel de webs hechas a mano y, al final, la mesa de trabajo con su cuadrícula. Quien entra ve el oficio antes de leer una promesa, y la voz sigue siendo la de una persona concreta que firma \"Un abrazo, Carlos\".\n\nEl sistema vive en dos superficies con la misma tinta. La **landing** es papel cálido y claro, con titulares grandes y apretados, bandas que alternan papel y blanco, y microinteracciones que responden al momento. El **configurador** es una mesa oscura y callada: el panel se retira para que la web del cliente, iluminada en el lienzo, sea lo único que importa. Las webs que genera Maketa tienen su propio sistema de temas (`src/theme/`) y no siguen este documento.\n\nEl vídeo y los carruseles (`video/src/diseno/marca.js`) usan la misma paleta de la landing: quien ve un reel y entra en maketa.es reconoce el sitio.",
     "keyCharacteristics": [
       "Un solo color de marca, el azul tinta; el resto es tinta sobre papel cálido.",
       "Titulares enormes y compactos (760, −0,04 em); el cuerpo, tranquilo y legible a 18 px.",

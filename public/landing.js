@@ -7,6 +7,10 @@
 ;(function () {
   var doc = document.documentElement
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  // Eventos del embudo para Vercel Web Analytics (la cola está en index.html).
+  var track = function (name, data) {
+    try { window.va && window.va('event', data ? { name: name, data: data } : { name: name }) } catch (e) {}
+  }
 
   /* ---------- 1. apariciones ---------- */
   // Se repiten al volver a bajar: un bloque se "rearma" solo cuando sale del todo
@@ -189,7 +193,9 @@
     var timer = null
     var stopped = reduce          // el usuario lo ha parado (o pide menos movimiento)
     var hovering = false
-    var visible = true
+    // Hasta que el observador diga que se ve, el carrusel cuenta como fuera de
+    // pantalla: así el vídeo central no se descarga al cargar la página.
+    var visible = !('IntersectionObserver' in window)
     var step = 300
 
     // velo para atenuar las laterales (más barato que un filtro)
@@ -201,7 +207,41 @@
       el._veil = veil
       el._link = el.querySelector('a')
       el._link.setAttribute('draggable', 'false')
+      el._video = el.querySelector('.tc__video')
     })
+
+    // Vídeo del gesto: solo en la tarjeta del centro, solo con la sección a la
+    // vista y nunca con movimiento reducido o ahorro de datos. Mientras suena, el
+    // carrusel espera a que termine para pasar a la siguiente.
+    var lite = reduce || !!(navigator.connection && navigator.connection.saveData)
+    var waiting = false
+    var stopVideo = function (el) {
+      if (!el._video) return
+      el._video.pause()
+      el.classList.remove('is-playing')
+    }
+    var syncVideo = function () {
+      items.forEach(function (el, i) {
+        if (i !== cur || lite || !visible || document.hidden) return stopVideo(el)
+        var v = el._video
+        if (!v) return
+        if (!v.src) {
+          v.src = v.getAttribute('data-src')
+          v.addEventListener('playing', function () { el.classList.add('is-playing') })
+          v.addEventListener('error', function () { waiting = false; el._video = null; el.classList.remove('is-playing') })
+          v.addEventListener('ended', function () {
+            waiting = false
+            if (items[cur] !== el) return
+            if (!stopped && !hovering && visible && !drag && !document.hidden) go(cur + 1)
+            else { v.currentTime = 0; v.play().catch(function () {}) }
+          })
+        }
+        if (!v.paused) return
+        waiting = true
+        v.currentTime = 0
+        v.play().catch(function () { waiting = false })
+      })
+    }
 
     var measure = function () { step = innerWidth < 640 ? Math.min(250, innerWidth * 0.62) : 300 }
 
@@ -230,6 +270,8 @@
         el.setAttribute('aria-hidden', String(!on))
       })
       fdots.forEach(function (d, i) { d.setAttribute('aria-current', String(i === cur)) })
+      waiting = false
+      syncVideo()
     }
     var go = function (i, byUser) {
       cur = ((i % n) + n) % n
@@ -240,7 +282,7 @@
         play()                    // tras tocarlo, el autoplay vuelve a contar desde cero
       }
     }
-    var tick = function () { if (!stopped && !hovering && visible && !drag && !document.hidden) go(cur + 1) }
+    var tick = function () { if (!stopped && !hovering && visible && !drag && !document.hidden && !waiting) go(cur + 1) }
     var play = function () { clearInterval(timer); timer = setInterval(tick, 4200) }
     var setStopped = function (v) {
       stopped = v
@@ -300,7 +342,9 @@
     items.forEach(function (el, i) {
       el._link.addEventListener('click', function (e) {
         if (moved) { e.preventDefault(); moved = false; return }   // fue un arrastre, no un clic
-        if (i !== cur) { e.preventDefault(); go(i, true) }
+        if (i !== cur) { e.preventDefault(); go(i, true); return }
+        var piece = el._link.getAttribute('data-piece')
+        if (piece) track('custom_live_opened', { piece: piece, source: 'landing' })
       })
     })
     fdots.forEach(function (d, i) { d.addEventListener('click', function () { go(i, true) }) })
@@ -316,8 +360,11 @@
     })
     // fuera de pantalla no gira (ni gasta batería)
     if ('IntersectionObserver' in window) {
-      new IntersectionObserver(function (en) { visible = en[0].isIntersecting }).observe(flow)
+      new IntersectionObserver(function (en) { visible = en[0].isIntersecting; syncVideo() }).observe(flow)
     }
+    document.addEventListener('visibilitychange', syncVideo)
+    var index = document.querySelector('[data-piece-index]')
+    if (index) index.addEventListener('click', function () { track('custom_index_opened', { source: 'landing' }) })
     var rz = 0
     addEventListener('resize', function () {
       cancelAnimationFrame(rz)

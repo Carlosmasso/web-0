@@ -554,7 +554,8 @@ Sevilla</span>
   // 1 = a la derecha); y, píxeles desde arriba; r, grados.
   var LAYOUTS = {
     wide: {
-      scatter: { polA: { x: .64, y: 40, r: -6 }, polB: { x: .97, y: 250, r: 6 }, post: { x: .03, y: 600, r: -4 }, card: { x: .70, y: 560, r: 3 } },
+      // polA va a .8: más a la izquierda tapa el titular en pantallas de ~1000 px.
+      scatter: { polA: { x: .8, y: 30, r: -6 }, polB: { x: .97, y: 300, r: 6 }, post: { x: .03, y: 600, r: -4 }, card: { x: .70, y: 580, r: 3 } },
       tidy: { polA: { x: 0, y: 600, r: 0 }, polB: { x: .26, y: 600, r: 0 }, post: { x: .52, y: 630, r: 0 }, card: { x: 1, y: 640, r: 0 } }
     },
     narrow: {

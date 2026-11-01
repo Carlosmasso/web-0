@@ -151,8 +151,8 @@ components:
 
 Maketa enseña cómo se hace la web en lugar de describirla. La landing es un
 taller luminoso con la puerta abierta: piezas sueltas que flotan en los
-márgenes, una demo que se toca en la primera pantalla, un carrusel de webs a
-medio montar y, al final, la mesa de trabajo con su cuadrícula. Quien entra ve
+márgenes, una demo que se toca en la primera pantalla, un carrusel de webs
+hechas a mano y, al final, la mesa de trabajo con su cuadrícula. Quien entra ve
 el oficio antes de leer una promesa, y la voz sigue siendo la de una persona
 concreta que firma "Un abrazo, Carlos".
 
@@ -256,7 +256,7 @@ demo del hero y el cierre oscuro son las dos piezas más anchas (1200–1240 px)
 
 "Cómo funciona" y "Lo que te llevas" reparten el espacio en dos columnas
 (texto a un lado, tarjetas o precio al otro) y caen a una columna en móvil. El
-carrusel de plantillas ocupa todo el ancho y se recorta por los lados.
+carrusel de webs a medida ocupa todo el ancho y se recorta por los lados.
 
 Por debajo de **1180 px** desaparecen las piezas decorativas, porque los
 titulares ocupan los márgenes. Por debajo de **760 px** la web de ejemplo de la
@@ -361,10 +361,16 @@ Cambiar de negocio funde el contenido con un leve desenfoque y desplazamiento;
 el color, la letra y el fondo cambian en continuo. El botón "Seguir en el
 configurador" abre el sector que se está viendo.
 
-### Carrusel de plantillas
-Siete webs dibujadas en 3D, la central de frente y las laterales giradas y
-veladas. Avanza solo cada 4,2 s, se para al pasar el ratón, al enfocar, fuera de
-pantalla y con movimiento reducido, y se arrastra con el dedo con inercia.
+### Carrusel de webs a medida
+Ocho webs hechas a mano en 3D: la central de frente y las laterales giradas y
+veladas. Cada tarjeta es el póster de su demo (AVIF con JPEG de respaldo) y, en
+la central, un vídeo corto con su gesto (la lente, el cordón, la copa…) que
+arranca sobre el póster; el carrusel espera a que termine para avanzar. Debajo,
+el **sector** como título ("Restaurante") y la plantilla en pequeño, porque el
+dueño de un negocio se reconoce antes en su sector que en un nombre. Cierra con
+una línea de precio sin cifra y el enlace a `/trabajos.html`. Se para al pasar el
+ratón, al enfocar y fuera de pantalla; con movimiento reducido o ahorro de datos
+no hay vídeo. Pósteres y vídeos salen de `pnpm capturas:trabajos`.
 
 ## Do's and Don'ts
 
