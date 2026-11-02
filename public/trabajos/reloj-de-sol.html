@@ -1,0 +1,1076 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Casa Marea · Suites en Cádiz — web de ejemplo</title>
+<meta name="description" content="Web de ejemplo hecha a mano por Maketa para unas suites de alquiler inventadas.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='13' r='7' fill='%23E0A04A'/%3E%3Cpath d='M3 22c4-3 7 3 13 0s9-3 13 0v7H3z' fill='%2324476B'/%3E%3C/svg%3E">
+
+<link rel="stylesheet" href="/trabajos/fuentes/fuentes.css" data-fuentes="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Hanken+Grotesk:wght@400..600&display=swap">
+<!--
+  Reloj de sol · plantilla a medida de Maketa (suites de alquiler ficticias).
+  Un solo archivo, sin dependencias. Para quien alquila habitaciones y compite
+  con las fotos iguales de las plataformas: la web enseña cómo se está dentro.
+    1. El día en la suite: al entrar pasa el día entero una vez; luego se
+       arrastra el sol (o se vuelve a reproducir con el botón) y
+       la habitación dibujada cambia de luz, del amanecer a la noche. Cielo,
+       mar, mancha de sol en el suelo, cortinas a la hora de la siesta y la
+       lámpara encendida de noche salen de una tabla de horas (DAY) que se
+       interpola.
+    2. Las suites, en tres fotos cada una: el cursor las recorre al pasar (en
+       el móvil, un toque pasa a la siguiente).
+    3. El barrio andando: al tocar un sitio se dibuja el camino desde la
+       puerta y los minutos se cuentan con el paseo.
+    4. Pedir fechas: calendario de llegada y salida y un llavero con la suite.
+       No se cobra nada: es una petición.
+-->
+<style>
+:root {
+  --cal: #F6F3EE;
+  --paper: #EFEAE2;
+  --card: #FFFFFF;
+  --ink: #1E1D1A;
+  --soft: #45433E;
+  --muted: #69655D;
+  --line: #DDD7CC;
+  --anil: #24476B;
+  --anil-deep: #1A3552;
+  --sol: #E0A04A;
+  --pad: clamp(16px, 4vw, 40px);
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  --serif: 'DM Serif Display', Georgia, serif;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--cal); color: var(--ink); font: 400 16px/1.6 'Hanken Grotesk', system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: clip; }
+a { color: inherit; }
+button, input, textarea { font: inherit; color: inherit; }
+h1, h2, h3, p, ul, ol, figure { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+:focus-visible { outline: 2px solid var(--anil); outline-offset: 3px; }
+::selection { background: var(--anil); color: #fff; }
+[hidden] { display: none !important; }
+[id] { scroll-margin-top: 24px; }
+
+.wrap { max-width: 1280px; margin: 0 auto; padding-left: var(--pad); padding-right: var(--pad); }
+.kicker { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .16em; color: var(--anil); }
+.h2 { margin-top: 14px; font-family: var(--serif); font-weight: 400; font-size: clamp(36px, 4.6vw, 64px); line-height: 1.02; letter-spacing: -0.02em; text-wrap: balance; }
+.h2 em, h1 em { font-style: italic; color: var(--anil); }
+.lead { font-size: 17px; line-height: 1.7; color: var(--soft); max-width: 470px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 50px; padding: 0 24px; border-radius: 999px; border: 1px solid var(--ink); background: none; font-size: 15px; font-weight: 500; text-decoration: none; cursor: pointer; transition: background .25s ease, color .25s ease, border-color .25s ease, transform .2s ease; }
+.btn:hover { background: var(--ink); color: var(--cal); }
+.btn:active { transform: scale(.97); }
+.btn--anil { background: var(--anil); border-color: var(--anil); color: #fff; }
+.btn--anil:hover { background: var(--anil-deep); border-color: var(--anil-deep); color: #fff; }
+.btn svg { width: 14px; height: 14px; }
+
+/* ---------- cabecera ---------- */
+
+.top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-top: 20px; padding-bottom: 20px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; font-family: var(--serif); font-size: 23px; letter-spacing: -0.01em; text-decoration: none; }
+.brand svg { width: 26px; height: 26px; }
+.top nav { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 28px; font-size: 14px; }
+.top nav a:not(.btn) { text-decoration: none; padding: 12px 0; color: var(--soft); }
+.top nav a:not(.btn):hover { color: var(--anil); }
+.top nav .btn { min-height: 44px; padding: 0 18px; font-size: 14px; }
+@media (max-width: 760px) { .top nav a:not(.btn) { display: none; } }
+
+/* ---------- el día en la suite ---------- */
+
+.hero { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-rows: auto 1fr auto; grid-template-areas: "head scene" "body scene" ". dial"; gap: 0 clamp(32px, 5vw, 80px); padding-top: clamp(12px, 3vw, 36px); padding-bottom: clamp(64px, 9vw, 120px); }
+.hero__head { grid-area: head; align-self: end; }
+.hero__body { grid-area: body; align-self: start; padding-top: 24px; }
+.hero h1 { margin-top: 16px; font-family: var(--serif); font-weight: 400; font-size: clamp(44px, 5vw, 74px); line-height: .98; letter-spacing: -0.025em; text-wrap: balance; }
+.hero__actions { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 10px; }
+.play { gap: 12px; }
+.play i { position: relative; width: 10px; height: 12px; }
+.play i::before, .play i::after { content: ""; position: absolute; top: 0; height: 12px; background: currentColor; transition: clip-path .25s ease; }
+.play i::before { left: 0; width: 10px; clip-path: polygon(0 0, 100% 50%, 100% 50%, 0 100%); }
+.play i::after { left: 0; width: 10px; clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); }
+.play[aria-pressed="true"] i::before { clip-path: polygon(0 0, 35% 0, 35% 100%, 0 100%); }
+.play[aria-pressed="true"] i::after { clip-path: polygon(65% 0, 100% 0, 100% 100%, 65% 100%); }
+
+.scene { grid-area: scene; align-self: end; position: relative; border-radius: 6px; overflow: hidden; background: #E9E1D5; box-shadow: 0 40px 80px -50px rgba(30, 29, 26, .45); }
+.scene svg { display: block; width: 100%; height: auto; }
+.scene .curtain { transform-box: fill-box; transition: transform 1.1s var(--ease); }
+.scene .curtain--l { transform-origin: left center; }
+.scene .curtain--r { transform-origin: right center; }
+.scene.is-drawn .curtain { transform: scaleX(2.55); }
+
+.dial { grid-area: dial; padding-top: 22px; }
+/* Nada se mueve al pasar las horas: cada cifra del reloj tiene su hueco (los
+   números de esta letra no miden lo mismo) y la frase, sitio para dos líneas. */
+.hour { display: flex; align-items: center; gap: 22px; }
+.hour strong { flex: none; display: flex; font-family: var(--serif); font-weight: 400; font-size: 46px; line-height: 1; }
+.hour strong i { width: .53em; font-style: normal; text-align: center; }
+.hour strong i.c { width: .22em; }
+.hour p { min-height: 3em; display: flex; align-items: center; font-size: 16px; line-height: 1.5; color: var(--soft); transition: opacity .35s ease, transform .35s var(--ease); }
+.hour p.is-out { opacity: 0; transform: translateY(6px); }
+.track { position: relative; margin-top: 18px; padding-bottom: 26px; }
+.track input { display: block; width: 100%; height: 34px; margin: 0; background: none; cursor: grab; -webkit-appearance: none; appearance: none; touch-action: pan-y; }
+.track input:active { cursor: grabbing; }
+.track input::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: linear-gradient(90deg, #F2C29E 0%, #9CC8EA 18%, #7BB4E0 45%, #F1D7A8 62%, #EE965E 78%, #34396E 90%, #10162F 100%); }
+.track input::-moz-range-track { height: 4px; border-radius: 2px; background: linear-gradient(90deg, #F2C29E 0%, #9CC8EA 18%, #7BB4E0 45%, #F1D7A8 62%, #EE965E 78%, #34396E 90%, #10162F 100%); }
+.track input::-webkit-slider-thumb { -webkit-appearance: none; width: 30px; height: 30px; margin-top: -13px; border: 0; border-radius: 50%; background: var(--sun, #F2B65A); box-shadow: 0 0 0 7px var(--halo, rgba(242, 182, 90, .25)), 0 6px 14px rgba(30, 29, 26, .25); transition: box-shadow .3s ease; }
+.track input::-moz-range-thumb { width: 30px; height: 30px; border: 0; border-radius: 50%; background: var(--sun, #F2B65A); box-shadow: 0 0 0 7px var(--halo, rgba(242, 182, 90, .25)), 0 6px 14px rgba(30, 29, 26, .25); }
+.track input:hover::-webkit-slider-thumb { box-shadow: 0 0 0 11px var(--halo, rgba(242, 182, 90, .25)), 0 6px 14px rgba(30, 29, 26, .25); }
+.track input:focus-visible { outline: none; }
+.track input:focus-visible::-webkit-slider-thumb { outline: 2px solid var(--anil); outline-offset: 10px; }
+.ticks { position: absolute; left: 15px; right: 15px; bottom: 0; height: 18px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ticks span { position: absolute; top: 0; transform: translateX(-50%); }
+
+@media (max-width: 960px) {
+  .hero { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; grid-template-areas: "head" "scene" "dial" "body"; }
+  .hero__head { padding-bottom: 24px; }
+  .hero__body { padding-top: 28px; }
+  .hour { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .hour strong { font-size: 38px; }
+  .hour p { font-size: 15px; align-items: flex-start; }
+}
+
+/* ---------- secciones ---------- */
+
+.section { padding-top: clamp(64px, 9vw, 120px); padding-bottom: clamp(64px, 9vw, 120px); }
+.section--line { border-top: 1px solid var(--line); }
+.section--paper { background: var(--paper); }
+.section__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 18px 40px; margin-bottom: clamp(36px, 5vw, 56px); }
+.section__head .lead { max-width: 380px; }
+
+/* ---------- las suites ---------- */
+
+.suites { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 3vw, 40px); }
+@media (max-width: 900px) { .suites { grid-template-columns: minmax(0, 1fr); max-width: 520px; } }
+.suite { display: flex; flex-direction: column; }
+/* Cada suite, en tres fotos: al pasar el ratón por encima se recorren de
+   izquierda a derecha; en el móvil, cada toque pasa a la siguiente. */
+.gal { position: relative; overflow: hidden; border-radius: 4px; aspect-ratio: 4 / 5; background: var(--paper); cursor: pointer; touch-action: pan-y; }
+.gal img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.04); transition: opacity .5s ease, transform 1.2s var(--ease); }
+.gal img.is-on { opacity: 1; transform: none; }
+.gal::after { content: ""; position: absolute; inset: 0 0 auto; z-index: 1; height: 72px; background: linear-gradient(rgba(20, 20, 18, .28), rgba(20, 20, 18, 0)); pointer-events: none; }
+.gal__bars { position: absolute; top: 12px; left: 12px; right: 12px; z-index: 2; display: flex; gap: 4px; }
+.gal__bars button { flex: 1; height: 24px; margin-top: -10px; padding: 10px 0; border: 0; background: none; cursor: pointer; }
+.gal__bars button::before { content: ""; display: block; height: 3px; border-radius: 2px; background: rgba(255, 255, 255, .5); transition: background .3s ease; }
+.gal__bars button[aria-current="true"]::before { background: #fff; }
+.gal__label { position: absolute; left: 12px; bottom: 12px; z-index: 2; display: inline-flex; gap: 8px; padding: 6px 12px; border-radius: 999px; background: rgba(246, 243, 238, .92); font-size: 13px; font-weight: 500; transition: opacity .25s ease; }
+.gal__label span { color: var(--muted); font-variant-numeric: tabular-nums; }
+.gal__label.is-out { opacity: 0; }
+.suite__num { color: var(--muted); font-family: 'Hanken Grotesk', sans-serif; font-size: 14px; letter-spacing: .08em; vertical-align: .9em; margin-left: 6px; }
+.suite__name { margin-top: 20px; font-family: var(--serif); font-weight: 400; font-size: 34px; line-height: 1; letter-spacing: -0.015em; }
+.suite__facts { margin-top: 10px; font-size: 14px; color: var(--muted); }
+.suite__note { margin-top: 12px; font-size: 15px; line-height: 1.65; color: var(--soft); }
+.suite__go { margin-top: 18px; align-self: flex-start; padding: 10px 0; border: 0; border-bottom: 1px solid var(--ink); background: none; font-size: 15px; font-weight: 500; cursor: pointer; transition: color .2s ease, border-color .2s ease, gap .3s var(--ease); display: inline-flex; gap: 8px; }
+.suite__go:hover { color: var(--anil); border-color: var(--anil); gap: 14px; }
+
+/* ---------- el barrio ---------- */
+
+.walk { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(28px, 5vw, 72px); align-items: center; }
+@media (max-width: 960px) { .walk { grid-template-columns: minmax(0, 1fr); } }
+.places { border-top: 1px solid var(--line); }
+/* Las filas no cambian de alto al elegir: lo que se cuenta del sitio va bajo el plano. */
+.place { position: relative; display: flex; justify-content: space-between; align-items: center; gap: 16px; width: 100%; padding: 16px 0; border: 0; border-bottom: 1px solid var(--line); background: none; text-align: left; cursor: pointer; }
+.place::before { content: ""; position: absolute; left: 0; bottom: -1px; width: 100%; height: 1px; background: var(--anil); transform: scaleX(0); transform-origin: left; transition: transform .5s var(--ease); }
+.place b { font-weight: 500; font-size: 17px; transition: color .2s ease; }
+.place em { flex: none; font-style: normal; font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; transition: color .2s ease; }
+.place:hover b, .place[aria-pressed="true"] b { color: var(--anil); }
+.place[aria-pressed="true"]::before { transform: scaleX(1); }
+.place[aria-pressed="true"] em { color: var(--ink); }
+.map__note { margin-top: 14px; min-height: 3em; font-size: 15px; line-height: 1.5; color: var(--soft); transition: opacity .3s ease; }
+.map__note b { font-weight: 600; color: var(--anil); }
+.map__note.is-out { opacity: 0; }
+.map { position: relative; }
+.map svg { display: block; width: 100%; height: auto; }
+.map__label { font: 500 11px 'Hanken Grotesk', sans-serif; fill: var(--muted); transition: fill .2s ease; }
+.map__spot circle { transition: r .3s var(--ease), fill .2s ease; }
+.map__spot.is-on .map__label { fill: var(--anil); font-weight: 600; }
+.map__spot.is-on circle { fill: var(--anil); }
+/* En el móvil el plano es pequeño: solo se rotula el sitio elegido, y más grande. */
+@media (max-width: 640px) {
+  .map__label { font-size: 20px; }
+  .map__spot:not(.is-on) .map__label { display: none; }
+}
+.map__mins { position: absolute; top: 4%; right: 4%; text-align: right; }
+.map__mins strong { display: block; font-family: var(--serif); font-weight: 400; font-size: clamp(44px, 5vw, 68px); line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums lining-nums; }
+.map__mins span { font-size: 13px; color: var(--muted); }
+
+/* ---------- fechas ---------- */
+
+.book { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(20px, 3vw, 32px); align-items: start; }
+@media (max-width: 960px) { .book { grid-template-columns: minmax(0, 1fr); } }
+.cal, .ask { padding: clamp(20px, 3vw, 32px); border-radius: 6px; background: var(--card); }
+.cal__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.cal__head h3 { font-family: var(--serif); font-weight: 400; font-size: 28px; letter-spacing: -0.01em; text-transform: capitalize; }
+.cal__nav { display: flex; gap: 6px; }
+.cal__nav button { width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 50%; background: none; cursor: pointer; transition: border-color .2s ease, opacity .2s ease; }
+.cal__nav button:hover:not(:disabled) { border-color: var(--ink); }
+.cal__nav button:disabled { opacity: .35; cursor: default; }
+.cal__grid { margin-top: 20px; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); row-gap: 4px; }
+.cal__dow { padding-bottom: 8px; text-align: center; font-size: 12px; font-weight: 600; letter-spacing: .08em; color: var(--muted); }
+.day { position: relative; height: 48px; border: 0; background: none; font-size: 15px; font-variant-numeric: tabular-nums; cursor: pointer; }
+.day span { position: relative; z-index: 1; display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; border-radius: 50%; transition: background .2s ease, color .2s ease; }
+.day:hover:not(:disabled) span { background: var(--paper); }
+.day:disabled { color: #B5B0A6; cursor: default; }
+.day.is-full span { text-decoration: line-through; }
+.day.is-range::before { content: ""; position: absolute; inset: 3px 0; background: #E3EAF1; }
+.day.is-start::before { left: 50%; }
+.day.is-end::before { right: 50%; }
+.day.is-start.is-end::before { display: none; }
+.day.is-start span, .day.is-end span { background: var(--anil) !important; color: #fff; }
+.day.is-preview::before { background: #EEF2F6; }
+.day.is-today span { box-shadow: inset 0 0 0 1px var(--line); }
+.cal__legend { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 13px; color: var(--muted); }
+.cal__legend s { color: #B5B0A6; }
+.cal__msg { margin-top: 8px; min-height: 22px; font-size: 14px; color: var(--anil); }
+.cal.is-nudge { animation: nudge .45s ease; }
+@keyframes nudge { 25% { transform: translateX(-6px); } 50% { transform: translateX(5px); } 75% { transform: translateX(-3px); } }
+
+.ask { display: flex; flex-direction: column; gap: 18px; }
+.ask__top { display: flex; gap: 18px; align-items: flex-start; }
+.fob { flex: none; width: 58px; height: 108px; }
+.fob svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.fob g { transform-origin: 29px 12px; }
+.fob.is-swing g { animation: swing 1.4s cubic-bezier(.3, .7, .4, 1); }
+@keyframes swing { 0% { transform: rotate(0); } 15% { transform: rotate(14deg); } 35% { transform: rotate(-9deg); } 55% { transform: rotate(5deg); } 75% { transform: rotate(-2deg); } 100% { transform: rotate(0); } }
+.ask__title { font-family: var(--serif); font-size: 28px; line-height: 1.1; letter-spacing: -0.01em; }
+.ask__sub { margin-top: 6px; font-size: 14px; color: var(--muted); }
+.pick { display: flex; flex-wrap: wrap; gap: 8px; }
+.pick button { min-height: 44px; padding: 0 18px; border: 1px solid var(--line); border-radius: 999px; background: none; font-size: 14px; cursor: pointer; transition: background .2s ease, border-color .2s ease, color .2s ease; }
+.pick button:hover { border-color: var(--ink); }
+.pick button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--cal); }
+.stay { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 6px; }
+.stay div { padding: 12px 14px; }
+.stay div + div { border-left: 1px solid var(--line); }
+.stay dt { font-size: 12px; color: var(--muted); }
+.stay dd { margin: 4px 0 0; font-size: 15px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font-size: 13px; color: var(--muted); }
+.field input { min-height: 48px; padding: 0 12px; border: 1px solid var(--line); border-radius: 6px; background: #fff; font-size: 15px; transition: border-color .2s ease; }
+.field input:focus { border-color: var(--anil); }
+.ask__fine { font-size: 13px; color: var(--muted); }
+
+/* Pie: 72 px por debajo, lo justo para que el aviso "Web de ejemplo" no tape su texto. */
+#fechas { padding-bottom: 0; }
+.foot { margin-top: clamp(56px, 8vw, 96px); padding-top: 20px; padding-bottom: 72px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; font-size: 13px; color: var(--muted); }
+.foot a { text-decoration: none; }
+.foot a:hover { color: var(--anil); }
+
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+.reveal.is-in { opacity: 1; transform: none; }
+
+/* ---------- aviso de ejemplo ---------- */
+
+.maketa { position: fixed; left: 16px; bottom: 16px; z-index: 40; display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 16px; border-radius: 999px; background: var(--ink); color: var(--cal); font-size: 14px; text-decoration: none; box-shadow: 0 10px 30px -12px rgba(30, 29, 26, .6); transition: background .25s ease; }
+.maketa:hover { background: var(--anil); }
+.is-embedded .maketa { display: none !important; }
+
+.demo { width: min(480px, calc(100% - 32px)); padding: 0; border: 0; border-radius: 8px; background: var(--card); color: var(--ink); box-shadow: 0 40px 80px -30px rgba(30, 29, 26, .5); }
+.demo::backdrop { background: rgba(30, 29, 26, .55); }
+.demo form { display: flex; flex-direction: column; gap: 16px; padding: 32px; }
+.demo h2 { font-family: var(--serif); font-weight: 400; font-size: 32px; line-height: 1.05; letter-spacing: -0.02em; }
+.demo h2 em { color: var(--anil); }
+.demo p { color: var(--soft); font-size: 15px; }
+.demo__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .scene .curtain, .hour p, .gal img, .gal__label, .place::before, .map__note { transition: none; }
+  .fob.is-swing g, .cal.is-nudge { animation: none; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .gal img { transform: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="top wrap">
+  <a class="brand" href="#inicio"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="13" r="7" fill="#E0A04A"/><path d="M3 22c4-3 7 3 13 0s9-3 13 0v7H3z" fill="#24476B"/></svg>Casa Marea</a>
+  <nav aria-label="Principal">
+    <a href="#suites">Suites</a>
+    <a href="#barrio">El barrio</a>
+    <a class="btn" href="#fechas">Pedir fechas</a>
+  </nav>
+</header>
+
+<main>
+  <section id="inicio" class="hero wrap">
+    <div class="hero__head">
+      <p class="kicker">Suites · Casco antiguo de Cádiz</p>
+      <h1>Tres suites con toda <em>la luz de Cádiz</em> dentro.</h1>
+    </div>
+    <div class="hero__body">
+      <p class="lead">Una casa de 1890 con tres suites para dos. Mueve el sol y mira cómo es estar dentro a cualquier hora: el desayuno, la siesta, la puesta de sol desde la cama.</p>
+      <div class="hero__actions">
+        <a class="btn btn--anil" href="#fechas">Pedir fechas</a>
+        <button type="button" class="btn play" aria-pressed="false" data-play><i aria-hidden="true"></i><span>Ver el día entero</span></button>
+      </div>
+    </div>
+
+    <figure class="scene" data-scene>
+      <svg viewBox="0 0 800 520" role="img" aria-label="La suite Azotea dibujada: una cama de lino frente a un ventanal en arco que da a las azoteas y al mar." data-scene-svg>
+        <defs>
+          <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#8DBFE6" data-sky="0"/>
+            <stop offset="1" stop-color="#E6F0F4" data-sky="1"/>
+          </linearGradient>
+          <linearGradient id="lino" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#000" stop-opacity="0"/>
+            <stop offset=".5" stop-color="#000" stop-opacity=".05"/>
+            <stop offset="1" stop-color="#000" stop-opacity="0"/>
+          </linearGradient>
+          <radialGradient id="lampara">
+            <stop offset="0" stop-color="#FFD592" stop-opacity=".95"/>
+            <stop offset=".35" stop-color="#FFB761" stop-opacity=".38"/>
+            <stop offset="1" stop-color="#FFB761" stop-opacity="0"/>
+          </radialGradient>
+          <clipPath id="hueco"><path d="M460 382V190a90 90 0 0 1 180 0V382Z"/></clipPath>
+          <mask id="luna"><circle cx="604" cy="150" r="12" fill="#fff"/><circle cx="610" cy="145" r="10.5" fill="#000"/></mask>
+          <filter id="suave" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="5"/></filter>
+        </defs>
+
+        <!-- la habitación -->
+        <rect width="800" height="434" fill="#F2ECE3"/>
+        <rect y="434" width="800" height="86" fill="#DCBEA2"/>
+        <g stroke="rgba(70,45,25,.1)" stroke-width="1" fill="none">
+          <path d="M0 462H800M0 494H800"/>
+          <path d="M80 434L-40 520M160 434L80 520M240 434L200 520M320 434L320 520M400 434L440 520M480 434L560 520M560 434L680 520M640 434L800 520M720 434L920 520"/>
+        </g>
+        <rect y="428" width="800" height="7" fill="#E6DCCF"/>
+        <path data-patch fill="#FFF1D6" filter="url(#suave)" style="mix-blend-mode: soft-light"/>
+        <path data-patch-core fill="#FFF6E6" opacity="0"/>
+
+        <!-- cuadro de la ola -->
+        <g transform="translate(206 118)">
+          <rect width="128" height="88" fill="#FBF8F3" stroke="#CFC4B4"/>
+          <path d="M16 54c16-13 32 13 48 0s32-13 48 0" fill="none" stroke="#24476B" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="92" cy="30" r="7" fill="#E0A04A"/>
+        </g>
+
+        <!-- hueco del ventanal (el grosor del muro) y alféizar -->
+        <path d="M448 388V190a102 102 0 0 1 204 0V388Z" fill="#E2D8CB"/>
+        <rect x="438" y="382" width="224" height="10" rx="2" fill="#EAE1D5"/>
+
+        <!-- planta -->
+        <g>
+          <path d="M752 392C750 350 744 300 736 252M752 392C756 340 766 300 774 268" stroke="#6E5B45" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <g fill="#7C8B5E">
+            <ellipse cx="728" cy="262" rx="7" ry="17" transform="rotate(-30 728 262)"/>
+            <ellipse cx="746" cy="250" rx="6" ry="15" transform="rotate(25 746 250)"/>
+            <ellipse cx="732" cy="300" rx="6" ry="16" transform="rotate(-50 732 300)"/>
+            <ellipse cx="780" cy="276" rx="6" ry="15" transform="rotate(35 780 276)"/>
+            <ellipse cx="766" cy="300" rx="6" ry="15" transform="rotate(-20 766 300)"/>
+          </g>
+          <g fill="#5E6E46">
+            <ellipse cx="744" cy="326" rx="6" ry="15" transform="rotate(-60 744 326)"/>
+            <ellipse cx="768" cy="250" rx="5" ry="13" transform="rotate(-15 768 250)"/>
+            <ellipse cx="760" cy="334" rx="5" ry="13" transform="rotate(50 760 334)"/>
+          </g>
+          <path d="M724 392H780L772 434H732Z" fill="#C47A52"/>
+          <rect x="720" y="388" width="64" height="8" rx="2" fill="#B56B45"/>
+        </g>
+
+        <!-- mesilla y pie de la lámpara -->
+        <rect x="40" y="368" width="64" height="8" rx="2" fill="#B98D63"/>
+        <rect x="44" y="376" width="56" height="40" fill="#C49A70"/>
+        <rect x="48" y="416" width="4" height="18" fill="#9E7650"/>
+        <rect x="92" y="416" width="4" height="18" fill="#9E7650"/>
+        <rect x="70" y="318" width="4" height="50" fill="#6B5A48"/>
+        <ellipse cx="72" cy="367" rx="13" ry="3" fill="#6B5A48"/>
+
+        <!-- cama -->
+        <rect x="122" y="262" width="300" height="152" rx="22" fill="#D8C3A3"/>
+        <g stroke="rgba(110,80,50,.16)" stroke-width="1.2">
+          <path d="M146 276V340M166 276V340M186 276V340M206 276V340M226 276V340M246 276V340M266 276V340M286 276V340M306 276V340M326 276V340M346 276V340M366 276V340M386 276V340M406 276V340"/>
+        </g>
+        <rect x="140" y="328" width="122" height="42" rx="16" fill="#FFFFFF" stroke="#E6DED2"/>
+        <rect x="282" y="328" width="122" height="42" rx="16" fill="#FFFFFF" stroke="#E6DED2"/>
+        <rect x="236" y="344" width="58" height="30" rx="12" fill="#E0A04A"/>
+        <rect x="104" y="360" width="336" height="58" rx="10" fill="#FAF7F1"/>
+        <rect x="104" y="386" width="336" height="32" rx="8" fill="#24476B"/>
+        <path d="M112 394H432" stroke="#3A6390" stroke-width="2"/>
+        <rect x="112" y="416" width="320" height="12" fill="#BFA184"/>
+        <rect x="122" y="428" width="6" height="6" fill="#9E7650"/>
+        <rect x="416" y="428" width="6" height="6" fill="#9E7650"/>
+
+        <!-- luz de la hora: dorada al atardecer, azul de noche -->
+        <rect width="800" height="520" fill="#FF8A3D" opacity="0" style="mix-blend-mode: multiply" data-gold/>
+        <rect width="800" height="520" fill="#1A2040" opacity="0" style="mix-blend-mode: multiply" data-night/>
+
+        <!-- lo que se ve por el ventanal -->
+        <g clip-path="url(#hueco)">
+          <rect x="440" y="80" width="220" height="320" fill="url(#cielo)"/>
+          <g fill="#FFFFFF" opacity="0" data-stars>
+            <circle cx="482" cy="132" r="1.3"/><circle cx="520" cy="110" r="1"/><circle cx="584" cy="118" r="1.4"/>
+            <circle cx="626" cy="176" r="1"/><circle cx="500" cy="176" r=".9"/><circle cx="556" cy="150" r="1.1"/>
+            <circle cx="474" cy="214" r="1"/><circle cx="632" cy="226" r=".8"/><circle cx="540" cy="226" r="1"/>
+          </g>
+          <circle r="34" fill="#FFE6A8" opacity=".28" data-halo/>
+          <circle r="17" fill="#FFE6A8" data-sun/>
+          <circle cx="604" cy="150" r="12" fill="#F4EBD6" mask="url(#luna)" opacity="0" data-moon/>
+          <rect x="440" y="300" width="220" height="100" fill="#4F86AE" data-sea/>
+          <path d="M440 306H660" stroke="#FFFFFF" stroke-opacity=".35" stroke-width="1.5" data-shine/>
+          <g fill="#F4F0E8" data-roofs>
+            <rect x="452" y="320" width="42" height="70"/>
+            <rect x="490" y="330" width="36" height="60"/>
+            <rect x="527" y="272" width="22" height="118"/>
+            <rect x="524" y="265" width="28" height="9"/>
+            <rect x="552" y="326" width="46" height="64"/>
+            <rect x="596" y="314" width="52" height="76"/>
+            <path d="M604 314a18 18 0 0 1 36 0Z"/>
+            <rect x="620" y="290" width="4" height="8"/>
+          </g>
+          <g fill="#FFD27A" opacity="0" data-lit>
+            <rect x="462" y="336" width="5" height="7"/><rect x="478" y="352" width="5" height="7"/>
+            <rect x="533" y="290" width="4" height="7"/><rect x="566" y="340" width="5" height="7"/>
+            <rect x="610" y="332" width="5" height="7"/><rect x="630" y="350" width="5" height="7"/>
+          </g>
+        </g>
+        <g fill="none" data-frame stroke="#FBF8F2">
+          <path d="M460 382V190a90 90 0 0 1 180 0V382Z" stroke-width="8"/>
+          <path d="M550 102V382M460 236H640" stroke-width="4"/>
+        </g>
+
+        <!-- cortinas de lino: se corren a la hora de la siesta y para dormir -->
+        <rect x="396" y="88" width="308" height="4" rx="2" fill="#8C7A64"/>
+        <g opacity=".95" data-curtains>
+          <g class="curtain curtain--l"><rect x="404" y="92" width="58" height="300" fill="#EDE4D3" data-cloth/><rect x="404" y="92" width="58" height="300" fill="url(#lino)"/><path d="M418 92V392M432 92V392M446 92V392" stroke="rgba(120,95,60,.12)"/></g>
+          <g class="curtain curtain--r"><rect x="638" y="92" width="58" height="300" fill="#EDE4D3" data-cloth/><rect x="638" y="92" width="58" height="300" fill="url(#lino)"/><path d="M652 92V392M666 92V392M680 92V392" stroke="rgba(120,95,60,.12)"/></g>
+        </g>
+
+        <!-- pantalla de la lámpara: se enciende de noche -->
+        <circle cx="72" cy="304" r="230" fill="url(#lampara)" opacity="0" style="mix-blend-mode: screen" data-glow/>
+        <path d="M52 320H92L85 288H59Z" fill="#EFE3CF" data-shade/>
+      </svg>
+    </figure>
+
+    <div class="dial">
+      <div class="hour">
+        <strong aria-hidden="true" data-clock>09:00</strong>
+        <p data-caption>El desayuno sube a la suite a la hora que digas.</p>
+      </div>
+      <div class="track">
+        <input type="range" min="7" max="23" step="0.25" value="9" aria-label="Hora del día" aria-valuetext="09:00" data-hour>
+        <div class="ticks" aria-hidden="true">
+          <span style="left: 0%">07:00</span><span style="left: 25%">11:00</span><span style="left: 50%">15:00</span><span style="left: 75%">19:00</span><span style="left: 100%">23:00</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="suites" class="section section--line">
+    <div class="wrap">
+      <div class="section__head">
+        <div>
+          <p class="kicker">Las suites</p>
+          <h2 class="h2">Tres suites, <em>tres luces.</em></h2>
+        </div>
+        <p class="lead">Cada una mira a un lado de la casa. Pasa por las fotos: el dormitorio, lo que la hace distinta y el baño.</p>
+      </div>
+      <div class="suites" data-suites></div>
+    </div>
+  </section>
+
+  <section id="barrio" class="section section--paper">
+    <div class="wrap walk">
+      <div>
+        <p class="kicker">El barrio</p>
+        <h2 class="h2">Todo, <em>andando.</em></h2>
+        <p class="lead" style="margin-top: 18px">Casa Marea está en mitad del casco antiguo. Toca un sitio y te dibujamos el camino desde la puerta.</p>
+        <div class="places" role="group" aria-label="Sitios cerca de la casa" style="margin-top: 32px" data-places></div>
+      </div>
+      <div class="map reveal">
+        <svg viewBox="0 0 600 440" role="img" aria-label="Plano del casco antiguo de Cádiz con la casa en el centro" data-map>
+          <defs>
+            <clipPath id="tierra"><path d="M40 214C38 128 116 62 228 54C330 47 424 70 500 122C540 150 562 186 572 222L600 214V290L566 300C548 360 452 400 340 396C240 392 150 382 92 334C56 304 41 262 40 214Z"/></clipPath>
+          </defs>
+          <rect width="600" height="440" rx="6" fill="#DCE5EE"/>
+          <path d="M40 214C38 128 116 62 228 54C330 47 424 70 500 122C540 150 562 186 572 222L600 214V290L566 300C548 360 452 400 340 396C240 392 150 382 92 334C56 304 41 262 40 214Z" fill="#F6F3EE"/>
+          <path d="M58 290C46 262 42 236 44 210" stroke="#E9D9B8" stroke-width="12" stroke-linecap="round" fill="none"/>
+          <g clip-path="url(#tierra)" stroke="#E2DCD1" stroke-width="1.4" fill="none">
+            <path d="M40 120L600 160M40 170L600 196M40 236L600 244M40 282L600 300M40 330L600 352"/>
+            <path d="M120 40L150 420M190 40L210 420M252 40L262 420M300 40L300 420M352 40L340 420M410 40L392 420M470 40L446 420M530 40L500 420"/>
+            <path d="M100 80L320 380M260 60L520 330"/>
+          </g>
+          <rect x="190" y="98" width="46" height="30" rx="4" fill="#D7E0C9" transform="rotate(-12 213 113)"/>
+          <path data-route fill="none" stroke="#24476B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <g data-spots></g>
+          <g transform="translate(300 230)">
+            <circle r="14" fill="#24476B" opacity=".14"/>
+            <rect x="-7" y="-7" width="14" height="14" rx="2" fill="#24476B"/>
+            <text y="30" text-anchor="middle" class="map__label" style="fill: var(--ink); font-weight: 600">Casa Marea</text>
+          </g>
+          <circle r="5" fill="#E0A04A" stroke="#fff" stroke-width="2" opacity="0" data-walker/>
+        </svg>
+        <p class="map__mins"><strong data-mins>0</strong><span>minutos andando</span></p>
+        <p class="map__note" aria-live="polite" data-map-note></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="fechas" class="section section--line">
+    <div class="wrap">
+      <div class="section__head">
+        <div>
+          <p class="kicker">Fechas</p>
+          <h2 class="h2" style="max-width: 12em">Tú eliges las noches. <em>Nosotros, lo demás.</em></h2>
+        </div>
+        <p class="lead">Marca llegada y salida. Aquí no pagas nada: te contestamos en unas horas con la disponibilidad y el precio.</p>
+      </div>
+      <div class="book">
+        <div class="cal reveal" data-cal>
+          <div class="cal__head">
+            <h3 aria-live="polite" data-month></h3>
+            <div class="cal__nav">
+              <button type="button" aria-label="Mes anterior" data-prev>‹</button>
+              <button type="button" aria-label="Mes siguiente" data-next>›</button>
+            </div>
+          </div>
+          <div class="cal__grid" data-grid></div>
+          <p class="cal__legend"><span>Toca la llegada y después la salida</span><span><s>15</s> completo</span></p>
+          <p class="cal__msg" aria-live="polite" data-cal-msg></p>
+        </div>
+        <form class="ask reveal" style="transition-delay: .08s" data-form>
+          <div class="ask__top">
+            <div class="fob" aria-hidden="true" data-fob>
+              <svg viewBox="0 0 58 108">
+                <g>
+                  <circle cx="29" cy="12" r="9" fill="none" stroke="#B89155" stroke-width="3"/>
+                  <rect x="25" y="19" width="8" height="10" rx="2" fill="#B89155"/>
+                  <rect x="8" y="27" width="42" height="78" rx="21" fill="#24476B"/>
+                  <text x="29" y="66" text-anchor="middle" fill="#F6F3EE" style="font: 400 24px 'DM Serif Display', serif" data-fob-num>01</text>
+                  <text x="29" y="84" text-anchor="middle" fill="#F6F3EE" opacity=".8" style="font: 600 7px 'Hanken Grotesk', sans-serif; letter-spacing: .14em" data-fob-name>PATIO</text>
+                </g>
+              </svg>
+            </div>
+            <div>
+              <p class="ask__title" data-ask-title>Suite Patio</p>
+              <p class="ask__sub" data-ask-sub></p>
+            </div>
+          </div>
+          <div class="pick" role="group" aria-label="Suite" data-pick></div>
+          <dl class="stay">
+            <div><dt>Llegada</dt><dd data-in>—</dd></div>
+            <div><dt>Salida</dt><dd data-out>—</dd></div>
+            <div><dt>Noches</dt><dd data-nights>—</dd></div>
+          </dl>
+          <div class="fields">
+            <div class="field"><label for="f-nombre">Nombre</label><input id="f-nombre" name="nombre" type="text" autocomplete="name" required></div>
+            <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
+          </div>
+          <button type="submit" class="btn btn--anil">Pedir disponibilidad</button>
+          <p class="ask__fine">Sin tarjeta y sin compromiso. Si tienes una hora de llegada rara, cuéntanoslo y te esperamos.</p>
+        </form>
+      </div>
+      <footer class="foot">
+        <span>© 2026 Casa Marea · Cádiz</span>
+        <a href="/trabajos.html" target="_top">Alojamiento ficticio · web de ejemplo de Maketa</a>
+        <a href="#inicio">Volver arriba ↑</a>
+      </footer>
+    </div>
+  </section>
+</main>
+
+<a class="maketa" href="/trabajos.html" target="_top">Web de ejemplo · <strong>Maketa</strong></a>
+
+<dialog class="demo" data-demo-note aria-labelledby="demo-title">
+  <form method="dialog">
+    <p class="kicker">Web de ejemplo</p>
+    <h2 id="demo-title">Casa Marea no existe. <em>Tu alojamiento, sí.</em></h2>
+    <p>Estas suites son inventadas: la web la he hecho para enseñar lo que se puede construir a mano. En la tuya, la petición te llegaría con la suite y las fechas, lista para contestar.</p>
+    <div class="demo__actions">
+      <a class="btn btn--anil" href="/trabajos.html?quiero=reloj-de-sol#reloj-de-sol" target="_top">Quiero una web así</a>
+      <button class="btn" value="close">Seguir mirando</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+(function () {
+  var doc = document.documentElement
+  doc.classList.add('js')
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
+  var embedded = false
+  try { embedded = window.self !== window.top } catch (e) { embedded = true }
+  if (embedded) doc.classList.add('is-embedded')
+  else {
+    var va = document.createElement('script')
+    va.defer = true
+    va.src = '/_vercel/insights/script.js'
+    document.head.appendChild(va)
+  }
+  var $ = function (s, r) { return (r || document).querySelector(s) }
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)) }
+  var SVG = 'http://www.w3.org/2000/svg'
+  var note = $('[data-demo-note]')
+  var openNote = function () { if (note.showModal) note.showModal() }
+  var clamp = function (v, a, b) { return Math.min(b, Math.max(a, v)) }
+  var hex = function (h) { return [1, 3, 5].map(function (i) { return parseInt(h.slice(i, i + 2), 16) }) }
+  var mix = function (a, b, t) {
+    var A = hex(a), B = hex(b)
+    return '#' + A.map(function (v, i) { return ('0' + Math.round(v + (B[i] - v) * t).toString(16)).slice(-2) }).join('')
+  }
+  var hhmm = function (h) {
+    var m = Math.round(h * 60)
+    return ('0' + Math.floor(m / 60) % 24).slice(-2) + ':' + ('0' + m % 60).slice(-2)
+  }
+
+  /* ---------- el día en la suite ---------- */
+  // Cómo es la luz a cada hora. Entre dos filas se interpola: colores del cielo,
+  // del mar y de las azoteas; cuánto sol entra (light) y de qué color (lc);
+  // y cuánto tiñen la habitación el dorado de la tarde (gold) y la noche (night).
+  var DAY = [
+    [7, { top: '#A9B8D6', bot: '#F4C7A1', sea: '#8E9CB9', roof: '#EAD9CB', light: .4, lc: '#FFD3A0', gold: .35, night: .12 }],
+    [9, { top: '#8DBFE6', bot: '#E6F0F4', sea: '#5288B0', roof: '#F4F0E8', light: .85, lc: '#FFF0D2', gold: 0, night: 0 }],
+    [13, { top: '#6DAEE2', bot: '#D9ECF6', sea: '#2F6F9F', roof: '#F7F4EE', light: 1, lc: '#FFF6E2', gold: 0, night: 0 }],
+    [17, { top: '#7DB0D8', bot: '#F1E1C2', sea: '#3B6C92', roof: '#F2E9DC', light: .9, lc: '#FFE6B5', gold: .12, night: 0 }],
+    [19.75, { top: '#7470A3', bot: '#F39A66', sea: '#6B5E87', roof: '#E8C3AA', light: .65, lc: '#FFB273', gold: .55, night: .1 }],
+    [21.25, { top: '#2D376B', bot: '#7B6A9B', sea: '#2B3258', roof: '#4A4B6E', light: 0, lc: '#FFB273', gold: .08, night: .7 }],
+    [23, { top: '#0E142E', bot: '#1F2850', sea: '#121935', roof: '#262B4A', light: 0, lc: '#FFB273', gold: 0, night: 1 }]
+  ]
+  function lightAt (h) {
+    var i = 1
+    while (i < DAY.length - 1 && DAY[i][0] < h) i++
+    var a = DAY[i - 1], b = DAY[i]
+    var t = clamp((h - a[0]) / (b[0] - a[0]), 0, 1)
+    var out = {}
+    Object.keys(a[1]).forEach(function (k) {
+      out[k] = typeof a[1][k] === 'number' ? a[1][k] + (b[1][k] - a[1][k]) * t : mix(a[1][k], b[1][k], t)
+    })
+    return out
+  }
+  // Lo que pasa en la suite a cada hora.
+  var MOMENTS = [
+    [8.25, 'Amanece sobre las azoteas. Se oyen las gaviotas y poco más.'],
+    [11, 'El desayuno sube a la suite a la hora que digas.'],
+    [14.5, 'Luz de sobra: no hace falta encender nada hasta la noche.'],
+    [16.5, 'Siesta: cortinas de lino y ni un ruido de la calle.'],
+    [19.25, 'Buena hora para bajar a la playa. Está a nueve minutos.'],
+    [21, 'La puesta de sol, desde la cama.'],
+    [22.75, 'Luz cálida y una copa en la azotea.'],
+    [24, 'Silencio. Se corren las cortinas y a dormir.']
+  ]
+  var momentAt = function (h) { for (var i = 0; i < MOMENTS.length; i++) if (h < MOMENTS[i][0]) return i; return MOMENTS.length - 1 }
+  var drawnAt = function (h) { return (h >= 14.5 && h < 16.5) || h >= 22.75 }
+
+  var scene = $('[data-scene]')
+  var el = {
+    sky: $$('[data-sky]'), sea: $('[data-sea]'), roofs: $('[data-roofs]'), lit: $('[data-lit]'), stars: $('[data-stars]'),
+    sun: $('[data-sun]'), halo: $('[data-halo]'), moon: $('[data-moon]'), shine: $('[data-shine]'),
+    patch: $('[data-patch]'), core: $('[data-patch-core]'), gold: $('[data-gold]'), night: $('[data-night]'),
+    frame: $('[data-frame]'), cloth: $$('[data-cloth]'), glow: $('[data-glow]'), shade: $('[data-shade]')
+  }
+  var range = $('[data-hour]')
+  var clock = $('[data-clock]')
+  var caption = $('[data-caption]')
+  var track = $('.track')
+  var hour = 9
+  var moment = -1
+  var captionTimer = 0
+
+  function paint (h) {
+    hour = h
+    var L = lightAt(h)
+    el.sky[0].setAttribute('stop-color', L.top)
+    el.sky[1].setAttribute('stop-color', L.bot)
+    el.sea.setAttribute('fill', L.sea)
+    el.roofs.setAttribute('fill', L.roof)
+    var dark = clamp((h - 20.25) / 1.5, 0, 1)
+    el.lit.setAttribute('opacity', dark.toFixed(2))
+    el.stars.setAttribute('opacity', clamp((h - 21) / 1.2, 0, 1).toFixed(2))
+    el.moon.setAttribute('opacity', clamp((h - 20.75) / 1, 0, 1).toFixed(2))
+    el.shine.setAttribute('stroke-opacity', (.35 * (1 - dark)).toFixed(2))
+
+    // El sol cruza el ventanal en arco, de 7:00 a 21:00, y se pone en el mar.
+    var t = clamp((h - 7) / 14, 0, 1)
+    var sx = 550 - Math.cos(Math.PI * t) * 92
+    var sy = 318 - Math.sin(Math.PI * t) * 196
+    var low = 1 - Math.sin(Math.PI * t)
+    var sunC = mix('#FFF0C4', '#FF9A5A', clamp(low * 1.25, 0, 1))
+    el.sun.setAttribute('cx', sx.toFixed(1)); el.sun.setAttribute('cy', sy.toFixed(1)); el.sun.setAttribute('fill', sunC)
+    el.halo.setAttribute('cx', sx.toFixed(1)); el.halo.setAttribute('cy', sy.toFixed(1)); el.halo.setAttribute('fill', sunC)
+    el.sun.style.opacity = el.halo.style.opacity = h > 21 ? 0 : 1
+
+    // La mancha de sol en el suelo: por la mañana cae a la derecha y por la
+    // tarde se estira hacia la cama.
+    var s = (h - 14) / 7
+    var dx = -s * 70, far = -s * 230
+    var pts = [[470 + dx, 436], [630 + dx, 436], [640 + far + 50 * Math.abs(s), 520], [460 + far - 50 * Math.abs(s), 520]]
+    var d = 'M' + pts.map(function (p) { return p[0].toFixed(1) + ' ' + p[1] }).join('L') + 'Z'
+    var drawn = drawnAt(h)
+    var light = L.light * (drawn ? .25 : 1)
+    el.patch.setAttribute('d', d); el.patch.setAttribute('fill', L.lc); el.patch.setAttribute('opacity', light.toFixed(2))
+    el.core.setAttribute('d', d); el.core.setAttribute('fill', L.lc); el.core.setAttribute('opacity', (light * .45).toFixed(2))
+    el.gold.setAttribute('opacity', (L.gold * .2).toFixed(3))
+    el.night.setAttribute('opacity', (L.night * .62).toFixed(3))
+    el.frame.setAttribute('stroke', mix('#FBF8F2', '#2A2F4A', L.night * .62))
+    el.cloth.forEach(function (c) { c.setAttribute('fill', mix(mix('#EDE4D3', '#F2B27A', L.gold * .35), '#2A2F4A', L.night * .55)) })
+    scene.classList.toggle('is-drawn', drawn)
+
+    // La lámpara se enciende al caer la tarde.
+    var lamp = clamp((h - 20) / .75, 0, 1)
+    el.glow.setAttribute('opacity', lamp.toFixed(2))
+    el.shade.setAttribute('fill', lamp > .5 ? '#FFE2A6' : mix('#EFE3CF', '#2A2F4A', L.night * .62))
+
+    // El selector: sol de día, luna de noche.
+    var night = h >= 21
+    track.style.setProperty('--sun', night ? '#EDE6D3' : sunC)
+    track.style.setProperty('--halo', night ? 'rgba(237, 230, 211, .22)' : 'rgba(242, 182, 90, .28)')
+    var hm = hhmm(h)
+    if (clock.dataset.t !== hm) {
+      clock.dataset.t = hm
+      clock.innerHTML = hm.split('').map(function (c) { return '<i' + (c === ':' ? ' class="c"' : '') + '>' + c + '</i>' }).join('')
+    }
+    range.setAttribute('aria-valuetext', hhmm(h) + ', ' + MOMENTS[momentAt(h)][1])
+
+    var m = momentAt(h)
+    if (m !== moment) {
+      var first = moment === -1
+      moment = m
+      clearTimeout(captionTimer)
+      if (first || reduce) caption.textContent = MOMENTS[m][1]
+      else {
+        caption.classList.add('is-out')
+        captionTimer = setTimeout(function () { caption.textContent = MOMENTS[m][1]; caption.classList.remove('is-out') }, 220)
+      }
+    }
+  }
+
+  range.addEventListener('input', function () { stopPlay(); paint(+range.value) })
+
+  // El día pasando: de `from` a `to` al ritmo de un día entero en diez segundos.
+  // Lo usa el botón y también la entrada; tocar el sol o el botón lo para.
+  var playBtn = $('[data-play]')
+  var playLabel = $('span', playBtn)
+  var raf = 0
+  function stopPlay () {
+    if (!raf) return
+    cancelAnimationFrame(raf); raf = 0
+    playBtn.setAttribute('aria-pressed', 'false'); playLabel.textContent = 'Ver el día entero'
+  }
+  function play (from, to, delay) {
+    var t0 = performance.now() + (delay || 0)
+    var dur = (to - from) / 16 * 10000
+    playBtn.setAttribute('aria-pressed', 'true'); playLabel.textContent = 'Pausar'
+    var step = function (now) {
+      var k = clamp((now - t0) / dur, 0, 1)
+      var h = from + (to - from) * k
+      range.value = h
+      paint(h)
+      if (k < 1) raf = requestAnimationFrame(step)
+      else { raf = 0; playBtn.setAttribute('aria-pressed', 'false'); playLabel.textContent = 'Ver el día otra vez' }
+    }
+    raf = requestAnimationFrame(step)
+  }
+  playBtn.addEventListener('click', function () {
+    if (raf) { stopPlay(); return }
+    play(hour >= 22.9 ? 7 : hour, 23)
+  })
+
+  /* ---------- las suites ---------- */
+  // Tres fotos por suite: el dormitorio, lo que la hace distinta y el baño.
+  var PX = function (id) { return 'https://images.pexels.com/photos/' + id + '/pexels-photo-' + id + '.jpeg?auto=compress&cs=tinysrgb&w=900' }
+  var SUITES = [
+    { name: 'Patio', num: '01', m2: 24, bed: 'cama de 160', extra: 'ducha de obra',
+      note: 'Da al patio de la casa, con sus arcos y sus naranjos. Fresca en agosto y con sol de mañana para desayunar.',
+      photos: [
+        [3754595, 'Dormitorio', 'Habitación encalada con contraventanas verdes y cama de lino'],
+        [4916453, 'El patio', 'Patio encalado con arcos, plantas y naranjos'],
+        [5316972, 'Ducha de obra', 'Baño blanco con ducha de obra y azulejo de dibujo']
+      ] },
+    { name: 'Balcón', num: '02', m2: 30, bed: 'cama de 180', extra: 'bañera exenta',
+      note: 'Dos balcones de forja a una calle peatonal. La luz de la tarde llega hasta la bañera.',
+      photos: [
+        [15404863, 'Dormitorio', 'Cama de lino junto a un balcón de puertas acristaladas'],
+        [18053699, 'Los balcones', 'Fachada encalada con un balcón de forja y geranios'],
+        [1358912, 'Bañera exenta', 'Bañera blanca exenta junto a un ventanal']
+      ] },
+    { name: 'Azotea', num: '03', m2: 38, bed: 'cama de 180', extra: 'terraza privada',
+      note: 'Arriba del todo, con terraza propia sobre los tejados y el mar al fondo.',
+      photos: [
+        [10554480, 'Dormitorio', 'Dormitorio blanco y luminoso con la cama bajo la ventana'],
+        [13407813, 'La terraza', 'Terraza con sombrillas cerradas frente al mar'],
+        [3148596, 'Baño', 'Baño de azulejo blanco con una palmera en maceta']
+      ] }
+  ]
+  var suitesEl = $('[data-suites]')
+  SUITES.forEach(function (s, i) {
+    var card = document.createElement('article')
+    card.className = 'suite reveal'
+    card.style.transitionDelay = (i * .08) + 's'
+    var n = s.photos.length
+    card.innerHTML =
+      '<div class="gal">' +
+        s.photos.map(function (ph, j) { return '<img src="' + PX(ph[0]) + '" alt="' + ph[2] + '"' + (j ? ' loading="lazy"' : '') + ' decoding="async"' + (j ? '' : ' class="is-on"') + '>' }).join('') +
+        '<div class="gal__bars" role="group" aria-label="Fotos de la suite ' + s.name + '">' +
+          s.photos.map(function (ph, j) { return '<button type="button" aria-label="' + ph[1] + '"' + (j ? '' : ' aria-current="true"') + '></button>' }).join('') +
+        '</div>' +
+        '<p class="gal__label" aria-hidden="true">' + s.photos[0][1] + ' <span>1/' + n + '</span></p>' +
+      '</div>' +
+      '<h3 class="suite__name">' + s.name + '<span class="suite__num">' + s.num + '</span></h3>' +
+      '<p class="suite__facts">' + s.m2 + ' m² · ' + s.bed + ' · ' + s.extra + '</p>' +
+      '<p class="suite__note">' + s.note + '</p>' +
+      '<button type="button" class="suite__go" data-go="' + i + '">Ver fechas de ' + s.name + ' <span aria-hidden="true">→</span></button>'
+    suitesEl.appendChild(card)
+
+    var gal = $('.gal', card)
+    var imgs = $$('img', gal)
+    var bars = $$('.gal__bars button', gal)
+    var label = $('.gal__label', gal)
+    var at = 0
+    var labelTimer = 0
+    var show = function (j) {
+      if (j === at) return
+      at = j
+      imgs.forEach(function (im, k) { im.classList.toggle('is-on', k === j) })
+      bars.forEach(function (b, k) { if (k === j) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current') })
+      clearTimeout(labelTimer)
+      label.classList.add('is-out')
+      labelTimer = setTimeout(function () { label.innerHTML = s.photos[j][1] + ' <span>' + (j + 1) + '/' + n + '</span>'; label.classList.remove('is-out') }, reduce ? 0 : 150)
+    }
+    // Con ratón, la foto depende de dónde esté el cursor; al salir, vuelve el dormitorio.
+    gal.addEventListener('pointermove', function (ev) {
+      if (ev.pointerType !== 'mouse') return
+      var r = gal.getBoundingClientRect()
+      show(clamp(Math.floor((ev.clientX - r.left) / r.width * n), 0, n - 1))
+    })
+    gal.addEventListener('pointerleave', function (ev) { if (ev.pointerType === 'mouse') show(0) })
+    // Con el dedo, cada toque pasa a la siguiente; las barras llevan a una en concreto.
+    gal.addEventListener('click', function (ev) {
+      var b = ev.target.closest('.gal__bars button')
+      if (b) show(bars.indexOf(b))
+      else if (!matchMedia('(hover: hover)').matches) show((at + 1) % n)
+    })
+  })
+
+  /* ---------- el barrio ---------- */
+  // Plano dibujado, no a escala: los minutos salen del largo del camino.
+  var PLACES = [
+    { name: 'Panadería de la esquina', note: 'Pan recién hecho a las ocho. Se baja en zapatillas.', at: [334, 238], route: [[300, 230], [334, 238]] },
+    { name: 'Torre Tavira', note: 'La cámara oscura y la mejor vista de las azoteas.', at: [318, 150], route: [[300, 230], [300, 196], [322, 190], [318, 150]] },
+    { name: 'Mercado Central', note: 'Pescado del día y churros para desayunar.', at: [402, 212], lab: 't', route: [[300, 230], [350, 226], [356, 206], [402, 212]] },
+    { name: 'Catedral', note: 'Su cúpula dorada es la que ves desde la suite Azotea.', at: [382, 324], route: [[300, 230], [318, 262], [352, 272], [362, 312], [382, 324]] },
+    { name: 'Parque Genovés', note: 'Sombra, bancos y un paseo junto al mar.', at: [180, 112], route: [[300, 230], [286, 186], [238, 164], [204, 128], [180, 112]] },
+    { name: 'Playa de la Caleta', note: 'Atardeceres entre dos castillos.', at: [64, 262], lab: 'b', route: [[300, 230], [252, 236], [222, 214], [170, 226], [120, 248], [64, 262]] }
+  ]
+  var routeEl = $('[data-route]')
+  var walker = $('[data-walker]')
+  var spotsEl = $('[data-spots]')
+  var minsEl = $('[data-mins]')
+  var mapNote = $('[data-map-note]')
+  var noteTimer = 0
+  var placesEl = $('[data-places]')
+  PLACES.forEach(function (p, i) {
+    p.d = 'M' + p.route.map(function (q) { return q.join(' ') }).join('L')
+    p.len = 0
+    for (var k = 1; k < p.route.length; k++) p.len += Math.hypot(p.route[k][0] - p.route[k - 1][0], p.route[k][1] - p.route[k - 1][1])
+    p.mins = Math.max(1, Math.round(p.len / 28))
+    var g = document.createElementNS(SVG, 'g')
+    g.setAttribute('class', 'map__spot')
+    // La etiqueta, a la derecha del punto; o encima o debajo (lab) si pisaría el camino o el borde.
+    var lx = p.lab ? p.at[0] : p.at[0] + 10
+    var ly = p.lab === 't' ? p.at[1] - 16 : p.lab === 'b' ? p.at[1] + 26 : p.at[1] + 4
+    var anchor = p.lab === 't' ? ' text-anchor="middle"' : ''
+    g.innerHTML = '<circle cx="' + p.at[0] + '" cy="' + p.at[1] + '" r="5" fill="#8E8A80"/><text class="map__label" x="' + lx + '" y="' + ly + '"' + anchor + '>' + p.name + '</text>'
+    spotsEl.appendChild(g)
+    p.spot = g
+    var b = document.createElement('button')
+    b.type = 'button'
+    b.className = 'place'
+    b.setAttribute('aria-pressed', 'false')
+    b.innerHTML = '<b>' + p.name + '</b><em>' + p.mins + ' min</em>'
+    b.addEventListener('click', function () { walk(i) })
+    b.addEventListener('pointerenter', function (ev) { if (ev.pointerType === 'mouse') walk(i) })
+    placesEl.appendChild(b)
+    p.btn = b
+  })
+  var current = -1
+  var walkRaf = 0
+  function walk (i) {
+    if (i === current) return
+    current = i
+    var p = PLACES[i]
+    PLACES.forEach(function (q, j) { q.btn.setAttribute('aria-pressed', j === i ? 'true' : 'false'); q.spot.classList.toggle('is-on', j === i) })
+    var noteHtml = '<b>' + p.name + '.</b> ' + p.note
+    clearTimeout(noteTimer)
+    if (reduce || !mapNote.innerHTML) mapNote.innerHTML = noteHtml
+    else {
+      mapNote.classList.add('is-out')
+      noteTimer = setTimeout(function () { mapNote.innerHTML = noteHtml; mapNote.classList.remove('is-out') }, 180)
+    }
+    routeEl.setAttribute('d', p.d)
+    var len = routeEl.getTotalLength()
+    routeEl.style.strokeDasharray = len
+    cancelAnimationFrame(walkRaf)
+    if (reduce) { routeEl.style.strokeDashoffset = 0; minsEl.textContent = p.mins; walker.setAttribute('opacity', 0); return }
+    var t0 = performance.now()
+    var dur = 500 + len * 4
+    walker.setAttribute('opacity', 1)
+    var step = function (now) {
+      var k = clamp((now - t0) / dur, 0, 1)
+      var e = 1 - Math.pow(1 - k, 3)
+      routeEl.style.strokeDashoffset = len * (1 - e)
+      var pt = routeEl.getPointAtLength(len * e)
+      walker.setAttribute('cx', pt.x.toFixed(1)); walker.setAttribute('cy', pt.y.toFixed(1))
+      minsEl.textContent = Math.round(p.mins * e)
+      if (k < 1) walkRaf = requestAnimationFrame(step)
+    }
+    walkRaf = requestAnimationFrame(step)
+  }
+
+  /* ---------- fechas ---------- */
+  var MONTHS = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre']
+  var DOW = ['L', 'M', 'X', 'J', 'V', 'S', 'D']
+  var WEEKDAY = ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb']
+  var today = new Date(); today.setHours(0, 0, 0, 0)
+  var book = { suite: 0, view: 0, start: null, end: null, hover: null }
+  var dayKey = function (d) { return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate() }
+  // Noches completas inventadas, distintas en cada suite pero siempre las mismas.
+  var full = function (d) { return (d.getDate() * 7 + d.getMonth() * 3 + book.suite * 5) % 11 === 0 }
+  var fmt = function (d) { return WEEKDAY[d.getDay()] + ' ' + d.getDate() + ' ' + MONTHS[d.getMonth()].slice(0, 3) }
+  var grid = $('[data-grid]')
+  var calEl = $('[data-cal]')
+  var calMsg = $('[data-cal-msg]')
+  var nights = function (a, b) { return Math.round((b - a) / 864e5) }
+  var anyFull = function (a, b) {
+    for (var d = new Date(a); d < b; d.setDate(d.getDate() + 1)) if (full(d)) return true
+    return false
+  }
+
+  function renderCal () {
+    var first = new Date(today.getFullYear(), today.getMonth() + book.view, 1)
+    $('[data-month]').textContent = MONTHS[first.getMonth()] + ' ' + first.getFullYear()
+    $('[data-prev]').disabled = book.view === 0
+    $('[data-next]').disabled = book.view === 5
+    grid.innerHTML = DOW.map(function (d) { return '<span class="cal__dow" aria-hidden="true">' + d + '</span>' }).join('')
+    var pad = (first.getDay() + 6) % 7
+    for (var n = 0; n < pad; n++) grid.appendChild(document.createElement('span'))
+    var last = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate()
+    var endShown = book.end || (book.start && book.hover && book.hover > book.start ? book.hover : null)
+    for (var i = 1; i <= last; i++) {
+      var d = new Date(first.getFullYear(), first.getMonth(), i)
+      var b = document.createElement('button')
+      b.type = 'button'
+      b.className = 'day'
+      b.dataset.key = dayKey(d)
+      b.innerHTML = '<span>' + i + '</span>'
+      var past = d < today
+      var isFull = full(d)
+      if (past) b.disabled = true
+      if (isFull && !past) { b.classList.add('is-full'); b.disabled = !(book.start && !book.end && d > book.start) }
+      if (+d === +today) b.classList.add('is-today')
+      var s = book.start && +d === +book.start
+      var e = endShown && +d === +endShown
+      if (s) b.classList.add('is-start', 'is-range')
+      if (e) b.classList.add('is-end', 'is-range')
+      if (book.start && endShown && d > book.start && d < endShown) b.classList.add('is-range')
+      if (!book.end && book.start && endShown && (d > book.start) && d <= endShown) b.classList.add('is-preview')
+      b.setAttribute('aria-label', d.getDate() + ' de ' + MONTHS[d.getMonth()] + (isFull ? ', completo' : '') + (s ? ', llegada' : '') + (e && book.end ? ', salida' : ''))
+      if (s || (e && book.end)) b.setAttribute('aria-pressed', 'true')
+      b._date = d
+      grid.appendChild(b)
+    }
+    renderStay()
+  }
+  grid.addEventListener('click', function (ev) {
+    var b = ev.target.closest('.day')
+    if (!b || b.disabled) return
+    var d = b._date
+    calMsg.textContent = ''
+    if (!book.start || book.end || d <= book.start) { book.start = d; book.end = null }
+    else if (anyFull(book.start, d)) calMsg.textContent = 'Hay alguna noche completa en medio: prueba otras fechas.'
+    else book.end = d
+    book.hover = null
+    renderCal()
+  })
+  grid.addEventListener('pointerover', function (ev) {
+    if (ev.pointerType !== 'mouse' || !book.start || book.end) return
+    var b = ev.target.closest('.day')
+    var d = b && !b.disabled ? b._date : null
+    if (d && book.hover && +d === +book.hover) return
+    book.hover = d && d > book.start && !anyFull(book.start, d) ? d : null
+    renderCal()
+  })
+  $('[data-prev]').addEventListener('click', function () { book.view = Math.max(0, book.view - 1); renderCal() })
+  $('[data-next]').addEventListener('click', function () { book.view = Math.min(5, book.view + 1); renderCal() })
+
+  function renderStay () {
+    $('[data-in]').textContent = book.start ? fmt(book.start) : '—'
+    $('[data-out]').textContent = book.end ? fmt(book.end) : '—'
+    $('[data-nights]').textContent = book.end ? nights(book.start, book.end) : '—'
+  }
+
+  // La suite: chips y llavero.
+  var pickEl = $('[data-pick]')
+  var fob = $('[data-fob]')
+  SUITES.forEach(function (s, i) {
+    var b = document.createElement('button')
+    b.type = 'button'
+    b.textContent = s.name
+    b.addEventListener('click', function () { chooseSuite(i) })
+    pickEl.appendChild(b)
+  })
+  function chooseSuite (i, quiet) {
+    var changed = i !== book.suite
+    book.suite = i
+    var s = SUITES[i]
+    $$('button', pickEl).forEach(function (b, j) { b.setAttribute('aria-pressed', j === i ? 'true' : 'false') })
+    $('[data-fob-num]').textContent = s.num
+    $('[data-fob-name]').textContent = s.name.toUpperCase()
+    $('[data-ask-title]').textContent = 'Suite ' + s.name
+    $('[data-ask-sub]').textContent = s.m2 + ' m² · ' + s.bed + ' · ' + s.extra
+    if (changed && !quiet) {
+      fob.classList.remove('is-swing'); void fob.offsetWidth; fob.classList.add('is-swing')
+      // Cambian las noches completas: si alguna cae dentro, se empieza de nuevo.
+      if (book.start && book.end && anyFull(book.start, book.end)) { book.end = null; calMsg.textContent = 'Esa suite tiene alguna noche completa en esas fechas.' }
+    }
+    renderCal()
+  }
+  $$('[data-go]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      chooseSuite(+b.dataset.go)
+      $('#fechas').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' })
+    })
+  })
+
+  /* ---------- contacto: el negocio no existe ---------- */
+  $('[data-form]').addEventListener('submit', function (ev) {
+    ev.preventDefault()
+    if (!book.end) {
+      calMsg.textContent = book.start ? 'Falta la salida: toca otro día del calendario.' : 'Elige primero las fechas en el calendario.'
+      calEl.classList.remove('is-nudge'); void calEl.offsetWidth; calEl.classList.add('is-nudge')
+      return
+    }
+    openNote()
+  })
+
+  /* ---------- arranque ---------- */
+  chooseSuite(0, true)
+  // Al entrar, el día pasa entero una vez, hasta las 23:00: se corren las
+  // cortinas y queda la lámpara. Sin animaciones, a media mañana.
+  if (reduce) paint(9)
+  else { range.value = 7; paint(7); play(7, 23, 700) }
+
+  /* ---------- aparecer al bajar ---------- */
+  var toReveal = $$('.reveal')
+  var show = function (el) { el.classList.add('is-in') }
+  if (reduce || !('IntersectionObserver' in window)) toReveal.forEach(show)
+  else {
+    var io = new IntersectionObserver(function (en) {
+      en.forEach(function (x) { if (x.isIntersecting) { show(x.target); io.unobserve(x.target) } })
+    }, { threshold: 0.15 })
+    toReveal.forEach(function (el) { io.observe(el) })
+  }
+  // El primer camino se dibuja solo cuando el plano entra en pantalla.
+  var mapEl = $('.map')
+  if ('IntersectionObserver' in window) {
+    var mo = new IntersectionObserver(function (en) {
+      if (en[0].isIntersecting) { if (current === -1) walk(5); mo.disconnect() }
+    }, { threshold: 0.4 })
+    mo.observe(mapEl)
+  } else walk(5)
+})()
+</script>
+</body>
+</html>

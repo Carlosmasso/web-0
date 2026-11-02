@@ -212,6 +212,17 @@ con el campo `piece`. Salen de los cuatro lienzos de Design de Carlos:
   queda fija arriba mientras se eligen muestras. Sora se añadió a mano a
   `fuentes.css` (desde Fontsource, mismo subconjunto latino); el próximo
   `pnpm fuentes:trabajos` la regenera desde Google sin cambiar nada.
+- ~~Reloj de sol → Casa Marea, suites de alquiler (Cádiz)~~ HECHO (nov. 2026).
+  Pieza nueva, sin lienzo de partida, para alojamientos que compiten con las
+  fotos iguales de las plataformas: la suite dibujada en SVG cambia de luz al
+  arrastrar el sol (tabla `DAY` de horas que se interpola: cielo, mar, mancha de
+  sol en el suelo, cortinas a la siesta y para dormir, lámpara de noche), con
+  "Ver el día entero" (al entrar pasa solo una vez, hasta las 23:00); las tres
+  suites en tres fotos cada una (dormitorio, lo suyo y el baño) que el cursor
+  recorre al pasar y que en el móvil avanzan con cada toque; el barrio andando (camino dibujado y
+  minutos según su largo) y "Pedir fechas" con calendario de llegada y salida y
+  llavero de la suite. Sin precios ni cobro: es una petición. DM Serif Display y
+  Hanken Grotesk, en local.
 
 Una pieza nueva: su HTML en `public/trabajos/`, un `<article>` en
 `trabajos.html` con `data-piece`, `data-name` y `data-kind`, y el
@@ -250,8 +261,11 @@ por sector en la portada (índice), una pieza destacada (Comanda; si se llega co
 una línea, tres etiquetas de lo que se puede tocar, "Verla en vivo" y "Quiero
 algo así" como enlace. Debajo, "¿Ninguna es lo tuyo?": el mismo formulario sin
 plantilla (`piece` "Sin plantilla", nota "Quiere una web a medida, sin
-plantilla de referencia"). Son nueve piezas: también **Muestrario** (Estancia,
-interiorismo). La página mide unos 6.300 px en escritorio, frente a ~10.000.
+plantilla de referencia"). Son diez piezas: también **Muestrario** (Estancia,
+interiorismo) y **Reloj de sol** (Casa Marea, suites). La página mide unos
+6.300 px en escritorio, frente a ~10.000. "¿Ninguna es lo tuyo?" va dentro de
+la rejilla: a lo ancho si las piezas de la rejilla son pares; si son impares,
+ocupa el hueco junto a la última.
 
 Medir con `custom_live_opened`, `custom_lead_opened` y `custom_lead_sent`.
 

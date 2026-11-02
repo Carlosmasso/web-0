@@ -65,6 +65,9 @@
 .job-any h2 { font-size: clamp(30px, 3.2vw, 44px); font-weight: 760; letter-spacing: -0.035em; line-height: 1; }
 .job-any p { margin-top: 12px; max-width: 520px; color: var(--ink-soft); font-size: 18px; line-height: 1.55; }
 .job-any .btn { border: 0; cursor: pointer; }
+/* A lo ancho bajo la rejilla; si la última fila tiene una sola pieza, ocupa el hueco de al lado. */
+.jobs__grid > .job-any { grid-column: 1 / -1; }
+.jobs__grid > article:nth-of-type(odd):last-of-type + .job-any { grid-column: auto; flex-direction: column; justify-content: center; align-items: flex-start; }
 
 @media (max-width: 960px) {
   .jobs__feature .job { grid-template-columns: minmax(0, 1fr); }

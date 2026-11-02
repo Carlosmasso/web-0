@@ -61,7 +61,7 @@
             que no caben en un configurador. Los negocios son inventados; lo que ves funcionando, no.
           </p>
           <nav class="sectors fade-in" style="--d: 0.15s" aria-label="Ir a la web de tu sector">
-            <ul><li><a class="sector" href="#comanda">Restaurante</a></li><li><a class="sector" href="#rayos-x">Arquitectura</a></li><li><a class="sector" href="#muestrario">Interiorismo</a></li><li><a class="sector" href="#analogica">Fotografía</a></li><li><a class="sector" href="#anatomia">Fisioterapia</a></li><li><a class="sector" href="#mesa-de-trabajo">Diseño gráfico</a></li><li><a class="sector" href="#cata">Vinoteca</a></li><li><a class="sector" href="#reticula">Asesoría</a></li><li><a class="sector" href="#apuntes">Idiomas</a></li></ul>
+            <ul><li><a class="sector" href="#comanda">Restaurante</a></li><li><a class="sector" href="#rayos-x">Arquitectura</a></li><li><a class="sector" href="#muestrario">Interiorismo</a></li><li><a class="sector" href="#reloj-de-sol">Alojamiento</a></li><li><a class="sector" href="#analogica">Fotografía</a></li><li><a class="sector" href="#anatomia">Fisioterapia</a></li><li><a class="sector" href="#mesa-de-trabajo">Diseño gráfico</a></li><li><a class="sector" href="#cata">Vinoteca</a></li><li><a class="sector" href="#reticula">Asesoría</a></li><li><a class="sector" href="#apuntes">Idiomas</a></li></ul>
           </nav>
         </div>
       </section>
@@ -131,6 +131,26 @@
               <ul class="job__tags" aria-label="Lo que se puede tocar"><li>Estancia que cambia</li><li>Luz de tarde</li><li>¿Cuánto se tarda?</li></ul>
               <div class="job__ctas">
                 <a class="btn btn--primary" href="/trabajos/muestrario.html" data-live>Verla en vivo <span class="arrow"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></a>
+                <button type="button" class="job__want" data-want>Quiero algo así</button>
+              </div>
+            </div>
+          </article>
+          <article id="reloj-de-sol" class="job" data-piece="reloj-de-sol" data-name="Reloj de sol" data-kind="Suites de alquiler">
+            <div class="job__frame reveal">
+              <div class="job__bar" aria-hidden="true"><i></i><i></i><i></i><span>casa-marea-suites · ejemplo</span></div>
+              <div class="job__screen" data-screen>
+                <picture><source type="image/avif" srcset="/trabajos/capturas/reloj-de-sol-ancho.avif" /><img src="/trabajos/capturas/reloj-de-sol-ancho.jpg" alt="" width="960" height="600" loading="lazy" decoding="async" /></picture>
+                <video data-src="/trabajos/videos/reloj-de-sol-ancho.mp4" muted playsinline loop preload="none" aria-hidden="true" tabindex="-1"></video>
+              </div>
+              <a class="job__hit" href="/trabajos/reloj-de-sol.html" data-live aria-label="Ver Reloj de sol en vivo"><span class="job__open" aria-hidden="true">Pruébala en vivo ↗</span></a>
+            </div>
+            <div class="job__copy reveal" style="--d: 0.06s">
+              <p class="eyebrow">Alojamiento</p>
+              <h2>Reloj de sol</h2>
+              <p class="job__lead">Arrastras el sol y ves cómo es estar dentro de la suite a cada hora, del desayuno a la noche.</p>
+              <ul class="job__tags" aria-label="Lo que se puede tocar"><li>El día en la suite</li><li>El barrio andando</li><li>Pedir fechas</li></ul>
+              <div class="job__ctas">
+                <a class="btn btn--primary" href="/trabajos/reloj-de-sol.html" data-live>Verla en vivo <span class="arrow"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></a>
                 <button type="button" class="job__want" data-want>Quiero algo así</button>
               </div>
             </div>
@@ -255,15 +275,16 @@
               </div>
             </div>
           </article>
-          </div>
 
-          <!-- Para quien le gusta el nivel pero no ninguna en concreto: el mismo formulario, sin plantilla. -->
+          <!-- Para quien le gusta el nivel pero no ninguna en concreto: el mismo formulario, sin plantilla.
+               Va dentro de la rejilla: si las piezas son impares, ocupa el hueco de la última fila. -->
           <div class="job-any reveal" data-piece="sin-plantilla" data-name="Sin plantilla" data-kind="Web a medida">
             <div>
               <h2>¿Ninguna es lo tuyo?</h2>
               <p>Cuéntame tu negocio y te propongo una idea pensada para ti, con su propio gesto.</p>
             </div>
             <button type="button" class="btn btn--primary" data-want>Cuéntame tu idea <span class="arrow"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span></button>
+          </div>
           </div>
         </div>
       </section>

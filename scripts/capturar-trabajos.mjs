@@ -90,6 +90,10 @@ const GUIONES = {
     await p.wait(1300); await p.click('[data-q-next]')
     await p.wait(900); await p.click('.opt', 2)
     await p.wait(1700)
+  },
+  // El día pasa solo al entrar: de media mañana a la noche, sin tocar nada.
+  'reloj-de-sol': async (p) => {
+    await p.wait(9400)
   }
 }
 
