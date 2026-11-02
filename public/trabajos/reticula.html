@@ -176,7 +176,7 @@ ul, ol { padding: 0; list-style: none; }
 /* ---------- contacto ---------- */
 
 .contact { background: var(--ink); color: var(--bg); margin-top: clamp(32px, 5vw, 64px); }
-.contact .wrap { padding-top: clamp(64px, 9vw, 128px); padding-bottom: 40px; }
+.contact .wrap { padding-top: clamp(64px, 9vw, 128px); padding-bottom: 0; }
 .contact .mono { color: #A3A39D; }
 .contact h2 { margin-top: 24px; font-weight: 500; font-size: clamp(56px, 11vw, 184px); line-height: .9; letter-spacing: -0.05em; }
 .topics { margin-top: 48px; display: flex; flex-wrap: wrap; gap: 8px; }
@@ -188,7 +188,8 @@ ul, ol { padding: 0; list-style: none; }
 .contact .pill { border-color: var(--bg); background: var(--bg); color: var(--ink); }
 .contact .pill:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
 .contact :focus-visible { outline-color: var(--bg); }
-.foot { margin-top: clamp(64px, 9vw, 128px); padding-top: 24px; border-top: 1px solid #3A3A37; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: #A3A39D; }
+/* Pie: 72 px por debajo, lo justo para que el aviso "Web de ejemplo" no tape su texto. */
+.foot { margin-top: clamp(64px, 9vw, 128px); padding-top: 24px; padding-bottom: 72px; border-top: 1px solid #3A3A37; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: #A3A39D; }
 .foot a { text-decoration: none; }
 .foot a:hover { color: var(--bg); }
 

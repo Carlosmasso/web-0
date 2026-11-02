@@ -203,6 +203,15 @@ con el campo `piece`. Salen de los cuatro lienzos de Design de Carlos:
 - ~~Apuntes → Acento, academia de idiomas (Salamanca)~~ HECHO. Prueba de nivel
   de inglés real (cuatro preguntas), escalera A1–C2 y "¿Cuánto tardo?" con horas
   orientativas por nivel del MCER.
+- ~~Muestrario → Estancia, estudio de interiorismo (Zaragoza)~~ HECHO (nov.
+  2026). Sale del lienzo "Portfolio 15 · Muestrario": estancia isométrica en
+  SVG que cambia de suelo, paredes, tapizado y madera al pasar por cada muestra
+  (al tocarla se queda), cuatro combinaciones de la casa, "luz de tarde" que
+  enciende la lámpara, proyectos en maqueta y "¿Cuánto se tarda?" con semanas
+  orientativas de proyecto y obra (sin precios). En el móvil la estancia se
+  queda fija arriba mientras se eligen muestras. Sora se añadió a mano a
+  `fuentes.css` (desde Fontsource, mismo subconjunto latino); el próximo
+  `pnpm fuentes:trabajos` la regenera desde Google sin cambiar nada.
 
 Una pieza nueva: su HTML en `public/trabajos/`, un `<article>` en
 `trabajos.html` con `data-piece`, `data-name` y `data-kind`, y el
@@ -234,6 +243,15 @@ configurador). `/trabajos.html` dejó los ocho iframes en vivo: cada pieza ense�
 póster y vídeo en formato ancho (`-ancho`), que suena solo mientras se ve.
 **Pendiente:** probar "Quiero algo así" de punta a punta en un deploy de
 preview (hoja de leads y los dos correos, con `piece`).
+
+**`/trabajos.html` reorganizada (nov. 2026).** De ocho filas en zigzag a: chips
+por sector en la portada (índice), una pieza destacada (Comanda; si se llega con
+`?quiero=<id>`, esa) y las demás en rejilla de dos, cada una con su sector,
+una línea, tres etiquetas de lo que se puede tocar, "Verla en vivo" y "Quiero
+algo así" como enlace. Debajo, "¿Ninguna es lo tuyo?": el mismo formulario sin
+plantilla (`piece` "Sin plantilla", nota "Quiere una web a medida, sin
+plantilla de referencia"). Son nueve piezas: también **Muestrario** (Estancia,
+interiorismo). La página mide unos 6.300 px en escritorio, frente a ~10.000.
 
 Medir con `custom_live_opened`, `custom_lead_opened` y `custom_lead_sent`.
 

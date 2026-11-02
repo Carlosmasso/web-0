@@ -1,0 +1,685 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estancia · Interiorismo en Zaragoza — web de ejemplo</title>
+<meta name="description" content="Web de ejemplo hecha a mano por Maketa para un estudio de interiorismo inventado.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 3l12 7-12 7L4 10z' fill='%23E6DCCB'/%3E%3Cpath d='M4 10l12 7v12L4 22z' fill='%232F5D50'/%3E%3Cpath d='M28 10l-12 7v12l12-7z' fill='%2322201C'/%3E%3C/svg%3E">
+
+<link rel="stylesheet" href="/trabajos/fuentes/fuentes.css" data-fuentes="https://fonts.googleapis.com/css2?family=Sora:wght@300..700&display=swap">
+<!--
+  Muestrario · plantilla a medida de Maketa (estudio de interiorismo ficticio).
+  Un solo archivo, sin dependencias. Para quien vende espacios y materiales:
+    1. Una estancia isométrica dibujada en SVG: al pasar por una muestra se ve
+       puesta en la habitación; al tocarla, se queda. Suelo, paredes, tapizado
+       y madera, con cuatro combinaciones de la casa.
+    2. "Luz de tarde": la estancia anochece y se enciende la lámpara.
+    3. Proyectos como maquetas: los muebles caen en su planta al aparecer y se
+       levantan al pasar el ratón.
+    4. "¿Cuánto se tarda?": tipo de espacio y metros → semanas orientativas de
+       proyecto y de obra, dibujadas en una línea de tiempo.
+    5. La petición de visita lleva la combinación elegida.
+  El dibujo sale de proj(): proyección isométrica de (x, y, z) a la pantalla.
+  Cada caja pinta tres caras (izquierda, derecha y tapa) con su tono; el orden
+  de pintado es el orden de la lista, de atrás hacia delante.
+-->
+<style>
+:root {
+  --paper: #EDEBE6;
+  --card: #FFFFFF;
+  --ink: #22201C;
+  --soft: #4A4741;
+  --muted: #5D5A53;
+  --line: #D4D0C8;
+  --green: #2F5D50;
+  --green-deep: #21443A;
+  --mint: #A9C4B8;
+  --pad: clamp(16px, 4vw, 40px);
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  --spring: cubic-bezier(.34, 1.56, .64, 1);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 16px/1.6 'Sora', system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: clip; }
+a { color: inherit; }
+button, input, textarea { font: inherit; color: inherit; }
+h1, h2, h3, p, ul, ol { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+::selection { background: var(--green); color: #fff; }
+[hidden] { display: none !important; }
+[id] { scroll-margin-top: 24px; }
+
+.wrap { max-width: 1320px; margin: 0 auto; padding-left: var(--pad); padding-right: var(--pad); }
+.kicker { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .14em; color: var(--green); }
+.h2 { margin-top: 12px; font-weight: 600; font-size: clamp(34px, 4.6vw, 64px); line-height: 1; letter-spacing: -0.04em; text-wrap: balance; }
+.lead { font-size: 16px; line-height: 1.7; color: var(--muted); max-width: 460px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 50px; padding: 0 24px; border-radius: 999px; border: 1px solid var(--ink); background: none; font-size: 15px; font-weight: 500; text-decoration: none; cursor: pointer; transition: background .25s ease, color .25s ease, border-color .25s ease, transform .2s ease; }
+.btn:hover { background: var(--ink); color: var(--paper); }
+.btn:active { transform: scale(.97); }
+.btn--green { background: var(--green); border-color: var(--green); color: #fff; }
+.btn--green:hover { background: var(--green-deep); border-color: var(--green-deep); color: #fff; }
+
+/* ---------- cabecera ---------- */
+
+.top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-top: 20px; padding-bottom: 20px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: 19px; letter-spacing: -0.03em; text-decoration: none; }
+.brand svg { width: 22px; height: 22px; }
+.top nav { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 26px; font-size: 14px; }
+.top nav a:not(.btn) { text-decoration: none; padding: 12px 0; color: var(--soft); }
+.top nav a:not(.btn):hover { color: var(--green); }
+.top nav .btn { min-height: 44px; padding: 0 18px; font-size: 14px; }
+@media (max-width: 760px) { .top nav a:not(.btn) { display: none; } }
+
+/* ---------- la estancia ---------- */
+
+.hero { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(28px, 4vw, 64px); align-items: center; padding-top: clamp(12px, 3vw, 40px); padding-bottom: clamp(56px, 8vw, 104px); }
+.hero h1 { font-weight: 600; font-size: clamp(40px, 4.8vw, 68px); line-height: 1; letter-spacing: -0.045em; text-wrap: balance; }
+.hero .lead { margin-top: 22px; }
+
+.mats { margin-top: 30px; display: grid; grid-template-columns: repeat(2, minmax(0, max-content)); gap: 20px 36px; }
+@media (max-width: 480px) { .mats { grid-template-columns: minmax(0, 1fr); } }
+.mat__head { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.mat__head span { text-transform: none; letter-spacing: 0; font-weight: 500; color: var(--ink); transition: color .2s ease; }
+.mat__head span.is-preview { color: var(--green); }
+.mat__row { margin-top: 8px; display: flex; gap: 8px; }
+.mats .sw { width: 48px; height: 48px; }
+.sw { position: relative; width: 52px; height: 52px; padding: 0; border-radius: 12px; border: 2px solid transparent; background: var(--c); box-shadow: inset 0 -10px 0 rgba(0, 0, 0, .08), 0 2px 0 rgba(0, 0, 0, .06); cursor: pointer; transition: transform .3s var(--spring), border-color .2s ease; }
+.sw:hover { transform: translateY(-3px); }
+.sw[aria-pressed="true"] { border-color: var(--ink); transform: translateY(-4px); }
+.sw[aria-pressed="true"]::after { content: ""; position: absolute; left: 50%; bottom: -9px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--ink); }
+.sw.is-pop { animation: pop .45s var(--spring); }
+@keyframes pop { 0% { transform: translateY(-4px) scale(.86); } 100% { transform: translateY(-4px) scale(1); } }
+
+.presets { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px 0 10px; border: 1px solid var(--line); border-radius: 999px; background: none; font-size: 13px; cursor: pointer; transition: border-color .2s ease, background .2s ease; }
+.chip:hover { border-color: var(--ink); }
+.chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.chip i { display: flex; }
+.chip i b { width: 10px; height: 18px; }
+.chip i b:first-child { border-radius: 4px 0 0 4px; }
+.chip i b:last-child { border-radius: 0 4px 4px 0; }
+
+.room { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.room__float { width: 100%; max-width: 640px; animation: floaty 7s ease-in-out infinite; }
+@keyframes floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+.room svg { display: block; width: 100%; height: auto; overflow: visible; }
+.room [data-scene] path { transition: fill .5s ease; }
+.room .glow { opacity: 0; transition: opacity .8s ease; mix-blend-mode: screen; pointer-events: none; }
+.room.is-dusk .glow { opacity: 1; }
+.room__bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 14px; font-size: 13px; color: var(--muted); }
+.room__bar strong { color: var(--ink); font-weight: 600; }
+.room__bar .is-preview { color: var(--green); }
+.dusk { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); font-size: 13px; cursor: pointer; transition: background .3s ease, color .3s ease, border-color .3s ease; }
+.dusk::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: #E8B04A; box-shadow: 0 0 0 3px rgba(232, 176, 74, .25); }
+.dusk[aria-pressed="true"] { background: #1E2340; border-color: #1E2340; color: #F3E6C8; }
+.dusk[aria-pressed="true"]::before { background: #FFE3A1; box-shadow: 0 0 10px 3px rgba(255, 227, 161, .7); }
+
+@media (max-width: 960px) {
+  .hero { display: flex; flex-direction: column; align-items: stretch; }
+  /* En el móvil la estancia se queda arriba mientras eliges muestras. */
+  .room { order: -1; position: sticky; top: 0; z-index: 5; margin: 0 calc(var(--pad) * -1); padding: 8px var(--pad) 10px; background: var(--paper); }
+  .room__float { max-width: 360px; animation: none; }
+}
+
+/* ---------- proyectos ---------- */
+
+.section { padding-top: clamp(56px, 8vw, 104px); padding-bottom: clamp(56px, 8vw, 104px); }
+.section--line { border-top: 1px solid var(--line); }
+.section__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px 40px; margin-bottom: 40px; }
+.section__head .lead { max-width: 360px; }
+
+/* Cuatro plantas: dos y dos, sin una suelta abajo. */
+.cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+@media (max-width: 640px) { .cards { grid-template-columns: minmax(0, 1fr); } }
+.card { display: flex; flex-direction: column; gap: 12px; padding: 20px 20px 22px; border-radius: 20px; background: var(--bg); transition: transform .45s var(--ease), box-shadow .45s var(--ease); }
+.card:hover { transform: translateY(-6px); box-shadow: 0 24px 40px -28px rgba(34, 32, 28, .45); }
+.card svg { display: block; width: 100%; height: auto; overflow: visible; }
+.card .b { transition: transform .5s var(--spring); transition-delay: calc(var(--i) * 40ms); }
+.card:hover .b { transform: translateY(calc(var(--i) * -3px - 2px)); }
+.card:hover .b0 { transform: none; }
+.js .card:not(.is-in) .b { opacity: 0; }
+.card.is-in .b { animation: drop .7s var(--spring) backwards; animation-delay: calc(var(--i) * 110ms + .1s); }
+@keyframes drop { 0% { transform: translateY(-34px); opacity: 0; } 60% { opacity: 1; } 100% { transform: translateY(0); } }
+.card__title { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.card__title h3 { font-size: 18px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; }
+.card__title span { flex: none; font-size: 13px; color: var(--muted); }
+.card__meta { font-size: 13px; color: var(--muted); }
+.card__note { font-size: 14px; line-height: 1.6; color: var(--soft); }
+
+/* ---------- proceso ---------- */
+
+.dark { background: var(--ink); color: var(--paper); }
+.dark .kicker { color: var(--mint); }
+.steps { margin-top: 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); border-top: 1px solid #45423C; }
+.steps li { display: flex; flex-direction: column; gap: 10px; padding: 24px 22px 28px 0; border-bottom: 1px solid #45423C; }
+.steps li span { font-size: 13px; color: var(--mint); }
+.steps li h3 { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; }
+.steps li p { font-size: 15px; line-height: 1.65; color: #C9C5BC; }
+
+/* ---------- plazos ---------- */
+
+.plan { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(28px, 4vw, 64px); align-items: start; }
+@media (max-width: 960px) { .plan { grid-template-columns: minmax(0, 1fr); } }
+.plan__box { padding: clamp(20px, 3vw, 32px); border-radius: 20px; background: var(--card); }
+.seg { display: flex; flex-wrap: wrap; gap: 8px; }
+.seg button { min-height: 44px; padding: 0 16px; border: 1px solid var(--line); border-radius: 999px; background: none; font-size: 14px; cursor: pointer; transition: background .2s ease, border-color .2s ease, color .2s ease; }
+.seg button:hover { border-color: var(--ink); }
+.seg button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.range { margin-top: 26px; }
+.range label { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--muted); }
+.range label output { font-size: 15px; font-weight: 600; color: var(--ink); }
+.range input { width: 100%; margin-top: 12px; accent-color: var(--green); }
+.weeks { margin-top: 30px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; }
+.weeks strong { font-size: clamp(44px, 5vw, 64px); font-weight: 600; letter-spacing: -0.045em; line-height: 1; }
+.weeks span { color: var(--muted); font-size: 15px; }
+.tl { margin-top: 20px; display: flex; height: 44px; border-radius: 10px; overflow: hidden; background: #F4F2EE; }
+.tl div { display: flex; align-items: center; padding: 0 10px; min-width: 0; font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; transition: flex-basis .6s var(--ease); }
+.tl__p { background: var(--mint); }
+.tl__o { background: var(--green); color: #fff; }
+.tl__e { background: #E8B04A; }
+.tl__legend { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--muted); }
+.tl__legend b { display: inline-block; width: 10px; height: 10px; margin-right: 6px; border-radius: 3px; vertical-align: -1px; }
+.plan__fine { margin-top: 18px; font-size: 13px; color: var(--muted); }
+
+/* ---------- contacto ---------- */
+
+.contact { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(28px, 4vw, 64px); align-items: start; }
+@media (max-width: 960px) { .contact { grid-template-columns: minmax(0, 1fr); } }
+.contact__mail { display: inline-block; margin-top: 22px; font-size: 18px; }
+.contact__mail:hover { color: var(--green); }
+.form { display: flex; flex-direction: column; gap: 16px; padding: clamp(20px, 3vw, 32px); border-radius: 20px; background: var(--card); }
+.combo { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: #F4F2EE; font-size: 13px; color: var(--muted); }
+.combo strong { color: var(--ink); font-weight: 600; }
+.combo__chips { display: flex; gap: 4px; flex: none; }
+.combo__chips i { width: 22px; height: 22px; border-radius: 6px; transition: background .4s ease; }
+.combo a { margin-left: auto; flex: none; font-size: 13px; color: var(--green); }
+.fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font-size: 13px; color: var(--muted); }
+.field input, .field textarea { min-height: 48px; padding: 0 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; font-size: 15px; transition: border-color .2s ease; }
+.field textarea { padding: 12px; resize: vertical; }
+.field input:focus, .field textarea:focus { border-color: var(--green); }
+.form__end { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+.form__end p { font-size: 13px; color: var(--muted); }
+
+/* Pie: 72 px por debajo, lo justo para que el aviso "Web de ejemplo" no tape su texto. */
+#contacto { padding-bottom: 0; }
+.foot { margin-top: clamp(48px, 7vw, 88px); padding-top: 20px; padding-bottom: 72px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; font-size: 13px; color: var(--muted); }
+.foot a { text-decoration: none; }
+.foot a:hover { color: var(--green); }
+
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+.reveal.is-in { opacity: 1; transform: none; }
+
+/* ---------- aviso de ejemplo ---------- */
+
+.maketa { position: fixed; left: 16px; bottom: 16px; z-index: 40; display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 16px; border-radius: 999px; background: var(--ink); color: var(--paper); font-size: 14px; text-decoration: none; box-shadow: 0 10px 30px -12px rgba(34, 32, 28, .6); transition: background .25s ease; }
+.maketa:hover { background: var(--green); }
+.is-embedded .maketa { display: none !important; }
+
+.demo { width: min(480px, calc(100% - 32px)); padding: 0; border: 0; border-radius: 20px; background: var(--card); color: var(--ink); box-shadow: 0 40px 80px -30px rgba(34, 32, 28, .5); }
+.demo::backdrop { background: rgba(34, 32, 28, .55); }
+.demo form { display: flex; flex-direction: column; gap: 16px; padding: 32px; }
+.demo h2 { font-weight: 600; font-size: 30px; line-height: 1.05; letter-spacing: -0.04em; }
+.demo h2 em { font-style: normal; color: var(--green); }
+.demo p { color: var(--soft); font-size: 15px; }
+.demo__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .room__float, .sw.is-pop, .card.is-in .b { animation: none; }
+  .room [data-scene] path, .card .b, .card, .sw, .tl div { transition: none; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .card:hover, .card:hover .b, .sw:hover { transform: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="top wrap">
+  <a class="brand" href="#inicio"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3l12 7-12 7L4 10z" fill="#D9CFBF"/><path d="M4 10l12 7v12L4 22z" fill="#2F5D50"/><path d="M28 10l-12 7v12l12-7z" fill="#22201C"/></svg>Estancia</a>
+  <nav aria-label="Principal">
+    <a href="#proyectos">Proyectos</a>
+    <a href="#proceso">Cómo trabajamos</a>
+    <a href="#plazos">Plazos</a>
+    <a class="btn" href="#contacto">Pedir visita</a>
+  </nav>
+</header>
+
+<main>
+  <section id="inicio" class="hero wrap">
+    <div>
+      <p class="kicker">Interiorismo · Zaragoza</p>
+      <h1 style="margin-top: 14px">Espacios que se sienten antes de verse.</h1>
+      <p class="lead">Viviendas, locales y oficinas, de la primera visita al último cojín. Pruébalo: pasa por una muestra para verla en la estancia y tócala para quedártela.</p>
+      <div class="mats" data-mats></div>
+      <div class="presets" role="group" aria-label="Combinaciones de la casa" data-presets></div>
+    </div>
+    <div class="room" data-room>
+      <div class="room__float">
+        <svg viewBox="-250 -200 500 470" role="img" data-room-svg>
+          <defs>
+            <radialGradient id="lamp-glow">
+              <stop offset="0" stop-color="#FFD98A" stop-opacity=".85"/>
+              <stop offset=".45" stop-color="#FFC266" stop-opacity=".28"/>
+              <stop offset="1" stop-color="#FFC266" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <ellipse cx="0" cy="262" rx="220" ry="18" fill="rgba(34,32,28,.08)"/>
+          <g data-scene stroke="rgba(34,32,28,.16)" stroke-width="0.8" stroke-linejoin="round"></g>
+          <clipPath id="room-clip"><path data-room-clip/></clipPath>
+          <circle class="glow" data-glow r="170" fill="url(#lamp-glow)" clip-path="url(#room-clip)"/>
+        </svg>
+      </div>
+      <div class="room__bar">
+        <span aria-live="polite" data-room-note></span>
+        <button type="button" class="dusk" aria-pressed="false" data-dusk>Luz de tarde</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="proyectos" class="section section--line">
+    <div class="wrap">
+      <div class="section__head">
+        <div>
+          <p class="kicker">Proyectos</p>
+          <h2 class="h2">Cuatro plantas recientes.</h2>
+        </div>
+        <p class="lead">Cada maqueta resume la distribución del proyecto: lo que se tiró, lo que se quedó y dónde acabó cada mueble.</p>
+      </div>
+      <div class="cards" data-cards></div>
+    </div>
+  </section>
+
+  <section id="proceso" class="section dark">
+    <div class="wrap">
+      <p class="kicker">Cómo trabajamos</p>
+      <h2 class="h2">Cuatro pasos, una sola persona al teléfono.</h2>
+      <ol class="steps">
+        <li class="reveal"><span>01</span><h3>Visita</h3><p>Vamos a verlo. Medimos, hacemos fotos y nos cuentas cómo vives o trabajas ahí, y cuánto quieres invertir.</p></li>
+        <li class="reveal" style="transition-delay: .08s"><span>02</span><h3>Concepto</h3><p>Distribución, muestrario de materiales y una primera imagen del espacio. Lo tocas antes de decidir.</p></li>
+        <li class="reveal" style="transition-delay: .16s"><span>03</span><h3>Proyecto</h3><p>Planos, mobiliario y un presupuesto de obra cerrado, partida por partida, con gremios de confianza.</p></li>
+        <li class="reveal" style="transition-delay: .24s"><span>04</span><h3>Obra y estilismo</h3><p>Seguimos la obra cada semana y montamos el final: lámparas, textiles, cuadros. Entras con todo puesto.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="plazos" class="section">
+    <div class="wrap plan">
+      <div>
+        <p class="kicker">Plazos</p>
+        <h2 class="h2">¿Cuánto se tarda?</h2>
+        <p class="lead" style="margin-top: 18px">Elige qué espacio es y cuántos metros tiene. Te decimos cuánto suele llevar, desde la visita hasta que entras.</p>
+      </div>
+      <div class="plan__box reveal">
+        <div class="seg" role="group" aria-label="Tipo de espacio" data-types></div>
+        <div class="range">
+          <label for="m2">Superficie <output for="m2" data-m2-out>80 m²</output></label>
+          <input id="m2" type="range" min="10" max="300" step="5" value="80" data-m2>
+        </div>
+        <div class="weeks" aria-live="polite"><strong data-weeks>16</strong><span data-weeks-label>semanas, más o menos</span></div>
+        <div class="tl" aria-hidden="true">
+          <div class="tl__p" data-tl="p"></div>
+          <div class="tl__o" data-tl="o"></div>
+          <div class="tl__e" data-tl="e"></div>
+        </div>
+        <p class="tl__legend" data-legend></p>
+        <p class="plan__fine">Orientativo: cada obra es un mundo, y licencias y gremios mandan. Lo afinamos en la visita.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto" class="section section--line">
+    <div class="wrap">
+      <div class="contact">
+        <div>
+          <p class="kicker">Contacto</p>
+          <h2 class="h2">Cuéntanos tu espacio.</h2>
+          <p class="lead" style="margin-top: 18px">La primera visita es sin compromiso en Zaragoza y alrededores. Si has jugado con el muestrario, la combinación viaja con tu mensaje.</p>
+          <a class="contact__mail" href="#contacto" data-note-link>hola@estancia.studio</a>
+        </div>
+        <form class="form reveal" data-form>
+          <div class="combo">
+            <span class="combo__chips" aria-hidden="true" data-chips><i></i><i></i><i></i><i></i></span>
+            <span>Tu combinación: <strong data-combo></strong></span>
+            <a href="#inicio">Cambiar</a>
+          </div>
+          <div class="fields">
+            <div class="field"><label for="f-nombre">Nombre</label><input id="f-nombre" name="nombre" type="text" autocomplete="name" required></div>
+            <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
+          </div>
+          <div class="field"><label for="f-msg">Qué espacio es, cuántos metros y para cuándo</label><textarea id="f-msg" name="mensaje" rows="4"></textarea></div>
+          <input type="hidden" name="combinacion" data-combo-input>
+          <div class="form__end">
+            <p>Te contestamos en menos de 48 horas.</p>
+            <button type="submit" class="btn btn--green">Pedir primera visita</button>
+          </div>
+        </form>
+      </div>
+      <footer class="foot">
+        <span>© 2026 Estancia · Zaragoza</span>
+        <a href="/trabajos.html" target="_top">Estudio ficticio · web de ejemplo de Maketa</a>
+        <a href="#inicio">Volver arriba ↑</a>
+      </footer>
+    </div>
+  </section>
+</main>
+
+<a class="maketa" href="/trabajos.html" target="_top">Web de ejemplo · <strong>Maketa</strong></a>
+
+<dialog class="demo" data-demo-note aria-labelledby="demo-title">
+  <form method="dialog">
+    <p class="kicker">Web de ejemplo</p>
+    <h2 id="demo-title">Estancia no existe. <em>Tu estudio, sí.</em></h2>
+    <p>Este estudio es inventado, igual que sus proyectos: la web la he hecho para enseñar lo que se puede construir a mano. En tu web, la petición de visita te llegaría con la combinación de materiales que eligió el cliente.</p>
+    <div class="demo__actions">
+      <a class="btn btn--green" href="/trabajos.html?quiero=muestrario#muestrario" target="_top">Quiero una web así</a>
+      <button class="btn" value="close">Seguir mirando</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+(function () {
+  var doc = document.documentElement
+  doc.classList.add('js')
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
+  var embedded = false
+  try { embedded = window.self !== window.top } catch (e) { embedded = true }
+  if (embedded) doc.classList.add('is-embedded')
+  else {
+    var va = document.createElement('script')
+    va.defer = true
+    va.src = '/_vercel/insights/script.js'
+    document.head.appendChild(va)
+  }
+  var $ = function (s, r) { return (r || document).querySelector(s) }
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)) }
+  var SVG = 'http://www.w3.org/2000/svg'
+  var note = $('[data-demo-note]')
+  var openNote = function () { if (note.showModal) note.showModal() }
+
+  /* ---------- color e isometría ---------- */
+  var hex = function (h) { return [1, 3, 5].map(function (i) { return parseInt(h.slice(i, i + 2), 16) }) }
+  var mix = function (h, t, a) {
+    var A = hex(h), B = hex(t)
+    return '#' + A.map(function (v, i) { return ('0' + Math.round(v + (B[i] - v) * a).toString(16)).slice(-2) }).join('')
+  }
+  // La tapa recibe la luz; la cara derecha, la sombra.
+  var tone = function (h, face) { return face === 'top' ? mix(h, '#FFFFFF', 0.14) : face === 'right' ? mix(h, '#000000', 0.16) : h }
+  var C30 = Math.cos(Math.PI / 6)
+  var proj = function (s, x, y, z) { return [(x - y) * C30 * s, (x + y) * 0.5 * s - z * s] }
+  var poly = function (s, pts) {
+    return 'M' + pts.map(function (p) { var q = proj(s, p[0], p[1], p[2]); return q[0].toFixed(1) + ' ' + q[1].toFixed(1) }).join(' L') + 'Z'
+  }
+  var faces = function (s, b) {
+    var x0 = b[0], y0 = b[1], z0 = b[2], x1 = b[3], y1 = b[4], z1 = b[5]
+    return {
+      top: poly(s, [[x0, y0, z1], [x1, y0, z1], [x1, y1, z1], [x0, y1, z1]]),
+      left: poly(s, [[x0, y1, z0], [x1, y1, z0], [x1, y1, z1], [x0, y1, z1]]),
+      right: poly(s, [[x1, y0, z0], [x1, y1, z0], [x1, y1, z1], [x1, y0, z1]])
+    }
+  }
+
+  /* ---------- el muestrario ---------- */
+  var MATS = {
+    floor: { label: 'Suelo', opts: [['Roble', '#C9A375'], ['Nogal', '#7A5236'], ['Microcemento', '#B9B5AE'], ['Terrazo', '#D8D2C6']] },
+    wall: { label: 'Paredes', opts: [['Cal', '#F2EEE6'], ['Salvia', '#B7C2A8'], ['Terracota', '#C97B5A'], ['Niebla', '#AFC0CC']] },
+    sofa: { label: 'Tapizado', opts: [['Lino', '#D9CFBF'], ['Mostaza', '#C9962E'], ['Verde botella', '#2F5D50'], ['Carbón', '#4A4A4A']] },
+    wood: { label: 'Madera', opts: [['Fresno', '#E2D6C2'], ['Roble claro', '#CDAA7D'], ['Nogal', '#6B4630'], ['Negro', '#2B2A28']] }
+  }
+  var KEYS = ['floor', 'wall', 'sofa', 'wood']
+  // Combinaciones de la casa: índice de cada material, en el orden de KEYS.
+  var PRESETS = [
+    { name: 'Nórdica', pick: [0, 0, 0, 0] },
+    { name: 'Mediterránea', pick: [3, 2, 0, 1] },
+    { name: 'Bosque', pick: [1, 1, 2, 2] },
+    { name: 'Industrial', pick: [2, 3, 3, 3] }
+  ]
+  var state = { pick: { floor: 0, wall: 0, sofa: 2, wood: 1 }, prev: null, dusk: false }
+  var effective = function () {
+    var e = { floor: state.pick.floor, wall: state.pick.wall, sofa: state.pick.sofa, wood: state.pick.wood }
+    if (state.prev) e[state.prev.k] = state.prev.i
+    return e
+  }
+  var color = function (e, k) { return MATS[k].opts[e[k]][1] }
+  var nameOf = function (e, k) { return MATS[k].opts[e[k]][0] }
+
+  // La estancia: una lista de caras, de atrás hacia delante. lit = no se apaga de noche.
+  var S = 24
+  var LAMP = proj(S, 8.78, 1.38, 3.8)
+  function scene (e) {
+    var out = []
+    var push = function (d, f, lit) { out.push({ d: d, f: f, lit: !!lit }) }
+    var box = function (b, c, only, lit) { var f = faces(S, b); (only || ['left', 'right', 'top']).forEach(function (k) { push(f[k], tone(c, k), lit) }) }
+    var fC = color(e, 'floor'), wC = color(e, 'wall'), sC = color(e, 'sofa'), mC = color(e, 'wood')
+    box([0, 0, -0.5, 10, 10, 0], fC)
+    var lw = faces(S, [-0.4, 0, -0.5, 0, 10, 7])
+    push(lw.left, tone(wC, 'right')); push(lw.top, tone(wC, 'top')); push(lw.right, mix(wC, '#000000', 0.1))
+    var fw = faces(S, [0, -0.4, -0.5, 10, 0, 7])
+    push(fw.left, mix(wC, '#000000', 0.06)); push(fw.top, tone(wC, 'top')); push(fw.right, tone(wC, 'right'))
+    // Ventana y cuadro
+    push(poly(S, [[5.6, 0.02, 2.8], [8.4, 0.02, 2.8], [8.4, 0.02, 5.8], [5.6, 0.02, 5.8]]), state.dusk ? '#2A3554' : '#CFE3EC', true)
+    push(poly(S, [[6.95, 0.03, 2.8], [7.05, 0.03, 2.8], [7.05, 0.03, 5.8], [6.95, 0.03, 5.8]]) + ' ' + poly(S, [[5.6, 0.03, 4.25], [8.4, 0.03, 4.25], [8.4, 0.03, 4.35], [5.6, 0.03, 4.35]]), '#FFFFFF')
+    push(poly(S, [[0.02, 3, 3.4], [0.02, 5.6, 3.4], [0.02, 5.6, 5.4], [0.02, 3, 5.4]]), '#2F5D50')
+    push(poly(S, [[0.03, 3.7, 3.9], [0.03, 4.7, 3.9], [0.03, 4.7, 4.9], [0.03, 3.7, 4.9]]), '#E8B04A')
+    // Balda con libros
+    box([0, 6.5, 3.0, 0.9, 9.3, 3.15], mC)
+    box([0.1, 6.9, 3.15, 0.75, 7.5, 3.9], '#8B5E3C')
+    box([0.1, 7.6, 3.15, 0.7, 8.0, 3.7], '#B9C6CF')
+    // Alfombra y sofá
+    push(faces(S, [2.2, 3.4, 0, 8.4, 8.8, 0.04]).top, mix(wC, '#FFFFFF', 0.35))
+    box([2.0, 0.3, 0, 7.4, 1.0, 2.3], sC)
+    box([1.6, 0.3, 0, 2.1, 3.0, 1.6], sC)
+    box([2.1, 1.0, 0, 7.0, 3.0, 1.0], sC)
+    box([2.4, 1.0, 1.0, 4.4, 1.6, 1.9], mix(sC, '#FFFFFF', 0.25), ['left', 'top'])
+    box([7.0, 0.3, 0, 7.5, 3.0, 1.6], sC)
+    // Lámpara de pie: la pantalla se enciende de tarde
+    box([8.7, 1.3, 0, 8.85, 1.45, 3.6], '#3A3A3A')
+    box([8.3, 0.9, 3.3, 9.25, 1.85, 4.3], state.dusk ? '#FFE3A1' : '#F3E6C8', null, true)
+    // Planta
+    box([0.6, 8.3, 0, 1.5, 9.2, 1.0], '#B5653F', ['left', 'right'])
+    var c = proj(S, 1.05, 8.75, 2.1)
+    push('M' + (c[0] - 30).toFixed(1) + ' ' + c[1].toFixed(1) + ' a30 30 0 1 0 60 0 a30 30 0 1 0 -60 0', '#5E7A4E')
+    // Mesa baja
+    box([5.1, 5.5, 0, 5.7, 6.1, 1.1], mix(mC, '#000000', 0.1))
+    box([4.0, 4.8, 1.1, 6.8, 6.8, 1.3], mC)
+    return out
+  }
+
+  var room = $('[data-room]')
+  var roomSvg = $('[data-room-svg]')
+  var sceneG = $('[data-scene]')
+  var glow = $('[data-glow]')
+  glow.setAttribute('cx', LAMP[0].toFixed(1)); glow.setAttribute('cy', LAMP[1].toFixed(1))
+  // La luz solo baña el interior: suelo y las dos paredes por dentro.
+  $('[data-room-clip]').setAttribute('d', faces(S, [0, 0, -0.5, 10, 10, 0]).top + ' ' + faces(S, [-0.4, 0, -0.5, 0, 10, 7]).right + ' ' + faces(S, [0, -0.4, -0.5, 10, 0, 7]).left)
+  var paths = []
+  var roomNote = $('[data-room-note]')
+
+  // Muestras
+  var matsEl = $('[data-mats]')
+  KEYS.forEach(function (k) {
+    var m = MATS[k]
+    var wrap = document.createElement('div')
+    wrap.className = 'mat'
+    wrap.innerHTML = '<p class="mat__head">' + m.label + ' <span data-cur="' + k + '"></span></p><div class="mat__row" role="group" aria-label="' + m.label + '"></div>'
+    var row = $('.mat__row', wrap)
+    m.opts.forEach(function (o, i) {
+      var b = document.createElement('button')
+      b.type = 'button'
+      b.className = 'sw'
+      b.style.setProperty('--c', o[1])
+      b.setAttribute('aria-label', m.label + ': ' + o[0])
+      b.dataset.k = k; b.dataset.i = i
+      row.appendChild(b)
+    })
+    matsEl.appendChild(wrap)
+  })
+  var swatches = $$('.sw', matsEl)
+  var keyboard = false
+  addEventListener('keydown', function () { keyboard = true }, true)
+  addEventListener('pointerdown', function () { keyboard = false }, true)
+  swatches.forEach(function (b) {
+    var k = b.dataset.k, i = +b.dataset.i
+    b.addEventListener('pointerenter', function (ev) { if (ev.pointerType === 'mouse') { state.prev = { k: k, i: i }; render() } })
+    b.addEventListener('pointerleave', function () { if (state.prev) { state.prev = null; render() } })
+    b.addEventListener('focus', function () { if (keyboard) { state.prev = { k: k, i: i }; render() } })
+    b.addEventListener('blur', function () { if (state.prev) { state.prev = null; render() } })
+    b.addEventListener('click', function () {
+      state.pick[k] = i; state.prev = null
+      b.classList.remove('is-pop'); void b.offsetWidth; b.classList.add('is-pop')
+      render()
+    })
+  })
+
+  // Combinaciones de la casa
+  var presetsEl = $('[data-presets]')
+  PRESETS.forEach(function (p) {
+    var b = document.createElement('button')
+    b.type = 'button'
+    b.className = 'chip'
+    b.innerHTML = '<i aria-hidden="true">' + KEYS.map(function (k, j) { return '<b style="background:' + MATS[k].opts[p.pick[j]][1] + '"></b>' }).join('') + '</i>' + p.name
+    b.addEventListener('click', function () {
+      KEYS.forEach(function (k, j) { state.pick[k] = p.pick[j] })
+      state.prev = null
+      render()
+    })
+    presetsEl.appendChild(b)
+  })
+  var presetBtns = $$('.chip', presetsEl)
+
+  // Luz de tarde
+  var duskBtn = $('[data-dusk]')
+  duskBtn.addEventListener('click', function () { state.dusk = !state.dusk; render() })
+
+  var chips = $$('[data-chips] i')
+  var comboEl = $('[data-combo]')
+  var comboInput = $('[data-combo-input]')
+
+  function render () {
+    var e = effective()
+    var list = scene(e)
+    list.forEach(function (it, n) {
+      var p = paths[n]
+      if (!p) { p = document.createElementNS(SVG, 'path'); sceneG.appendChild(p); paths[n] = p }
+      p.setAttribute('d', it.d)
+      p.style.fill = state.dusk && !it.lit ? mix(it.f, '#1E2340', 0.34) : it.f
+    })
+    room.classList.toggle('is-dusk', state.dusk)
+    duskBtn.setAttribute('aria-pressed', state.dusk ? 'true' : 'false')
+    duskBtn.textContent = state.dusk ? 'Luz de día' : 'Luz de tarde'
+    roomSvg.setAttribute('aria-label', 'Estancia isométrica: suelo de ' + nameOf(e, 'floor').toLowerCase() + ', paredes ' + nameOf(e, 'wall').toLowerCase() + ', sofá ' + nameOf(e, 'sofa').toLowerCase() + ' y madera de ' + nameOf(e, 'wood').toLowerCase())
+
+    // Los nombres son siempre los de lo elegido: al pasar por una muestra se ve en
+    // la estancia, pero el texto solo cambia al tocarla (si no, no para de bailar).
+    KEYS.forEach(function (k) {
+      $('[data-cur="' + k + '"]').textContent = MATS[k].opts[state.pick[k]][0]
+    })
+    swatches.forEach(function (b) { b.setAttribute('aria-pressed', state.pick[b.dataset.k] === +b.dataset.i ? 'true' : 'false') })
+    presetBtns.forEach(function (b, j) {
+      var on = KEYS.every(function (k, n) { return state.pick[k] === PRESETS[j].pick[n] })
+      b.setAttribute('aria-pressed', on ? 'true' : 'false')
+    })
+
+    var combo = KEYS.map(function (k) { return MATS[k].opts[state.pick[k]][0] }).join(' · ')
+    roomNote.innerHTML = '<strong>' + combo + '</strong>'
+    comboEl.textContent = combo
+    comboInput.value = combo
+    chips.forEach(function (c, n) { c.style.background = MATS[KEYS[n]].opts[state.pick[KEYS[n]]][1] })
+  }
+  render()
+
+  /* ---------- proyectos (inventados) ---------- */
+  var CARDS = [
+    { title: 'Piso en Predicadores', kind: 'Vivienda', where: 'Casco Histórico', year: 2025, m2: 84, bg: '#E3DED4', floor: '#C9A375',
+      note: 'Tres habitaciones pequeñas pasan a ser dos y un salón con luz de la calle.',
+      boxes: [[[0.3, 0.3, 0, 3.2, 1.2, 1.0], '#2F5D50'], [[4.2, 0.3, 0, 5.6, 2.2, 2.4], '#6B4630'], [[2, 3, 0, 4.6, 5.2, 0.7], '#E2D6C2'], [[5.2, 5.2, 0, 5.8, 5.8, 1.8], '#5E7A4E']] },
+    { title: 'Café Albada', kind: 'Hostelería', where: 'Delicias', year: 2024, m2: 62, bg: '#E9DCCF', floor: '#B9B5AE',
+      note: 'Barra de terracota a lo largo y mesas que se juntan para los grupos del sábado.',
+      boxes: [[[0.3, 0.3, 0, 5.6, 1.4, 1.6], '#C97B5A'], [[1, 3, 0, 2, 4, 1.1], '#2B2A28'], [[3.4, 3, 0, 4.4, 4, 1.1], '#2B2A28'], [[0.3, 4.6, 0, 1.0, 5.7, 2.8], '#E8B04A']] },
+    { title: 'Oficina de Atelier Norte', kind: 'Oficina', where: 'La Magdalena', year: 2025, m2: 140, bg: '#DCE2DE', floor: '#D8D2C6',
+      note: 'Una mesa larga para doce, archivo a la vista y una sala que se cierra con cortina.',
+      boxes: [[[0.6, 0.6, 0, 5.4, 2.2, 1.0], '#E2D6C2'], [[0.3, 3.2, 0, 1.0, 5.8, 3.0], '#AFC0CC'], [[2.4, 3.6, 0, 5.2, 5.0, 0.9], '#4A4A4A'], [[5.0, 0.3, 0, 5.8, 0.9, 2.2], '#5E7A4E']] },
+    { title: 'Barro, taller de cerámica', kind: 'Comercio', where: 'San Pablo', year: 2023, m2: 48, bg: '#E8E0E3', floor: '#7A5236',
+      note: 'Tienda delante, torno detrás y una mesa central donde se exponen las piezas del mes.',
+      boxes: [[[0.3, 0.3, 0, 1.2, 5.7, 2.6], '#F2EEE6'], [[2.4, 2.2, 0, 4.4, 3.8, 1.0], '#F2EEE6'], [[2.9, 2.6, 1.0, 3.5, 3.2, 1.6], '#C97B5A'], [[4.6, 0.3, 0, 5.7, 1.2, 1.8], '#2F5D50']] }
+  ]
+  var cardsEl = $('[data-cards]')
+  CARDS.forEach(function (cd) {
+    var el = document.createElement('article')
+    el.className = 'card'
+    el.style.setProperty('--bg', cd.bg)
+    var s = 12
+    var all = [[[0, 0, -0.4, 6, 6, 0], cd.floor]].concat(cd.boxes)
+    var svg = '<svg viewBox="-100 -60 200 160" aria-hidden="true" stroke="rgba(34,32,28,.15)" stroke-width="0.6">' + all.map(function (bx, n) {
+      var f = faces(s, bx[0])
+      return '<g class="b b' + n + '" style="--i:' + n + '">' + ['left', 'right', 'top'].map(function (k) { return '<path d="' + f[k] + '" fill="' + tone(bx[1], k) + '"/>' }).join('') + '</g>'
+    }).join('') + '</svg>'
+    el.innerHTML = svg +
+      '<div class="card__title"><h3>' + cd.title + '</h3><span>' + cd.m2 + ' m²</span></div>' +
+      '<p class="card__meta">' + cd.kind + ' · ' + cd.where + ' · ' + cd.year + '</p>' +
+      '<p class="card__note">' + cd.note + '</p>'
+    cardsEl.appendChild(el)
+  })
+
+  /* ---------- ¿cuánto se tarda? ---------- */
+  // Semanas orientativas: base + metros / ritmo. Proyecto, obra y estilismo.
+  var TYPES = [
+    { id: 'vivienda', name: 'Vivienda', p: [3, 50], o: [6, 15], e: 1, m2: 80 },
+    { id: 'cocina', name: 'Cocina o baño', p: [2, 40], o: [3, 12], e: 0.5, m2: 15 },
+    { id: 'local', name: 'Local', p: [3, 50], o: [5, 14], e: 1, m2: 60 },
+    { id: 'oficina', name: 'Oficina', p: [3, 60], o: [4, 20], e: 1, m2: 140 }
+  ]
+  var plan = { t: 0, m2: 80 }
+  var typesEl = $('[data-types]')
+  TYPES.forEach(function (t, i) {
+    var b = document.createElement('button')
+    b.type = 'button'
+    b.textContent = t.name
+    b.addEventListener('click', function () { plan.t = i; plan.m2 = t.m2; m2In.value = t.m2; renderPlan() })
+    typesEl.appendChild(b)
+  })
+  var m2In = $('[data-m2]')
+  m2In.addEventListener('input', function () { plan.m2 = +m2In.value; renderPlan() })
+  var tl = { p: $('[data-tl="p"]'), o: $('[data-tl="o"]'), e: $('[data-tl="e"]') }
+  var wk = function (n) { return n === 1 ? '1 semana' : (n % 1 ? String(n).replace('.', ',') : n) + ' semanas' }
+  function renderPlan () {
+    var t = TYPES[plan.t]
+    $$('button', typesEl).forEach(function (b, i) { b.setAttribute('aria-pressed', i === plan.t ? 'true' : 'false') })
+    var p = Math.round(t.p[0] + plan.m2 / t.p[1])
+    var o = Math.round(t.o[0] + plan.m2 / t.o[1])
+    var e = t.e
+    var total = p + o + e
+    $('[data-m2-out]').textContent = plan.m2 + ' m²'
+    $('[data-weeks]').textContent = String(total).replace('.', ',')
+    $('[data-weeks-label]').textContent = 'semanas, más o menos · unos ' + Math.max(1, Math.round(total / 4.3)) + ' meses'
+    tl.p.style.flexBasis = (p / total * 100) + '%'; tl.p.textContent = 'Proyecto'
+    tl.o.style.flexBasis = (o / total * 100) + '%'; tl.o.textContent = 'Obra'
+    tl.e.style.flexBasis = (e / total * 100) + '%'; tl.e.textContent = ''
+    $('[data-legend]').innerHTML = '<span><b style="background:var(--mint)"></b>Proyecto · ' + wk(p) + '</span><span><b style="background:var(--green)"></b>Obra · ' + wk(o) + '</span><span><b style="background:#E8B04A"></b>Estilismo · ' + wk(e) + '</span>'
+  }
+  renderPlan()
+
+  /* ---------- contacto: el negocio no existe ---------- */
+  $('[data-form]').addEventListener('submit', function (ev) { ev.preventDefault(); openNote() })
+  $('[data-note-link]').addEventListener('click', function (ev) { ev.preventDefault(); openNote() })
+
+  /* ---------- aparecer al bajar ---------- */
+  var toReveal = $$('.reveal, .card')
+  var show = function (el) { el.classList.add('is-in') }
+  if (reduce || !('IntersectionObserver' in window)) toReveal.forEach(show)
+  else {
+    var io = new IntersectionObserver(function (en) {
+      en.forEach(function (x) { if (x.isIntersecting) { show(x.target); io.unobserve(x.target) } })
+    }, { threshold: 0.15 })
+    toReveal.forEach(function (el) { io.observe(el) })
+  }
+})()
+</script>
+</body>
+</html>

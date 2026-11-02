@@ -54,7 +54,9 @@
   if (!dialog) return
   var form = dialog.querySelector('[data-want-form]')
   var done = dialog.querySelector('[data-want-done]')
-  var nameOut = dialog.querySelector('[data-want-name]')
+  var title = dialog.querySelector('#want-title')
+  // "¿Ninguna es lo tuyo?" usa el mismo formulario, sin plantilla de referencia.
+  var NONE = 'sin-plantilla'
   var errorBox = dialog.querySelector('[data-want-error]')
   var submitBtn = dialog.querySelector('[data-want-submit]')
   var current = null
@@ -63,7 +65,8 @@
 
   function open(job) {
     current = job
-    nameOut.textContent = job.getAttribute('data-name')
+    var none = job.getAttribute('data-piece') === NONE
+    title.textContent = none ? 'Cuéntame tu idea' : 'Quiero algo como ' + job.getAttribute('data-name')
     if (!done.hidden) {
       form.reset()
       form.hidden = false
@@ -125,8 +128,10 @@
 
     var f = form.elements
     var piece = current.getAttribute('data-piece')
+    var none = piece === NONE
     var label = current.getAttribute('data-name') + ' (' + current.getAttribute('data-kind').toLowerCase() + ')'
-    var note = ['Le gusta la web de ejemplo ' + label + '.', f.note.value.trim()].filter(Boolean).join('\n\n')
+    var intro = none ? 'Quiere una web a medida, sin plantilla de referencia.' : 'Le gusta la web de ejemplo ' + label + '.'
+    var note = [intro, f.note.value.trim()].filter(Boolean).join('\n\n')
 
     errorBox.hidden = true
     submitBtn.disabled = true
@@ -142,7 +147,7 @@
         phone: f.phone.value.trim(),
         note: note,
         piece: current.getAttribute('data-name'),
-        previewLink: location.origin + '/trabajos/' + piece + '.html',
+        previewLink: location.origin + (none ? '/trabajos.html' : '/trabajos/' + piece + '.html'),
         consent: true,
         company: f.company.value,
         elapsedMs: Date.now() - openedAt,
@@ -162,10 +167,19 @@
       })
   })
 
-  // Las demos llevan aquí con ?quiero=<id>: se abre el formulario de esa pieza.
+  // Las demos llevan aquí con ?quiero=<id>: esa pieza pasa a ser la destacada
+  // (la que lo era ocupa su sitio en la rejilla) y se abre su formulario.
   var wanted = new URLSearchParams(location.search).get('quiero')
   var job = wanted && document.querySelector('[data-piece="' + wanted.replace(/[^a-z0-9-]/g, '') + '"]')
   if (job) {
+    var feature = document.querySelector('[data-feature]')
+    var featured = feature && feature.querySelector('.job')
+    if (featured && job.classList.contains('job') && job !== featured) {
+      var mark = document.createComment('')
+      job.before(mark)
+      feature.appendChild(job)
+      mark.replaceWith(featured)
+    }
     job.scrollIntoView({ block: 'center' })
     open(job)
   }

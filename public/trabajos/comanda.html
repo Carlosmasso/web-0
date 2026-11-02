@@ -215,7 +215,9 @@ ul, ol { padding: 0; list-style: none; }
 .stamp small { display: block; font-size: 11px; letter-spacing: .04em; }
 .book.is-torn .stamp { opacity: .95; transform: rotate(-8deg); transition: transform .35s var(--ease) .25s, opacity .2s ease .25s; }
 
-.foot { margin-top: clamp(72px, 9vw, 120px); padding-top: 24px; padding-bottom: 32px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-family: var(--mono); font-size: 13px; color: var(--muted); }
+/* Pie: 72 px por debajo, lo justo para que el aviso "Web de ejemplo" no tape su texto. */
+#reservar { padding-bottom: 0; }
+.foot { margin-top: clamp(72px, 9vw, 120px); padding-top: 24px; padding-bottom: 72px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-family: var(--mono); font-size: 13px; color: var(--muted); }
 .foot a { text-decoration: none; }
 .foot a:hover { color: var(--ember-soft); }
 

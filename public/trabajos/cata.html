@@ -76,16 +76,33 @@ ul { padding: 0; list-style: none; }
 
 /* ---------- portada con copa ---------- */
 
-.hero { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 40px; align-items: center; min-height: 680px; padding-top: 24px; padding-bottom: clamp(48px, 7vw, 96px); }
+.pour { position: relative; height: 230vh; }
+/* La portada se queda fija mientras bajas: la copa se sirve a la vista y,
+   cuando está llena, la página sigue. */
+.hero { position: sticky; top: 0; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 40px; align-items: center; height: 100vh; height: 100svh; min-height: 600px; padding-top: 24px; padding-bottom: 24px; }
 .hero h1 { margin-top: 18px; font-family: var(--serif); font-weight: 500; font-size: clamp(60px, 9vw, 144px); line-height: .88; letter-spacing: -0.02em; }
 .hero h1 em { color: var(--wine); }
 .hero .lead { margin-top: 28px; }
 .hero__ctas { margin-top: 36px; display: flex; flex-wrap: wrap; gap: 12px; }
 .glass { position: relative; display: grid; place-items: center; }
 .glass::before { content: ""; position: absolute; width: 76%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgba(107, 20, 40, .14), transparent 65%); }
-.glass svg { position: relative; width: min(340px, 80%); height: auto; overflow: visible; }
+.glass svg { position: relative; width: min(280px, 70%); height: auto; overflow: visible; }
 .glass__hint { position: relative; margin-top: 8px; font-family: var(--serif); font-style: italic; font-size: 20px; color: var(--muted); }
-@media (max-width: 860px) { .hero { grid-template-columns: minmax(0, 1fr); min-height: 0; } .glass svg { width: min(240px, 60%); } }
+.bottle { transform: translate(100px, -40px) rotate(-118deg) translateY(70px); opacity: 0; transition: transform .6s var(--ease), opacity .35s ease; }
+.glass.is-pouring .bottle { transform: translate(100px, -40px) rotate(-118deg); opacity: 1; }
+.stream { opacity: 0; transition: opacity .2s ease; }
+.glass.is-pouring .stream { opacity: 1; }
+@media (max-width: 860px) {
+  .pour { height: 210svh; }
+  .hero { grid-template-columns: minmax(0, 1fr); align-content: center; gap: 12px; min-height: 0; }
+  .hero h1 { font-size: clamp(44px, 12vw, 72px); }
+  .hero .lead { margin-top: 16px; font-size: 16px; }
+  .hero__ctas { margin-top: 20px; }
+  .glass svg { width: auto; height: min(300px, 34svh); }
+  /* En móvil no hay sitio para la botella sin tapar el texto: solo cae el chorro. */
+  .bottle { display: none; }
+  .glass__hint { font-size: 17px; }
+}
 
 /* ---------- encuentra tu vino ---------- */
 
@@ -187,7 +204,8 @@ ul { padding: 0; list-style: none; }
 .hours li.is-today { color: var(--wine); font-weight: 600; }
 @media (max-width: 860px) { .visit { grid-template-columns: minmax(0, 1fr); } }
 
-.foot { margin-top: clamp(72px, 9vw, 120px); padding-top: 24px; padding-bottom: 32px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 14px; color: var(--muted); }
+/* Pie: 72 px por debajo, lo justo para que el aviso "Web de ejemplo" no tape su texto. */
+.foot { margin-top: clamp(72px, 9vw, 120px); padding-top: 24px; padding-bottom: 72px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 14px; color: var(--muted); }
 .foot a { text-decoration: none; }
 .foot a:hover { color: var(--wine); }
 
@@ -208,6 +226,7 @@ ul { padding: 0; list-style: none; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .wine, .slot button, .status.is-open::before { animation: none; }
+  .bottle, .stream { display: none; }
   .seg, .match .p, .box-meter span { transition: none; }
   .seg:hover, .seg:focus-visible, .seg.is-on { transform: none; }
 }
@@ -226,7 +245,8 @@ ul { padding: 0; list-style: none; }
 </header>
 
 <main>
-  <section id="inicio" class="hero wrap" data-hero>
+  <section id="inicio" class="pour" data-pour>
+  <div class="hero wrap" data-hero>
     <div>
       <p class="kicker">Vinoteca · Calle Laurel, Logroño</p>
       <h1>Cada botella, <em>una conversación.</em></h1>
@@ -243,6 +263,13 @@ ul { padding: 0; list-style: none; }
           <linearGradient id="liquid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8A1C35"/><stop offset="1" stop-color="#3B0F1A"/></linearGradient>
           <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".0"/><stop offset=".25" stop-color="#fff" stop-opacity=".55"/><stop offset=".4" stop-color="#fff" stop-opacity="0"/></linearGradient>
         </defs>
+        <g class="bottle" data-bottle>
+          <path d="M-5 0h10v38c0 8 14 12 14 30v120c0 5-3 8-8 8h-22c-5 0-8-3-8-8V68c0-18 14-22 14-30z" fill="#2A0A12"/>
+          <rect x="-12" y="104" width="24" height="44" rx="2" fill="#E9DFC6"/>
+          <rect x="-6" y="-4" width="12" height="10" rx="2" fill="#4A1220"/>
+        </g>
+        <linearGradient id="chorro" x1="0" x2="0" y1="-40" y2="40" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#7A1A30" stop-opacity="0"/><stop offset=".35" stop-color="#7A1A30"/></linearGradient>
+        <rect class="stream" data-stream x="98" y="-38" width="4" height="0" rx="2" fill="url(#chorro)"/>
         <g clip-path="url(#bowl)"><path data-liquid fill="url(#liquid)" d=""/></g>
         <path d="M40 30q-2 126 60 142 62-16 60-142" fill="url(#shine)" opacity=".5"/>
         <path d="M40 30q-2 126 60 142 62-16 60-142" fill="none" stroke="#23161A" stroke-width="2.5" stroke-linecap="round"/>
@@ -251,6 +278,7 @@ ul { padding: 0; list-style: none; }
       </svg>
       <p class="glass__hint" data-glass-hint>Baja despacio, que te servimos.</p>
     </div>
+  </div>
   </section>
 
   <section id="encuentra" class="band">
@@ -404,16 +432,18 @@ ul { padding: 0; list-style: none; }
   }
 
   /* ---------- 1. la copa ---------- */
-  var liquid = $('[data-liquid]'), hero = $('[data-hero]'), glass = $('[data-glass]')
-  var level = .18, target = .18, wobble = 0, t0 = performance.now(), raf = 0
+  var liquid = $('[data-liquid]'), pour = $('[data-pour]'), glass = $('[data-glass]'), stream = $('[data-stream]')
+  var level = .18, target = .18, wobble = 0, t0 = performance.now(), raf = 0, pouring = false, pourT = 0
   function wave(now) {
     raf = 0
     level += (target - level) * (reduce ? 1 : .08)
-    wobble *= .96
+    wobble = pouring ? Math.min(5, wobble + .35) : wobble * .96
     var t = (now - t0) / 1000, y0 = 170 - level * 136, amp = reduce ? 0 : 1.6 + wobble
     var d = 'M20 ' + (y0 + Math.sin(t * 2.2) * amp).toFixed(1)
     for (var x = 30; x <= 180; x += 10) d += ' L' + x + ' ' + (y0 + Math.sin(t * 2.2 + x / 18) * amp + Math.sin(t * 1.3 + x / 9) * amp * .4).toFixed(1)
     liquid.setAttribute('d', d + ' L180 200 L20 200 Z')
+    // El chorro baja desde la boca de la botella hasta la superficie.
+    stream.setAttribute('height', Math.max(0, y0 + 38).toFixed(1))
     if (glassOn && (!reduce || Math.abs(target - level) > .002)) raf = requestAnimationFrame(wave)
   }
   // La ola solo se mueve mientras la copa está en pantalla.
@@ -421,10 +451,20 @@ ul { padding: 0; list-style: none; }
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(function (en) { glassOn = en[0].isIntersecting; if (glassOn && !raf) raf = requestAnimationFrame(wave) }).observe(glass)
   }
+  // El llenado va del principio al final de la sección fija; mientras sube,
+  // la botella se asoma y sirve, y se retira en cuanto dejas de bajar.
   function onScroll() {
-    var p = Math.max(0, Math.min(1, scrollY / Math.max(1, hero.offsetHeight * .75)))
-    target = .18 + p * .62
-    $('[data-glass-hint]').textContent = p > .85 ? 'Servida. ¿Buscamos la botella?' : 'Baja despacio, que te servimos.'
+    var range = Math.max(1, pour.offsetHeight - innerHeight)
+    var p = Math.max(0, Math.min(1, (scrollY - pour.offsetTop) / range))
+    var next = .18 + p * .62
+    if (next > target + .0005 && p < 1 && !reduce) {
+      pouring = true
+      glass.classList.add('is-pouring')
+      clearTimeout(pourT)
+      pourT = setTimeout(function () { pouring = false; glass.classList.remove('is-pouring') }, 260)
+    }
+    target = next
+    $('[data-glass-hint]').textContent = p > .97 ? 'Servida. ¿Buscamos la botella?' : 'Baja despacio, que te servimos.'
     if (!raf) raf = requestAnimationFrame(wave)
   }
   addEventListener('scroll', onScroll, { passive: true })

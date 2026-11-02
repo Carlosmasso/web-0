@@ -63,15 +63,26 @@ const GUIONES = {
     await p.wait(900)
   },
   cata: async (p) => {
-    await p.wait(300); await p.scroll(700)
-    await p.wait(2500); await p.scroll(0)
-    await p.wait(2200)
+    // La portada se queda fija mientras se sirve: se baja a tramos por su sección.
+    for (const f of [0.35, 0.7, 1]) {
+      await p.wait(f === 0.35 ? 300 : 1100)
+      await p.run(`(() => { const s = document.querySelector('[data-pour]'); scrollTo({ top: s.offsetTop + (s.offsetHeight - innerHeight) * ${f}, behavior: 'smooth' }) })()`)
+    }
+    await p.wait(1800)
   },
   reticula: async (p) => {
     await p.wait(500); await p.scrollTo('#calendario', 40)
     await p.wait(1600); await p.click('[data-quarters] button', 0)
     await p.wait(1300); await p.click('[data-quarters] button', 1)
     await p.wait(1400)
+  },
+  muestrario: async (p) => {
+    await p.wait(400); await p.click('.sw[data-k="wall"]', 1)
+    await p.wait(900); await p.click('.sw[data-k="sofa"]', 1)
+    await p.wait(900); await p.click('.sw[data-k="floor"]', 1)
+    await p.wait(1000); await p.click('[data-dusk]')
+    await p.wait(1800); await p.click('.chip', 1)
+    await p.wait(1200)
   },
   apuntes: async (p) => {
     await p.wait(400); await p.scrollTo('#prueba', 30)
@@ -147,6 +158,7 @@ try {
       }
       await mouse('mouseReleased', c.x + dx, c.y + dy)
     },
+    run: (expr) => evaluate(expr),
     scroll: (y) => evaluate(`window.scrollTo({ top: ${y}, behavior: 'smooth' })`),
     scrollTo: (sel, offset) => evaluate(`window.scrollTo({ top: document.querySelector(${JSON.stringify(sel)}).getBoundingClientRect().top + scrollY - ${offset}, behavior: 'smooth' })`)
   }

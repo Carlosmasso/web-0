@@ -245,7 +245,9 @@ ul { padding: 0; list-style: none; }
 .stamp.is-on { opacity: .92; animation: slam .45s var(--ease) both; transform: rotate(-8deg); }
 @keyframes slam { 0% { transform: scale(2.6) rotate(-16deg); opacity: 0; } 60% { transform: scale(.92) rotate(-8deg); opacity: 1; } 100% { transform: scale(1) rotate(-8deg); opacity: .92; } }
 
-.foot { margin-top: clamp(64px, 9vw, 120px); padding-top: 24px; padding-bottom: 32px; border-top: 1px solid rgba(243, 241, 234, .3); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-family: var(--mono); font-size: 14px; color: var(--muted); }
+/* Pie: 72 px por debajo, lo justo para que el aviso "Web de ejemplo" no tape su texto. */
+#contacto { padding-bottom: 0; }
+.foot { margin-top: clamp(64px, 9vw, 120px); padding-top: 24px; padding-bottom: 72px; border-top: 1px solid rgba(243, 241, 234, .3); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-family: var(--mono); font-size: 14px; color: var(--muted); }
 .foot a { color: var(--muted); }
 
 /* ---------- aviso de ejemplo ---------- */

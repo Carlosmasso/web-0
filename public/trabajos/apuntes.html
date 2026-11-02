@@ -227,7 +227,9 @@ ul, ol { padding: 0; list-style: none; }
 .cta .btn:hover { box-shadow: 6px 6px 0 var(--paper); }
 .cta .btn:active { box-shadow: 1px 1px 0 var(--paper); }
 .cta :focus-visible { outline-color: var(--paper); }
-.foot { padding-top: 32px; padding-bottom: 40px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 14px; color: var(--muted); }
+/* Pie: 72 px por debajo, lo justo para que el aviso "Web de ejemplo" no tape su texto. */
+#matricula { padding-bottom: 0; }
+.foot { padding-top: 32px; padding-bottom: 72px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 14px; color: var(--muted); }
 .foot a { text-decoration: none; }
 .foot a:hover { text-decoration: underline wavy var(--red); }
 

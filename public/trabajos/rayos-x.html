@@ -231,7 +231,7 @@ ul, ol { padding: 0; list-style: none; }
 
 /* ---------- contacto ---------- */
 
-.contact { padding-top: clamp(80px, 11vw, 160px); padding-bottom: 48px; }
+.contact { padding-top: clamp(80px, 11vw, 160px); padding-bottom: 0; }
 .contact__in { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 48px; }
 .contact__copy { flex: 1 1 520px; display: flex; flex-direction: column; gap: 24px; }
 .contact h2 { font-weight: 500; font-size: clamp(52px, 8vw, 128px); line-height: .95; letter-spacing: -0.05em; }
@@ -241,7 +241,8 @@ ul, ol { padding: 0; list-style: none; }
 .magnet__btn:hover { background: var(--ink); }
 .magnet__btn > span { display: flex; flex-direction: column; align-items: center; gap: 8px; transform: translate(var(--mx2, 0), var(--my2, 0)); transition: transform .35s var(--ease); }
 
-.foot { margin-top: clamp(64px, 9vw, 120px); padding-top: 24px; padding-bottom: 32px; border-top: 1px solid var(--ink); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 14px; color: var(--muted); }
+/* Pie: 72 px por debajo, lo justo para que el aviso "Web de ejemplo" no tape su texto. */
+.foot { margin-top: clamp(64px, 9vw, 120px); padding-top: 24px; padding-bottom: 72px; border-top: 1px solid var(--ink); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 14px; color: var(--muted); }
 .foot__clock { display: inline-flex; align-items: center; gap: 8px; font-variant-numeric: tabular-nums; }
 .foot__clock::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #1E9E5A; }
 .foot a { text-decoration: none; }

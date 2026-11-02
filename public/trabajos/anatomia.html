@@ -225,7 +225,8 @@ ul { padding: 0; list-style: none; }
 .cta .btn:hover { background: var(--clay); border-color: var(--clay); color: #fff; }
 .cta :focus-visible { outline-color: var(--paper); }
 @media (max-width: 860px) { .cta { grid-template-columns: minmax(0, 1fr); } }
-.foot { padding-top: 32px; padding-bottom: 40px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 14px; color: var(--muted); }
+/* Pie: 72 px por debajo, lo justo para que el aviso "Web de ejemplo" no tape su texto. */
+.foot { padding-top: 32px; padding-bottom: 72px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 14px; color: var(--muted); }
 .foot a { text-decoration: none; }
 .foot a:hover { color: var(--ink); }
 
@@ -396,7 +397,7 @@ ul { padding: 0; list-style: none; }
     </div>
   </section>
 
-  <section id="cita" class="wrap" style="padding-bottom: 24px">
+  <section id="cita" class="wrap">
     <div class="cta">
       <div>
         <p class="kicker" style="color: #B8C9BB">Primera cita</p>

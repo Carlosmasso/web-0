@@ -7,12 +7,22 @@
 .jobs-hero h1 { margin-top: 22px; max-width: 980px; font-size: clamp(44px, 6.6vw, 96px); font-weight: 760; line-height: 0.98; letter-spacing: -0.04em; text-wrap: balance; }
 .jobs-hero h1 .accent { color: var(--accent); }
 .jobs-hero .lead { margin-top: 28px; max-width: 640px; }
+/* Índice por sector: quien llega sabe enseguida dónde está lo suyo. */
+.sectors ul { margin-top: 36px; display: flex; flex-wrap: wrap; gap: 8px; }
+.sector { display: inline-flex; align-items: center; min-height: 42px; padding: 0 16px; border-radius: 999px; background: var(--white); box-shadow: inset 0 0 0 1.5px #d9d7d0; color: var(--ink); font-size: 15px; font-weight: 600; transition: box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease; }
+.sector:hover { color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--ink); }
+.sector:active { scale: 0.97; }
 
 /* ---------- las piezas ---------- */
 
-.jobs { padding: clamp(72px, 9vw, 120px) 0 clamp(80px, 10vw, 130px); background: var(--white); border-top: 1px solid var(--line-soft); }
-.jobs .wrap { display: flex; flex-direction: column; gap: clamp(80px, 10vw, 140px); }
-.job { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: clamp(36px, 5vw, 72px); align-items: center; }
+/* Debajo de la última pieza, poco margen: el cambio de banda ya separa. */
+.jobs { padding: clamp(72px, 9vw, 120px) 0 clamp(56px, 6vw, 80px); background: var(--white); border-top: 1px solid var(--line-soft); }
+.jobs .wrap { display: flex; flex-direction: column; gap: clamp(64px, 8vw, 104px); }
+/* La destacada, en grande: ventana a un lado y texto al otro. */
+.jobs__feature .job { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: clamp(36px, 5vw, 72px); align-items: center; }
+/* El resto, en rejilla de dos: se recorre de un vistazo. */
+.jobs__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(56px, 6vw, 80px) clamp(28px, 3.4vw, 48px); }
+.jobs__grid .job { display: flex; flex-direction: column; gap: 26px; }
 
 /* La web, funcionando, dentro de una ventana: es producto, así que lleva sombra. */
 .job__frame {
@@ -37,30 +47,39 @@
 .job__frame:hover .job__open, .job__hit:focus-visible .job__open { opacity: 1; transform: none; }
 .job__hit:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
 
-.job__copy h2 { margin-top: 14px; font-size: clamp(40px, 4.6vw, 64px); font-weight: 760; line-height: 0.98; letter-spacing: -0.04em; }
-.job__copy .lead { margin-top: 20px; max-width: 520px; }
-.job__list { margin-top: 26px; padding-top: 24px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 12px; }
-.job__list li { position: relative; padding-left: 22px; font-size: 17px; line-height: 1.5; }
-.job__list li::before { content: ''; position: absolute; left: 0; top: 0.62em; width: 8px; height: 8px; border-radius: 8px; background: var(--accent); }
-.job__ctas { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 12px; }
+.job__copy h2 { margin-top: 10px; font-size: clamp(32px, 3vw, 42px); font-weight: 760; line-height: 1; letter-spacing: -0.035em; }
+.jobs__feature .job__copy h2 { margin-top: 14px; font-size: clamp(40px, 4.6vw, 64px); line-height: 0.98; letter-spacing: -0.04em; }
+.job__lead { margin-top: 12px; max-width: 520px; color: var(--ink-soft); font-size: 17px; line-height: 1.55; }
+.jobs__feature .job__lead { margin-top: 20px; font-size: clamp(18px, 1.4vw, 20px); line-height: 1.6; }
+/* Lo que se puede tocar, en etiquetas cortas. */
+.job__tags { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 6px; }
+.job__tags li { padding: 5px 12px; border-radius: 999px; background: var(--panel); color: var(--ink-soft); font-size: 14px; font-weight: 600; }
+.job__ctas { margin-top: 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 22px; }
 .job__ctas .btn { cursor: pointer; border: 0; }
+/* "Quiero algo así" como enlace: el botón fuerte de cada tarjeta es "Verla en vivo". */
+.job__want { padding: 10px 0; border: 0; background: none; color: var(--ink); font-size: 16px; font-weight: 650; text-decoration: underline; text-decoration-color: var(--accent-line); text-decoration-thickness: 2px; text-underline-offset: 5px; cursor: pointer; transition: text-decoration-color 0.2s ease; }
+.job__want:hover { text-decoration-color: var(--accent); }
 
-/* Una sí y otra no, la ventana pasa a la derecha: la lista respira. */
-.job--flip { grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr); }
-.job--flip .job__frame { order: 2; }
+/* ¿Ninguna es lo tuyo? */
+.job-any { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 24px 48px; padding: clamp(32px, 4vw, 48px); border-radius: 26px; background: var(--paper); border: 1.5px dashed #d9d7d0; }
+.job-any h2 { font-size: clamp(30px, 3.2vw, 44px); font-weight: 760; letter-spacing: -0.035em; line-height: 1; }
+.job-any p { margin-top: 12px; max-width: 520px; color: var(--ink-soft); font-size: 18px; line-height: 1.55; }
+.job-any .btn { border: 0; cursor: pointer; }
 
 @media (max-width: 960px) {
-  .job, .job--flip { grid-template-columns: minmax(0, 1fr); }
-  .job--flip .job__frame { order: 0; }
+  .jobs__feature .job { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 760px) {
+  .jobs__grid { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 560px) {
-  .job__ctas { display: grid; grid-template-columns: 1fr; }
   .job__bar span { margin-right: 0; }
+  .job-any .btn { width: 100%; }
 }
 
 /* ---------- cómo se hace ---------- */
 
-.how { padding: clamp(80px, 10vw, 130px) 0; }
+.how { padding: clamp(64px, 7vw, 96px) 0 clamp(80px, 10vw, 130px); }
 .how__in { display: flex; flex-wrap: wrap; gap: 64px; align-items: flex-start; }
 .how__side { flex: 1 1 340px; position: sticky; top: 120px; }
 .how__side h2 { font-size: clamp(38px, 4.2vw, 60px); }
