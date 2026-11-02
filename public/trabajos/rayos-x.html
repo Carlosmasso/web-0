@@ -17,7 +17,7 @@
     1. Portada: una lente sigue al cursor (o al dedo) y descubre el plano bajo la
        fachada. Sin nadie tocando, deriva sola; "Ver el plano" la abre entera.
     2. Cinta de obras que se para al pasar el ratón.
-    3. Servicios: la imagen de cada uno flota junto al cursor; en móvil va dentro.
+    3. Servicios: al pasar por cada uno se dibuja su plano; la foto, al abrirlo.
     4. Proceso por fases con barra de progreso.
     5. Botón de contacto magnético y reloj de Valencia en vivo.
   Con movimiento reducido: sin deriva, sin cinta, sin imán; la lente salta al punto.
@@ -167,7 +167,7 @@ ul, ol { padding: 0; list-style: none; }
 .svc-rows { border-top: 1px solid var(--ink); }
 .svc { border-bottom: 1px solid var(--line); transition: opacity .35s ease; }
 .svc-list.is-hovering .svc:not(.is-hover) { opacity: .4; }
-.svc__head { width: 100%; display: grid; grid-template-columns: 56px minmax(0, 1fr) 44px; align-items: center; gap: 16px; padding: 28px 0; border: 0; background: none; text-align: left; cursor: pointer; }
+.svc__head { width: 100%; display: grid; grid-template-columns: 56px minmax(0, 1fr) 132px 44px; align-items: center; gap: 16px; padding: 28px 0; border: 0; background: none; text-align: left; cursor: pointer; }
 .svc__n { font-size: 14px; color: var(--muted); }
 .svc__title { font-size: clamp(28px, 4.4vw, 60px); font-weight: 500; letter-spacing: -0.04em; line-height: 1; transition: transform .5s var(--ease); }
 .svc.is-hover .svc__title { transform: translateX(16px); }
@@ -180,20 +180,23 @@ ul, ol { padding: 0; list-style: none; }
 .svc__cols { display: flex; flex-wrap: wrap; gap: 16px 48px; padding: 0 0 32px 72px; }
 .svc__desc { flex: 1 1 280px; max-width: 520px; font-size: 18px; line-height: 1.5; color: var(--soft); }
 .svc__items { flex: 1 1 200px; font-size: 15px; line-height: 1.8; color: var(--muted); }
-.svc__img { display: none; }
-
-/* La imagen que flota junto al cursor (solo con ratón). */
-.peek { position: absolute; left: 0; top: 0; z-index: 4; width: 260px; height: 320px; pointer-events: none; will-change: transform; }
-.peek__card { position: absolute; inset: 0; border-radius: 18px; overflow: hidden; background: var(--line); opacity: 0; transform: translate(-50%, -50%) scale(.6) rotate(0deg); transition: opacity .3s ease, transform .45s var(--ease); }
-.peek.is-on .peek__card { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(var(--rot, -4deg)); }
-.peek img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .3s ease; }
-.peek img.is-on { opacity: 1; }
-.peek__label { position: absolute; left: 14px; bottom: 14px; padding: 6px 10px; border-radius: 999px; background: rgba(11, 11, 18, .72); color: #fff; font-size: 13px; }
+/* Al pasar, se dibuja el plano del servicio, trazo a trazo; abierto, se queda. */
+.svc__draw svg { display: block; width: 132px; height: 66px; color: var(--accent); }
+.svc__draw path { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset .5s cubic-bezier(.6, .1, .3, 1); }
+.svc.is-hover .svc__draw path, .svc.is-open .svc__draw path { stroke-dashoffset: 0; transition-duration: .9s; }
+.svc__draw path:nth-child(2) { transition-delay: .12s; }
+.svc__draw path:nth-child(3) { transition-delay: .24s; }
+.svc__draw path:nth-child(4) { transition-delay: .36s; }
+.svc__draw path:nth-child(5) { transition-delay: .48s; }
+/* La foto de cada servicio, dentro del desplegable: se ve al abrirlo, no al pasar. */
+/* min-width: 0, o la imagen no baja de su ancho natural dentro del flex. */
+.svc__img { order: 3; flex: 0 0 260px; width: 260px; min-width: 0; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 14px; }
 
 @media (hover: none), (max-width: 900px) {
-  .peek { display: none; }
+  .svc__head { grid-template-columns: 56px minmax(0, 1fr) 44px; }
+  .svc__draw { display: none; }
   .svc__cols { padding-left: 0; }
-  .svc__img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 14px; }
+  .svc__img { order: 0; flex: 1 1 100%; width: 100%; aspect-ratio: 16 / 10; }
 }
 
 /* ---------- obras ---------- */
@@ -269,6 +272,7 @@ ul, ol { padding: 0; list-style: none; }
   .pulse, .marquee__track, .note[open] { animation: none; }
   .marquee { overflow-x: auto; }
   .svc.is-hover .svc__title, .work:hover .work__img img { transform: none; }
+  .svc__draw path { transition: none; }
   .magnet__btn, .magnet__btn > span { transform: none; }
 }
 </style>
@@ -397,20 +401,12 @@ ul, ol { padding: 0; list-style: none; }
       <p>Pasa por encima o toca para abrir</p>
     </div>
     <div class="svc-list" data-services>
-      <div class="peek" data-peek aria-hidden="true">
-        <div class="peek__card">
-          <img data-peek-img alt="" loading="lazy" src="https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=600">
-          <img data-peek-img alt="" loading="lazy" src="https://images.pexels.com/photos/3990359/pexels-photo-3990359.jpeg?auto=compress&cs=tinysrgb&w=600">
-          <img data-peek-img alt="" loading="lazy" src="https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=600">
-          <img data-peek-img alt="" loading="lazy" src="https://images.pexels.com/photos/1109541/pexels-photo-1109541.jpeg?auto=compress&cs=tinysrgb&w=600">
-          <span class="peek__label" data-peek-label></span>
-        </div>
-      </div>
       <div class="svc-rows">
-        <div class="svc is-open" data-label="Casa en Godella">
+        <div class="svc is-open">
           <button type="button" class="svc__head" aria-expanded="true" aria-controls="svc-1">
             <span class="svc__n">01</span>
             <span class="svc__title">Vivienda nueva</span>
+            <span class="svc__draw" aria-hidden="true"><svg viewBox="0 0 132 66"><path pathLength="1" d="M4 60h124"/><path pathLength="1" d="M30 60V30L66 8l36 22v30"/><path pathLength="1" d="M58 60V44h16v16"/><path pathLength="1" d="M38 36h12v10H38z"/><path pathLength="1" d="M82 36h12v10H82z"/></svg></span>
             <span class="svc__dot" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
           </button>
           <div class="svc__body" id="svc-1">
@@ -421,10 +417,11 @@ ul, ol { padding: 0; list-style: none; }
             </div></div>
           </div>
         </div>
-        <div class="svc" data-label="Reforma en Ruzafa">
+        <div class="svc">
           <button type="button" class="svc__head" aria-expanded="false" aria-controls="svc-2">
             <span class="svc__n">02</span>
             <span class="svc__title">Rehabilitación</span>
+            <span class="svc__draw" aria-hidden="true"><svg viewBox="0 0 132 66"><path pathLength="1" d="M10 60V12h112v48"/><path pathLength="1" d="M10 24h112M10 36h36M86 36h36M10 48h34M88 48h34"/><path pathLength="1" d="M38 12v12M66 12v12M94 12v12M24 24v12M108 24v12"/><path pathLength="1" d="M48 60V46a18 18 0 0 1 36 0v14"/></svg></span>
             <span class="svc__dot" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
           </button>
           <div class="svc__body" id="svc-2">
@@ -435,10 +432,11 @@ ul, ol { padding: 0; list-style: none; }
             </div></div>
           </div>
         </div>
-        <div class="svc" data-label="Interior en Benimaclet">
+        <div class="svc">
           <button type="button" class="svc__head" aria-expanded="false" aria-controls="svc-3">
             <span class="svc__n">03</span>
             <span class="svc__title">Interiorismo</span>
+            <span class="svc__draw" aria-hidden="true"><svg viewBox="0 0 132 66"><path pathLength="1" d="M8 6h116v54H8z"/><path pathLength="1" d="M18 42h46v12H18zM18 42v-6h46v6"/><path pathLength="1" d="M94 18a10 10 0 1 0 0.01 0"/><path pathLength="1" d="M60 6v10M8 30h10"/><path pathLength="1" d="M104 50h12v6h-12z"/></svg></span>
             <span class="svc__dot" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
           </button>
           <div class="svc__body" id="svc-3">
@@ -449,10 +447,11 @@ ul, ol { padding: 0; list-style: none; }
             </div></div>
           </div>
         </div>
-        <div class="svc" data-label="En obra, cada semana">
+        <div class="svc">
           <button type="button" class="svc__head" aria-expanded="false" aria-controls="svc-4">
             <span class="svc__n">04</span>
             <span class="svc__title">Licencias y dirección de obra</span>
+            <span class="svc__draw" aria-hidden="true"><svg viewBox="0 0 132 66"><path pathLength="1" d="M28 4h44l14 14v42H28z"/><path pathLength="1" d="M72 4v14h14"/><path pathLength="1" d="M36 28h34M36 36h34M36 44h22"/><path pathLength="1" d="M104 32a14 14 0 1 0 0.01 0"/><path pathLength="1" d="M98 46l4 4 8-8"/></svg></span>
             <span class="svc__dot" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
           </button>
           <div class="svc__body" id="svc-4">
@@ -654,14 +653,13 @@ ul, ol { padding: 0; list-style: none; }
   // La foto llega después del primer cálculo en conexiones lentas.
   fig.querySelector('img').addEventListener('load', measure)
 
-  /* ---------- 2. servicios: acordeón e imagen flotante ---------- */
+  /* ---------- 2. servicios: acordeón y plano al pasar ---------- */
+  // Al pasar por una fila, se resalta y se dibuja su plano (CSS); las demás se
+  // apagan un poco. La foto vive en el desplegable.
   var list = document.querySelector('[data-services]')
   var rows = Array.prototype.slice.call(list.querySelectorAll('.svc'))
-  var peek = list.querySelector('[data-peek]')
-  var peekImgs = list.querySelectorAll('[data-peek-img]')
-  var peekLabel = list.querySelector('[data-peek-label]')
 
-  rows.forEach(function (row, i) {
+  rows.forEach(function (row) {
     var btn = row.querySelector('.svc__head')
     btn.addEventListener('click', function () {
       var open = !row.classList.contains('is-open')
@@ -675,36 +673,12 @@ ul, ol { padding: 0; list-style: none; }
     btn.addEventListener('pointerenter', function () {
       rows.forEach(function (r) { r.classList.toggle('is-hover', r === row) })
       list.classList.add('is-hovering')
-      Array.prototype.forEach.call(peekImgs, function (img, j) { img.classList.toggle('is-on', j === i) })
-      peekLabel.textContent = row.getAttribute('data-label')
-      peek.style.setProperty('--rot', (i % 2 ? 4 : -4) + 'deg')
-      peek.classList.add('is-on')
     })
   })
-
   if (mouse) {
-    var p = { x: 0, y: 0 }, q = null, peekRaf = 0
-    var follow = function () {
-      peekRaf = 0
-      if (!q) return
-      var k = reduce ? 1 : 0.2
-      p.x += (q.x - p.x) * k; p.y += (q.y - p.y) * k
-      peek.style.transform = 'translate3d(' + p.x.toFixed(1) + 'px,' + p.y.toFixed(1) + 'px,0)'
-      if (Math.abs(q.x - p.x) > 0.3 || Math.abs(q.y - p.y) > 0.3) peekRaf = requestAnimationFrame(follow)
-    }
-    list.addEventListener('pointermove', function (e) {
-      var r = list.getBoundingClientRect()
-      var x = Math.min(Math.max(e.clientX - r.left + 170, 140), r.width - 140)
-      var y = e.clientY - r.top
-      if (!q) { p = { x: x, y: y } }
-      q = { x: x, y: y }
-      if (!peekRaf) peekRaf = requestAnimationFrame(follow)
-    })
     list.addEventListener('pointerleave', function () {
       rows.forEach(function (r) { r.classList.remove('is-hover') })
       list.classList.remove('is-hovering')
-      peek.classList.remove('is-on')
-      q = null
     })
   }
 
