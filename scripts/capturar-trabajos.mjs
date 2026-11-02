@@ -2,9 +2,9 @@
 // CAPTURAS DE LAS WEBS A MEDIDA (carrusel de la landing)
 //
 // Abre cada demo de public/trabajos/ en Chrome sin ventana y saca:
-//   · un póster (JPEG + AVIF, 720 × 940) para la tarjeta del carrusel;
-//   · un vídeo corto (MP4 H.264, sin sonido) con el gesto de esa web, que el
-//     carrusel reproduce solo en la tarjeta del centro.
+//   · un póster (JPEG + AVIF) y un vídeo corto (MP4 H.264, sin sonido) con el
+//     gesto de esa web, en dos formatos: vertical para el carrusel de la
+//     landing y apaisado ("-ancho") para las tarjetas de /trabajos.html.
 // El póster es el primer fotograma del vídeo, así que el cambio no se nota.
 //
 // Requiere `pnpm dev` en marcha, Google Chrome y ffmpeg con libx264 y libsvtav1
@@ -23,11 +23,13 @@ const BASE = process.env.BASE || 'http://localhost:5173'
 const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
 const OUT_IMG = 'public/trabajos/capturas'
 const OUT_VID = 'public/trabajos/videos'
-// La tarjeta del carrusel mide 360 × 470: se captura al triple y se guarda al doble.
-const W = 1080
-const H = 1410
-const OUT_W = 720
-const OUT_H = 940
+// Dos formatos: el vertical del carrusel de la landing (tarjeta de 360 × 470,
+// capturada al triple y guardada al doble) y el apaisado de /trabajos.html
+// (ventana de 16:10, guardada a 960 × 600). Los archivos anchos llevan "-ancho".
+const FORMATOS = [
+  { sufijo: '', W: 1080, H: 1410, OUT_W: 720, OUT_H: 940 },
+  { sufijo: '-ancho', W: 1440, H: 900, OUT_W: 960, OUT_H: 600 }
+]
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 
 // El gesto de cada web, en unos seis segundos. Empieza donde acaba el póster.
@@ -90,7 +92,7 @@ const work = mkdtempSync(join(tmpdir(), 'maketa-capturas-'))
 const port = 9300 + Math.floor(Math.random() * 500)
 const chrome = spawn(CHROME, [
   '--headless=new', '--disable-gpu', '--hide-scrollbars', '--mute-audio', '--force-device-scale-factor=1',
-  `--remote-debugging-port=${port}`, `--user-data-dir=${join(work, 'perfil')}`, `--window-size=${W},${H}`, 'about:blank'
+  `--remote-debugging-port=${port}`, `--user-data-dir=${join(work, 'perfil')}`, `--window-size=${FORMATOS[0].W},${FORMATOS[0].H}`, 'about:blank'
 ], { stdio: 'ignore' })
 
 try {
@@ -114,9 +116,18 @@ try {
   const send = (method, params = {}) => new Promise((r) => { const n = ++seq; pending.set(n, r); ws.send(JSON.stringify({ id: n, method, params })) })
   const evaluate = async (expr) => (await send('Runtime.evaluate', { expression: expr, returnByValue: true, awaitPromise: true })).result.value
   const mouse = (type, x, y) => send('Input.dispatchMouseEvent', { type, x, y, button: type === 'mouseMoved' ? 'none' : 'left', buttons: type === 'mousePressed' ? 1 : 0, clickCount: 1 })
+  let H = FORMATOS[0].H
+  const rect = (sel, i) => evaluate(`(() => { const el = document.querySelectorAll(${JSON.stringify(sel)})[${i}]; if (!el) return null; const b = el.getBoundingClientRect(); return { x: b.x + b.width / 2, y: b.y + b.height / 2 } })()`)
+  // Si lo que hay que pulsar está fuera de pantalla, se baja hasta ello con
+  // suavidad: en el vídeo se ve como un recorrido, no como un salto.
   const center = async (sel, i = 0) => {
-    const r = await evaluate(`(() => { const el = document.querySelectorAll(${JSON.stringify(sel)})[${i}]; if (!el) return null; const b = el.getBoundingClientRect(); return { x: b.x + b.width / 2, y: b.y + b.height / 2 } })()`)
+    let r = await rect(sel, i)
     if (!r) throw new Error(`No encuentro ${sel} [${i}]`)
+    if (r.y < 40 || r.y > H - 40) {
+      await evaluate(`document.querySelectorAll(${JSON.stringify(sel)})[${i}].scrollIntoView({ block: 'center', behavior: 'smooth' })`)
+      await sleep(900)
+      r = await rect(sel, i)
+    }
     return r
   }
   const page = {
@@ -141,10 +152,11 @@ try {
   }
 
   await send('Page.enable')
-  await send('Emulation.setDeviceMetricsOverride', { width: W, height: H, deviceScaleFactor: 1, mobile: false })
 
-  for (const id of ids) {
-    const dir = join(work, id)
+  for (const id of ids) for (const { sufijo, W, H: alto, OUT_W, OUT_H } of FORMATOS) {
+    H = alto
+    await send('Emulation.setDeviceMetricsOverride', { width: W, height: H, deviceScaleFactor: 1, mobile: false })
+    const dir = join(work, id + sufijo)
     mkdirSync(dir)
     let loaded
     const onLoad = new Promise((r) => { loaded = r })
@@ -161,8 +173,8 @@ try {
     const png = join(dir, 'poster.png')
     writeFileSync(png, Buffer.from(shot.data, 'base64'))
     const scale = `scale=${OUT_W}:${OUT_H}:flags=lanczos`
-    execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', png, '-vf', scale, '-q:v', '4', join(OUT_IMG, `${id}.jpg`)])
-    execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', png, '-vf', `${scale},format=yuv420p`, '-c:v', 'libsvtav1', '-crf', '36', '-frames:v', '1', join(OUT_IMG, `${id}.avif`)], { env: { ...process.env, SVT_LOG: '1' } })
+    execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', png, '-vf', scale, '-q:v', '4', join(OUT_IMG, `${id}${sufijo}.jpg`)])
+    execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', png, '-vf', `${scale},format=yuv420p`, '-c:v', 'libsvtav1', '-crf', '36', '-frames:v', '1', join(OUT_IMG, `${id}${sufijo}.avif`)], { env: { ...process.env, SVT_LOG: '1' } })
 
     // Vídeo: Chrome manda un fotograma cada vez que la pantalla cambia; luego se
     // rellenan los huecos a 30 fps respetando el tiempo real entre fotogramas.
@@ -188,8 +200,8 @@ try {
     writeFileSync(join(dir, 'lista.txt'), list)
     execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', join(dir, 'lista.txt'),
       '-vf', `fps=30,${scale},format=yuv420p`, '-c:v', 'libx264', '-preset', 'slow', '-crf', '30', '-profile:v', 'main',
-      '-movflags', '+faststart', '-an', join(OUT_VID, `${id}.mp4`)])
-    console.log(`✓ ${id}: póster y vídeo (${frames.length} fotogramas, ${(tEnd - t0).toFixed(1)} s)`)
+      '-movflags', '+faststart', '-an', join(OUT_VID, `${id}${sufijo}.mp4`)])
+    console.log(`✓ ${id}${sufijo}: póster y vídeo (${frames.length} fotogramas, ${(tEnd - t0).toFixed(1)} s)`)
   }
   ws.close()
 } finally {

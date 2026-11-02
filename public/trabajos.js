@@ -1,6 +1,6 @@
 // Maketa · webs a medida (trabajos.html). Sin dependencias.
-// 1. Cada pieza se ve funcionando en miniatura: el iframe se pinta a 1440 px y se
-//    escala al hueco.
+// 1. Cada pieza enseña su póster y, mientras está a la vista, un vídeo corto de
+//    su gesto (pnpm capturas:trabajos). La web en vivo, a un toque.
 // 2. "Quiero algo así": un diálogo que manda un lead a /api/lead con la pieza.
 //    `?quiero=<id>` lo abre directamente (es a donde llevan las propias demos).
 // 3. Eventos del embudo para Vercel Web Analytics, sin datos personales.
@@ -11,16 +11,35 @@
     try { window.va && window.va('event', data ? { name: name, data: data } : { name: name }) } catch (e) {}
   }
 
-  /* ---------- 1. miniaturas vivas ---------- */
+  /* ---------- 1. póster y vídeo de cada pieza ---------- */
+  // El vídeo del gesto suena en bucle mientras su ventana está a la vista, y se
+  // para al salir. Con movimiento reducido o ahorro de datos, solo el póster.
+  var lite = matchMedia('(prefers-reduced-motion: reduce)').matches || !!(navigator.connection && navigator.connection.saveData)
   var screens = document.querySelectorAll('[data-screen]')
-  function fit(el) { el.style.setProperty('--s', String(el.clientWidth / 1440)) }
-  if ('ResizeObserver' in window) {
-    var ro = new ResizeObserver(function (en) { en.forEach(function (e) { fit(e.target) }) })
-    screens.forEach(function (el) { ro.observe(el) })
-  } else {
-    var fitAll = function () { screens.forEach(fit) }
-    addEventListener('resize', fitAll)
-    fitAll()
+  if (!lite && 'IntersectionObserver' in window) {
+    var onScreen = new Set()
+    var playBox = function (box) {
+      var v = box.querySelector('video')
+      if (!v) return
+      if (!v.src) {
+        v.src = v.getAttribute('data-src')
+        v.addEventListener('playing', function () { box.classList.add('is-playing') })
+      }
+      v.play().catch(function () {})
+    }
+    var pauseBox = function (box) { var v = box.querySelector('video'); if (v) v.pause() }
+    var vio = new IntersectionObserver(function (en) {
+      en.forEach(function (e) {
+        if (e.isIntersecting) onScreen.add(e.target)
+        else onScreen.delete(e.target)
+        if (e.isIntersecting && !document.hidden) playBox(e.target)
+        else pauseBox(e.target)
+      })
+    }, { threshold: 0.5 })
+    screens.forEach(function (el) { vio.observe(el) })
+    document.addEventListener('visibilitychange', function () {
+      screens.forEach(function (el) { if (document.hidden || !onScreen.has(el)) pauseBox(el); else playBox(el) })
+    })
   }
 
   document.addEventListener('click', function (e) {

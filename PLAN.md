@@ -226,6 +226,15 @@ cada demo tiene su guion en `scripts/capturar-trabajos.mjs`. Medir con
 `custom_lead_opened` y `custom_lead_sent`. **Pendiente de Carlos:** si se quiere
 una cifra orientativa para las webs a medida, no está en `TARIFAS.md`.
 
+**Privacidad y peso (nov. 2026).** Las demos ya no piden nada a Google: sus
+tipografías (solo latín, woff2) salen de `public/trabajos/fuentes/` con
+`pnpm fuentes:trabajos`, que lee el `data-fuentes` de cada demo. La política de
+privacidad nombra Pexels (fotos) y Google Fonts (las tipografías del
+configurador). `/trabajos.html` dejó los ocho iframes en vivo: cada pieza enseña
+póster y vídeo en formato ancho (`-ancho`), que suena solo mientras se ve.
+**Pendiente:** probar "Quiero algo así" de punta a punta en un deploy de
+preview (hoja de leads y los dos correos, con `piece`).
+
 Medir con `custom_live_opened`, `custom_lead_opened` y `custom_lead_sent`.
 
 ---

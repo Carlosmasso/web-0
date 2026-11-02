@@ -65,15 +65,17 @@
 
       <section class="jobs" aria-label="Webs de ejemplo">
         <div class="wrap">
-          <!-- Cada pieza vive en public/trabajos/<id>.html y se enseña aquí en miniatura,
-               funcionando. data-name y data-kind alimentan el formulario y la analítica. -->
+          <!-- Cada pieza vive en public/trabajos/<id>.html. Aquí se enseña con su póster y
+               un vídeo corto de su gesto (pnpm capturas:trabajos); la web en vivo, a un
+               toque. data-name y data-kind alimentan el formulario y la analítica. -->
           <article id="rayos-x" class="job" data-piece="rayos-x" data-name="Rayos X" data-kind="Estudio de arquitectura">
             <div class="job__frame reveal">
               <div class="job__bar" aria-hidden="true"><i></i><i></i><i></i><span>vano-arquitectura · ejemplo</span></div>
               <div class="job__screen" data-screen>
-                <iframe src="/trabajos/rayos-x.html" title="Vista previa de Rayos X" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
+                <picture><source type="image/avif" srcset="/trabajos/capturas/rayos-x-ancho.avif" /><img src="/trabajos/capturas/rayos-x-ancho.jpg" alt="" width="960" height="600" loading="lazy" decoding="async" /></picture>
+                <video data-src="/trabajos/videos/rayos-x-ancho.mp4" muted playsinline loop preload="none" aria-hidden="true" tabindex="-1"></video>
               </div>
-              <a class="job__hit" href="/trabajos/rayos-x.html" data-live aria-label="Ver Rayos X en vivo"></a>
+              <a class="job__hit" href="/trabajos/rayos-x.html" data-live aria-label="Ver Rayos X en vivo"><span class="job__open" aria-hidden="true">Pruébala en vivo ↗</span></a>
             </div>
             <div class="job__copy">
               <p class="eyebrow reveal">01 · Estudio de arquitectura</p>
@@ -98,9 +100,10 @@
             <div class="job__frame reveal">
               <div class="job__bar" aria-hidden="true"><i></i><i></i><i></i><span>pliego-estudio · ejemplo</span></div>
               <div class="job__screen" data-screen>
-                <iframe src="/trabajos/mesa-de-trabajo.html" title="Vista previa de Mesa de trabajo" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
+                <picture><source type="image/avif" srcset="/trabajos/capturas/mesa-de-trabajo-ancho.avif" /><img src="/trabajos/capturas/mesa-de-trabajo-ancho.jpg" alt="" width="960" height="600" loading="lazy" decoding="async" /></picture>
+                <video data-src="/trabajos/videos/mesa-de-trabajo-ancho.mp4" muted playsinline loop preload="none" aria-hidden="true" tabindex="-1"></video>
               </div>
-              <a class="job__hit" href="/trabajos/mesa-de-trabajo.html" data-live aria-label="Ver Mesa de trabajo en vivo"></a>
+              <a class="job__hit" href="/trabajos/mesa-de-trabajo.html" data-live aria-label="Ver Mesa de trabajo en vivo"><span class="job__open" aria-hidden="true">Pruébala en vivo ↗</span></a>
             </div>
             <div class="job__copy">
               <p class="eyebrow reveal">02 · Estudio de diseño gráfico</p>
@@ -125,9 +128,10 @@
             <div class="job__frame reveal">
               <div class="job__bar" aria-hidden="true"><i></i><i></i><i></i><span>revelado-foto · ejemplo</span></div>
               <div class="job__screen" data-screen>
-                <iframe src="/trabajos/analogica.html" title="Vista previa de Analógica" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
+                <picture><source type="image/avif" srcset="/trabajos/capturas/analogica-ancho.avif" /><img src="/trabajos/capturas/analogica-ancho.jpg" alt="" width="960" height="600" loading="lazy" decoding="async" /></picture>
+                <video data-src="/trabajos/videos/analogica-ancho.mp4" muted playsinline loop preload="none" aria-hidden="true" tabindex="-1"></video>
               </div>
-              <a class="job__hit" href="/trabajos/analogica.html" data-live aria-label="Ver Analógica en vivo"></a>
+              <a class="job__hit" href="/trabajos/analogica.html" data-live aria-label="Ver Analógica en vivo"><span class="job__open" aria-hidden="true">Pruébala en vivo ↗</span></a>
             </div>
             <div class="job__copy">
               <p class="eyebrow reveal">03 · Estudio de fotografía</p>
@@ -152,9 +156,10 @@
             <div class="job__frame reveal">
               <div class="job__bar" aria-hidden="true"><i></i><i></i><i></i><span>cifra-asesores · ejemplo</span></div>
               <div class="job__screen" data-screen>
-                <iframe src="/trabajos/reticula.html" title="Vista previa de Retícula suiza" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
+                <picture><source type="image/avif" srcset="/trabajos/capturas/reticula-ancho.avif" /><img src="/trabajos/capturas/reticula-ancho.jpg" alt="" width="960" height="600" loading="lazy" decoding="async" /></picture>
+                <video data-src="/trabajos/videos/reticula-ancho.mp4" muted playsinline loop preload="none" aria-hidden="true" tabindex="-1"></video>
               </div>
-              <a class="job__hit" href="/trabajos/reticula.html" data-live aria-label="Ver Retícula suiza en vivo"></a>
+              <a class="job__hit" href="/trabajos/reticula.html" data-live aria-label="Ver Retícula suiza en vivo"><span class="job__open" aria-hidden="true">Pruébala en vivo ↗</span></a>
             </div>
             <div class="job__copy">
               <p class="eyebrow reveal">04 · Asesoría</p>
@@ -179,9 +184,10 @@
             <div class="job__frame reveal">
               <div class="job__bar" aria-hidden="true"><i></i><i></i><i></i><span>lume-brasas · ejemplo</span></div>
               <div class="job__screen" data-screen>
-                <iframe src="/trabajos/comanda.html" title="Vista previa de Comanda" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
+                <picture><source type="image/avif" srcset="/trabajos/capturas/comanda-ancho.avif" /><img src="/trabajos/capturas/comanda-ancho.jpg" alt="" width="960" height="600" loading="lazy" decoding="async" /></picture>
+                <video data-src="/trabajos/videos/comanda-ancho.mp4" muted playsinline loop preload="none" aria-hidden="true" tabindex="-1"></video>
               </div>
-              <a class="job__hit" href="/trabajos/comanda.html" data-live aria-label="Ver Comanda en vivo"></a>
+              <a class="job__hit" href="/trabajos/comanda.html" data-live aria-label="Ver Comanda en vivo"><span class="job__open" aria-hidden="true">Pruébala en vivo ↗</span></a>
             </div>
             <div class="job__copy">
               <p class="eyebrow reveal">05 · Restaurante</p>
@@ -206,9 +212,10 @@
             <div class="job__frame reveal">
               <div class="job__bar" aria-hidden="true"><i></i><i></i><i></i><span>eje-fisio · ejemplo</span></div>
               <div class="job__screen" data-screen>
-                <iframe src="/trabajos/anatomia.html" title="Vista previa de Anatomía" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
+                <picture><source type="image/avif" srcset="/trabajos/capturas/anatomia-ancho.avif" /><img src="/trabajos/capturas/anatomia-ancho.jpg" alt="" width="960" height="600" loading="lazy" decoding="async" /></picture>
+                <video data-src="/trabajos/videos/anatomia-ancho.mp4" muted playsinline loop preload="none" aria-hidden="true" tabindex="-1"></video>
               </div>
-              <a class="job__hit" href="/trabajos/anatomia.html" data-live aria-label="Ver Anatomía en vivo"></a>
+              <a class="job__hit" href="/trabajos/anatomia.html" data-live aria-label="Ver Anatomía en vivo"><span class="job__open" aria-hidden="true">Pruébala en vivo ↗</span></a>
             </div>
             <div class="job__copy">
               <p class="eyebrow reveal">06 · Fisioterapia y pilates</p>
@@ -234,9 +241,10 @@
             <div class="job__frame reveal">
               <div class="job__bar" aria-hidden="true"><i></i><i></i><i></i><span>lias-vinoteca · ejemplo</span></div>
               <div class="job__screen" data-screen>
-                <iframe src="/trabajos/cata.html" title="Vista previa de Cata" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
+                <picture><source type="image/avif" srcset="/trabajos/capturas/cata-ancho.avif" /><img src="/trabajos/capturas/cata-ancho.jpg" alt="" width="960" height="600" loading="lazy" decoding="async" /></picture>
+                <video data-src="/trabajos/videos/cata-ancho.mp4" muted playsinline loop preload="none" aria-hidden="true" tabindex="-1"></video>
               </div>
-              <a class="job__hit" href="/trabajos/cata.html" data-live aria-label="Ver Cata en vivo"></a>
+              <a class="job__hit" href="/trabajos/cata.html" data-live aria-label="Ver Cata en vivo"><span class="job__open" aria-hidden="true">Pruébala en vivo ↗</span></a>
             </div>
             <div class="job__copy">
               <p class="eyebrow reveal">07 · Vinoteca</p>
@@ -261,9 +269,10 @@
             <div class="job__frame reveal">
               <div class="job__bar" aria-hidden="true"><i></i><i></i><i></i><span>acento-idiomas · ejemplo</span></div>
               <div class="job__screen" data-screen>
-                <iframe src="/trabajos/apuntes.html" title="Vista previa de Apuntes" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
+                <picture><source type="image/avif" srcset="/trabajos/capturas/apuntes-ancho.avif" /><img src="/trabajos/capturas/apuntes-ancho.jpg" alt="" width="960" height="600" loading="lazy" decoding="async" /></picture>
+                <video data-src="/trabajos/videos/apuntes-ancho.mp4" muted playsinline loop preload="none" aria-hidden="true" tabindex="-1"></video>
               </div>
-              <a class="job__hit" href="/trabajos/apuntes.html" data-live aria-label="Ver Apuntes en vivo"></a>
+              <a class="job__hit" href="/trabajos/apuntes.html" data-live aria-label="Ver Apuntes en vivo"><span class="job__open" aria-hidden="true">Pruébala en vivo ↗</span></a>
             </div>
             <div class="job__copy">
               <p class="eyebrow reveal">08 · Academia de idiomas</p>

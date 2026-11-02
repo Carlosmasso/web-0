@@ -27,7 +27,8 @@ pnpm build               # vite build de las tres entradas a dist/
 pnpm test                # vitest run (src/**/*.test.js, entorno node)
 pnpm vitest run src/theme/resolve.test.js   # un solo archivo
 pnpm verify:export       # genera un proyecto desde un preset, install + build reales (~40 s)
-pnpm capturas:trabajos   # pósteres y vídeos de las webs a medida para el carrusel (con pnpm dev en marcha)
+pnpm capturas:trabajos   # pósteres y vídeos de las webs a medida, vertical y ancho (con pnpm dev en marcha)
+pnpm fuentes:trabajos    # descarga las tipografías de las demos a public/trabajos/fuentes/
 ```
 
 Ejecuta `verify:export` tras tocar cualquier cosa de `src/preview/` o `src/export/`: el

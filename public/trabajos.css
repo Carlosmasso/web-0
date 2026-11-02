@@ -28,9 +28,13 @@
 .job__bar i { width: 10px; height: 10px; border-radius: 10px; background: #dcdad3; }
 .job__bar span { justify-self: center; margin-right: 37px; padding: 3px 14px; border-radius: 999px; background: var(--white); color: var(--ink-faint); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 .job__screen { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: #edecef; }
-/* El iframe se pinta a 1440 px de ancho y se reduce al hueco (la escala la pone trabajos.js). */
-.job__screen iframe { position: absolute; left: 0; top: 0; width: 1440px; height: 900px; border: 0; transform-origin: 0 0; transform: scale(var(--s, 0.5)); pointer-events: none; }
-.job__hit { position: absolute; inset: 0; z-index: 2; border-radius: inherit; }
+/* Póster y, encima, el vídeo del gesto: aparece cuando empieza a sonar (trabajos.js). */
+.job__screen picture, .job__screen img, .job__screen video { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+.job__screen video { position: absolute; inset: 0; opacity: 0; transition: opacity 0.4s ease; }
+.job__screen.is-playing video { opacity: 1; }
+.job__hit { position: absolute; inset: 0; z-index: 2; border-radius: inherit; display: grid; place-items: center; }
+.job__open { padding: 10px 18px; border-radius: 999px; background: rgba(22, 23, 27, 0.86); color: #fff; font-size: 15px; font-weight: 650; opacity: 0; transform: translateY(6px); transition: opacity 0.3s ease, transform 0.3s var(--ease); }
+.job__frame:hover .job__open, .job__hit:focus-visible .job__open { opacity: 1; transform: none; }
 .job__hit:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
 
 .job__copy h2 { margin-top: 14px; font-size: clamp(40px, 4.6vw, 64px); font-weight: 760; line-height: 0.98; letter-spacing: -0.04em; }

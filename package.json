@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "verify:export": "VERIFY_EXPORT_BUILD=1 vitest run export-build --testTimeout=240000",
-    "capturas:trabajos": "node scripts/capturar-trabajos.mjs"
+    "capturas:trabajos": "node scripts/capturar-trabajos.mjs",
+    "fuentes:trabajos": "node scripts/fuentes-trabajos.mjs"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.7",
