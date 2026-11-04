@@ -225,8 +225,19 @@ con el campo `piece`. Salen de los cuatro lienzos de Design de Carlos:
   Hanken Grotesk, en local.
 
 Una pieza nueva: su HTML en `public/trabajos/`, un `<article>` en
-`trabajos.html` con `data-piece`, `data-name` y `data-kind`, y el
-`?quiero=<id>` en su aviso de ejemplo.
+`trabajos.html` con `data-piece`, `data-name` y `data-kind`, el
+`?quiero=<id>` en su aviso de ejemplo y `<script defer src="/trabajos/cinta.js">`
+antes de `</body>`.
+
+**La cinta invita (nov. 2026).** `public/trabajos/cinta.js`, común a las demos:
+cuando alguien ya ha jugado (tres toques; o 25 s con algo tocado o media página
+leída; o el 80 % leído), la cinta "Web de ejemplo · Maketa" pasa a "¿Te gusta?
+Hazla tuya →" con un rebote y lleva a `/trabajos.html?quiero=<id>`. Conserva el
+aspecto de cada demo y no actúa dentro de un iframe. Medir con
+`custom_demo_invite_shown` y `custom_demo_invite_clicked` (`piece`). En la
+portada y en `/trabajos.html` hay además un "Volver arriba" con anillo de
+progreso (`landing.js`, evento `back_to_top`). Una barra fija "Diseñar mi web"
+en el móvil se descartó: el menú ya va fijo con ese botón.
 
 **En la landing (nov. 2026).** El carrusel "Así quedaría la tuya", que repetía
 las plantillas por sector de la demo de arriba, pasa a ser "¿Quieres algo
