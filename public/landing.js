@@ -4,6 +4,7 @@
 // 3. El carrusel circular de plantillas: autoplay, pausa al pasar por encima,
 //    flechas, puntos, teclado y arrastre con el dedo.
 // 4. "Abriendo tu web…" al ir al configurador.
+// 5. Volver arriba: aparece al bajar y su anillo marca cuánto llevas.
 ;(function () {
   var doc = document.documentElement
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -388,4 +389,36 @@
     doc.classList.add('is-leaving')
   })
   addEventListener('pageshow', function () { doc.classList.remove('is-leaving') })
+
+  /* ---------- 5. volver arriba ---------- */
+  // Lo crea el script para no repetirlo en cada página. El anillo se llena con
+  // lo leído; al pulsar, la flecha sale hacia arriba y vuelve a entrar por abajo.
+  var top = document.createElement('button')
+  top.type = 'button'
+  top.className = 'totop'
+  top.setAttribute('aria-label', 'Volver arriba')
+  top.innerHTML =
+    '<span class="totop__text" aria-hidden="true">Arriba</span>' +
+    '<span class="totop__dial" aria-hidden="true">' +
+      '<svg class="totop__ring" viewBox="0 0 52 52"><circle cx="26" cy="26" r="23" pathLength="1"/><circle class="totop__fill" cx="26" cy="26" r="23" pathLength="1"/></svg>' +
+      '<svg class="totop__arrow" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg>' +
+    '</span>'
+  document.body.appendChild(top)
+  var fill = top.querySelector('.totop__fill')
+  var ticking = false
+  var sync = function () {
+    ticking = false
+    var max = doc.scrollHeight - innerHeight
+    var k = max > 0 ? Math.min(1, scrollY / max) : 0
+    fill.style.strokeDashoffset = String(1 - k)
+    top.classList.toggle('is-on', scrollY > innerHeight * 0.8)
+  }
+  addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(sync) } }, { passive: true })
+  addEventListener('resize', sync)
+  sync()
+  top.addEventListener('click', function () {
+    top.classList.remove('is-launch'); void top.offsetWidth; top.classList.add('is-launch')
+    scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' })
+    track('back_to_top')
+  })
 })()
