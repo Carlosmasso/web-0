@@ -236,8 +236,12 @@ Hazla tuya →" con un rebote y lleva a `/trabajos.html?quiero=<id>`. Conserva e
 aspecto de cada demo y no actúa dentro de un iframe. Medir con
 `custom_demo_invite_shown` y `custom_demo_invite_clicked` (`piece`). En la
 portada y en `/trabajos.html` hay además un "Volver arriba" con anillo de
-progreso (`landing.js`, evento `back_to_top`). Una barra fija "Diseñar mi web"
-en el móvil se descartó: el menú ya va fijo con ese botón.
+progreso (`landing.js`, evento `back_to_top`); el menú marca con un subrayado
+azul la sección que se lee y se aparta al bajar (vuelve al subir; deja
+`--nav-h` para lo que va debajo), y en `/trabajos.html` una tira fija de
+sectores (`trabajos.js`) repite los chips de la entrada y marca la pieza que se
+ve. Una barra fija "Diseñar mi web" en el móvil se descartó: el menú ya lleva
+ese botón y vuelve en cuanto se sube.
 
 **En la landing (nov. 2026).** El carrusel "Así quedaría la tuya", que repetía
 las plantillas por sector de la demo de arriba, pasa a ser "¿Quieres algo

@@ -5,6 +5,7 @@
 //    flechas, puntos, teclado y arrastre con el dedo.
 // 4. "Abriendo tu web…" al ir al configurador.
 // 5. Volver arriba: aparece al bajar y su anillo marca cuánto llevas.
+// 6. El menú: marca la sección que se lee y se aparta al bajar.
 ;(function () {
   var doc = document.documentElement
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -421,4 +422,83 @@
     scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' })
     track('back_to_top')
   })
+
+  /* ---------- 6. el menú ---------- */
+  // Un subrayado azul se desliza al enlace de la sección que se está leyendo (en
+  // /trabajos.html, fijo en "A medida"). El menú se aparta al bajar y vuelve en
+  // cuanto se sube; no se va arriba del todo, con el foco dentro ni mientras
+  // baja solo tras pulsar un enlace interno. --nav-h le sirve a lo que va debajo.
+  // Al pulsar un enlace interno, el subrayado va directo a su destino y se queda
+  // ahí hasta que la página deja de moverse: no pasa por las secciones de en medio.
+  var nav = document.querySelector('.nav')
+  var links = nav && nav.querySelector('.nav__links')
+  if (links) {
+    var ink = document.createElement('span')
+    ink.className = 'nav__ink'
+    ink.setAttribute('aria-hidden', 'true')
+    links.appendChild(ink)
+    var spy = Array.prototype.slice.call(links.querySelectorAll('.navlink[href^="#"]'))
+      .map(function (a) { return { a: a, sec: document.getElementById(a.getAttribute('href').slice(1)) } })
+      .filter(function (x) { return x.sec })
+    var page = links.querySelector('.navlink[aria-current="page"]')
+    var here = null
+    var mark = function (a, force) {
+      if (a === here && !force) return
+      here = a
+      spy.forEach(function (x) { x.a.classList.toggle('is-here', x.a === a) })
+      if (!a || !a.offsetWidth) { ink.classList.remove('is-on'); return }
+      var from = !ink.classList.contains('is-on')
+      if (from) ink.style.transition = 'none'
+      ink.style.width = a.offsetWidth + 'px'
+      ink.style.transform = 'translate(' + a.offsetLeft + 'px, ' + (a.offsetTop + a.offsetHeight + 3) + 'px)'
+      if (from) { void ink.offsetWidth; ink.style.transition = '' }
+      ink.classList.add('is-on')
+    }
+    var lastY = scrollY
+    var gliding = false
+    var glideTimer = 0
+    // La página "se para" cuando pasan 160 ms sin scroll.
+    var onGlide = function () {
+      clearTimeout(glideTimer)
+      glideTimer = setTimeout(function () {
+        gliding = false
+        removeEventListener('scroll', onGlide)
+        onNav()
+      }, 160)
+    }
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href^="#"]')
+      var to = a && a.getAttribute('href').length > 1 && document.getElementById(a.getAttribute('href').slice(1))
+      if (!to) return
+      var dest = null
+      spy.forEach(function (x) { if (x.sec === to || x.sec.contains(to)) dest = x.a })
+      if (spy.length) mark(dest)
+      gliding = true
+      addEventListener('scroll', onGlide, { passive: true })
+      onGlide()
+    })
+    nav.addEventListener('focusin', function () { doc.classList.remove('is-nav-up') })
+    var navTick = false
+    var onNav = function () {
+      navTick = false
+      var y = scrollY
+      var dy = y - lastY
+      if (y < 160) doc.classList.remove('is-nav-up')
+      else if (Math.abs(dy) > 6) {
+        doc.classList.toggle('is-nav-up', dy > 0 && !gliding && !nav.contains(document.activeElement))
+        lastY = y
+      }
+      if (gliding) return
+      if (!spy.length) { mark(page); return }
+      var mid = innerHeight * 0.4
+      var now = null
+      spy.forEach(function (x) { var r = x.sec.getBoundingClientRect(); if (r.top <= mid && r.bottom > mid) now = x.a })
+      mark(now)
+    }
+    var setNavH = function () { doc.style.setProperty('--nav-h', nav.offsetHeight + 'px') }
+    addEventListener('scroll', function () { if (!navTick) { navTick = true; requestAnimationFrame(onNav) } }, { passive: true })
+    addEventListener('resize', function () { setNavH(); mark(here, true) })
+    setNavH()
+    onNav()
+  }
 })()

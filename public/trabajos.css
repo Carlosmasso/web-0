@@ -13,6 +13,18 @@
 .sector:hover { color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--ink); }
 .sector:active { scale: 0.97; }
 
+/* La tira de sectores (trabajos.js): aparece bajo el menú al pasar la entrada y
+   sube a ocupar su sitio cuando el menú se aparta. En el móvil se desliza. */
+.secbar { position: fixed; left: 0; right: 0; top: 0; z-index: 45; background: rgba(251, 250, 248, 0.94); border-bottom: 1px solid rgba(22, 23, 27, 0.06); opacity: 0; visibility: hidden; transform: translateY(calc(var(--nav-h, 70px) - 100%)); transition: transform 0.35s var(--ease), opacity 0.25s ease, visibility 0s linear 0.35s; }
+.secbar.is-on { opacity: 1; visibility: visible; transform: translateY(var(--nav-h, 70px)); transition: transform 0.35s var(--ease), opacity 0.25s ease; }
+.is-nav-up .secbar.is-on { transform: none; }
+.secbar__list { display: flex; gap: 6px; margin: 0 -24px; padding: 10px 24px; overflow-x: auto; scrollbar-width: none; -webkit-mask-image: linear-gradient(to right, transparent, #000 24px, #000 calc(100% - 24px), transparent); mask-image: linear-gradient(to right, transparent, #000 24px, #000 calc(100% - 24px), transparent); }
+.secbar__list::-webkit-scrollbar { display: none; }
+.secbar .sector { flex: none; min-height: 36px; padding: 0 14px; font-size: 14px; white-space: nowrap; }
+.secbar .sector[aria-current='true'] { background: var(--ink); color: #fff; box-shadow: inset 0 0 0 1.5px var(--ink); }
+/* Con la tira encima, cada pieza se queda por debajo al saltar a ella. */
+.job[id] { scroll-margin-top: calc(var(--nav-h, 70px) + 72px); }
+
 /* ---------- las piezas ---------- */
 
 /* Debajo de la última pieza, poco margen: el cambio de banda ya separa. */

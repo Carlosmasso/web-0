@@ -145,6 +145,10 @@ body {
 .shell__home svg {
   display: block;
 }
+/* La copia de la barra del lienzo solo se ve cuando el panel es hoja inferior. */
+.shell__home--bar {
+  display: none;
+}
 .shell__logo {
   font-weight: 700;
   font-size: 1.05rem;
@@ -1969,6 +1973,15 @@ body {
     white-space: nowrap;
     flex: none;
   }
+  /* Todo en una fila sin desplazar de lado: delante, el logo para volver a la
+     portada; fuera, lo que solo usa el estudio en el escritorio. */
+  .shell__home--bar {
+    display: block;
+  }
+  .shell__dl,
+  .shell__violations {
+    display: none;
+  }
 
   /* --- el panel, hoja inferior --- */
   .shell__panel {
@@ -2051,6 +2064,33 @@ body {
   }
   .shell__legal {
     padding: 10px 16px 28px;
+  }
+}
+
+/* Por debajo de 760 px no caben también "Reiniciar" ni, en el teléfono, los
+   paddings de escritorio: botones más justos, y fuera la flecha de "Quiero esta
+   web" y el icono de Deshacer (que conserva su texto). */
+@media (max-width: 760px) {
+  .shell__reset {
+    display: none;
+  }
+}
+@media (max-width: 640px) {
+  .shell__bar {
+    gap: 6px;
+  }
+  .shell__actions {
+    flex: 1 1 auto;
+    width: auto;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+  .shell__actions button {
+    padding: 8px 9px;
+  }
+  .shell__undo svg,
+  .shell__cta .shell__arrow {
+    display: none;
   }
 }
 

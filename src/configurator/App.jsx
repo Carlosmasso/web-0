@@ -51,6 +51,23 @@ import { useHistory } from "./useHistory";
 // UNA web con versiones; tú tienes un proyecto por cliente.
 const FIRST_NAME = isStudio ? "Proyecto 1" : "Mi web";
 
+// El logo de la landing, enlazado a la portada. Va arriba del panel en
+// escritorio y al principio de la barra del lienzo en tableta y móvil, donde el
+// panel es una hoja inferior y su cabecera no se ve.
+function HomeLink({ className, size }) {
+  return (
+    <a className={className} href="/" aria-label="Maketa: volver a la portada">
+      <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden="true">
+        <rect width="32" height="32" rx="8" fill="#3b53d6" />
+        <rect x="7" y="6.5" width="18" height="19" rx="2.5" fill="none" stroke="#fff" strokeWidth="2" />
+        <rect x="10" y="9.5" width="12" height="4" rx="1" fill="#fff" />
+        <rect x="10" y="16" width="5.5" height="6.5" rx="1" fill="#fff" />
+        <rect x="17.5" y="16" width="4.5" height="6.5" rx="1" fill="#fff" opacity="0.5" />
+      </svg>
+    </a>
+  );
+}
+
 export function App() {
   // Todo el mundo trabaja sobre el registro: tú con varios proyectos, el
   // cliente con las versiones de su web. Un `?c=` en la URL se resuelve contra
@@ -599,15 +616,7 @@ export function App() {
 
         <div className="shell__brand">
           <div className="shell__brand-row">
-            <a className="shell__home" href="/" aria-label="Maketa: volver a la portada">
-              <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true">
-                <rect width="32" height="32" rx="8" fill="#3b53d6" />
-                <rect x="7" y="6.5" width="18" height="19" rx="2.5" fill="none" stroke="#fff" strokeWidth="2" />
-                <rect x="10" y="9.5" width="12" height="4" rx="1" fill="#fff" />
-                <rect x="10" y="16" width="5.5" height="6.5" rx="1" fill="#fff" />
-                <rect x="17.5" y="16" width="4.5" height="6.5" rx="1" fill="#fff" opacity="0.5" />
-              </svg>
-            </a>
+            <HomeLink className="shell__home" size={28} />
             {/* {showPicker ? ( */}
             <ProjectMenu
               projectId={projectId}
@@ -720,6 +729,7 @@ export function App() {
 
       <main className="shell__stage-wrap">
         <div className="shell__bar">
+          <HomeLink className="shell__home shell__home--bar" size={30} />
           <div className="shell__devices">
             <button
               className={device === "desktop" ? "is-active" : ""}

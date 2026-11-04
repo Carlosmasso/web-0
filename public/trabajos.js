@@ -4,6 +4,7 @@
 // 2. "Quiero algo así": un diálogo que manda un lead a /api/lead con la pieza.
 //    `?quiero=<id>` lo abre directamente (es a donde llevan las propias demos).
 // 3. Eventos del embudo para Vercel Web Analytics, sin datos personales.
+// 4. La tira de sectores: fija bajo el menú mientras se recorren las piezas.
 ;(function () {
   var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -182,5 +183,81 @@
     }
     job.scrollIntoView({ block: 'center' })
     open(job)
+  }
+
+  /* ---------- 4. tira de sectores ---------- */
+  // Cuando los sectores de la entrada salen de pantalla, una tira fija bajo el
+  // menú los repite y marca la pieza que se está viendo (en la rejilla, la que
+  // está bajo el ratón si hay dos a la misma altura). Se va al acabar las piezas.
+  // Al pulsar un sector se marca ya el elegido, y se mantiene hasta que la página
+  // deja de moverse: no se encienden por el camino los que quedan en medio.
+  var heroSectors = document.querySelector('.sectors')
+  var jobsSec = document.querySelector('.jobs')
+  if (heroSectors && jobsSec) {
+    var bar = document.createElement('nav')
+    bar.className = 'secbar'
+    bar.setAttribute('aria-label', 'Webs por sector')
+    bar.innerHTML = '<div class="wrap"><ul class="secbar__list">' + heroSectors.querySelector('ul').innerHTML + '</ul></div>'
+    document.body.appendChild(bar)
+    var list = bar.querySelector('.secbar__list')
+    var chips = Array.prototype.slice.call(list.querySelectorAll('.sector'))
+    var pieces = chips.map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)) })
+    var hovered = null
+    pieces.forEach(function (el) {
+      if (!el) return
+      el.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') { hovered = el; queue() } })
+      el.addEventListener('pointerleave', function () { if (hovered === el) { hovered = null; queue() } })
+    })
+    var shown = false
+    var current = -1
+    var barTick = false
+    var locked = false
+    var lockTimer = 0
+    var queue = function () { if (!barTick) { barTick = true; requestAnimationFrame(sync) } }
+    var unlockLater = function () {
+      clearTimeout(lockTimer)
+      lockTimer = setTimeout(function () { locked = false; removeEventListener('scroll', unlockLater); queue() }, 160)
+    }
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a.sector')
+      if (!a) return
+      var i = pieces.indexOf(document.getElementById(a.getAttribute('href').slice(1)))
+      if (i < 0) return
+      locked = true
+      select(i)
+      addEventListener('scroll', unlockLater, { passive: true })
+      unlockLater()
+    })
+    var sync = function () {
+      barTick = false
+      var on = heroSectors.getBoundingClientRect().bottom < 60 && jobsSec.getBoundingClientRect().bottom > innerHeight * 0.45
+      if (on !== shown) { shown = on; bar.classList.toggle('is-on', on) }
+      if (locked) return
+      // La pieza que se ve: la última que ha pasado del 40 % de la pantalla.
+      var mid = innerHeight * 0.4
+      var best = -1
+      var bestTop = -Infinity
+      pieces.forEach(function (el, i) {
+        if (!el) return
+        var top = el.getBoundingClientRect().top
+        if (top <= mid && (top > bestTop + 1 || (Math.abs(top - bestTop) <= 1 && el === hovered))) { best = i; bestTop = top }
+      })
+      select(best)
+    }
+    var select = function (best) {
+      if (best === current) return
+      current = best
+      chips.forEach(function (c, i) {
+        if (i === best) c.setAttribute('aria-current', 'true')
+        else c.removeAttribute('aria-current')
+      })
+      if (best >= 0) {
+        var c = chips[best]
+        list.scrollTo({ left: c.offsetLeft - (list.clientWidth - c.offsetWidth) / 2, behavior: shown && !lite ? 'smooth' : 'auto' })
+      }
+    }
+    addEventListener('scroll', queue, { passive: true })
+    addEventListener('resize', queue)
+    sync()
   }
 })()

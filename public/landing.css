@@ -173,6 +173,14 @@ main:focus { outline: none; }
   transition: transform 0.35s var(--ease);
 }
 .navlink:hover::after { transform: scaleX(1); transform-origin: left; }
+/* La sección que se lee: subrayado azul que se desliza de un enlace a otro
+   (lo coloca landing.js). Y el menú se aparta al bajar. */
+.nav { transition: transform 0.35s var(--ease); }
+.is-nav-up .nav { transform: translateY(-100%); }
+.nav__links { position: relative; }
+.nav__ink { position: absolute; left: 0; top: 0; height: 2px; border-radius: 2px; background: var(--accent); opacity: 0; pointer-events: none; transition: transform 0.45s var(--ease), width 0.45s var(--ease), opacity 0.25s ease; }
+.nav__ink.is-on { opacity: 1; }
+.navlink.is-here, .navlink[aria-current='page'] { color: var(--ink); }
 @media (max-width: 640px) { .nav__links .navlink { display: none; } }
 
 /* ---------- hero ---------- */
